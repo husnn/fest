@@ -9,7 +9,7 @@ import styles from '../../styles/Profile.module.scss';
 import { Button } from '../../ui';
 import { getDisplayName } from '../../utils';
 
-export default function ProfilePage () {
+export default function ProfilePage() {
   const router = useRouter();
   const { setLinks } = useHeader();
 
@@ -21,14 +21,7 @@ export default function ProfilePage () {
   const { id } = router.query;
 
   useEffect(() => {
-    setLinks([
-      headerLinks.Signout({
-        onClick: () => {
-          clearAuth();
-          router.push('/login');
-        }
-      })
-    ]);
+    // setLinks();
   }, []);
 
   useEffect(() => {
@@ -52,13 +45,15 @@ export default function ProfilePage () {
             </div>
           </div>
           <div className={styles.userActions}>
-            <Button color='primary' size="small">Buy coins</Button>
-            <Button color='secondary' size="small">Message</Button>
-            <Button color={
-              followed ? 'ghost' : 'secondary'
-            } size="small">{
-              followed ? 'Unfollow' : 'Follow'
-            }</Button>
+            <Button color="primary" size="small">
+              Buy coins
+            </Button>
+            <Button color="secondary" size="small">
+              Message
+            </Button>
+            <Button color={followed ? 'ghost' : 'secondary'} size="small">
+              {followed ? 'Unfollow' : 'Follow'}
+            </Button>
           </div>
 
           <div className="stats">

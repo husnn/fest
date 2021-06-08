@@ -23,7 +23,8 @@ const OAuthSchema = new EntitySchema<OAuth>({
       type: 'text'
     },
     refreshToken: {
-      type: 'text'
+      type: 'text',
+      nullable: true
     },
     expiry: {
       type: 'timestamp'

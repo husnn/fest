@@ -13,11 +13,12 @@ export interface HeaderLink {
   visible?: boolean;
   nested?: HeaderLink[];
   render?: () => React.ReactNode;
-};
+}
 
 export type HeaderLinkProps = {
   onClick?: () => void;
-}
+  [key: string]: any;
+};
 
 type HeaderProps = {
   links?: HeaderLink[];
@@ -56,7 +57,9 @@ const Header: React.FC<HeaderProps> = () => {
   return (
     <HeaderContainer>
       <HeaderWrapper>
-        <Link href="/"><h2>Fanbase</h2></Link>
+        <Link href="/">
+          <h2>Fanbase</h2>
+        </Link>
         <div
           className="header__right"
           css={css`
@@ -66,19 +69,11 @@ const Header: React.FC<HeaderProps> = () => {
           {links && (
             <HeaderLinks>
               {links.map((link: HeaderLink, index: number) => {
-                return link.visible !== false
-                  ? (
+                return link.visible !== false ? (
                   <Link key={index} href={link.route}>
-                    {link.render
-                      ? (
-                          link.render()
-                        )
-                      : (
-                          link.name
-                        )}
+                    {link.render ? link.render() : link.name}
                   </Link>
-                    )
-                  : null;
+                ) : null;
               })}
             </HeaderLinks>
           )}

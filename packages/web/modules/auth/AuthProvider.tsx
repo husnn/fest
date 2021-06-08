@@ -13,12 +13,15 @@ export const AuthProvider: React.FC = ({ children }) => {
   useEffect(() => {
     const user = getCurrentUser();
 
+    console.log('Getting current user...');
+
     setAuthenticated(getAuthToken() != null);
     setCurrentUser(user);
   }, []);
 
   const clearAuth = () => {
     removeAuth();
+
     setAuthenticated(false);
     setCurrentUser(null);
   };

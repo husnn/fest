@@ -3,7 +3,7 @@ import Button from '../../ui/Button';
 import { specific } from '../../utils';
 
 export const headerLinks = specific<{
-  [key: string]: HeaderLink |((props: HeaderLinkProps) => HeaderLink);
+  [key: string]: HeaderLink | ((props: HeaderLinkProps) => HeaderLink);
 }>()({
   Home: {
     name: 'Home',
@@ -13,25 +13,22 @@ export const headerLinks = specific<{
     name: 'Create token',
     route: '/create-token'
   },
-  Login: {
+  Login: ({ onClick, isAuthenticated }: HeaderLinkProps) => ({
     name: 'Login',
-    route: '/login',
     render: () => (
-      <Button color="secondary" size="small">
-        Login
-      </Button>
+      <span onClick={onClick}>
+        {isAuthenticated ? (
+          <Button color="normal" size="small">
+            Sign out
+          </Button>
+        ) : (
+          <Button color="secondary" size="small">
+            Login
+          </Button>
+        )}
+      </span>
     )
-  },
-  Signout: ({ onClick }: HeaderLinkProps) => {
-    return {
-      name: 'Sign out',
-      render: () => (
-        <Button color="normal" size="small" onClick={onClick}>
-          Sign out
-        </Button>
-      )
-    };
-  }
+  })
 });
 
 export default headerLinks;
