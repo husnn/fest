@@ -1,7 +1,9 @@
-import { isExpired } from '@fanbase/shared';
+import { CurrentUser, isExpired } from '@fanbase/shared';
 
 import UseCase from '../../base/UseCase';
 import { User } from '../../entities';
+import { mapUserToDTO } from '../../mappers';
+import { WalletRepository } from '../../repositories';
 import UserRepository from '../../repositories/UserRepository';
 import { Result } from '../../Result';
 import { LoginError } from './errors';
@@ -13,7 +15,7 @@ export interface LoginWithEmailInput {
 
 export interface LoginWithEmailOutput {
   token: string;
-  user: User;
+  user: CurrentUser;
 }
 
 export class LoginWithEmail extends UseCase<
@@ -21,11 +23,15 @@ export class LoginWithEmail extends UseCase<
   LoginWithEmailOutput
 > {
   private userRepository: UserRepository;
+  private walletRepository: WalletRepository;
 
-  constructor(userRepository: UserRepository) {
+  constructor(
+    userRepository: UserRepository,
+    walletRepository: WalletRepository
+  ) {
     super();
-
     this.userRepository = userRepository;
+    this.walletRepository = walletRepository;
   }
 
   async exec(data: LoginWithEmailInput): Promise<Result<LoginWithEmailOutput>> {
@@ -45,9 +51,11 @@ export class LoginWithEmail extends UseCase<
     user.loginCode.expiry = new Date();
     this.userRepository.update(user);
 
+    user.wallet = await this.walletRepository.get(user.walletId);
+
     return Result.ok({
       token: User.generateJwt(user),
-      user
+      user: mapUserToDTO(user)
     });
   }
 }

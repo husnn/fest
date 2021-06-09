@@ -3,11 +3,13 @@ import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import * as Yup from 'yup';
 
+import { css, Global } from '@emotion/react';
 import styled from '@emotion/styled';
 import { USERNAME_REGEX } from '@fanbase/shared';
 
 import { GoogleButton } from '../components';
 import ApiClient from '../modules/api/ApiClient';
+import { saveCurrentUser } from '../modules/auth/authStorage';
 import useAuthentication from '../modules/auth/useAuthentication';
 import styles from '../styles/Settings.module.scss';
 import { Button, FormInput, TextInput } from '../ui';
@@ -47,8 +49,6 @@ export default function SettingsPage() {
 
   const { currentUser } = useAuthentication();
 
-  useEffect(() => {}, []);
-
   return (
     <div className={'boxed ' + styles.content}>
       {currentUser && (
@@ -79,6 +79,7 @@ export default function SettingsPage() {
 
                 try {
                   const response = await ApiClient.instance?.editUser(data);
+                  saveCurrentUser(response.user);
                 } catch (err) {
                   if (err.error == 'ValidationError')
                     setErrors({ global: err.message });
@@ -129,9 +130,27 @@ export default function SettingsPage() {
                     />
                   </FormInput>
 
-                  {errors.global && <p>{errors.global}</p>}
+                  {errors.global && (
+                    <p className="form-error">{errors.global}</p>
+                  )}
 
-                  <Button type="submit" color="secondary">
+                  <Global
+                    styles={css`
+                      .form-error {
+                        padding: 10px 20px;
+                        color: red;
+                        background-color: #ffcccb;
+                        border-radius: 10px;
+                      }
+                    `}
+                  />
+
+                  <Button
+                    type="submit"
+                    color="secondary"
+                    loading={isSubmitting}
+                    disabled={!isValid}
+                  >
                     Save Changes
                   </Button>
                 </Form>

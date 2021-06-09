@@ -1,15 +1,16 @@
 import { NextFunction, Request, Response } from 'express';
 
 import {
-    EthereumService, GetTokensCreated, GetUser, MailService, TokenRepository, UserRepository,
-    WalletRepository
+    EditUser, EthereumService, GetTokensCreated, GetUser, MailService, TokenRepository,
+    UserRepository, WalletRepository
 } from '@fanbase/core';
 import { GetTokensCreatedResponse, GetUserResponse } from '@fanbase/shared';
-import { UserInfo } from '@fanbase/shared/src/types';
+import { EditUserResponse, UserInfo } from '@fanbase/shared/src/types';
 
-import { HttpResponse, NotFoundError, ValidationError } from '../http';
+import { HttpError, HttpResponse, NotFoundError, ValidationError } from '../http';
 
 class UserController {
+  private editUserUseCase: EditUser;
   private getUserUseCase: GetUser;
   private getTokensCreatedUseCase: GetTokensCreated;
 
@@ -20,6 +21,7 @@ class UserController {
     ethereumService: EthereumService,
     mailService: MailService
   ) {
+    this.editUserUseCase = new EditUser(userRepository, walletRepository);
     this.getUserUseCase = new GetUser(userRepository);
     this.getTokensCreatedUseCase = new GetTokensCreated(tokenRepository);
   }
@@ -42,7 +44,21 @@ class UserController {
     try {
       const data: UserInfo = req.body;
 
-      if (!data.username) throw new ValidationError('Missing username.');
+      if (Object.keys(data).length === 0)
+        throw new ValidationError('No changes were made.');
+
+      const result = await this.editUserUseCase.exec({
+        user: req.user,
+        ...data
+      });
+
+      if (!result.success) throw new HttpError();
+
+      const { user } = result.data;
+
+      return new HttpResponse<EditUserResponse>(res, {
+        user
+      });
     } catch (err) {
       next(err);
     }

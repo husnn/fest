@@ -32,7 +32,9 @@ export type UserInfo = {
   email?: string;
 };
 
-export interface EditUserResponse extends Response {}
+export interface EditUserResponse extends Response {
+  user: CurrentUser;
+}
 
 export interface EditUserRequest extends Request {
   authenticated: 'required';

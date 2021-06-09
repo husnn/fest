@@ -20,7 +20,7 @@ export class UserRepository
   }
 
   async findByEmail(email: string): Promise<User> {
-    return this.db.findOne({ email });
+    return this.db.findOne({ email }, { relations: ['wallet'] });
   }
 
   async findByUsername(username: string): Promise<User> {

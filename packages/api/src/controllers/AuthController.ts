@@ -2,11 +2,10 @@ import { NextFunction, Request, Response } from 'express';
 
 import {
     EthereumService, IdentifyWithEmail, IdentifyWithWallet, LoginError, LoginWithEmail,
-    LoginWithWallet, MailService, TokenRepository, User, UserRepository, WalletRepository
+    LoginWithWallet, MailService, TokenRepository, UserRepository, WalletRepository
 } from '@fanbase/core';
 import {
-    CurrentUser, IdentifyWithEmailResponse, IdentifyWithWalletResponse, LoginWithEmailResponse,
-    Wallet
+    IdentifyWithEmailResponse, IdentifyWithWalletResponse, LoginWithEmailResponse
 } from '@fanbase/shared';
 
 import { HttpError, HttpResponse } from '../http';
@@ -38,20 +37,16 @@ class AuthController {
       walletRepository
     );
 
-    this.loginWithEmailUseCase = new LoginWithEmail(userRepository);
+    this.loginWithEmailUseCase = new LoginWithEmail(
+      userRepository,
+      walletRepository
+    );
 
     this.loginWithWalletUseCase = new LoginWithWallet(
       userRepository,
       walletRepository,
       ethereumService
     );
-  }
-
-  mapUserToDTO(user: User): CurrentUser {
-    return new CurrentUser({
-      ...user,
-      wallet: new Wallet(user.wallet)
-    });
   }
 
   async loginWithEmail(req: Request, res: Response, next: NextFunction) {
@@ -76,7 +71,7 @@ class AuthController {
 
       return new HttpResponse<LoginWithEmailResponse>(res, {
         token,
-        user: this.mapUserToDTO(user)
+        user
       });
     } catch (err) {
       next(err);
@@ -97,7 +92,7 @@ class AuthController {
 
       return new HttpResponse<LoginWithEmailResponse>(res, {
         token,
-        user: this.mapUserToDTO(user)
+        user
       });
     } catch (err) {
       next(err);
