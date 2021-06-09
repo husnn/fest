@@ -1,20 +1,26 @@
 import { GetServerSideProps } from 'next';
+import Error from 'next/error';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
+import { GetUserResponse, User } from '@fanbase/shared';
+
+import ApiClient from '../../modules/api/ApiClient';
 import useAuthentication from '../../modules/auth/useAuthentication';
-import useTabs, { Tab, Tabs } from '../../modules/tabs/useTabs';
+import useTabs, { Tab, Tabs } from '../../modules/navigation/useTabs';
 import styles from '../../styles/Profile.module.scss';
-import { Button } from '../../ui';
+import { Button, Link } from '../../ui';
 import ButtonGroup from '../../ui/ButtonGroup';
 import ResponsiveTabs from '../../ui/ResponsiveTabs';
 import { getDisplayName } from '../../utils';
 
-export default function ProfilePage() {
+export default function ProfilePage({ errorCode }) {
   const router = useRouter();
 
-  const [user, setUser] = useState();
+  const [user, setUser] = useState<User>();
+  const [isSelf, setSelf] = useState(false);
+
   const { currentUser } = useAuthentication();
 
   const [followed, setFollowed] = useState(true);
@@ -36,20 +42,29 @@ export default function ProfilePage() {
     }
   } as Tabs;
 
-  const { id } = router.query;
+  const { username } = router.query;
 
   useEffect(() => {
     initTabs(TABS);
   }, []);
 
   useEffect(() => {
-    setUser(currentUser);
-  }, [currentUser]);
+    if (currentUser && username === currentUser.username) {
+      setSelf(true);
+    }
+
+    ApiClient.instance
+      ?.getUserByUsername(username as string)
+      .then((response: GetUserResponse) => {
+        setUser(response.user);
+      })
+      .catch((err) => {});
+  }, [username, currentUser]);
 
   return (
     <div>
       <Head>
-        <title>{id}</title>
+        <title>{username}</title>
       </Head>
       <div className="boxed">
         <div className={styles.header}>
@@ -63,22 +78,33 @@ export default function ProfilePage() {
               <p>I have been a YouTube creator since the early 2000s.</p>
             </div>
             <div className={styles.headerActions}>
-              <ButtonGroup
-                dropdown={
-                  <React.Fragment>
-                    <Button color="primary" size="small">
-                      Buy coins
-                    </Button>
-                    <Button color="secondary" size="small">
-                      Message
-                    </Button>
-                  </React.Fragment>
-                }
-              >
-                <Button color={followed ? 'normal' : 'secondary'} size="small">
-                  {followed ? 'Unfollow' : 'Follow'}
-                </Button>
-              </ButtonGroup>
+              {!isSelf ? (
+                <ButtonGroup
+                  dropdown={
+                    <React.Fragment>
+                      <Button color="primary" size="small">
+                        Buy coins
+                      </Button>
+                      <Button color="secondary" size="small">
+                        Message
+                      </Button>
+                    </React.Fragment>
+                  }
+                >
+                  <Button
+                    color={followed ? 'normal' : 'secondary'}
+                    size="small"
+                  >
+                    {followed ? 'Unfollow' : 'Follow'}
+                  </Button>
+                </ButtonGroup>
+              ) : (
+                <Link href="/settings">
+                  <Button size="small" color="secondary">
+                    Edit profile
+                  </Button>
+                </Link>
+              )}
             </div>
           </div>
 

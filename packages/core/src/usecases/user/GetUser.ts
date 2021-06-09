@@ -1,6 +1,9 @@
+import { User as UserDTO } from '@fanbase/shared';
+
 import UseCase from '../../base/UseCase';
 import { User } from '../../entities';
-import { UserRepository } from '../../repositories';
+import { mapUserToDTO } from '../../mappers';
+import { UserRepository, WalletRepository } from '../../repositories';
 import { Result } from '../../Result';
 
 export interface GetUserInput {
@@ -8,15 +11,19 @@ export interface GetUserInput {
   username?: string;
 }
 
-export type GetUserOutput = User;
+export type GetUserOutput = UserDTO;
 
 export class GetUser extends UseCase<GetUserInput, GetUserOutput> {
   private userRepository: UserRepository;
+  private walletRepository: WalletRepository;
 
-  constructor(userRepository: UserRepository) {
+  constructor(
+    userRepository: UserRepository,
+    walletRepository: WalletRepository
+  ) {
     super();
-
     this.userRepository = userRepository;
+    this.walletRepository = walletRepository;
   }
 
   async exec(data: GetUserInput): Promise<Result<GetUserOutput>> {
@@ -28,6 +35,10 @@ export class GetUser extends UseCase<GetUserInput, GetUserOutput> {
       user = await this.userRepository.findByUsername(data.username);
     }
 
-    return user ? Result.ok(user) : Result.fail();
+    if (!user) return Result.fail();
+
+    user.wallet = await this.walletRepository.get(user.walletId);
+
+    return Result.ok(mapUserToDTO(user));
   }
 }

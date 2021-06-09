@@ -22,7 +22,7 @@ class UserController {
     mailService: MailService
   ) {
     this.editUserUseCase = new EditUser(userRepository, walletRepository);
-    this.getUserUseCase = new GetUser(userRepository);
+    this.getUserUseCase = new GetUser(userRepository, walletRepository);
     this.getTokensCreatedUseCase = new GetTokensCreated(tokenRepository);
   }
 

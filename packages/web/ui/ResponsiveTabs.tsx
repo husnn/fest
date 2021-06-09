@@ -1,9 +1,8 @@
 import { useState } from 'react';
 
-import { ThemeContext } from '@emotion/react';
 import styled from '@emotion/styled';
 
-import { Tab } from '../modules/tabs/useTabs';
+import { Tab } from '../modules/navigation/useTabs';
 import { fontSize } from '../styles/constants';
 
 const ResponsiveTabGroup = styled.div`

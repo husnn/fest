@@ -1,9 +1,10 @@
 .header {
-  padding: 20px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
 
   @media screen and (min-width: 400px) {
+    padding: 20px;
     gap: 10px;
   }
 }
@@ -38,6 +39,7 @@
 
 .headerContent {
   width: 100%;
+  margin-top: 10px;
   padding: 10px;
   display: flex;
   justify-content: space-between;
@@ -58,15 +60,24 @@
   flex-direction: row;
   flex-wrap: wrap;
   flex-basis: 320px;
+  justify-content: flex-end;
   align-items: flex-start;
   gap: 10px;
+
+  @media screen and (max-width: 600px) {
+    justify-content: flex-start;
+  }
 }
 
 .content {
-  padding: 0 20px 80px;
+  padding: 0 10px 80px;
   display: flex;
   flex-wrap: wrap;
   gap: 30px;
+  
+  @media screen and (min-width: 400px) {
+    padding: 0 20px 80px;
+  }
 }
 
 .sidebar {

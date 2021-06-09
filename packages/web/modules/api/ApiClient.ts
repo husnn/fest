@@ -2,11 +2,11 @@ import {
     ApproveMintRequest, ApproveMintResponse, CreateTokenRequest, CreateTokenResponse, CurrentUser,
     EditUserRequest, EditUserResponse, GetOAuthLinkRequest, GetOAuthLinkResponse,
     GetOwnUploadsRequest, GetOwnUploadsResponse, GetTokenRequest, GetTokenResponse,
-    GetTokensCreatedResponse, IdentifyWithEmailRequest, IdentifyWithEmailResponse,
-    IdentifyWithWalletRequest, IdentifyWithWalletResponse, LoginWithEmailRequest,
-    LoginWithEmailResponse, LoginWithWalletRequest, LoginWithWalletResponse, OAuthCheckLinkRequest,
-    OAuthCheckLinkResponse, OAuthLinkRequest, Protocol, Token, TokenData, UnlinkOAuthRequest,
-    UnlinkOAuthResponse, UserInfo, YouTubeVideo
+    GetTokensCreatedResponse, GetUserByUsernameRequest, GetUserResponse, IdentifyWithEmailRequest,
+    IdentifyWithEmailResponse, IdentifyWithWalletRequest, IdentifyWithWalletResponse,
+    LoginWithEmailRequest, LoginWithEmailResponse, LoginWithWalletRequest, LoginWithWalletResponse,
+    OAuthCheckLinkRequest, OAuthCheckLinkResponse, OAuthLinkRequest, Protocol, Token, TokenData,
+    UnlinkOAuthRequest, UnlinkOAuthResponse, UserInfo, YouTubeVideo
 } from '@fanbase/shared';
 
 import HttpClient from './HttpClient';
@@ -26,6 +26,17 @@ export default class ApiClient {
   }
 
   // User
+
+  async getUserByUsername(username: string): Promise<GetUserResponse> {
+    return this.client.request<GetUserResponse, GetUserByUsernameRequest>({
+      method: 'GET',
+      endpoint: '/users',
+      authentication: 'none',
+      params: {
+        username
+      }
+    });
+  }
 
   async editUser(data: UserInfo): Promise<EditUserResponse> {
     return this.client.request<EditUserResponse, EditUserRequest>({

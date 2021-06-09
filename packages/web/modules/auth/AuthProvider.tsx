@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 import { CurrentUser } from '@fanbase/shared';
 
-import { getAuthToken, getCurrentUser, removeAuth } from './authStorage';
+import { getAuthToken, getCurrentUser, removeAuth, saveCurrentUser } from './authStorage';
 
 export const AuthContext = React.createContext(null);
 
@@ -24,6 +24,11 @@ export const AuthProvider: React.FC = ({ children }) => {
       router.push('/login');
     }
   }, []);
+
+  useEffect(() => {
+    if (currentUser && Object.keys(currentUser).length !== 0)
+      saveCurrentUser(currentUser);
+  }, [currentUser]);
 
   const clearAuth = () => {
     removeAuth();

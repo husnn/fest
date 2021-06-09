@@ -2,7 +2,7 @@ import { CurrentUser, decryptText, isExpired, Protocol } from '@fanbase/shared';
 
 import UseCase from '../../base/UseCase';
 import { User } from '../../entities';
-import { mapUserToDTO } from '../../mappers';
+import { mapUserToCurrentDTO } from '../../mappers';
 import UserRepository from '../../repositories/UserRepository';
 import WalletRepository from '../../repositories/WalletRepository';
 import { Result } from '../../Result';
@@ -75,7 +75,7 @@ export class LoginWithWallet extends UseCase<
 
     return Result.ok({
       token: User.generateJwt(user),
-      user: mapUserToDTO(user)
+      user: mapUserToCurrentDTO(user)
     });
   }
 }

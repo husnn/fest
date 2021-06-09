@@ -23,25 +23,6 @@ export interface Response {
 }
 
 /**
- * User
- */
-
-export type UserInfo = {
-  name?: string;
-  username?: string;
-  email?: string;
-};
-
-export interface EditUserResponse extends Response {
-  user: CurrentUser;
-}
-
-export interface EditUserRequest extends Request {
-  authenticated: 'required';
-  body: UserInfo;
-}
-
-/**
  * Token
  */
 
@@ -158,11 +139,27 @@ export interface GetUserResponse extends Response {
   user: User;
 }
 
-export interface GetUserRequest extends Request {
-  body: {
-    id?: string;
-    username?: string;
+export interface GetUserByUsernameRequest extends Request {
+  method: 'GET';
+  authentication: 'none';
+  params: {
+    username: string;
   };
+}
+
+export type UserInfo = {
+  name?: string;
+  username?: string;
+  email?: string;
+};
+
+export interface EditUserResponse extends Response {
+  user: CurrentUser;
+}
+
+export interface EditUserRequest extends Request {
+  authenticated: 'required';
+  body: UserInfo;
 }
 
 /**

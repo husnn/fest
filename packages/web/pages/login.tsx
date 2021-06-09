@@ -13,9 +13,10 @@ import EthereumClient from '../modules/ethereum/EthereumClient';
 import { useHeader } from '../modules/navigation';
 import styles from '../styles/Login.module.css';
 import Button from '../ui/Button';
+import { getProfileUrl } from '../utils';
 
-export default function Login () {
-  const { isAuthenticated, setAuthenticated, setCurrentUser } =
+export default function Login() {
+  const { isAuthenticated, setAuthenticated, currentUser, setCurrentUser } =
     useAuthentication();
 
   const [loginWithEmail, setLoginWithEmail] = useState(false);
@@ -34,7 +35,8 @@ export default function Login () {
   }, []);
 
   useEffect(() => {
-    if (isAuthenticated) router.push('/u/husnain');
+    if (isAuthenticated)
+      router.push(getProfileUrl({ username: currentUser.username }));
   }, [isAuthenticated]);
 
   const onLogin = (token: string, user: CurrentUser) => {

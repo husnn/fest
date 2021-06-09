@@ -1,9 +1,19 @@
 import { User } from '@fanbase/core';
-import { CurrentUser, Wallet } from '@fanbase/shared';
+import { CurrentUser, User as UserDTO, Wallet } from '@fanbase/shared';
 
-export const mapUserToDTO = (user: User): CurrentUser => {
+export const mapUserToCurrentDTO = (user: User): CurrentUser => {
   return new CurrentUser({
     ...user,
     wallet: new Wallet(user.wallet)
+  });
+};
+
+export const mapUserToDTO = (user: User): UserDTO => {
+  return new UserDTO({
+    ...user,
+    wallet: new Wallet({
+      protocol: user.wallet.protocol,
+      address: user.wallet.address
+    })
   });
 };

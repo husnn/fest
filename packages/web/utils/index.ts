@@ -3,6 +3,14 @@ import { Token, User } from '@fanbase/shared';
 export const getTokenUrl = (token?: Token, id?: string) =>
   `/tokens/${token ? token.id : id}`;
 
+export const getProfileUrl = ({
+  username,
+  id
+}: {
+  username?: string;
+  id?: string;
+}) => (username ? `/u/${username}` : `/user/${id}`);
+
 export const specific =
   <T>() =>
   <U extends T>(argument: U) =>

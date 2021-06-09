@@ -9,7 +9,6 @@ import { USERNAME_REGEX } from '@fanbase/shared';
 
 import { GoogleButton } from '../components';
 import ApiClient from '../modules/api/ApiClient';
-import { saveCurrentUser } from '../modules/auth/authStorage';
 import useAuthentication from '../modules/auth/useAuthentication';
 import styles from '../styles/Settings.module.scss';
 import { Button, FormInput, TextInput } from '../ui';
@@ -19,7 +18,7 @@ const SettingsSheet = styled.div`
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 50px;
 `;
 
 const SettingsBlock = styled.div`
@@ -47,7 +46,7 @@ const UserInfoSchema = Yup.object().shape({
 export default function SettingsPage() {
   const router = useRouter();
 
-  const { currentUser } = useAuthentication();
+  const { currentUser, setCurrentUser } = useAuthentication();
 
   return (
     <div className={'boxed ' + styles.content}>
@@ -59,6 +58,7 @@ export default function SettingsPage() {
             </FormInput>
           </SettingsBlock>
           <SettingsBlock>
+            <h4>Edit profile</h4>
             <Formik
               initialValues={{
                 name: currentUser.name || '',
@@ -79,7 +79,7 @@ export default function SettingsPage() {
 
                 try {
                   const response = await ApiClient.instance?.editUser(data);
-                  saveCurrentUser(response.user);
+                  setCurrentUser(response.user);
                 } catch (err) {
                   if (err.error == 'ValidationError')
                     setErrors({ global: err.message });
@@ -158,7 +158,7 @@ export default function SettingsPage() {
             </Formik>
           </SettingsBlock>
           <SettingsBlock>
-            <h2>Connect to YouTube</h2>
+            <h4>Connect to YouTube</h4>
             <GoogleButton
               onLinkReceived={(link: string) => {
                 router.push(link);
