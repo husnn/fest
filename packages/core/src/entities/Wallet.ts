@@ -1,6 +1,5 @@
-import { Protocol } from '../enums/Protocol';
-import { WalletType } from '../enums/WalletType';
-import { decryptText, encryptText } from '../utils';
+import { decryptText, encryptText, Protocol, WalletType } from '@fanbase/shared';
+
 import User from './User';
 
 export class Wallet {
@@ -15,20 +14,20 @@ export class Wallet {
 
   private _privateKey: string;
 
-  constructor (data: Partial<Wallet>) {
+  constructor(data: Partial<Wallet>) {
     Object.assign(this, data);
     if (data.privateKey) this.type = WalletType.INTERNAL;
   }
 
-  get privateKey () {
+  get privateKey() {
     return this._privateKey;
   }
 
-  set privateKey (value: string) {
+  set privateKey(value: string) {
     if (value) this._privateKey = encryptText(value);
   }
 
-  get decryptedPrivateKey () {
+  get decryptedPrivateKey() {
     return decryptText(this._privateKey);
   }
 }

@@ -1,6 +1,7 @@
-import { OAuth, OAuthProvider } from '@fanbase/shared';
+import { OAuthProvider } from '@fanbase/shared';
 
 import UseCase from '../../base/UseCase';
+import { OAuth } from '../../entities';
 import OAuthRepository from '../../repositories/OAuthRepository';
 import { Result } from '../../Result';
 import { GoogleService, YouTubeService } from '../../services';
@@ -15,14 +16,14 @@ export class LinkGoogle extends UseCase<LinkGoogleInput, LinkGoogleOutput> {
   private oAuthRepository: OAuthRepository;
   private googleService: GoogleService;
 
-  constructor (oAuthRepository: OAuthRepository, googleService: GoogleService) {
+  constructor(oAuthRepository: OAuthRepository, googleService: GoogleService) {
     super();
 
     this.oAuthRepository = oAuthRepository;
     this.googleService = googleService;
   }
 
-  async exec (data: LinkGoogleInput): Promise<Result<LinkGoogleOutput>> {
+  async exec(data: LinkGoogleInput): Promise<Result<LinkGoogleOutput>> {
     let auth = await this.oAuthRepository.findByUser(
       OAuthProvider.GOOGLE,
       data.user

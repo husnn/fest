@@ -1,6 +1,5 @@
-import { Token } from '@fanbase/shared';
-
 import UseCase from '../../base/UseCase';
+import { Token } from '../../entities';
 import { TokenRepository } from '../../repositories';
 import UserRepository from '../../repositories/UserRepository';
 import { Result } from '../../Result';
@@ -16,7 +15,7 @@ export class CreateToken extends UseCase<CreateTokenInput, CreateTokenOutput> {
   private userRepository: UserRepository;
   private tokenRepository: TokenRepository;
 
-  constructor (
+  constructor(
     tokenRepository: TokenRepository,
     userRepository: UserRepository
   ) {
@@ -26,7 +25,7 @@ export class CreateToken extends UseCase<CreateTokenInput, CreateTokenOutput> {
     this.userRepository = userRepository;
   }
 
-  async exec (data: CreateTokenInput): Promise<Result<CreateTokenOutput>> {
+  async exec(data: CreateTokenInput): Promise<Result<CreateTokenOutput>> {
     let token = new Token({
       creatorId: data.user,
       supply: data.supply

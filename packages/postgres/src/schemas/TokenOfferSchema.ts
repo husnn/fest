@@ -1,6 +1,7 @@
 import { EntitySchema } from 'typeorm';
 
-import { Currency, OfferStatus, TokenOffer } from '@fanbase/shared';
+import { TokenOffer } from '@fanbase/core';
+import { Currency, OfferStatus } from '@fanbase/shared';
 
 const TokenOfferSchema = new EntitySchema<TokenOffer>({
   name: 'token_offer',

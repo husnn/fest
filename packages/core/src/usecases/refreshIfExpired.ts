@@ -1,6 +1,5 @@
-import { OAuth } from '@fanbase/shared';
+import { OAuth } from '@fanbase/core';
 
-import OAuthRepository from '../repositories/OAuthRepository';
 import { Result } from '../Result';
 import GoogleService from '../services/GoogleService';
 

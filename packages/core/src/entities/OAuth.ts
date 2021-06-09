@@ -1,4 +1,5 @@
-import OAuthProvider from '../enums/OAuthProvider';
+import { OAuthProvider } from '@fanbase/shared';
+
 import User from './User';
 
 export class OAuth {
@@ -11,7 +12,7 @@ export class OAuth {
   refreshToken: string;
   expiry: Date;
 
-  constructor (data?: Partial<OAuth>) {
+  constructor(data?: Partial<OAuth>) {
     Object.assign(this, data);
   }
 }

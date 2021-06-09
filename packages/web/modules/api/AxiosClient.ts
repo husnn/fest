@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 
 import { Request, Response } from '@fanbase/shared';
 
@@ -8,7 +8,7 @@ import HttpClient from './HttpClient';
 export default class AxiosClient extends HttpClient {
   private axios: AxiosInstance;
 
-  constructor () {
+  constructor() {
     super();
     this.axios = axios.create({
       baseURL:
@@ -18,7 +18,7 @@ export default class AxiosClient extends HttpClient {
     });
   }
 
-  async request<U extends Response | null = Response> (
+  async request<U extends Response | null = Response>(
     req: Request
   ): Promise<U> {
     return this.axios
@@ -35,10 +35,10 @@ export default class AxiosClient extends HttpClient {
         }
       })
       .then((response: AxiosResponse<U>) => {
-        return response.data;
+        return Promise.resolve(response.data);
       })
-      .catch(err => {
-        return err;
+      .catch((err: AxiosError<U>) => {
+        return Promise.reject(err.response.data);
       });
   }
 }

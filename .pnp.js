@@ -3223,6 +3223,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-transition-group", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:4.4.2"],
             ["sass", "npm:1.34.1"],
             ["typescript", "patch:typescript@npm%3A4.2.4#builtin<compat/typescript>::version=4.2.4&hash=ddfc1b"],
+            ["url-loader", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:4.1.1"],
             ["web3", "npm:1.3.6"],
             ["yup", "npm:0.32.9"],
             ["zustand", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:3.5.2"]
@@ -6447,6 +6448,28 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["json-schema-traverse", "npm:1.0.0"],
             ["require-from-string", "npm:2.0.2"],
             ["uri-js", "npm:4.4.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["ajv-keywords", [
+        ["npm:3.5.2", {
+          "packageLocation": "./.yarn/cache/ajv-keywords-npm-3.5.2-0e391b70e2-01f26c2923.zip/node_modules/ajv-keywords/",
+          "packageDependencies": [
+            ["ajv-keywords", "npm:3.5.2"]
+          ],
+          "linkType": "SOFT",
+        }],
+        ["virtual:e97702da819489f096a2f633012a8075909b2037311bea971ba30e003e897ee9522eb9bdac9a523ed06e2c6d6c2e297712663d12cde8819d988854e2ff4aebd9#npm:3.5.2", {
+          "packageLocation": "./.yarn/$$virtual/ajv-keywords-virtual-59751b9428/0/cache/ajv-keywords-npm-3.5.2-0e391b70e2-01f26c2923.zip/node_modules/ajv-keywords/",
+          "packageDependencies": [
+            ["ajv-keywords", "virtual:e97702da819489f096a2f633012a8075909b2037311bea971ba30e003e897ee9522eb9bdac9a523ed06e2c6d6c2e297712663d12cde8819d988854e2ff4aebd9#npm:3.5.2"],
+            ["@types/ajv", null],
+            ["ajv", "npm:6.12.6"]
+          ],
+          "packagePeers": [
+            "@types/ajv",
+            "ajv"
           ],
           "linkType": "HARD",
         }]
@@ -20049,6 +20072,18 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["schema-utils", [
+        ["npm:3.0.0", {
+          "packageLocation": "./.yarn/cache/schema-utils-npm-3.0.0-e97702da81-a084f593f2.zip/node_modules/schema-utils/",
+          "packageDependencies": [
+            ["schema-utils", "npm:3.0.0"],
+            ["@types/json-schema", "npm:7.0.7"],
+            ["ajv", "npm:6.12.6"],
+            ["ajv-keywords", "virtual:e97702da819489f096a2f633012a8075909b2037311bea971ba30e003e897ee9522eb9bdac9a523ed06e2c6d6c2e297712663d12cde8819d988854e2ff4aebd9#npm:3.5.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["scrypt-async", [
         ["npm:2.0.1", {
           "packageLocation": "./.yarn/cache/scrypt-async-npm-2.0.1-3646df744e-c341445477.zip/node_modules/scrypt-async/",
@@ -22328,6 +22363,35 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["url", "npm:0.11.0"],
             ["punycode", "npm:1.3.2"],
             ["querystring", "npm:0.2.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["url-loader", [
+        ["npm:4.1.1", {
+          "packageLocation": "./.yarn/cache/url-loader-npm-4.1.1-568e22ebcb-871e8c8df2.zip/node_modules/url-loader/",
+          "packageDependencies": [
+            ["url-loader", "npm:4.1.1"]
+          ],
+          "linkType": "SOFT",
+        }],
+        ["virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:4.1.1", {
+          "packageLocation": "./.yarn/$$virtual/url-loader-virtual-0636c68335/0/cache/url-loader-npm-4.1.1-568e22ebcb-871e8c8df2.zip/node_modules/url-loader/",
+          "packageDependencies": [
+            ["url-loader", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:4.1.1"],
+            ["@types/file-loader", null],
+            ["@types/webpack", null],
+            ["file-loader", null],
+            ["loader-utils", "npm:2.0.0"],
+            ["mime-types", "npm:2.1.31"],
+            ["schema-utils", "npm:3.0.0"],
+            ["webpack", null]
+          ],
+          "packagePeers": [
+            "@types/file-loader",
+            "@types/webpack",
+            "file-loader",
+            "webpack"
           ],
           "linkType": "HARD",
         }]

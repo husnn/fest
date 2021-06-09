@@ -1,4 +1,5 @@
-import { Protocol } from '../enums';
+import { Protocol } from '@fanbase/shared';
+
 import User from './User';
 
 export class Token {
@@ -17,7 +18,7 @@ export class Token {
     transaction: string;
   };
 
-  constructor (data?: Partial<Token>) {
+  constructor(data?: Partial<Token>) {
     Object.assign(this, data);
   }
 }

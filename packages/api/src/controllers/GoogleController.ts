@@ -1,11 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
 
 import {
-  GetGoogleAuthLink, GetGoogleAuthStatus, GoogleService, LinkGoogle, OAuthRepository, UnlinkGoogle
+    GetGoogleAuthLink, GetGoogleAuthStatus, GoogleService, LinkGoogle, OAuthRepository,
+    UnlinkGoogle, User
 } from '@fanbase/core';
-import {
-  GetOAuthLinkResponse, OAuthCheckLinkResponse, UnlinkOAuthResponse, User
-} from '@fanbase/shared';
+import { GetOAuthLinkResponse, OAuthCheckLinkResponse, UnlinkOAuthResponse } from '@fanbase/shared';
 
 import { appConfig } from '../config';
 import { HttpError, HttpResponse } from '../http';
@@ -16,7 +15,7 @@ class GoogleController {
   private getGoogleAuthStatusUseCase: GetGoogleAuthStatus;
   private unlinkGoogleUseCase: UnlinkGoogle;
 
-  constructor (oAuthRepository: OAuthRepository, googleService: GoogleService) {
+  constructor(oAuthRepository: OAuthRepository, googleService: GoogleService) {
     this.getGoogleAuthLinkUseCase = new GetGoogleAuthLink(googleService);
     this.linkGoogleUseCase = new LinkGoogle(oAuthRepository, googleService);
     this.getGoogleAuthStatusUseCase = new GetGoogleAuthStatus(
@@ -26,7 +25,7 @@ class GoogleController {
     this.unlinkGoogleUseCase = new UnlinkGoogle(oAuthRepository);
   }
 
-  async unlink (req: Request, res: Response, next: NextFunction) {
+  async unlink(req: Request, res: Response, next: NextFunction) {
     try {
       const result = await this.unlinkGoogleUseCase.exec({ user: req.user });
       if (!result.success) throw new HttpError();
@@ -37,7 +36,7 @@ class GoogleController {
     }
   }
 
-  async checkLink (req: Request, res: Response, next: NextFunction) {
+  async checkLink(req: Request, res: Response, next: NextFunction) {
     try {
       const result = await this.getGoogleAuthStatusUseCase.exec({
         user: req.user
@@ -51,7 +50,7 @@ class GoogleController {
     }
   }
 
-  async link (req: Request, res: Response, next: NextFunction) {
+  async link(req: Request, res: Response, next: NextFunction) {
     try {
       let user = req.user;
       let { code } = req.body;
@@ -77,7 +76,7 @@ class GoogleController {
     }
   }
 
-  async getAuthLink (req: Request, res: Response, next: NextFunction) {
+  async getAuthLink(req: Request, res: Response, next: NextFunction) {
     try {
       const result = await this.getGoogleAuthLinkUseCase.exec({
         state: User.generateJwt(new User({ id: req.user }))

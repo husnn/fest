@@ -1,6 +1,6 @@
 import { EntitySchema } from 'typeorm';
 
-import { User } from '@fanbase/shared';
+import { User } from '@fanbase/core';
 
 const UserSchema = new EntitySchema<User>({
   name: 'user',
@@ -20,6 +20,11 @@ const UserSchema = new EntitySchema<User>({
       type: 'text',
       name: 'username',
       unique: true,
+      nullable: true
+    },
+    name: {
+      type: 'text',
+      name: 'name',
       nullable: true
     },
     loginCode: {

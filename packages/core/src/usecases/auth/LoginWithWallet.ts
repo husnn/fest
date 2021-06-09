@@ -1,6 +1,7 @@
-import { decryptText, isExpired, Protocol, User } from '@fanbase/shared';
+import { decryptText, isExpired, Protocol } from '@fanbase/shared';
 
 import UseCase from '../../base/UseCase';
+import { User } from '../../entities';
 import UserRepository from '../../repositories/UserRepository';
 import WalletRepository from '../../repositories/WalletRepository';
 import { Result } from '../../Result';
@@ -27,7 +28,7 @@ export class LoginWithWallet extends UseCase<
   private walletRepository: WalletRepository;
   private ethereumService: EthereumService;
 
-  constructor (
+  constructor(
     userRepository: UserRepository,
     walletRepository: WalletRepository,
     ethereumService: EthereumService
@@ -39,7 +40,7 @@ export class LoginWithWallet extends UseCase<
     this.ethereumService = ethereumService;
   }
 
-  async exec (
+  async exec(
     data: LoginWithWalletInput
   ): Promise<Result<LoginWithWalletOuput>> {
     const recoverResult = this.ethereumService.recoverAddress(
@@ -52,7 +53,7 @@ export class LoginWithWallet extends UseCase<
       recoverResult.data.address
     );
 
-    const user = await this.userRepository.get(wallet.ownerId);
+    const user = await this.userRepository.get(wallet.ownerId, ['wallet']);
 
     const { value: code, expiry } = user.loginCode;
 

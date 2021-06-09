@@ -1,17 +1,17 @@
-import { WalletRepository as IWalletRepository } from '@fanbase/core';
-import { Wallet } from '@fanbase/shared';
+import { Wallet, WalletRepository as IWalletRepository } from '@fanbase/core';
 
 import WalletSchema from '../schemas/WalletSchema';
 import Repository from './Repository';
 
 export class WalletRepository
   extends Repository<Wallet>
-  implements IWalletRepository {
-  constructor () {
+  implements IWalletRepository
+{
+  constructor() {
     super(WalletSchema);
   }
 
-  async findByUser (protocol: string, user: string): Promise<Wallet> {
+  async findByUser(protocol: string, user: string): Promise<Wallet> {
     return await this.db
       .createQueryBuilder('wallet')
       .where('wallet.protocol = :protocol', { protocol })
@@ -19,7 +19,7 @@ export class WalletRepository
       .getOne();
   }
 
-  async findByAddress (protocol: string, address: string): Promise<Wallet> {
+  async findByAddress(protocol: string, address: string): Promise<Wallet> {
     return await this.db
       .createQueryBuilder('wallet')
       .where('wallet.protocol = :protocol', { protocol })

@@ -1,36 +1,84 @@
-.profileHeader {
-  padding: 0 50px;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  height: 200px;
-  background-color: #EEE;
-}
-
-.avatar {
-  width: 130px;
-  height: 130px;
-  margin-left: -20px;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 50%;
-}
-
-.userInfo {
-  margin-top: 15%;
+.header {
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 20px;
+
+  @media screen and (min-width: 400px) {
+    gap: 10px;
+  }
 }
 
-.displayName {}
+.headerBg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 150px;
+  background-color: #EEE;
+  z-index: -1;
+  
+  @media screen and (min-width: 400px) {
+    height: 200px;
+  }
+}
 
-.userActions {
+.headerAvatar {
+  width: 120px;
+  height: 120px;
+  margin-top: 100px;
+  background-color: #fff;
+  border-radius: 50%;
+
+  @media screen and (max-width: 400px) {
+    width: 100px;
+    height: 100px;
+    margin-top: 80px;
+  }
+}
+
+.headerContent {
+  width: 100%;
+  padding: 10px;
   display: flex;
-  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
   gap: 10px;
 }
 
-.content {}
+.headerUserInfo {
+  display: flex;
+  flex-basis: 250px;
+  flex-direction: column;
+}
+
+.headerActions {
+  width: 100%;
+  margin-left: -5px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  flex-basis: 320px;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.content {
+  padding: 0 20px 80px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.sidebar {
+  flex-basis: 300px;
+  overflow: auto;
+
+  @media screen and (max-width: 800px) {
+    flex-grow: 1;
+  }
+}
+
+.tabContent {
+  flex-basis: 500px;
+  padding: 10px;
+}

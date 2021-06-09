@@ -5,23 +5,23 @@ import { Repository as IRepository } from '@fanbase/core';
 export abstract class Repository<T> implements IRepository<T> {
   protected db: PostgresRepository<T>;
 
-  constructor (schema: EntitySchema) {
+  constructor(schema: EntitySchema) {
     this.db = getRepository<T>(schema);
   }
 
-  get (id: string): Promise<T> {
-    return this.db.findOne(id);
+  get(id: string, relations: string[] = []): Promise<T> {
+    return this.db.findOne(id, { relations });
   }
 
-  create (item: T): Promise<T> {
+  create(item: T): Promise<T> {
     return this.db.save(item);
   }
 
-  update (item: T): Promise<T> {
+  update(item: T): Promise<T> {
     return this.db.save(item);
   }
 
-  async remove (item: T): Promise<void> {
+  async remove(item: T): Promise<void> {
     await this.db.remove(item);
   }
 }

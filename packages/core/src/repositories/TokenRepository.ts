@@ -1,5 +1,4 @@
-import { Token } from '@fanbase/shared';
-
+import { Token } from '../entities';
 import Repository from './Repository';
 
 export interface TokenRepository extends Repository<Token> {

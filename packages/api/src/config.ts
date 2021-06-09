@@ -16,9 +16,7 @@ const appConfig: AppConfig = {
 
 const getApiUrl = () =>
   process.env.API_URL ||
-  `${appConfig.protocol}://${appConfig.host}${
-    !appConfig.isProduction ? ':' + appConfig.port : null
-  }/${appConfig.apiVersion}`;
+  `http://localhost:${[appConfig.port]}/${appConfig.apiVersion}`;
 
 const ethConfig = {
   provider: process.env.ETH_PROVIDER || 'http://localhost:8545'

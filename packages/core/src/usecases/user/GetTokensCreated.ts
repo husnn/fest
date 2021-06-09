@@ -1,6 +1,5 @@
-import { Token } from '@fanbase/shared';
-
 import UseCase from '../../base/UseCase';
+import { Token } from '../../entities';
 import { TokenRepository } from '../../repositories';
 import { Result } from '../../Result';
 
@@ -16,13 +15,13 @@ export class GetTokensCreated extends UseCase<
 > {
   private tokenRepository: TokenRepository;
 
-  constructor (tokenRepository: TokenRepository) {
+  constructor(tokenRepository: TokenRepository) {
     super();
 
     this.tokenRepository = tokenRepository;
   }
 
-  async exec (
+  async exec(
     data: GetTokensCreatedInput
   ): Promise<Result<GetTokensCreatedOutput>> {
     const tokens = await this.tokenRepository.findByCreator(data.user);

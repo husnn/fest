@@ -1,5 +1,4 @@
-import { TokenOffer } from '@fanbase/shared';
-
+import { TokenOffer } from '../entities';
 import Repository from './Repository';
 
 export interface TokenOfferRepository extends Repository<TokenOffer> {}

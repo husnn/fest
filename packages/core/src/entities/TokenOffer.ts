@@ -1,5 +1,5 @@
-import Currency from '../enums/Currency';
-import OfferStatus from '../enums/OfferStatus';
+import { Currency, OfferStatus } from '@fanbase/shared';
+
 import TokenOwnership from './TokenOwnership';
 import User from './User';
 
@@ -17,7 +17,7 @@ export class TokenOffer {
   currency: Currency;
   amount: number = 0;
 
-  constructor (data?: Partial<TokenOffer>) {
+  constructor(data?: Partial<TokenOffer>) {
     Object.assign(this, data);
   }
 }

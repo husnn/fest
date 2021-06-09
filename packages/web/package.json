@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "tsc --build tsconfig.json && next build",
+    "build": "tsc --build --clean tsconfig.json && next build",
     "start": "next start",
     "serve": "yarn build && yarn start"
   },
@@ -17,7 +17,8 @@
     "@types/react-transition-group": "^4.4.1",
     "@types/web3": "^1.2.2",
     "@types/yup": "^0.29.11",
-    "typescript": "4.2.4"
+    "typescript": "4.2.4",
+    "url-loader": "^4.1.1"
   },
   "dependencies": {
     "@emotion/react": "^11.4.0",

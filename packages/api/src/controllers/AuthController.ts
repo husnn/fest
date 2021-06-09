@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
 
 import {
-  EthereumService, IdentifyWithEmail, IdentifyWithWallet, LoginError, LoginWithEmail,
-  LoginWithWallet, MailService, TokenRepository, UserRepository, WalletRepository
+    EthereumService, IdentifyWithEmail, IdentifyWithWallet, LoginError, LoginWithEmail,
+    LoginWithWallet, MailService, TokenRepository, User, UserRepository, WalletRepository
 } from '@fanbase/core';
 import {
-  IdentifyWithEmailResponse, IdentifyWithWalletResponse, LoginWithEmailRequest,
-  LoginWithEmailResponse
+    CurrentUser, IdentifyWithEmailResponse, IdentifyWithWalletResponse, LoginWithEmailResponse,
+    Wallet
 } from '@fanbase/shared';
 
 import { HttpError, HttpResponse } from '../http';
@@ -19,7 +19,7 @@ class AuthController {
   private loginWithEmailUseCase: LoginWithEmail;
   private loginWithWalletUseCase: LoginWithWallet;
 
-  constructor (
+  constructor(
     userRepository: UserRepository,
     walletRepository: WalletRepository,
     tokenRepository: TokenRepository,
@@ -47,7 +47,14 @@ class AuthController {
     );
   }
 
-  async loginWithEmail (req: Request, res: Response, next: NextFunction) {
+  mapUserToDTO(user: User): CurrentUser {
+    return new CurrentUser({
+      ...user,
+      wallet: new Wallet(user.wallet)
+    });
+  }
+
+  async loginWithEmail(req: Request, res: Response, next: NextFunction) {
     try {
       const { email, code } = req.body;
 
@@ -69,18 +76,14 @@ class AuthController {
 
       return new HttpResponse<LoginWithEmailResponse>(res, {
         token,
-        user: {
-          id: user.id,
-          address: user.wallet?.address,
-          email: user.email
-        }
+        user: this.mapUserToDTO(user)
       });
     } catch (err) {
       next(err);
     }
   }
 
-  async loginWithWallet (req: Request, res: Response, next: NextFunction) {
+  async loginWithWallet(req: Request, res: Response, next: NextFunction) {
     try {
       const { protocol, code, signature } = req.body;
 
@@ -94,18 +97,14 @@ class AuthController {
 
       return new HttpResponse<LoginWithEmailResponse>(res, {
         token,
-        user: {
-          id: user.id,
-          address: user.wallet?.address,
-          email: user.email
-        }
+        user: this.mapUserToDTO(user)
       });
     } catch (err) {
       next(err);
     }
   }
 
-  async identifyWithEmail (req: Request, res: Response, next: NextFunction) {
+  async identifyWithEmail(req: Request, res: Response, next: NextFunction) {
     try {
       const { email } = req.body;
 
@@ -119,11 +118,13 @@ class AuthController {
     }
   }
 
-  async identifyWithWallet (req: Request, res: Response, next: NextFunction) {
+  async identifyWithWallet(req: Request, res: Response, next: NextFunction) {
     try {
       const { protocol, address } = req.body;
 
-      if (!protocol || !address) { throw new ValidationError('Missing wallet protocol or address.'); }
+      if (!protocol || !address) {
+        throw new ValidationError('Missing wallet protocol or address.');
+      }
 
       const result = await this.identifyWithWalletUseCase.exec({
         protocol,

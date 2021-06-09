@@ -1,6 +1,7 @@
-import { isExpired, User } from '@fanbase/shared';
+import { isExpired } from '@fanbase/shared';
 
 import UseCase from '../../base/UseCase';
+import { User } from '../../entities';
 import UserRepository from '../../repositories/UserRepository';
 import { Result } from '../../Result';
 import { LoginError } from './errors';
@@ -21,13 +22,13 @@ export class LoginWithEmail extends UseCase<
 > {
   private userRepository: UserRepository;
 
-  constructor (userRepository: UserRepository) {
+  constructor(userRepository: UserRepository) {
     super();
 
     this.userRepository = userRepository;
   }
 
-  async exec (data: LoginWithEmailInput): Promise<Result<LoginWithEmailOutput>> {
+  async exec(data: LoginWithEmailInput): Promise<Result<LoginWithEmailOutput>> {
     const user = await this.userRepository.findByEmail(data.email);
 
     const { value: code, expiry } = user.loginCode;

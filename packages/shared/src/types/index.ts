@@ -1,4 +1,4 @@
-import { Token, User } from '../entities';
+import { CurrentUser, Token, User } from '../dto';
 import { Protocol } from '../enums';
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT';
@@ -18,13 +18,25 @@ export interface Response {
   success: boolean;
   status: number;
   body?: any;
-  error?: any;
+  error?: string;
+  message?: string;
 }
 
-export interface CurrentUser {
-  id: string;
-  address: string;
+/**
+ * User
+ */
+
+export type UserInfo = {
+  name?: string;
+  username?: string;
   email?: string;
+};
+
+export interface EditUserResponse extends Response {}
+
+export interface EditUserRequest extends Request {
+  authenticated: 'required';
+  body: UserInfo;
 }
 
 /**

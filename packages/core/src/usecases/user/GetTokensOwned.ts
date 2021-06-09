@@ -1,6 +1,5 @@
-import { Token, TokenOwnership } from '@fanbase/shared';
-
 import UseCase from '../../base/UseCase';
+import { Token, TokenOwnership } from '../../entities';
 import { TokenOwnershipRepository, TokenRepository } from '../../repositories';
 import { Result } from '../../Result';
 
@@ -13,7 +12,7 @@ export class TokenOwned extends Token {
   owner: Owner;
   quantity: number;
 
-  static from (ownership: TokenOwnership): TokenOwned {
+  static from(ownership: TokenOwnership): TokenOwned {
     const owned = new TokenOwned();
     return owned;
   }
@@ -32,7 +31,7 @@ export class GetTokensOwned extends UseCase<
   private tokenOwnershipRepository: TokenOwnershipRepository;
   private tokenRepository: TokenRepository;
 
-  constructor (
+  constructor(
     tokenOwnershipRepository: TokenOwnershipRepository,
     tokenRepository: TokenRepository
   ) {
@@ -42,7 +41,7 @@ export class GetTokensOwned extends UseCase<
     this.tokenRepository = tokenRepository;
   }
 
-  async exec (data: GetTokensOwnedInput): Promise<Result<GetTokensOwnedOutput>> {
+  async exec(data: GetTokensOwnedInput): Promise<Result<GetTokensOwnedOutput>> {
     const tokenOwnerships = await this.tokenOwnershipRepository.findByOwner(
       data.user
     );

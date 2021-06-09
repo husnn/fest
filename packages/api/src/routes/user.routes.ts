@@ -6,9 +6,10 @@ import { TokenRepository, UserRepository, WalletRepository } from '@fanbase/post
 
 import { ethConfig } from '../config';
 import UserController from '../controllers/UserController';
+import authMiddleware from '../middleware/authMiddleware';
 import MailService from '../services/MailService';
 
-export default function init (router: Router) {
+export default function init(router: Router) {
   const userRepository = new UserRepository();
   const walletRepository = new WalletRepository();
   const tokenRepository = new TokenRepository();
@@ -28,6 +29,13 @@ export default function init (router: Router) {
 
   router.get('/', (req: Request, res: Response, next: NextFunction) =>
     userController.get(req, res, next)
+  );
+
+  router.post(
+    '/me',
+    authMiddleware,
+    (req: Request, res: Response, next: NextFunction) =>
+      userController.editUser(req, res, next)
   );
 
   router.get(

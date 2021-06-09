@@ -1,6 +1,7 @@
-import { encryptText, Protocol, User, Wallet, WalletType } from '@fanbase/shared';
+import { encryptText, Protocol, WalletType } from '@fanbase/shared';
 
 import UseCase from '../../base/UseCase';
+import { User, Wallet } from '../../entities';
 import UserRepository from '../../repositories/UserRepository';
 import WalletRepository from '../../repositories/WalletRepository';
 import { Result } from '../../Result';
@@ -25,7 +26,7 @@ export class IdentifyWithWallet extends UseCase<
   private userRepository: UserRepository;
   private walletRepository: WalletRepository;
 
-  constructor (
+  constructor(
     userRepository: UserRepository,
     walletRepository: WalletRepository
   ) {
@@ -35,7 +36,7 @@ export class IdentifyWithWallet extends UseCase<
     this.walletRepository = walletRepository;
   }
 
-  async exec (
+  async exec(
     data: IdentifyWithWalletInput
   ): Promise<Result<IdentifyWithWalletOutput>> {
     let user: User;

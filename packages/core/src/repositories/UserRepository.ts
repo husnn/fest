@@ -1,5 +1,4 @@
-import { User } from '@fanbase/shared';
-
+import { User } from '../entities';
 import Repository from './Repository';
 
 export interface UserRepository extends Repository<User> {

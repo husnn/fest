@@ -1,4 +1,4 @@
-import { Wallet } from '@fanbase/shared';
+import { Wallet } from '@fanbase/core';
 
 import { Result } from '../Result';
 

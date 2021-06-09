@@ -13,7 +13,6 @@ export const GoogleButton: React.FC<GoogleButtonProps> = ({
 
   return (
     <Button
-      size="small"
       color={isLinked ? 'normal' : 'secondary'}
       onClick={async () => {
         if (!isLinked) {

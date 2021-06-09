@@ -1,18 +1,19 @@
 import { NextFunction, Request, Response } from 'express';
 
 import {
-  EthereumService, GetTokensCreated, GetUser, MailService, TokenRepository, UserRepository,
-  WalletRepository
+    EthereumService, GetTokensCreated, GetUser, MailService, TokenRepository, UserRepository,
+    WalletRepository
 } from '@fanbase/core';
 import { GetTokensCreatedResponse, GetUserResponse } from '@fanbase/shared';
+import { UserInfo } from '@fanbase/shared/src/types';
 
-import { HttpResponse, NotFoundError } from '../http';
+import { HttpResponse, NotFoundError, ValidationError } from '../http';
 
 class UserController {
   private getUserUseCase: GetUser;
   private getTokensCreatedUseCase: GetTokensCreated;
 
-  constructor (
+  constructor(
     userRepository: UserRepository,
     walletRepository: WalletRepository,
     tokenRepository: TokenRepository,
@@ -23,7 +24,7 @@ class UserController {
     this.getTokensCreatedUseCase = new GetTokensCreated(tokenRepository);
   }
 
-  async getTokensCreated (req: Request, res: Response, next: NextFunction) {
+  async getTokensCreated(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
       const tokens = await this.getTokensCreatedUseCase.exec({ user: id });
@@ -37,7 +38,17 @@ class UserController {
     }
   }
 
-  async get (req: Request, res: Response, next: NextFunction) {
+  async editUser(req: Request, res: Response, next: NextFunction) {
+    try {
+      const data: UserInfo = req.body;
+
+      if (!data.username) throw new ValidationError('Missing username.');
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async get(req: Request, res: Response, next: NextFunction) {
     try {
       const { id, username } = req.query as any;
 

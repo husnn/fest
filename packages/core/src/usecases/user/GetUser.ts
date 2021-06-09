@@ -1,6 +1,5 @@
-import { User } from '@fanbase/shared';
-
 import UseCase from '../../base/UseCase';
+import { User } from '../../entities';
 import { UserRepository } from '../../repositories';
 import { Result } from '../../Result';
 
@@ -14,13 +13,13 @@ export type GetUserOutput = User;
 export class GetUser extends UseCase<GetUserInput, GetUserOutput> {
   private userRepository: UserRepository;
 
-  constructor (userRepository: UserRepository) {
+  constructor(userRepository: UserRepository) {
     super();
 
     this.userRepository = userRepository;
   }
 
-  async exec (data: GetUserInput): Promise<Result<GetUserOutput>> {
+  async exec(data: GetUserInput): Promise<Result<GetUserOutput>> {
     let user: User;
 
     if (data.id) {

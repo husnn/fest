@@ -1,5 +1,4 @@
-import { Wallet } from '@fanbase/shared';
-
+import { Wallet } from '../entities';
 import Repository from './Repository';
 
 export interface WalletRepository extends Repository<Wallet> {

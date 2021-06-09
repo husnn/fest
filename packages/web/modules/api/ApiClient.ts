@@ -1,11 +1,12 @@
 import {
-  ApproveMintRequest, ApproveMintResponse, CreateTokenRequest, CreateTokenResponse, CurrentUser,
-  GetOAuthLinkRequest, GetOAuthLinkResponse, GetOwnUploadsRequest, GetOwnUploadsResponse,
-  GetTokenRequest, GetTokenResponse, GetTokensCreatedResponse, IdentifyWithEmailRequest,
-  IdentifyWithEmailResponse, IdentifyWithWalletRequest, IdentifyWithWalletResponse,
-  LoginWithEmailRequest, LoginWithEmailResponse, LoginWithWalletRequest, LoginWithWalletResponse,
-  OAuthCheckLinkRequest, OAuthCheckLinkResponse, OAuthLinkRequest, Protocol, Token, TokenData,
-  UnlinkOAuthRequest, UnlinkOAuthResponse, YouTubeVideo
+    ApproveMintRequest, ApproveMintResponse, CreateTokenRequest, CreateTokenResponse, CurrentUser,
+    EditUserRequest, EditUserResponse, GetOAuthLinkRequest, GetOAuthLinkResponse,
+    GetOwnUploadsRequest, GetOwnUploadsResponse, GetTokenRequest, GetTokenResponse,
+    GetTokensCreatedResponse, IdentifyWithEmailRequest, IdentifyWithEmailResponse,
+    IdentifyWithWalletRequest, IdentifyWithWalletResponse, LoginWithEmailRequest,
+    LoginWithEmailResponse, LoginWithWalletRequest, LoginWithWalletResponse, OAuthCheckLinkRequest,
+    OAuthCheckLinkResponse, OAuthLinkRequest, Protocol, Token, TokenData, UnlinkOAuthRequest,
+    UnlinkOAuthResponse, UserInfo, YouTubeVideo
 } from '@fanbase/shared';
 
 import HttpClient from './HttpClient';
@@ -15,25 +16,33 @@ export default class ApiClient {
 
   static instance: ApiClient | undefined;
 
-  static getInstance () {
+  static getInstance() {
     return this.instance;
   }
 
-  constructor (client: HttpClient) {
+  constructor(client: HttpClient) {
     this.client = client;
     ApiClient.instance = this;
   }
 
+  // User
+
+  async editUser(data: UserInfo): Promise<EditUserResponse> {
+    return this.client.request<EditUserResponse, EditUserRequest>({
+      method: 'POST',
+      endpoint: '/me',
+      authenticated: 'required',
+      body: data
+    });
+  }
+
   // Token
 
-  async approveMint (
+  async approveMint(
     protocol = Protocol.ETHEREUM,
     supply: number
   ): Promise<ApproveMintResponse> {
-    return await this.client.request<
-      ApproveMintResponse,
-      ApproveMintRequest
-    >({
+    return this.client.request<ApproveMintResponse, ApproveMintRequest>({
       method: 'POST',
       endpoint: '/tokens/approve-mint',
       authenticated: 'required',
@@ -44,7 +53,7 @@ export default class ApiClient {
     });
   }
 
-  async getTokensCreated (user: string): Promise<Token[]> {
+  async getTokensCreated(user: string): Promise<Token[]> {
     const response = await this.client.request<GetTokensCreatedResponse>({
       method: 'GET',
       endpoint: `/users/${user}/tokens/created`
@@ -53,8 +62,11 @@ export default class ApiClient {
     return response.body.tokens;
   }
 
-  async getToken (id: string): Promise<Token> {
-    const response = await this.client.request<GetTokenResponse, GetTokenRequest>({
+  async getToken(id: string): Promise<Token> {
+    const response = await this.client.request<
+      GetTokenResponse,
+      GetTokenRequest
+    >({
       method: 'GET',
       endpoint: `/tokens/${id}`
     });
@@ -62,7 +74,7 @@ export default class ApiClient {
     return response.token;
   }
 
-  async createToken (data: TokenData): Promise<string> {
+  async createToken(data: TokenData): Promise<string> {
     const response = await this.client.request<
       CreateTokenResponse,
       CreateTokenRequest
@@ -78,7 +90,7 @@ export default class ApiClient {
 
   // YouTube
 
-  async getYouTubeUploads (
+  async getYouTubeUploads(
     playlist?: string,
     page?: string,
     count = 2
@@ -112,7 +124,7 @@ export default class ApiClient {
 
   // Google
 
-  async unlinkGoogle (): Promise<void> {
+  async unlinkGoogle(): Promise<void> {
     await this.client.request<UnlinkOAuthResponse, UnlinkOAuthRequest>({
       method: 'POST',
       endpoint: '/google/unlink',
@@ -120,7 +132,7 @@ export default class ApiClient {
     });
   }
 
-  async isGoogleLinked (): Promise<boolean> {
+  async isGoogleLinked(): Promise<boolean> {
     const response = await this.client.request<
       OAuthCheckLinkResponse,
       OAuthCheckLinkRequest
@@ -133,7 +145,7 @@ export default class ApiClient {
     return response.linked;
   }
 
-  async linkGoogle (code: string) {
+  async linkGoogle(code: string) {
     await this.client.request<null, OAuthLinkRequest>({
       method: 'POST',
       endpoint: '/google/link',
@@ -144,7 +156,7 @@ export default class ApiClient {
     });
   }
 
-  async getGoogleOAuthLink (): Promise<string> {
+  async getGoogleOAuthLink(): Promise<string> {
     const response = await this.client.request<
       GetOAuthLinkResponse,
       GetOAuthLinkRequest
@@ -159,7 +171,7 @@ export default class ApiClient {
 
   // Auth
 
-  async loginWithEmail (
+  async loginWithEmail(
     email: string,
     code: string
   ): Promise<{
@@ -185,7 +197,7 @@ export default class ApiClient {
     };
   }
 
-  async loginWithWallet (
+  async loginWithWallet(
     protocol = Protocol.ETHEREUM,
     code: string,
     signature: string
@@ -213,7 +225,7 @@ export default class ApiClient {
     };
   }
 
-  async identifyWithWallet (
+  async identifyWithWallet(
     address: string,
     protocol = Protocol.ETHEREUM
   ): Promise<{ code: string; message: string }> {
@@ -235,7 +247,7 @@ export default class ApiClient {
     return { code, message };
   }
 
-  async identifyWithEmail (email: string): Promise<void> {
+  async identifyWithEmail(email: string): Promise<void> {
     await this.client.request<
       IdentifyWithEmailResponse,
       IdentifyWithEmailRequest

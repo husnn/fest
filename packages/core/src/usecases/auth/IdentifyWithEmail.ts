@@ -1,7 +1,6 @@
-import { User } from '@fanbase/shared';
-
 import UseCase from '../../base/UseCase';
 import { LoginCodeEmail } from '../../emails';
+import { User } from '../../entities';
 import UserRepository from '../../repositories/UserRepository';
 import WalletRepository from '../../repositories/WalletRepository';
 import { Result } from '../../Result';
@@ -24,7 +23,7 @@ export class IdentifyWithEmail extends UseCase<
   private ethereumService: EthereumService;
   private mailService: MailService;
 
-  constructor (
+  constructor(
     userRepository: UserRepository,
     walletRepository: WalletRepository,
     ethereumService: EthereumService,
@@ -38,7 +37,7 @@ export class IdentifyWithEmail extends UseCase<
     this.mailService = mailService;
   }
 
-  async exec (
+  async exec(
     data: IdentifyWithEmailInput
   ): Promise<Result<IdentifyWithEmailOutput>> {
     let user = await this.userRepository.findByEmail(data.email);
