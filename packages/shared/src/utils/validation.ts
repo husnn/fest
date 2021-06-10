@@ -8,3 +8,8 @@ export const USERNAME_REGEX =
   /^(?=.{3,15}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/;
 
 export const isUsername = (value: string) => USERNAME_REGEX.test(value);
+
+export const UUID_REGEX =
+  /[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}/;
+
+export const isUUID = (value: string) => UUID_REGEX.test(value);

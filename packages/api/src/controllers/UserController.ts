@@ -66,7 +66,8 @@ class UserController {
 
   async get(req: Request, res: Response, next: NextFunction) {
     try {
-      const { id, username } = req.query as any;
+      const { id } = req.params;
+      const { username } = req.query as any;
 
       const result = await this.getUserUseCase.exec({ id, username });
 

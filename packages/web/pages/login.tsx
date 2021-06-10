@@ -35,13 +35,15 @@ export default function Login() {
   }, []);
 
   useEffect(() => {
-    if (isAuthenticated)
-      router.push(getProfileUrl({ username: currentUser.username }));
+    if (isAuthenticated) {
+      router.push(getProfileUrl(currentUser));
+    }
   }, [isAuthenticated]);
 
   const onLogin = (token: string, user: CurrentUser) => {
     saveAuthToken(token);
     saveCurrentUser(user);
+
     setCurrentUser(user);
     setAuthenticated(true);
   };

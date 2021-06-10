@@ -1,10 +1,9 @@
 import { GetServerSideProps } from 'next';
-import Error from 'next/error';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
-import { GetUserResponse, User } from '@fanbase/shared';
+import { User } from '@fanbase/shared';
 
 import ApiClient from '../../modules/api/ApiClient';
 import useAuthentication from '../../modules/auth/useAuthentication';
@@ -13,13 +12,12 @@ import styles from '../../styles/Profile.module.scss';
 import { Button, Link } from '../../ui';
 import ButtonGroup from '../../ui/ButtonGroup';
 import ResponsiveTabs from '../../ui/ResponsiveTabs';
-import { getDisplayName } from '../../utils';
+import { getDisplayName, getProfileUrl } from '../../utils';
 
-export default function ProfilePage({ errorCode }) {
+export default function ProfilePage() {
   const router = useRouter();
 
   const [user, setUser] = useState<User>();
-  const [isSelf, setSelf] = useState(false);
 
   const { currentUser } = useAuthentication();
 
@@ -42,29 +40,34 @@ export default function ProfilePage({ errorCode }) {
     }
   } as Tabs;
 
-  const { username } = router.query;
+  const { id } = router.query;
+
+  const fetchUser = async () => {
+    try {
+      const response = await ApiClient.instance?.getUser(id as string);
+
+      const { user } = response;
+
+      if (user.username) {
+        router.replace(getProfileUrl(user));
+      }
+
+      setUser(user);
+    } catch (err) {}
+  };
 
   useEffect(() => {
     initTabs(TABS);
+    fetchUser();
   }, []);
 
-  useEffect(() => {
-    if (currentUser && username === currentUser.username) {
-      setSelf(true);
-    }
-
-    ApiClient.instance
-      ?.getUserByUsername(username as string)
-      .then((response: GetUserResponse) => {
-        setUser(response.user);
-      })
-      .catch((err) => {});
-  }, [username, currentUser]);
+  const isSelf =
+    currentUser && (id === currentUser.username || id === currentUser.id);
 
   return (
     <div>
       <Head>
-        <title>{username}</title>
+        <title>{(user && getDisplayName(user)) || id}</title>
       </Head>
       <div className="boxed">
         <div className={styles.header}>

@@ -2,11 +2,12 @@ import {
     ApproveMintRequest, ApproveMintResponse, CreateTokenRequest, CreateTokenResponse, CurrentUser,
     EditUserRequest, EditUserResponse, GetOAuthLinkRequest, GetOAuthLinkResponse,
     GetOwnUploadsRequest, GetOwnUploadsResponse, GetTokenRequest, GetTokenResponse,
-    GetTokensCreatedResponse, GetUserByUsernameRequest, GetUserResponse, IdentifyWithEmailRequest,
-    IdentifyWithEmailResponse, IdentifyWithWalletRequest, IdentifyWithWalletResponse,
-    LoginWithEmailRequest, LoginWithEmailResponse, LoginWithWalletRequest, LoginWithWalletResponse,
-    OAuthCheckLinkRequest, OAuthCheckLinkResponse, OAuthLinkRequest, Protocol, Token, TokenData,
-    UnlinkOAuthRequest, UnlinkOAuthResponse, UserInfo, YouTubeVideo
+    GetTokensCreatedResponse, GetUserByIdRequest, GetUserByUsernameRequest, GetUserResponse,
+    IdentifyWithEmailRequest, IdentifyWithEmailResponse, IdentifyWithWalletRequest,
+    IdentifyWithWalletResponse, isUUID, LoginWithEmailRequest, LoginWithEmailResponse,
+    LoginWithWalletRequest, LoginWithWalletResponse, OAuthCheckLinkRequest, OAuthCheckLinkResponse,
+    OAuthLinkRequest, Protocol, Token, TokenData, UnlinkOAuthRequest, UnlinkOAuthResponse, UserInfo,
+    YouTubeVideo
 } from '@fanbase/shared';
 
 import HttpClient from './HttpClient';
@@ -36,6 +37,18 @@ export default class ApiClient {
         username
       }
     });
+  }
+
+  async getUser(identifier: string): Promise<GetUserResponse> {
+    if (identifier && isUUID(identifier)) {
+      return this.client.request<GetUserResponse, GetUserByIdRequest>({
+        method: 'GET',
+        endpoint: `/users/${identifier}`,
+        authentication: 'none'
+      });
+    }
+
+    return this.getUserByUsername(identifier);
   }
 
   async editUser(data: UserInfo): Promise<EditUserResponse> {

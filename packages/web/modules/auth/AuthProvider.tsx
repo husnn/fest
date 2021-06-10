@@ -25,10 +25,10 @@ export const AuthProvider: React.FC = ({ children }) => {
     }
   }, []);
 
-  useEffect(() => {
-    if (currentUser && Object.keys(currentUser).length !== 0)
-      saveCurrentUser(currentUser);
-  }, [currentUser]);
+  // useEffect(() => {
+  //   if (currentUser && Object.keys(currentUser).length !== 0)
+  //     saveCurrentUser(currentUser);
+  // }, [currentUser]);
 
   const clearAuth = () => {
     removeAuth();

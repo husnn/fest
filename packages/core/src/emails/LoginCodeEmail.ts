@@ -4,13 +4,13 @@ export class LoginCodeEmail extends Email {
   subject: string;
   content: string;
 
-  constructor (to: string, code: string) {
+  constructor(to: string, code: string) {
     super(to);
 
     this.subject = 'Login to Fanbase';
 
     this.content = `
-      ${code} 
+      Your login code is ${code}
     `;
   }
 }

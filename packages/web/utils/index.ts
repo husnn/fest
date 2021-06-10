@@ -9,7 +9,7 @@ export const getProfileUrl = ({
 }: {
   username?: string;
   id?: string;
-}) => (username ? `/u/${username}` : `/user/${id}`);
+}) => `/u/${username || id}`;
 
 export const specific =
   <T>() =>

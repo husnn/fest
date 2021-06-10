@@ -139,6 +139,11 @@ export interface GetUserResponse extends Response {
   user: User;
 }
 
+export interface GetUserByIdRequest extends Request {
+  method: 'GET';
+  authentication: 'none';
+}
+
 export interface GetUserByUsernameRequest extends Request {
   method: 'GET';
   authentication: 'none';

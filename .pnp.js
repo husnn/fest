@@ -3063,6 +3063,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@fanbase/ethereum", "workspace:packages/ethereum"],
             ["@fanbase/postgres", "workspace:packages/postgres"],
             ["@fanbase/shared", "workspace:packages/shared"],
+            ["@sendgrid/mail", "npm:7.4.4"],
             ["@types/cors", "npm:2.8.10"],
             ["@types/express", "npm:4.17.12"],
             ["@types/jsonwebtoken", "npm:8.5.1"],
@@ -4505,6 +4506,38 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@repeaterjs-repeater-npm-3.0.4-e0f5393b15-45e4afba3e.zip/node_modules/@repeaterjs/repeater/",
           "packageDependencies": [
             ["@repeaterjs/repeater", "npm:3.0.4"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@sendgrid/client", [
+        ["npm:7.4.3", {
+          "packageLocation": "./.yarn/cache/@sendgrid-client-npm-7.4.3-5371620211-657418b9d3.zip/node_modules/@sendgrid/client/",
+          "packageDependencies": [
+            ["@sendgrid/client", "npm:7.4.3"],
+            ["@sendgrid/helpers", "npm:7.4.3"],
+            ["axios", "npm:0.21.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@sendgrid/helpers", [
+        ["npm:7.4.3", {
+          "packageLocation": "./.yarn/cache/@sendgrid-helpers-npm-7.4.3-1e4e575f5e-1528ff0a19.zip/node_modules/@sendgrid/helpers/",
+          "packageDependencies": [
+            ["@sendgrid/helpers", "npm:7.4.3"],
+            ["deepmerge", "npm:4.2.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@sendgrid/mail", [
+        ["npm:7.4.4", {
+          "packageLocation": "./.yarn/cache/@sendgrid-mail-npm-7.4.4-815c11e40d-568c64dd49.zip/node_modules/@sendgrid/mail/",
+          "packageDependencies": [
+            ["@sendgrid/mail", "npm:7.4.4"],
+            ["@sendgrid/client", "npm:7.4.3"],
+            ["@sendgrid/helpers", "npm:7.4.3"]
           ],
           "linkType": "HARD",
         }]

@@ -22,6 +22,15 @@ const ethConfig = {
   provider: process.env.ETH_PROVIDER || 'http://localhost:8545'
 };
 
+const mailConfig = {
+  from: {
+    noreply: process.env.MAIL_FROM_NO_REPLY
+  },
+  sendgrid: {
+    apiUrl: process.env.SENDGRID_API_KEY
+  }
+};
+
 const postgresConfig: PostgresConfig = {
   uri: process.env.DATABASE_URL,
   host: process.env.PG_HOST || '127.0.0.1',
@@ -47,6 +56,7 @@ export {
   getApiUrl,
   postgresConfig,
   ethConfig,
+  mailConfig,
   googleConfig,
   youTubeConfig
 };

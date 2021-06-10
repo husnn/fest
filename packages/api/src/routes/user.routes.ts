@@ -27,15 +27,15 @@ export default function init(router: Router) {
     mailService
   );
 
-  router.get('/', (req: Request, res: Response, next: NextFunction) =>
-    userController.get(req, res, next)
-  );
-
   router.post(
     '/me',
     authMiddleware,
     (req: Request, res: Response, next: NextFunction) =>
       userController.editUser(req, res, next)
+  );
+
+  router.get('/users/:id?', (req: Request, res: Response, next: NextFunction) =>
+    userController.get(req, res, next)
   );
 
   router.get(

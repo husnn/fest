@@ -1888,6 +1888,7 @@ __metadata:
     "@fanbase/ethereum": "*"
     "@fanbase/postgres": "*"
     "@fanbase/shared": "*"
+    "@sendgrid/mail": ^7.4.4
     "@types/cors": ^2.8.10
     "@types/express": ^4.17.11
     "@types/jsonwebtoken": ^8.5.1
@@ -2848,6 +2849,35 @@ __metadata:
   version: 3.0.4
   resolution: "@repeaterjs/repeater@npm:3.0.4"
   checksum: 45e4afba3e8756e585c3807452596349b8c2d085546558e2eb13dd6de37ae0e6a235abda3feecfd955a32ae1db6194eafa78a91788d1506f35b4fb51e482974b
+  languageName: node
+  linkType: hard
+
+"@sendgrid/client@npm:^7.4.3":
+  version: 7.4.3
+  resolution: "@sendgrid/client@npm:7.4.3"
+  dependencies:
+    "@sendgrid/helpers": ^7.4.3
+    axios: ^0.21.1
+  checksum: 657418b9d34f5dfe9e60c2972a9354d73b0457578961e115e1138bcaff5491bc357242e794be4cc55b7f76d3d779449f02e10d76ef957b4995fd4540054232e2
+  languageName: node
+  linkType: hard
+
+"@sendgrid/helpers@npm:^7.4.3":
+  version: 7.4.3
+  resolution: "@sendgrid/helpers@npm:7.4.3"
+  dependencies:
+    deepmerge: ^4.2.2
+  checksum: 1528ff0a19c60e3a0219c28c693a8746b9090387a2971dd9c0a6f78b451b563ea4de6f5d3a53978278146f02db9d4064bb1ccb944a48ec811f280d445f8ca70e
+  languageName: node
+  linkType: hard
+
+"@sendgrid/mail@npm:^7.4.4":
+  version: 7.4.4
+  resolution: "@sendgrid/mail@npm:7.4.4"
+  dependencies:
+    "@sendgrid/client": ^7.4.3
+    "@sendgrid/helpers": ^7.4.3
+  checksum: 568c64dd49822ce5c27832bbc8a82d91b9e5bdb2e5cc636454f3f5c67664da3b82edf77bccea0d36e615cccfad585bf4c3fff0e423f00fe420e3c6261662884e
   languageName: node
   linkType: hard
 
