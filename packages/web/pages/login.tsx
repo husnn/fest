@@ -41,6 +41,8 @@ export default function Login() {
   }, [isAuthenticated]);
 
   const onLogin = (token: string, user: CurrentUser) => {
+    if (!token || !user) return;
+
     saveAuthToken(token);
     saveCurrentUser(user);
 
@@ -55,22 +57,26 @@ export default function Login() {
 
     if (!address) return;
 
-    const identificationData = await ApiClient.instance?.identifyWithWallet(
-      address
-    );
+    try {
+      const identificationData = await ApiClient.instance?.identifyWithWallet(
+        address
+      );
 
-    const signature = await EthereumClient.instance?.signMessage(
-      identificationData.message,
-      address
-    );
+      const signature = await EthereumClient.instance?.signMessage(
+        identificationData.message,
+        address
+      );
 
-    const { token, user } = await ApiClient.instance?.loginWithWallet(
-      Protocol.ETHEREUM,
-      identificationData.code,
-      signature
-    );
+      const { token, user } = await ApiClient.instance?.loginWithWallet(
+        Protocol.ETHEREUM,
+        identificationData.code,
+        signature
+      );
 
-    onLogin(token, user);
+      onLogin(token, user);
+    } catch (err) {
+      console.log(`Could not login. ${err}`);
+    }
   };
 
   return (

@@ -4,10 +4,9 @@ import {
     GetOwnUploadsRequest, GetOwnUploadsResponse, GetTokenRequest, GetTokenResponse,
     GetTokensCreatedResponse, GetUserByIdRequest, GetUserByUsernameRequest, GetUserResponse,
     IdentifyWithEmailRequest, IdentifyWithEmailResponse, IdentifyWithWalletRequest,
-    IdentifyWithWalletResponse, isUUID, LoginWithEmailRequest, LoginWithEmailResponse,
-    LoginWithWalletRequest, LoginWithWalletResponse, OAuthCheckLinkRequest, OAuthCheckLinkResponse,
-    OAuthLinkRequest, Protocol, Token, TokenData, UnlinkOAuthRequest, UnlinkOAuthResponse, UserInfo,
-    YouTubeVideo
+    IdentifyWithWalletResponse, isUUID, LoginResponse, LoginWithEmailRequest,
+    LoginWithWalletRequest, OAuthCheckLinkRequest, OAuthCheckLinkResponse, OAuthLinkRequest,
+    Protocol, Token, TokenData, UnlinkOAuthRequest, UnlinkOAuthResponse, UserInfo, YouTubeVideo
 } from '@fanbase/shared';
 
 import HttpClient from './HttpClient';
@@ -195,17 +194,8 @@ export default class ApiClient {
 
   // Auth
 
-  async loginWithEmail(
-    email: string,
-    code: string
-  ): Promise<{
-    token: string;
-    user: CurrentUser;
-  }> {
-    const response = await this.client.request<
-      LoginWithEmailResponse,
-      LoginWithEmailRequest
-    >({
+  async loginWithEmail(email: string, code: string): Promise<LoginResponse> {
+    return this.client.request<LoginResponse, LoginWithEmailRequest>({
       method: 'POST',
       endpoint: '/auth/login/email',
       authentication: 'none',
@@ -214,25 +204,14 @@ export default class ApiClient {
         code
       }
     });
-
-    return {
-      token: response.token,
-      user: response.user
-    };
   }
 
   async loginWithWallet(
     protocol = Protocol.ETHEREUM,
     code: string,
     signature: string
-  ): Promise<{
-    token: string;
-    user: CurrentUser;
-  }> {
-    const response = await this.client.request<
-      LoginWithWalletResponse,
-      LoginWithWalletRequest
-    >({
+  ): Promise<LoginResponse> {
+    return this.client.request<LoginResponse, LoginWithWalletRequest>({
       method: 'POST',
       endpoint: '/auth/login/wallet',
       authentication: 'none',
@@ -242,11 +221,6 @@ export default class ApiClient {
         signature
       }
     });
-
-    return {
-      token: response.token,
-      user: response.user
-    };
   }
 
   async identifyWithWallet(

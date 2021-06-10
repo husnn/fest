@@ -5,7 +5,7 @@ import {
     LoginWithWallet, MailService, TokenRepository, UserRepository, WalletRepository
 } from '@fanbase/core';
 import {
-    IdentifyWithEmailResponse, IdentifyWithWalletResponse, LoginWithEmailResponse
+    IdentifyWithEmailResponse, IdentifyWithWalletResponse, LoginResponse
 } from '@fanbase/shared';
 
 import { HttpError, HttpResponse } from '../http';
@@ -69,7 +69,7 @@ class AuthController {
 
       const { token, user } = result.data;
 
-      return new HttpResponse<LoginWithEmailResponse>(res, {
+      return new HttpResponse<LoginResponse>(res, {
         token,
         user
       });
@@ -90,7 +90,7 @@ class AuthController {
 
       const { token, user } = result.data;
 
-      return new HttpResponse<LoginWithEmailResponse>(res, {
+      return new HttpResponse<LoginResponse>(res, {
         token,
         user
       });

@@ -171,7 +171,7 @@ export interface EditUserRequest extends Request {
  * Login
  */
 
-export interface LoginWithEmailResponse extends Response {
+export interface LoginResponse extends Response {
   token: string;
   user: CurrentUser;
 }
@@ -181,11 +181,6 @@ export interface LoginWithEmailRequest extends Request {
     email: string;
     code: string;
   };
-}
-
-export interface LoginWithWalletResponse extends Response {
-  token: string;
-  user: CurrentUser;
 }
 
 export interface LoginWithWalletRequest extends Request {

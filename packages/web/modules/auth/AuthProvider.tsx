@@ -5,13 +5,25 @@ import { CurrentUser } from '@fanbase/shared';
 
 import { getAuthToken, getCurrentUser, removeAuth, saveCurrentUser } from './authStorage';
 
-export const AuthContext = React.createContext(null);
+type AuthContextProps = {
+  isAuthenticated: boolean;
+  setAuthenticated: (authenticated: boolean) => void;
+  currentUser: CurrentUser | undefined;
+  setCurrentUser: (user: CurrentUser) => void;
+  setRedirect: (redirect: boolean) => void;
+  clearAuth: () => void;
+};
+
+export const AuthContext = React.createContext<AuthContextProps | undefined>(
+  undefined
+);
 
 export const AuthProvider: React.FC = ({ children }) => {
-  const router = useRouter();
-
   const [isAuthenticated, setAuthenticated] = useState(false);
   const [currentUser, setCurrentUser] = useState<CurrentUser>(null);
+  const [redirect, setRedirect] = useState(false);
+
+  const router = useRouter();
 
   useEffect(() => {
     const user = getCurrentUser();
@@ -19,16 +31,13 @@ export const AuthProvider: React.FC = ({ children }) => {
 
     setAuthenticated(isAuthenticated);
     setCurrentUser(user);
-
-    if (!isAuthenticated) {
-      router.push('/login');
-    }
   }, []);
 
-  // useEffect(() => {
-  //   if (currentUser && Object.keys(currentUser).length !== 0)
-  //     saveCurrentUser(currentUser);
-  // }, [currentUser]);
+  useEffect(() => {
+    if (redirect && !isAuthenticated) {
+      router.push('/login');
+    }
+  }, [isAuthenticated, redirect]);
 
   const clearAuth = () => {
     removeAuth();
@@ -44,6 +53,7 @@ export const AuthProvider: React.FC = ({ children }) => {
         setAuthenticated,
         currentUser,
         setCurrentUser,
+        setRedirect,
         clearAuth
       }}
     >

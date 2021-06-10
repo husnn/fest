@@ -9,6 +9,7 @@ import { USERNAME_REGEX } from '@fanbase/shared';
 
 import { GoogleButton } from '../components';
 import ApiClient from '../modules/api/ApiClient';
+import { saveCurrentUser } from '../modules/auth/authStorage';
 import useAuthentication from '../modules/auth/useAuthentication';
 import styles from '../styles/Settings.module.scss';
 import { Button, FormInput, TextInput } from '../ui';
@@ -46,7 +47,7 @@ const UserInfoSchema = Yup.object().shape({
 export default function SettingsPage() {
   const router = useRouter();
 
-  const { currentUser, setCurrentUser } = useAuthentication();
+  const { currentUser, setCurrentUser } = useAuthentication(true);
 
   return (
     <div className={'boxed ' + styles.content}>
@@ -79,7 +80,9 @@ export default function SettingsPage() {
 
                 try {
                   const response = await ApiClient.instance?.editUser(data);
+
                   setCurrentUser(response.user);
+                  saveCurrentUser(response.user);
                 } catch (err) {
                   if (err.error == 'ValidationError')
                     setErrors({ global: err.message });
