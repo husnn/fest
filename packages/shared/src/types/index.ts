@@ -156,6 +156,7 @@ export type UserInfo = {
   name?: string;
   username?: string;
   email?: string;
+  bio?: string;
 };
 
 export interface EditUserResponse extends Response {

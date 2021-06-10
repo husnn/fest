@@ -14,6 +14,7 @@ export class User {
   phoneVerified: boolean;
   username: string;
   name: string;
+  bio: string;
   walletId: string;
   wallet: Wallet;
   tokensCreated: Token[];

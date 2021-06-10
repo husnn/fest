@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { User } from '@fanbase/shared';
 
 import ApiClient from '../../modules/api/ApiClient';
+import { getCurrentUser, saveCurrentUser } from '../../modules/auth/authStorage';
 import useAuthentication from '../../modules/auth/useAuthentication';
 import useTabs, { Tab, Tabs } from '../../modules/navigation/useTabs';
 import styles from '../../styles/Profile.module.scss';
@@ -19,7 +20,7 @@ export default function ProfilePage() {
 
   const [user, setUser] = useState<User>();
 
-  const { currentUser } = useAuthentication();
+  const { currentUser, setCurrentUser } = useAuthentication();
 
   const [followed, setFollowed] = useState(true);
 
@@ -62,7 +63,17 @@ export default function ProfilePage() {
   }, []);
 
   const isSelf =
-    currentUser && (id === currentUser.username || id === currentUser.id);
+    currentUser && (id === currentUser?.username || id === currentUser?.id);
+
+  useEffect(() => {
+    if (user && isSelf) {
+      let currentUser = getCurrentUser();
+      Object.assign(currentUser, user);
+
+      setCurrentUser(currentUser);
+      saveCurrentUser(currentUser);
+    }
+  }, [user]);
 
   return (
     <div>
@@ -78,7 +89,7 @@ export default function ProfilePage() {
               <h3 className={styles.headerName}>
                 {user ? getDisplayName(user) : null}
               </h3>
-              <p>I have been a YouTube creator since the early 2000s.</p>
+              {user?.bio && <p style={{ marginTop: 10 }}>{user.bio}</p>}
             </div>
             <div className={styles.headerActions}>
               {!isSelf ? (
@@ -111,12 +122,12 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          <div className="stats">
+          {/* <div className="stats">
             <div className="fans"></div>
             <div className="coin-price"></div>
             <div className="yt-subs"></div>
             <div className="twitter-followers"></div>
-          </div>
+          </div> */}
         </div>
 
         <div className={styles.content}>

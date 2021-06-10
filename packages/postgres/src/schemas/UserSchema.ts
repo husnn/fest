@@ -27,6 +27,11 @@ const UserSchema = new EntitySchema<User>({
       name: 'name',
       nullable: true
     },
+    bio: {
+      type: 'text',
+      name: 'bio',
+      nullable: true
+    },
     loginCode: {
       type: 'simple-json',
       name: 'login_code',

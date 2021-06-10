@@ -9,10 +9,11 @@ import styles from '../styles/Home.module.css';
 export default function Home() {
   const router = useRouter();
   const { setLinks } = useHeader();
-  const { isAuthenticated, clearAuth } = useAuthentication();
+  const { isAuthenticated, currentUser, clearAuth } = useAuthentication();
 
   useEffect(() => {
     setLinks([
+      ...(currentUser ? [headerLinks.Profile(currentUser)] : []),
       headerLinks.Login({
         isAuthenticated,
         onClick: () => {

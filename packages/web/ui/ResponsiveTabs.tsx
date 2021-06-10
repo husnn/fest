@@ -21,7 +21,7 @@ const ResponsiveTabGroup = styled.div`
 `;
 
 const ResponsiveTab = styled.div<{ selected: boolean }>`
-  padding: 15px;
+  padding: 10px;
   font-weight: bold;
   color: ${(props) =>
     props.selected ? 'rgba(0, 0, 0, 0.7)' : 'rgba(0, 0, 0, 0.3)'};

@@ -11,8 +11,9 @@ import { GoogleButton } from '../components';
 import ApiClient from '../modules/api/ApiClient';
 import { saveCurrentUser } from '../modules/auth/authStorage';
 import useAuthentication from '../modules/auth/useAuthentication';
+import { fontSize } from '../styles/constants';
 import styles from '../styles/Settings.module.scss';
-import { Button, FormInput, TextInput } from '../ui';
+import { Button, FormInput, TextArea, TextInput } from '../ui';
 
 const SettingsSheet = styled.div`
   max-width: 400px;
@@ -64,14 +65,15 @@ export default function SettingsPage() {
               initialValues={{
                 name: currentUser.name || '',
                 username: currentUser.username || '',
-                email: currentUser.email || ''
+                email: currentUser.email || '',
+                bio: currentUser.bio || ''
               }}
               validationSchema={UserInfoSchema}
               onSubmit={async (values, { setErrors }) => {
                 let data = {};
 
                 for (const key in values) {
-                  const val = values[key];
+                  let val = values[key];
 
                   if (val && val != currentUser[key]) {
                     data[key] = val;
@@ -93,6 +95,7 @@ export default function SettingsPage() {
                 values,
                 handleChange,
                 isValid,
+                dirty,
                 errors,
                 isSubmitting
               }: FormikProps<any>) => (
@@ -133,6 +136,17 @@ export default function SettingsPage() {
                     />
                   </FormInput>
 
+                  <FormInput label="Bio" error={errors.bio as string}>
+                    <Field
+                      type="bio"
+                      id="bio"
+                      placeholder="Tell us something about yourself..."
+                      component={TextArea}
+                      value={values.bio}
+                      onChange={handleChange}
+                    />
+                  </FormInput>
+
                   {errors.global && (
                     <p className="form-error">{errors.global}</p>
                   )}
@@ -143,6 +157,7 @@ export default function SettingsPage() {
                         padding: 10px 20px;
                         color: red;
                         background-color: #ffcccb;
+                        font-size: ${fontSize.sm};
                         border-radius: 10px;
                       }
                     `}
@@ -152,7 +167,7 @@ export default function SettingsPage() {
                     type="submit"
                     color="secondary"
                     loading={isSubmitting}
-                    disabled={!isValid}
+                    disabled={!dirty || !isValid}
                   >
                     Save Changes
                   </Button>

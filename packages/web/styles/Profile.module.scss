@@ -1,5 +1,5 @@
 .header {
-  padding: 10px;
+  padding: 10px 10px 0;
   display: flex;
   flex-direction: column;
 
@@ -18,22 +18,38 @@
   background-color: #EEE;
   z-index: -1;
   
-  @media screen and (min-width: 400px) {
+  @media screen and (min-width: 600px) {
+    height: 180px;
+  }
+  
+  @media screen and (min-width: 800px) {
     height: 200px;
   }
 }
 
 .headerAvatar {
-  width: 120px;
-  height: 120px;
+  width: 80px;
+  height: 80px;
   margin-top: 100px;
   background-color: #fff;
   border-radius: 50%;
 
-  @media screen and (max-width: 400px) {
+  @media screen and (min-width: 400px) {
+    width: 85px;
+    height: 85px;
+    margin-top: 80px;
+  }
+
+  @media screen and (min-width: 600px) {
     width: 100px;
     height: 100px;
-    margin-top: 80px;
+    margin-top: 100px;
+  }
+
+  @media screen and (min-width: 800px) {
+    width: 120px;
+    height: 120px;
+    margin-top: 120px;
   }
 }
 
@@ -44,7 +60,7 @@
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 20px;
 }
 
 .headerUserInfo {
@@ -70,7 +86,7 @@
 }
 
 .content {
-  padding: 0 10px 80px;
+  padding: 10px 10px 80px;
   display: flex;
   flex-wrap: wrap;
   gap: 30px;

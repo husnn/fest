@@ -10,6 +10,7 @@ type EditUserInput = {
   name?: string;
   username?: string;
   email?: string;
+  bio?: string;
 };
 
 type EditUserOutput = {
@@ -30,7 +31,7 @@ export class EditUser extends UseCase<EditUserInput, EditUserOutput> {
   }
 
   async exec(data: EditUserInput): Promise<Result<EditUserOutput>> {
-    const { name, username, email } = data;
+    const { name, username, email, bio } = data;
 
     let user = await this.userRepository.get(data.user);
 
@@ -39,6 +40,7 @@ export class EditUser extends UseCase<EditUserInput, EditUserOutput> {
     if (name) user.name = name;
     if (username) user.username = username;
     if (email) user.email = email;
+    if (bio) user.bio = bio;
 
     if (JSON.stringify(original) !== JSON.stringify(user)) {
       await this.userRepository.update(user);

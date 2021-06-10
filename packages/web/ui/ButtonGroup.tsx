@@ -57,10 +57,9 @@ const ButtonGroupContainer = styled.div<{
     width: 100%;
     margin-top: 10px;
     padding: 20px 10px;
-    background-color: white;
+    background-color: #f0f8ff;
     display: ${(props) => (props.open ? 'flex' : 'none')};
     flex-direction: column;
-    border: 1px solid #ccc;
     border-radius: 20px;
   }
 `;

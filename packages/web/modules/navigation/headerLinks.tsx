@@ -1,6 +1,8 @@
+import { CurrentUser } from '@fanbase/shared';
+
 import { HeaderLink, HeaderLinkProps } from '../../components/Header';
 import Button from '../../ui/Button';
-import { specific } from '../../utils';
+import { getDisplayName, getProfileUrl, specific } from '../../utils';
 
 export const headerLinks = specific<{
   [key: string]: HeaderLink | ((props: HeaderLinkProps) => HeaderLink);
@@ -13,6 +15,10 @@ export const headerLinks = specific<{
     name: 'Create token',
     route: '/create-token'
   },
+  Profile: (user: CurrentUser) => ({
+    name: getDisplayName(user),
+    route: getProfileUrl(user)
+  }),
   Login: ({ onClick, isAuthenticated }: HeaderLinkProps) => ({
     name: 'Login',
     render: () => (
