@@ -3214,6 +3214,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/yup", "npm:0.29.11"],
             ["axios", "npm:0.21.1"],
             ["formik", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:2.2.9"],
+            ["fortmatic", "npm:2.2.1"],
             ["moment", "npm:2.29.1"],
             ["next", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:10.2.2"],
             ["next-http-proxy-middleware", "npm:1.0.10"],
@@ -11978,6 +11979,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packagePeers": [
             "@types/react",
             "react"
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["fortmatic", [
+        ["npm:2.2.1", {
+          "packageLocation": "./.yarn/cache/fortmatic-npm-2.2.1-b2683e1994-af9df88c85.zip/node_modules/fortmatic/",
+          "packageDependencies": [
+            ["fortmatic", "npm:2.2.1"]
           ],
           "linkType": "HARD",
         }]

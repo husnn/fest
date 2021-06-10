@@ -1,3 +1,4 @@
+import Fortmatic from 'fortmatic';
 import Web3 from 'web3';
 
 import { Token, Wallet } from '@fanbase/shared';
@@ -15,14 +16,19 @@ export default class EthereumClient {
 
   async initWeb3(): Promise<void> {
     if (typeof window !== 'undefined') {
+      let provider: any;
       let ethereum = (window as any).ethereum;
 
       if (ethereum) {
         ethereum.request({ method: 'eth_requestAccounts' });
+        ethereum.web3 = this.web3;
+        provider = ethereum;
+      } else {
+        const fm = new Fortmatic(process.env.NEXT_PUBLIC_FORTMATIC_API_KEY);
+        provider = fm.getProvider();
       }
 
-      this.web3.setProvider(ethereum);
-      ethereum.web3 = this.web3;
+      this.web3.setProvider(provider);
     }
   }
 

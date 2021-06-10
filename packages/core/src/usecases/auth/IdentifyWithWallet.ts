@@ -54,7 +54,7 @@ export class IdentifyWithWallet extends UseCase<
         type: WalletType.EXTERNAL,
         protocol: data.protocol,
         ownerId: user.id,
-        address: data.address
+        address: data.address.toLowerCase() // Convert to lowercase before insertion
       });
 
       wallet = await this.walletRepository.create(wallet);
