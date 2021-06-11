@@ -20,11 +20,19 @@ export class UserRepository
   }
 
   async findByEmail(email: string): Promise<User> {
-    return this.db.findOne({ email }, { relations: ['wallet'] });
+    return this.db
+      .createQueryBuilder('user')
+      .where('LOWER(user.email) = LOWER(:email)', { email })
+      .leftJoinAndSelect('user.wallet', 'wallet')
+      .getOne();
   }
 
   async findByUsername(username: string): Promise<User> {
-    return this.db.findOne({ username });
+    return this.db
+      .createQueryBuilder('user')
+      .where('LOWER(user.username) = LOWER(:username)', { username })
+      .leftJoinAndSelect('user.wallet', 'wallet')
+      .getOne();
   }
 }
 

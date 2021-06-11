@@ -37,10 +37,10 @@ export class EditUser extends UseCase<EditUserInput, EditUserOutput> {
 
     const original = Object.assign({}, user);
 
-    if (name) user.name = name;
-    if (username) user.username = username;
-    if (email) user.email = email;
-    if (bio) user.bio = bio;
+    if (name) user.name = name.trim(); // @BeforeInsert Trim
+    if (username) user.username = username.trim(); // @BeforeInsert Trim and validate
+    if (email) user.email = email.trim().toLowerCase(); // @BeforeInsert Trim and validate
+    if (bio) user.bio = bio.trim(); // @BeforeInsert Trim and validate
 
     if (JSON.stringify(original) !== JSON.stringify(user)) {
       await this.userRepository.update(user);

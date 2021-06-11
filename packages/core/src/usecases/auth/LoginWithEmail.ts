@@ -44,7 +44,6 @@ export class LoginWithEmail extends UseCase<
     }
 
     if (isExpired(expiry)) {
-      console.log('expired');
       return Result.fail(LoginError.CODE_EXPIRED);
     }
 

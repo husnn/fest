@@ -23,7 +23,7 @@ export class WalletRepository
     return await this.db
       .createQueryBuilder('wallet')
       .where('wallet.protocol = :protocol', { protocol })
-      .andWhere('wallet.address = :address', { address })
+      .andWhere('LOWER(wallet.address) = LOWER(:address)', { address })
       .getOne();
   }
 }

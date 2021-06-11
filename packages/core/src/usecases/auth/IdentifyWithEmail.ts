@@ -43,7 +43,10 @@ export class IdentifyWithEmail extends UseCase<
     let user = await this.userRepository.findByEmail(data.email);
 
     if (!user) {
-      user = new User({ email: data.email });
+      user = new User({
+        email: data.email.trim().toLowerCase() // @BeforeInsert Trim and convert to lowercase
+      });
+
       user = await this.userRepository.create(user);
 
       let wallet = await this.ethereumService.generateWallet();
