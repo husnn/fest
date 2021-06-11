@@ -1,10 +1,9 @@
 import { Field, Form, Formik, FormikProps } from 'formik';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
-import * as Yup from 'yup';
+import React, { useState } from 'react';
 
-import { TokenType, YouTubeVideo } from '@fanbase/shared';
+import { CreateTokenSchema, TokenType, YouTubeVideo } from '@fanbase/shared';
 
 import YouTubeVideoList, { YouTubeVideoRow } from '../components/YouTubeVideoList';
 import ApiClient from '../modules/api/ApiClient';
@@ -23,24 +22,6 @@ export default function CreateTokenPage() {
 
   const router = useRouter();
   useAuthentication(true);
-
-  const CreateTokenSchema = Yup.object().shape({
-    type: Yup.mixed<TokenType>().oneOf(Object.values(TokenType)).required(),
-    resource: Yup.mixed().when('type', {
-      is: TokenType.YT_VIDEO,
-      otherwise: Yup.mixed().nullable()
-    }),
-    name: Yup.string().label('Name').max(100).required(),
-    description: Yup.string().label('Description').min(3).max(500),
-    media: Yup.string().url(),
-    supply: Yup.number().label('Supply').min(1).max(999999).required(),
-    royaltyPercentage: Yup.number()
-      .label('Royalty percentage')
-      .min(0)
-      .max(100)
-      .required(),
-    attributes: Yup.object()
-  });
 
   const tokenTypesOptions: {
     [key: string]: RadioOption;
@@ -104,6 +85,7 @@ export default function CreateTokenPage() {
           handleChange,
           setFieldValue,
           isValid,
+          dirty,
           errors,
           isSubmitting
         }: FormikProps<any>) => (
@@ -290,7 +272,7 @@ export default function CreateTokenPage() {
                   type="submit"
                   color="primary"
                   loading={isSubmitting}
-                  disabled={!isValid || created}
+                  disabled={!dirty || !isValid || created}
                 >
                   Create
                 </Button>

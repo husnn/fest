@@ -1,11 +1,10 @@
 import { Field, Form, Formik, FormikProps } from 'formik';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
-import * as Yup from 'yup';
+import React from 'react';
 
 import { css, Global } from '@emotion/react';
 import styled from '@emotion/styled';
-import { USERNAME_REGEX } from '@fanbase/shared';
+import UserInfoSchema from '@fanbase/shared/src/validation/UserInfoSchema';
 
 import { GoogleButton } from '../components';
 import ApiClient from '../modules/api/ApiClient';
@@ -14,6 +13,7 @@ import useAuthentication from '../modules/auth/useAuthentication';
 import { fontSize } from '../styles/constants';
 import styles from '../styles/Settings.module.scss';
 import { Button, FormInput, TextArea, TextInput } from '../ui';
+import { getProfileUrl } from '../utils';
 
 const SettingsSheet = styled.div`
   max-width: 400px;
@@ -33,17 +33,6 @@ const SettingsBlock = styled.div`
     gap: 20px;
   }
 `;
-
-const UserInfoSchema = Yup.object().shape({
-  name: Yup.string().label('Name').max(20),
-  username: Yup.string()
-    .label('Username')
-    .matches(
-      USERNAME_REGEX,
-      'Username must be between 3 and 15 characters long.'
-    ),
-  email: Yup.string().email().label('Email address')
-});
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -85,9 +74,10 @@ export default function SettingsPage() {
 
                   setCurrentUser(response.user);
                   saveCurrentUser(response.user);
+
+                  router.push(getProfileUrl(response.user));
                 } catch (err) {
-                  if (err.error == 'ValidationError')
-                    setErrors({ global: err.message });
+                  setErrors({ global: err.message });
                 }
               }}
             >

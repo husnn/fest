@@ -3195,7 +3195,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/node", "npm:15.12.1"],
             ["bcrypt", "npm:5.0.1"],
             ["jsonwebtoken", "npm:8.5.1"],
-            ["typescript", "patch:typescript@npm%3A4.3.2#builtin<compat/typescript>::version=4.3.2&hash=ddfc1b"]
+            ["typescript", "patch:typescript@npm%3A4.3.2#builtin<compat/typescript>::version=4.3.2&hash=ddfc1b"],
+            ["yup", "npm:0.32.9"]
           ],
           "linkType": "SOFT",
         }]
@@ -3235,7 +3236,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["typescript", "patch:typescript@npm%3A4.2.4#builtin<compat/typescript>::version=4.2.4&hash=ddfc1b"],
             ["url-loader", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:4.1.1"],
             ["web3", "npm:1.3.6"],
-            ["yup", "npm:0.32.9"],
             ["zustand", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:3.5.2"]
           ],
           "linkType": "SOFT",

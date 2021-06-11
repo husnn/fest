@@ -26,7 +26,7 @@ export const useHeader = (toShow?: string[], toHide?: string[]) => {
       id: 'profile',
       title: currentUser ? getDisplayName(currentUser) : '',
       route: currentUser ? getProfileUrl(currentUser) : '/',
-      visible: currentUser !== null,
+      visible: currentUser != null,
       children: [
         {
           id: 'settings',
