@@ -1421,6 +1421,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.14.5":
+  version: 7.14.5
+  resolution: "@babel/runtime@npm:7.14.5"
+  dependencies:
+    regenerator-runtime: ^0.13.4
+  checksum: 1e7b7bd939488df0e9af92fac7cf65a38d6de0e5be71883ac2e5f59e6c1199086a9be723b483f9c79adca9f7a62fdffc9ce6f85b953c7efb3469f01f64a41f27
+  languageName: node
+  linkType: hard
+
 "@babel/template@npm:^7.12.13":
   version: 7.12.13
   resolution: "@babel/template@npm:7.12.13"
@@ -2007,6 +2016,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@fanbase/web@workspace:packages/web"
   dependencies:
+    "@babel/runtime": ^7.14.5
     "@emotion/react": ^11.4.0
     "@emotion/styled": ^11.3.0
     "@fanbase/eth-contracts": "*"
@@ -3859,7 +3869,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:>=13.7.0, @types/node@npm:^15.0.1, @types/node@npm:^15.0.2, @types/node@npm:^15.12.1, @types/node@npm:^15.6.0":
+"@types/node@npm:*, @types/node@npm:>=13.7.0, @types/node@npm:^15.0.1, @types/node@npm:^15.0.2, @types/node@npm:^15.6.0":
   version: 15.12.1
   resolution: "@types/node@npm:15.12.1"
   checksum: 8a111dc99281e07b1a6408437a09eafb081760aa8bd73d481793345b302a565772c45f2be7fdd7386a8a7ce589a999ccfb513dba15a0b3320dba03c94308253f
@@ -8753,7 +8763,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "fanbase@workspace:."
   dependencies:
-    "@types/node": ^15.12.1
     "@typescript-eslint/eslint-plugin": ^4.26.1
     "@typescript-eslint/parser": ^4.26.1
     "@yarnpkg/pnpify": ^3.0.0-rc.6

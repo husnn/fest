@@ -16,23 +16,14 @@ import Button from '../ui/Button';
 import { getProfileUrl } from '../utils';
 
 export default function Login() {
+  useHeader([]);
+
+  const router = useRouter();
+
   const { isAuthenticated, setAuthenticated, currentUser, setCurrentUser } =
     useAuthentication();
 
   const [loginWithEmail, setLoginWithEmail] = useState(false);
-
-  const router = useRouter();
-
-  const { setLinks } = useHeader();
-
-  useEffect(() => {
-    setLinks([
-      {
-        name: 'Home',
-        route: '/'
-      }
-    ]);
-  }, []);
 
   useEffect(() => {
     if (isAuthenticated) {

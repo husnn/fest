@@ -8,19 +8,21 @@ import { TokenType, YouTubeVideo } from '@fanbase/shared';
 
 import YouTubeVideoList, { YouTubeVideoRow } from '../components/YouTubeVideoList';
 import ApiClient from '../modules/api/ApiClient';
+import useAuthentication from '../modules/auth/useAuthentication';
 import { useHeader } from '../modules/navigation';
 import styles from '../styles/CreateToken.module.scss';
 import {
-  AttributesInput, Button, Checkbox, FormInput, RadioGroup, TextArea, TextInput
+    AttributesInput, Button, Checkbox, FormInput, RadioGroup, TextArea, TextInput
 } from '../ui';
 import Modal from '../ui/Modal';
 import { RadioOption } from '../ui/RadioGroup';
 import { getTokenUrl } from '../utils';
 
-export default function CreateTokenPage () {
-  const router = useRouter();
+export default function CreateTokenPage() {
+  useHeader(['home', 'profile']);
 
-  const { setLinks } = useHeader();
+  const router = useRouter();
+  useAuthentication(true);
 
   const CreateTokenSchema = Yup.object().shape({
     type: Yup.mixed<TokenType>().oneOf(Object.values(TokenType)).required(),
@@ -52,10 +54,6 @@ export default function CreateTokenPage () {
       label: 'YouTube Video'
     }
   };
-
-  useEffect(() => {
-    setLinks(null);
-  }, []);
 
   const [tokenType, setTokenType] = useState<RadioOption>(
     tokenTypesOptions.BASIC
@@ -127,8 +125,7 @@ export default function CreateTokenPage () {
 
               {values.type == tokenTypesOptions.YT_VIDEO.id && (
                 <div className={styles.ytVideoSelection}>
-                  {youTubeVideo
-                    ? (
+                  {youTubeVideo ? (
                     <YouTubeVideoRow
                       video={youTubeVideo}
                       selected
@@ -136,8 +133,7 @@ export default function CreateTokenPage () {
                         setShowYouTubeVideo(true);
                       }}
                     />
-                      )
-                    : (
+                  ) : (
                     <Button
                       type="button"
                       size="small"
@@ -147,7 +143,7 @@ export default function CreateTokenPage () {
                     >
                       Select Video
                     </Button>
-                      )}
+                  )}
                 </div>
               )}
 

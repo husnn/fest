@@ -1,36 +1,39 @@
 /** @jsxImportSource @emotion/react */
+
 import React from 'react';
 
-import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
 import { useHeader } from '../modules/navigation';
 import { Link } from '../ui';
 
-export interface HeaderLink {
-  name: string;
+export type HeaderLinkType = {
+  id: string;
+  title?: string;
   route?: string;
   visible?: boolean;
-  nested?: HeaderLink[];
+  children?: HeaderLinkType[];
   render?: () => React.ReactNode;
-}
+  onClick?: () => void;
+};
 
 export type HeaderLinkProps = {
-  onClick?: () => void;
   [key: string]: any;
 };
 
 type HeaderProps = {
-  links?: HeaderLink[];
+  links?: HeaderLinkType[];
 };
 
 const HeaderContainer = styled.div`
   height: 80px;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
+  background-color: white;
   border-bottom: 1px solid #eee;
+  z-index: 99;
 `;
 
 const HeaderWrapper = styled.div`
@@ -44,15 +47,103 @@ const HeaderWrapper = styled.div`
   justify-content: space-between;
 `;
 
-const HeaderLinks = styled.div`
+const HeaderLinksContainer = styled.div`
+  font-weight: bold;
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 30px;
+
+  a {
+    opacity: 0.7;
+  }
+
+  a:hover {
+    opacity: 0.9;
+  }
+`;
+
+const LinkDropdown = styled.div`
+  min-width: 180px;
+  margin-top: 20px;
+  padding: 20px;
+  background: white;
+  position: absolute;
+  visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transform: translateX(-50%);
+  border-radius: 10px;
+  box-shadow: 3px 3px 20px 2px #eee;
+  opacity: 0;
+  transition: all 200ms ease 50ms;
+  z-index: 1;
+
+  > div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+`;
+
+const HeaderLinkContainer = styled.span`
+  &:hover {
+    > div {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
 `;
 
 const Header: React.FC<HeaderProps> = () => {
   const { links } = useHeader();
+
+  // const [linksOpen, setLinksOpen] = useState<{ [level: string]: number }>();
+
+  const HeaderLink = ({ link }: { link: HeaderLinkType }) => (
+    <Link
+      href={link.route}
+      expandable={link.children != null && !link.render}
+      onClick={() => (link.onClick ? link.onClick() : null)}
+    >
+      {link.render ? link.render() : link.title}
+    </Link>
+  );
+
+  const HeaderLinks = ({
+    links,
+    level = 0
+  }: {
+    links: HeaderLinkType[];
+    level?: number;
+  }) => (
+    <HeaderLinksContainer>
+      {links.map((link: HeaderLinkType, index: number) => {
+        if (link.visible === false) return null;
+
+        return (
+          <HeaderLinkContainer
+            key={index}
+            onMouseEnter={() => {
+              // setLinksOpen({ ...linksOpen, [level]: index });
+            }}
+            onMouseLeave={() => {
+              // setLinksOpen({ ...linksOpen, [level]: null });
+            }}
+          >
+            <HeaderLink link={link} />
+            {link.children && (
+              <LinkDropdown>
+                <HeaderLinks links={link.children} level={level + 1} />
+              </LinkDropdown>
+            )}
+          </HeaderLinkContainer>
+        );
+      })}
+    </HeaderLinksContainer>
+  );
 
   return (
     <HeaderContainer>
@@ -60,24 +151,7 @@ const Header: React.FC<HeaderProps> = () => {
         <Link href="/">
           <h2>Fanbase</h2>
         </Link>
-        <div
-          className="header__right"
-          css={css`
-            float: right;
-          `}
-        >
-          {links && (
-            <HeaderLinks>
-              {links.map((link: HeaderLink, index: number) => {
-                return link.visible !== false ? (
-                  <Link key={index} href={link.route}>
-                    {link.render ? link.render() : link.name}
-                  </Link>
-                ) : null;
-              })}
-            </HeaderLinks>
-          )}
-        </div>
+        {links && <HeaderLinks links={links} />}
       </HeaderWrapper>
     </HeaderContainer>
   );

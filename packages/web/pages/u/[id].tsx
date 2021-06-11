@@ -8,6 +8,7 @@ import { User } from '@fanbase/shared';
 import ApiClient from '../../modules/api/ApiClient';
 import { getCurrentUser, saveCurrentUser } from '../../modules/auth/authStorage';
 import useAuthentication from '../../modules/auth/useAuthentication';
+import { useHeader } from '../../modules/navigation';
 import useTabs, { Tab, Tabs } from '../../modules/navigation/useTabs';
 import styles from '../../styles/Profile.module.scss';
 import { Button, Link } from '../../ui';
@@ -16,6 +17,8 @@ import ResponsiveTabs from '../../ui/ResponsiveTabs';
 import { getDisplayName, getProfileUrl } from '../../utils';
 
 export default function ProfilePage() {
+  useHeader(['create-token', 'profile']);
+
   const router = useRouter();
 
   const [user, setUser] = useState<User>();
@@ -63,7 +66,8 @@ export default function ProfilePage() {
   }, []);
 
   const isSelf =
-    currentUser && (id === currentUser?.username || id === currentUser?.id);
+    (currentUser && (id === currentUser?.username || id === currentUser?.id)) ||
+    user?.id === currentUser?.id;
 
   useEffect(() => {
     if (user && isSelf) {
@@ -73,7 +77,7 @@ export default function ProfilePage() {
       setCurrentUser(currentUser);
       saveCurrentUser(currentUser);
     }
-  }, [user]);
+  }, [isSelf]);
 
   return (
     <div>

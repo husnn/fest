@@ -82,7 +82,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         [null, {
           "packageLocation": "./",
           "packageDependencies": [
-            ["@types/node", "npm:15.12.1"],
             ["@typescript-eslint/eslint-plugin", "virtual:c854f68d252b5f7f0a12089c0a8d378315a510bb72adea1f39c1b0225be487e8e77397c9f31c6e3c75f21f0105f5fcce3119b6da233eea7c419991cac2d6f94e#npm:4.26.1"],
             ["@typescript-eslint/parser", "virtual:c854f68d252b5f7f0a12089c0a8d378315a510bb72adea1f39c1b0225be487e8e77397c9f31c6e3c75f21f0105f5fcce3119b6da233eea7c419991cac2d6f94e#npm:4.26.1"],
             ["@yarnpkg/pnpify", "virtual:c854f68d252b5f7f0a12089c0a8d378315a510bb72adea1f39c1b0225be487e8e77397c9f31c6e3c75f21f0105f5fcce3119b6da233eea7c419991cac2d6f94e#npm:3.0.0-rc.6"],
@@ -2522,6 +2521,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["regenerator-runtime", "npm:0.13.8"]
           ],
           "linkType": "HARD",
+        }],
+        ["npm:7.14.5", {
+          "packageLocation": "./.yarn/cache/@babel-runtime-npm-7.14.5-1d59900d58-1e7b7bd939.zip/node_modules/@babel/runtime/",
+          "packageDependencies": [
+            ["@babel/runtime", "npm:7.14.5"],
+            ["regenerator-runtime", "npm:0.13.8"]
+          ],
+          "linkType": "HARD",
         }]
       ]],
       ["@babel/template", [
@@ -3198,6 +3205,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./packages/web/",
           "packageDependencies": [
             ["@fanbase/web", "workspace:packages/web"],
+            ["@babel/runtime", "npm:7.14.5"],
             ["@emotion/react", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:11.4.0"],
             ["@emotion/styled", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:11.3.0"],
             ["@fanbase/eth-contracts", "workspace:packages/ethereum/contracts"],
@@ -11469,7 +11477,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",
           "packageDependencies": [
             ["fanbase", "workspace:."],
-            ["@types/node", "npm:15.12.1"],
             ["@typescript-eslint/eslint-plugin", "virtual:c854f68d252b5f7f0a12089c0a8d378315a510bb72adea1f39c1b0225be487e8e77397c9f31c6e3c75f21f0105f5fcce3119b6da233eea7c419991cac2d6f94e#npm:4.26.1"],
             ["@typescript-eslint/parser", "virtual:c854f68d252b5f7f0a12089c0a8d378315a510bb72adea1f39c1b0225be487e8e77397c9f31c6e3c75f21f0105f5fcce3119b6da233eea7c419991cac2d6f94e#npm:4.26.1"],
             ["@yarnpkg/pnpify", "virtual:c854f68d252b5f7f0a12089c0a8d378315a510bb72adea1f39c1b0225be487e8e77397c9f31c6e3c75f21f0105f5fcce3119b6da233eea7c419991cac2d6f94e#npm:3.0.0-rc.6"],
@@ -23959,10 +23966,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/$$virtual/zustand-virtual-5d361781e3/0/cache/zustand-npm-3.5.2-faf7d1db3f-f5df588525.zip/node_modules/zustand/",
           "packageDependencies": [
             ["zustand", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:3.5.2"],
+            ["@babel/runtime", "npm:7.14.5"],
+            ["@types/babel__runtime", null],
             ["@types/react", "npm:17.0.6"],
             ["react", "npm:17.0.2"]
           ],
           "packagePeers": [
+            "@babel/runtime",
+            "@types/babel__runtime",
             "@types/react",
             "react"
           ],
