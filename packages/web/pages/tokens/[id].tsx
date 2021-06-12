@@ -10,7 +10,7 @@ import { Protocol, Token } from '@fanbase/shared';
 import ApiClient from '../../modules/api/ApiClient';
 import EthereumClient from '../../modules/ethereum/EthereumClient';
 
-export default function TokenPage () {
+export default function TokenPage() {
   const router = useRouter();
   const { id } = router.query;
 
@@ -19,7 +19,10 @@ export default function TokenPage () {
     ApiClient.instance?.getToken(id as string).then(async (token: Token) => {
       console.log(token);
 
-      const approval = await ApiClient.instance.approveMint(Protocol.ETHEREUM, 100);
+      const approval = await ApiClient.instance.approveMint(
+        Protocol.ETHEREUM,
+        100
+      );
       console.log(approval);
 
       const tokenContractAddr = Contracts.Token.getAddress();

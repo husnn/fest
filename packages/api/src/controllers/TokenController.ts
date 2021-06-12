@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 
 import {
-  ApproveMint, CreateToken, EthereumService, GetToken, TokenRepository, UserRepository,
-  WalletRepository
+    ApproveMint, CreateToken, EthereumService, GetToken, TokenRepository, UserRepository,
+    WalletRepository
 } from '@fanbase/core';
 import { ApproveMintResponse, CreateTokenResponse, Protocol, TokenData } from '@fanbase/shared';
 import { GetTokenResponse } from '@fanbase/shared/src/types';
@@ -15,7 +15,7 @@ class TokenController {
   private getTokenUseCase: GetToken;
   private approveMintUseCase: ApproveMint;
 
-  constructor (
+  constructor(
     tokenRepository: TokenRepository,
     userRepository: UserRepository,
     walletRepository: WalletRepository,
@@ -31,7 +31,7 @@ class TokenController {
     );
   }
 
-  async approveMint (req: Request, res: Response, next: NextFunction) {
+  async approveMint(req: Request, res: Response, next: NextFunction) {
     const { supply } = req.body;
 
     const result = await this.approveMintUseCase.exec({
@@ -49,7 +49,7 @@ class TokenController {
     });
   }
 
-  async getToken (req: Request, res: Response, next: NextFunction) {
+  async getToken(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
       const result = await this.getTokenUseCase.exec({ id });
@@ -64,7 +64,7 @@ class TokenController {
     }
   }
 
-  async createToken (req: Request, res: Response, next: NextFunction) {
+  async createToken(req: Request, res: Response, next: NextFunction) {
     try {
       const { name, description, supply }: TokenData = req.body;
 

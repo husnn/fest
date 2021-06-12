@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { CurrentUser, isEmailAddress, User } from '@fanbase/shared';
+import { CurrentUser, isEmailAddress } from '@fanbase/shared';
 
 import ApiClient from '../modules/api/ApiClient';
 import styles from '../styles/Login.module.css';

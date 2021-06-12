@@ -145,9 +145,7 @@ export default function ProfilePage() {
           </div>
           <div className={styles.tabContent}>
             {tabSelected?.id == TABS.POSTS.id && (
-              <div className={styles.postsTab}>
-                <p>THIS IS THE Posts TAB</p>
-              </div>
+              <div className={styles.postsTab}></div>
             )}
             {tabSelected?.id == TABS.TOKENS_CREATED.id && (
               <div className={styles.tokensCreated}>
@@ -156,9 +154,7 @@ export default function ProfilePage() {
             )}
             {tabSelected?.id == TABS.TOKENS_OWNED.id && (
               <div className={styles.tokensCreated}>
-                <div className="you-own">
-                  <p>Tokens owned</p>
-                </div>
+                <div className="you-own"></div>
               </div>
             )}
           </div>

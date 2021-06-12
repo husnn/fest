@@ -3230,7 +3230,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["next-transpile-modules", "npm:7.2.0"],
             ["react", "npm:17.0.2"],
             ["react-dom", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:17.0.2"],
-            ["react-modal", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:3.14.2"],
             ["react-transition-group", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:4.4.2"],
             ["sass", "npm:1.34.1"],
             ["typescript", "patch:typescript@npm%3A4.2.4#builtin<compat/typescript>::version=4.2.4&hash=ddfc1b"],
@@ -11331,15 +11330,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["exenv", [
-        ["npm:1.2.2", {
-          "packageLocation": "./.yarn/cache/exenv-npm-1.2.2-eeb9069149-09fd080c04.zip/node_modules/exenv/",
-          "packageDependencies": [
-            ["exenv", "npm:1.2.2"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
       ["expand-brackets", [
         ["npm:0.1.5", {
           "packageLocation": "./.yarn/cache/expand-brackets-npm-0.1.5-8e035b7cb7-927f4818e1.zip/node_modules/expand-brackets/",
@@ -19149,45 +19139,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["react-lifecycles-compat", [
-        ["npm:3.0.4", {
-          "packageLocation": "./.yarn/cache/react-lifecycles-compat-npm-3.0.4-d5e285a39e-82176a55ef.zip/node_modules/react-lifecycles-compat/",
-          "packageDependencies": [
-            ["react-lifecycles-compat", "npm:3.0.4"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["react-modal", [
-        ["npm:3.14.2", {
-          "packageLocation": "./.yarn/cache/react-modal-npm-3.14.2-10f31d742c-280bbb6099.zip/node_modules/react-modal/",
-          "packageDependencies": [
-            ["react-modal", "npm:3.14.2"]
-          ],
-          "linkType": "SOFT",
-        }],
-        ["virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:3.14.2", {
-          "packageLocation": "./.yarn/$$virtual/react-modal-virtual-9614be0b4f/0/cache/react-modal-npm-3.14.2-10f31d742c-280bbb6099.zip/node_modules/react-modal/",
-          "packageDependencies": [
-            ["react-modal", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:3.14.2"],
-            ["@types/react", "npm:17.0.6"],
-            ["@types/react-dom", "npm:17.0.6"],
-            ["exenv", "npm:1.2.2"],
-            ["prop-types", "npm:15.7.2"],
-            ["react", "npm:17.0.2"],
-            ["react-dom", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:17.0.2"],
-            ["react-lifecycles-compat", "npm:3.0.4"],
-            ["warning", "npm:4.0.3"]
-          ],
-          "packagePeers": [
-            "@types/react-dom",
-            "@types/react",
-            "react-dom",
-            "react"
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
       ["react-refresh", [
         ["npm:0.8.3", {
           "packageLocation": "./.yarn/cache/react-refresh-npm-0.8.3-9b3fb3900b-38f06df8e0.zip/node_modules/react-refresh/",
@@ -22804,16 +22755,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/vuvuzela-npm-1.0.3-bbf5b53d77-e0e5e85c66.zip/node_modules/vuvuzela/",
           "packageDependencies": [
             ["vuvuzela", "npm:1.0.3"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["warning", [
-        ["npm:4.0.3", {
-          "packageLocation": "./.yarn/cache/warning-npm-4.0.3-291e921d6d-20ef5d29ff.zip/node_modules/warning/",
-          "packageDependencies": [
-            ["warning", "npm:4.0.3"],
-            ["loose-envify", "npm:1.4.0"]
           ],
           "linkType": "HARD",
         }]

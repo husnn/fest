@@ -1,5 +1,7 @@
+// isUUID + Protocol cause blank screen in Safari
+
 import {
-    ApproveMintRequest, ApproveMintResponse, CreateTokenRequest, CreateTokenResponse, CurrentUser,
+    ApproveMintRequest, ApproveMintResponse, CreateTokenRequest, CreateTokenResponse,
     EditUserRequest, EditUserResponse, GetOAuthLinkRequest, GetOAuthLinkResponse,
     GetOwnUploadsRequest, GetOwnUploadsResponse, GetTokenRequest, GetTokenResponse,
     GetTokensCreatedResponse, GetUserByIdRequest, GetUserByUsernameRequest, GetUserResponse,

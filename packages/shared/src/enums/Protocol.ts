@@ -1,3 +1,5 @@
 export enum Protocol {
-  ETHEREUM = 'ETHEREUM',
+  ETHEREUM = 'ETHEREUM'
 }
+
+export default Protocol;
