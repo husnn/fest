@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
-import { CurrentUser } from '@fanbase/shared';
+import { CurrentUser, Protocol } from '@fanbase/shared';
 
 import LoginWithEmail from '../components/LoginWithEmail';
 import ApiClient from '../modules/api/ApiClient';

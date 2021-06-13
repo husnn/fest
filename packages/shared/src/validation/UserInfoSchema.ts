@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 
-import { USERNAME_REGEX } from './';
+import { USERNAME_REGEX } from '../utils';
 
 export const UserInfoSchema = Yup.object().shape({
   name: Yup.string().label('Name').max(20),
