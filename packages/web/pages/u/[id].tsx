@@ -66,16 +66,23 @@ export default function ProfilePage() {
   }, []);
 
   const isSelf =
-    (currentUser && (id === currentUser?.username || id === currentUser?.id)) ||
-    user?.id === currentUser?.id;
+    currentUser &&
+    (id === currentUser.username ||
+      id === currentUser.id ||
+      user?.id === currentUser.id);
 
   useEffect(() => {
-    if (user && isSelf) {
+    if (isSelf) {
       let currentUser = getCurrentUser();
-      Object.assign(currentUser, user);
 
-      setCurrentUser(currentUser);
-      saveCurrentUser(currentUser);
+      if (user) {
+        Object.assign(currentUser, user);
+
+        setCurrentUser(currentUser);
+        saveCurrentUser(currentUser);
+      }
+
+      setUser(currentUser);
     }
   }, [isSelf]);
 
