@@ -6,9 +6,9 @@ import {
     GetOwnUploadsRequest, GetOwnUploadsResponse, GetTokenRequest, GetTokenResponse,
     GetTokensCreatedResponse, GetUserByIdRequest, GetUserByUsernameRequest, GetUserResponse,
     IdentifyWithEmailRequest, IdentifyWithEmailResponse, IdentifyWithWalletRequest,
-    IdentifyWithWalletResponse, isUUID, LoginResponse, LoginWithEmailRequest,
-    LoginWithWalletRequest, OAuthCheckLinkRequest, OAuthCheckLinkResponse, OAuthLinkRequest,
-    Protocol, Token, TokenData, UnlinkOAuthRequest, UnlinkOAuthResponse, UserInfo, YouTubeVideo
+    IdentifyWithWalletResponse, LoginResponse, LoginWithEmailRequest, LoginWithWalletRequest,
+    OAuthCheckLinkRequest, OAuthCheckLinkResponse, OAuthLinkRequest, Token, TokenData,
+    UnlinkOAuthRequest, UnlinkOAuthResponse, UserInfo, YouTubeVideo
 } from '@fanbase/shared';
 
 import HttpClient from './HttpClient';
