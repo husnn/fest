@@ -3230,6 +3230,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["next-transpile-modules", "npm:7.2.0"],
             ["react", "npm:17.0.2"],
             ["react-dom", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:17.0.2"],
+            ["react-reveal", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:1.2.2"],
             ["react-transition-group", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:4.4.2"],
             ["sass", "npm:1.34.1"],
             ["typescript", "patch:typescript@npm%3A4.2.4#builtin<compat/typescript>::version=4.2.4&hash=ddfc1b"],
@@ -19144,6 +19145,29 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/react-refresh-npm-0.8.3-9b3fb3900b-38f06df8e0.zip/node_modules/react-refresh/",
           "packageDependencies": [
             ["react-refresh", "npm:0.8.3"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["react-reveal", [
+        ["npm:1.2.2", {
+          "packageLocation": "./.yarn/cache/react-reveal-npm-1.2.2-27b882f87d-430153cc9a.zip/node_modules/react-reveal/",
+          "packageDependencies": [
+            ["react-reveal", "npm:1.2.2"]
+          ],
+          "linkType": "SOFT",
+        }],
+        ["virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:1.2.2", {
+          "packageLocation": "./.yarn/$$virtual/react-reveal-virtual-d201be9f7d/0/cache/react-reveal-npm-1.2.2-27b882f87d-430153cc9a.zip/node_modules/react-reveal/",
+          "packageDependencies": [
+            ["react-reveal", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:1.2.2"],
+            ["@types/react", "npm:17.0.6"],
+            ["prop-types", "npm:15.7.2"],
+            ["react", "npm:17.0.2"]
+          ],
+          "packagePeers": [
+            "@types/react",
+            "react"
           ],
           "linkType": "HARD",
         }]

@@ -76,7 +76,7 @@ const LinkDropdown = styled.div`
   gap: 20px;
   transform: translateX(-50%);
   border-radius: 10px;
-  box-shadow: 3px 3px 20px 2px #eee;
+  box-shadow: 3px 3px 20px 2px rgba(0, 0, 0, 0.1);
   opacity: 0;
   transition: all 200ms ease 100ms;
   z-index: 1;

@@ -50,7 +50,7 @@ export default function CreateTokenPage() {
   const [created, setCreated] = useState(false);
 
   return (
-    <div className={styles.createToken + ' container'}>
+    <div className="container">
       <Head>
         <title>Create new token</title>
       </Head>

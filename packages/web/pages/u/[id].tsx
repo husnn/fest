@@ -87,84 +87,79 @@ export default function ProfilePage() {
   }, [isSelf]);
 
   return (
-    <div>
+    <div className="boxed" style={{ padding: 0 }}>
       <Head>
         <title>{(user && getDisplayName(user)) || id}</title>
       </Head>
-      <div className="boxed">
-        <div className={styles.header}>
-          <div className={styles.headerBg}></div>
-          <div className={'avatar ' + styles.headerAvatar}></div>
-          <div className={styles.headerContent}>
-            <div className={styles.headerUserInfo}>
-              <h3 className={styles.headerName}>
-                {user ? getDisplayName(user) : null}
-              </h3>
-              {user?.bio && <p style={{ marginTop: 10 }}>{user.bio}</p>}
-            </div>
-            <div className={styles.headerActions}>
-              {!isSelf ? (
-                <ButtonGroup
-                  dropdown={
-                    <React.Fragment>
-                      <Button color="primary" size="small">
-                        Buy coins
-                      </Button>
-                      <Button color="secondary" size="small">
-                        Message
-                      </Button>
-                    </React.Fragment>
-                  }
-                >
-                  <Button
-                    color={followed ? 'normal' : 'secondary'}
-                    size="small"
-                  >
-                    {followed ? 'Unfollow' : 'Follow'}
-                  </Button>
-                </ButtonGroup>
-              ) : (
-                <Link href="/settings">
-                  <Button size="small" color="secondary">
-                    Edit profile
-                  </Button>
-                </Link>
-              )}
-            </div>
+      <div className={styles.header}>
+        <div className={styles.headerBg}></div>
+        <div className={'avatar ' + styles.headerAvatar}></div>
+        <div className={styles.headerContent}>
+          <div className={styles.headerUserInfo}>
+            <h3 className={styles.headerName}>
+              {user ? getDisplayName(user) : null}
+            </h3>
+            {user?.bio && <p style={{ marginTop: 10 }}>{user.bio}</p>}
           </div>
+          <div className={styles.headerActions}>
+            {!isSelf ? (
+              <ButtonGroup
+                dropdown={
+                  <React.Fragment>
+                    <Button color="primary" size="small">
+                      Buy coins
+                    </Button>
+                    <Button color="secondary" size="small">
+                      Message
+                    </Button>
+                  </React.Fragment>
+                }
+              >
+                <Button color={followed ? 'normal' : 'secondary'} size="small">
+                  {followed ? 'Unfollow' : 'Follow'}
+                </Button>
+              </ButtonGroup>
+            ) : (
+              <Link href="/settings">
+                <Button size="small" color="secondary">
+                  Edit profile
+                </Button>
+              </Link>
+            )}
+          </div>
+        </div>
 
-          {/* <div className="stats">
+        {/* <div className="stats">
             <div className="fans"></div>
             <div className="coin-price"></div>
             <div className="yt-subs"></div>
             <div className="twitter-followers"></div>
           </div> */}
-        </div>
+      </div>
 
-        <div className={styles.content}>
-          <div className={styles.sidebar}>
-            <ResponsiveTabs
-              tabs={Object.values(TABS)}
-              onTabSelected={(tab: Tab) => {
-                selectTab(tab);
-              }}
-            />
-          </div>
-          <div className={styles.tabContent}>
-            {tabSelected?.id == TABS.POSTS.id && (
-              <div className={styles.postsTab}></div>
-            )}
-            {tabSelected?.id == TABS.TOKENS_CREATED.id && (
-              <div className={styles.tokensCreated}>
-                <div className="you-created"></div>
-              </div>
-            )}
-            {tabSelected?.id == TABS.TOKENS_OWNED.id && (
-              <div className={styles.tokensCreated}>
-                <div className="you-own"></div>
-              </div>
-            )}
-          </div>
+      <div className={styles.content}>
+        <div className={styles.sidebar}>
+          <ResponsiveTabs
+            tabs={Object.values(TABS)}
+            onTabSelected={(tab: Tab) => {
+              selectTab(tab);
+            }}
+          />
+        </div>
+        <div className={styles.tabContent}>
+          {tabSelected?.id == TABS.POSTS.id && (
+            <div className={styles.postsTab}></div>
+          )}
+          {tabSelected?.id == TABS.TOKENS_CREATED.id && (
+            <div className={styles.tokensCreated}>
+              <div className="you-created"></div>
+            </div>
+          )}
+          {tabSelected?.id == TABS.TOKENS_OWNED.id && (
+            <div className={styles.tokensCreated}>
+              <div className="you-own"></div>
+            </div>
+          )}
         </div>
       </div>
     </div>

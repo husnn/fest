@@ -52,7 +52,7 @@ const ButtonStyled = styled.button<ButtonProps>`
           color = props.theme.color.secondary;
           break;
         case 'ghost':
-          color = 'none';
+          color = 'rgba(0, 0, 0, 0.0)';
           break;
       }
     }

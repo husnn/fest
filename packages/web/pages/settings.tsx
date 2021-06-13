@@ -40,7 +40,7 @@ export default function SettingsPage() {
   const { currentUser, setCurrentUser } = useAuthentication(true);
 
   return (
-    <div className={'boxed ' + styles.content}>
+    <div className="boxed">
       {currentUser && (
         <SettingsSheet>
           <SettingsBlock>

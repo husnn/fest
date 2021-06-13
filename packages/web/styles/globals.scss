@@ -84,27 +84,27 @@ input:focus, textarea:focus {
 .container {
   width: 100%;
   min-height: 100vh;
-  padding: 50px 0.75rem;
+  padding: 30px 0.75rem 80px;
   position: absolute;
   top: 80px;
   bottom: 0;
 }
 
 .full-width {
-  width: 100%;
+  @extend .container;
+
   min-height: 100vh;
-  padding: 0;
+  padding-left: 0;
+  padding-right: 0;
   position: absolute;
-  top: 80px;
   bottom: 0;
 }
 
 .boxed {
-  width: 100%;
+  @extend .container;
+
   max-width: 900px;
-  padding: 0;
   position: absolute;
-  top: 80px;
   left: 50%;
   transform: translateX(-50%);
 }
