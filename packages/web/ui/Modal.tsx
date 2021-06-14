@@ -55,10 +55,14 @@ const ModalContainer = styled.div<ModalContainerProps>`
   padding: ${(props) => (props.zeroPadding ? '0' : '30px')};
   display: flex;
   flex-direction: column;
-  gap: 20px;
   background-color: white;
   z-index: 999;
   overflow-y: scroll;
+  // gap: 20px;
+
+  > * + * {
+    margin-top: 20px;
+  }
 
   @media screen and (max-width: 499px) {
     min-height: 200px;
@@ -81,7 +85,11 @@ const ModalContainer = styled.div<ModalContainerProps>`
 const ModalContent = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  // gap: 20px;
+
+  > * + * {
+    margin-top: 15px;
+  }
 `;
 
 const ModalHead = styled.div`
@@ -91,13 +99,21 @@ const ModalHead = styled.div`
 const ModalTitleBlock = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 15px;
+  // gap: 15px;
+
+  > * + * {
+    margin-left: 15px;
+  }
 `;
 
 const ModalActions = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  // gap: 15px;
+
+  > * + * {
+    margin-top: 15px;
+  }
 `;
 
 const ModalBody = styled.div``;
@@ -123,8 +139,7 @@ const Modal: React.FC<ModalProps> = ({
     setIsBrowser(true);
   }, []);
 
-  const modalWrapper = show
-    ? (
+  const modalWrapper = show ? (
     <div id="modal__wrapper">
       <CSSTransition
         in={!closing}
@@ -190,8 +205,7 @@ const Modal: React.FC<ModalProps> = ({
         </ModalContainer>
       </CSSTransition>
     </div>
-      )
-    : null;
+  ) : null;
 
   return isBrowser
     ? ReactDOM.createPortal(modalWrapper, document.getElementById('modal'))

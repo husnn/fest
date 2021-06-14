@@ -11,7 +11,7 @@ import { saveAuthToken, saveCurrentUser } from '../modules/auth/authStorage';
 import useAuthentication from '../modules/auth/useAuthentication';
 import EthereumClient from '../modules/ethereum/EthereumClient';
 import { useHeader } from '../modules/navigation';
-import styles from '../styles/Login.module.css';
+import styles from '../styles/Login.module.scss';
 import Button from '../ui/Button';
 import { getProfileUrl } from '../utils';
 

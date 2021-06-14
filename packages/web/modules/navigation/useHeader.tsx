@@ -20,7 +20,8 @@ export const useHeader = (toShow?: string[], toHide?: string[]) => {
     {
       id: 'create-token',
       title: 'Create token',
-      route: '/create-token'
+      route: '/create-token',
+      visible: isAuthenticated
     },
     {
       id: 'profile',

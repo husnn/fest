@@ -20,17 +20,21 @@ const SettingsSheet = styled.div`
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 50px;
+  // gap: 50px;
+
+  > * + * {
+    margin-top: 30px;
+  }
 `;
 
 const SettingsBlock = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 20px;
+  // gap: 20px;
 
-  &:form {
-    gap: 20px;
+  > * + * {
+    margin-top: 20px;
   }
 `;
 

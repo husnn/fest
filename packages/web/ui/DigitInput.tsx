@@ -14,16 +14,13 @@ const DigitInputForm = styled.div`
   width: 100%;
   padding: 15px;
   background-color: ${colors.blueLightest};
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 30px;
   border: 1px solid #ccc;
   border-radius: ${corners.sm};
 
-  @media screen and (max-width: 499px) {
-    justify-content: center;
-  }
+  display: flex;
+  flex-direction: row;
+  // justify-content: space-around;
+  // gap: 30px;
 
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {
@@ -33,23 +30,17 @@ const DigitInputForm = styled.div`
 `;
 
 const DigitInputBox = styled.input`
-  width: 40px;
+  max-width: 40px;
   height: 35px;
+  margin: 5px;
   color: #555;
   font-weight: bold;
   font-size: 14pt;
   text-align: center;
-  border: 1px solid #ccc;
-  border-radius: ${corners.xs};
+  border: 0;
   outline: none;
-
-  &:hover {
-    border: 1px solid #aaa;
-  }
-
-  &:focus {
-    border: 1px solid #aaa;
-  }
+  border-radius: ${corners.xs};
+  box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
 `;
 
 const DigitInput: React.FC<DigitInputProps> = ({
@@ -83,7 +74,9 @@ const DigitInput: React.FC<DigitInputProps> = ({
       return;
     }
 
-    if (focusIndex >= 0 && focusIndex < length) { inputRefs.current[focusIndex].current.focus(); }
+    if (focusIndex >= 0 && focusIndex < length) {
+      inputRefs.current[focusIndex].current.focus();
+    }
   };
 
   return (

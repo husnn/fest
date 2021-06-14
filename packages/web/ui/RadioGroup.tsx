@@ -17,13 +17,21 @@ type RadioProps = {
 const RadioGroupContainer = styled.div`
   display: flex;
   align-items: center;
-  gap: 30px;
+  // gap: 30px;
+
+  > * + * {
+    margin-left: 20px;
+  }
 `;
 
 const Radio = styled.div`
   display: flex;
   align-items: center;
-  gap: 5px;
+  // gap: 5px;
+
+  > * + * {
+    margin-left: 5px;
+  }
 `;
 
 const RadioButton = styled.input`

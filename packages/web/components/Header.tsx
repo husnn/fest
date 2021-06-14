@@ -53,7 +53,10 @@ const HeaderLinksContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 30px;
+
+  > * + * {
+    margin-left: 30px;
+  }
 
   a {
     opacity: 0.7;
@@ -66,14 +69,13 @@ const HeaderLinksContainer = styled.div`
 
 const LinkDropdown = styled.div`
   min-width: 180px;
+  padding: 10px 0;
   margin-top: 20px;
-  padding: 20px;
   background: white;
   position: absolute;
   visibility: hidden;
   display: flex;
   flex-direction: column;
-  gap: 20px;
   transform: translateX(-50%);
   border-radius: 10px;
   box-shadow: 3px 3px 20px 2px rgba(0, 0, 0, 0.1);
@@ -81,11 +83,29 @@ const LinkDropdown = styled.div`
   transition: all 200ms ease 100ms;
   z-index: 1;
 
+  // gap: 20px;
+
   > div {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 20px;
+    // gap: 20px;
+
+    span {
+      width: 100%;
+      margin: 0;
+      padding: 10px 20px;
+      cursor: pointer;
+
+      a {
+        width: 100%;
+        float: left;
+      }
+
+      &:hover {
+        background-color: #eee;
+      }
+    }
   }
 `;
 

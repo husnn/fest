@@ -19,8 +19,8 @@ export const Checkbox: React.FC<CheckboxProps> = ({
       style={{
         margin: 0,
         display: 'flex',
-        gap: 5,
         alignItems: 'center'
+        // gap: 5
       }}
     >
       <input

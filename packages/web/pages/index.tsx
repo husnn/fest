@@ -50,8 +50,7 @@ export default function Home() {
       </div>
       <div className={styles.section}>
         <h2 className={styles.sectionTitleLeft}>Connect with your top fans</h2>
-        <div className={styles.splitSection}></div>
-        <div className={styles.splitSection} style={{ marginTop: 10 }}>
+        <div className={styles.splitSection} style={{ marginTop: 30 }}>
           <Fade big bottom>
             <div>
               <img src={'images/share-content-illustration-1.svg'} />
@@ -102,16 +101,18 @@ export default function Home() {
         className={`${styles.section} ${styles.fullWidth}`}
         style={{ background: '#000D20' }}
       >
-        <Flash fraction={1} delay={200}>
-          <h2 className={styles.sectionTitle} style={{ color: '#fff' }}>
-            Build a stronger connection
-          </h2>
-        </Flash>
-        <p className={styles.description} style={{ color: '#fff' }}>
-          It's impossible to connect with everyone,
-          <br />
-          prioritize those who love you the most.
-        </p>
+        <span>
+          <Flash fraction={1} delay={200}>
+            <h2 className={styles.sectionTitle} style={{ color: '#fff' }}>
+              Build a stronger connection
+            </h2>
+          </Flash>
+          <p className={styles.description} style={{ color: '#fff' }}>
+            It's impossible to connect with everyone,
+            <br />
+            prioritize those who love you the most.
+          </p>
+        </span>
         {/* <Link href="/login">
           <Button color="secondary" size="small">
             Get started
@@ -127,7 +128,7 @@ export default function Home() {
             >
               Fanbase is...
             </h3>
-            <h2 className={styles.sectionTitle} style={{ marginTop: 10 }}>
+            <h2 className={styles.sectionTitle} style={{ marginTop: 5 }}>
               A home for your community
             </h2>
             <p className={styles.description}>

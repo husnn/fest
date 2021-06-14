@@ -26,20 +26,18 @@ export const FormInput: React.FC<FormInputProps> = ({
         }}
       >
         {label ? <label>{label}</label> : null}
-        {optional
-          ? (
+        {optional ? (
           <label style={{ opacity: 0.5, fontSize: '9pt' }}>Optional</label>
-            )
-          : null}
+        ) : null}
       </div>
       {children}
-      {error
-        ? (
-        <p style={{ color: 'red', fontSize: '9pt' }}>{error}</p>
-          )
-        : (
-            description && <p style={{ fontSize: '9pt' }}>{description}</p>
-          )}
+      {error ? (
+        <p style={{ marginTop: 10, color: 'red', fontSize: '9pt' }}>{error}</p>
+      ) : (
+        description && (
+          <p style={{ marginTop: 10, fontSize: '9pt' }}>{description}</p>
+        )
+      )}
     </div>
   );
 };

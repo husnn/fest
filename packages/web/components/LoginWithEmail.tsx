@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { CurrentUser, isEmailAddress } from '@fanbase/shared';
 
 import ApiClient from '../modules/api/ApiClient';
-import styles from '../styles/Login.module.css';
+import styles from '../styles/Login.module.scss';
 import DigitInput from '../ui/DigitInput';
 import TextInput from '../ui/TextInput';
 import ModalWithSteps, { ModalWithStepsProps } from './ModalWithSteps';
