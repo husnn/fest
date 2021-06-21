@@ -36,7 +36,8 @@ const WalletSchema = new EntitySchema<Wallet>({
     },
     ownerId: {
       type: 'uuid',
-      name: 'owner_id'
+      name: 'owner_id',
+      nullable: true
     }
   },
   relations: {

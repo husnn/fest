@@ -5,7 +5,7 @@ import {
 import TokenOwnershipSchema from '../schemas/TokenOwnershipSchema';
 import Repository from './Repository';
 
-class TokenOwnershipRepository
+export class TokenOwnershipRepository
   extends Repository<TokenOwnership>
   implements ITokenOwnershipRepository
 {
@@ -13,11 +13,15 @@ class TokenOwnershipRepository
     super(TokenOwnershipSchema);
   }
 
-  async findByOwner(user: string): Promise<TokenOwnership[]> {
+  findByOwnerAndToken(user: string, token: string): Promise<TokenOwnership> {
+    return this.db.findOne({ ownerId: user, tokenId: token });
+  }
+
+  findByOwner(user: string): Promise<TokenOwnership[]> {
     return this.db.find({ ownerId: user });
   }
 
-  async findByToken(token: string): Promise<TokenOwnership[]> {
+  findByToken(token: string): Promise<TokenOwnership[]> {
     return this.db.find({ tokenId: token });
   }
 }

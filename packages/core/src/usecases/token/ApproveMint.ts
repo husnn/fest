@@ -1,33 +1,37 @@
-import { Protocol, randomNumericString } from '@fanbase/shared';
+import { encryptText, Protocol, randomNumericString } from '@fanbase/shared';
 
 import UseCase from '../../base/UseCase';
-import { WalletRepository } from '../../repositories';
+import { TokenRepository, WalletRepository } from '../../repositories';
 import { Result } from '../../Result';
 import { EthereumService } from '../../services';
 
 export interface ApproveMintInput {
   protocol: Protocol;
   user: string;
-  supply: string;
+  token: string;
 }
 
 export interface ApproveMintOutput {
   data: string;
-  signature: string;
+  expiry: number;
   salt: string;
+  signature: string;
 }
 
 export class ApproveMint extends UseCase<ApproveMintInput, ApproveMintOutput> {
   private walletRepository: WalletRepository;
+  private tokenRepository: TokenRepository;
   private ethereumService: EthereumService;
 
   constructor(
     walletRepository: WalletRepository,
+    tokenRepository: TokenRepository,
     ethereumService: EthereumService
   ) {
     super();
 
     this.walletRepository = walletRepository;
+    this.tokenRepository = tokenRepository;
     this.ethereumService = ethereumService;
   }
 
@@ -37,16 +41,23 @@ export class ApproveMint extends UseCase<ApproveMintInput, ApproveMintOutput> {
       data.user
     );
 
+    const token = await this.tokenRepository.get(data.token);
+
+    if (!token) return Result.fail();
+    if (token.creatorId !== data.user) return Result.fail();
+
+    const expiry = Math.floor(Date.now() / 1000) + 600; // Expires in 10 minutes
     const salt = randomNumericString(32);
 
     const result = await this.ethereumService.signMint(
       wallet.address,
-      data.supply,
+      token.supply,
+      expiry,
       salt
     );
 
     const { signature } = result.data;
 
-    return Result.ok({ data: '', signature, salt });
+    return Result.ok({ data: encryptText(token.id), expiry, salt, signature });
   }
 }

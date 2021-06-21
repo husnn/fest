@@ -10,6 +10,11 @@ const TokenSchema = new EntitySchema<Token>({
       generated: 'uuid',
       primary: true
     },
+    dateCreated: {
+      type: 'timestamp',
+      name: 'date_created',
+      createDate: true
+    },
     creatorId: {
       type: 'uuid',
       name: 'creator_id',
@@ -19,12 +24,19 @@ const TokenSchema = new EntitySchema<Token>({
       type: 'integer',
       default: 0
     },
+    name: {
+      type: 'text'
+    },
+    description: {
+      type: 'text',
+      nullable: true
+    },
     minted: {
       type: 'boolean',
       default: false
     },
     chain: {
-      type: 'simple-json',
+      type: 'jsonb',
       nullable: true
     }
   },

@@ -54,7 +54,7 @@ export class LoginWithWallet extends UseCase<
       recoverResult.data.address
     );
 
-    let user = await this.userRepository.get(wallet.ownerId);
+    const user = await this.userRepository.get(wallet.ownerId);
 
     const { value: code, expiry } = user.loginCode;
 

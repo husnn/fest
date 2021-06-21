@@ -63,7 +63,7 @@ export default class ApiClient {
 
   async approveMint(
     protocol = Protocol.ETHEREUM,
-    supply: number
+    token: string
   ): Promise<ApproveMintResponse> {
     return this.client.request<ApproveMintResponse, ApproveMintRequest>({
       method: 'POST',
@@ -71,18 +71,24 @@ export default class ApiClient {
       authenticated: 'required',
       body: {
         protocol,
-        supply
+        token
       }
     });
   }
 
-  async getTokensCreated(user: string): Promise<Token[]> {
-    const response = await this.client.request<GetTokensCreatedResponse>({
+  async getTokensCreated(
+    user: string,
+    count?: number,
+    page?: number
+  ): Promise<GetTokensCreatedResponse> {
+    return this.client.request<GetTokensCreatedResponse>({
       method: 'GET',
-      endpoint: `/users/${user}/tokens/created`
+      endpoint: `/users/${user}/tokens-created`,
+      params: {
+        count,
+        page
+      }
     });
-
-    return response.body.tokens;
   }
 
   async getToken(id: string): Promise<Token> {

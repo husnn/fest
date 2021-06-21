@@ -12,7 +12,7 @@ export const saveAuthToken = (token: string) => {
 
 export const getCurrentUser = (): CurrentUser | null => {
   let user: CurrentUser | null;
-  let data = localStorage.getItem(CURRENT_USER);
+  const data = localStorage.getItem(CURRENT_USER);
 
   if (data) {
     try {

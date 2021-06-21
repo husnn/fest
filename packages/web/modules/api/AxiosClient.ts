@@ -25,7 +25,7 @@ export default class AxiosClient extends HttpClient {
       .request({
         method: req.method,
         url: req.endpoint,
-        data: req.method === 'POST' || 'PUT' ? req.body : null,
+        data: req.method === 'POST' || req.method === 'PUT' ? req.body : null,
         params: req.params,
         headers: {
           ...req.headers,

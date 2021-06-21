@@ -6,8 +6,8 @@ export class Wallet {
   readonly id: string;
   type: WalletType = WalletType.EXTERNAL;
   protocol: Protocol;
-  ownerId: string;
-  owner: User;
+  ownerId?: string;
+  owner?: User;
   address: string;
   publicKey: string;
   seed: string;

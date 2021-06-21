@@ -10,6 +10,7 @@ import ApiClient from '../modules/api/ApiClient';
 import { saveAuthToken, saveCurrentUser } from '../modules/auth/authStorage';
 import useAuthentication from '../modules/auth/useAuthentication';
 import EthereumClient from '../modules/ethereum/EthereumClient';
+import useEthereum from '../modules/ethereum/useEthereum';
 import { useHeader } from '../modules/navigation';
 import styles from '../styles/Login.module.scss';
 import Button from '../ui/Button';
@@ -19,6 +20,7 @@ export default function Login() {
   useHeader([]);
 
   const router = useRouter();
+  const eth = useEthereum();
 
   const { isAuthenticated, setAuthenticated, currentUser, setCurrentUser } =
     useAuthentication();
@@ -42,20 +44,16 @@ export default function Login() {
   };
 
   const loginWithWallet = async () => {
-    const address = await EthereumClient.instance?.getAddress().catch(() => {
-      console.log('Could not get address.');
-    });
-
-    if (!address) return;
+    if (!eth.account) return;
 
     try {
       const identificationData = await ApiClient.instance?.identifyWithWallet(
-        address
+        eth.account
       );
 
       const signature = await EthereumClient.instance?.signMessage(
         identificationData.message,
-        address
+        eth.account
       );
 
       const { token, user } = await ApiClient.instance?.loginWithWallet(

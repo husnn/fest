@@ -9,13 +9,19 @@ import { Protocol, WalletType } from '@fanbase/shared';
 
 export class EthereumService implements IEthereumService {
   private tokenContract?: any;
-  private daiContract?: any;
 
   constructor(web3: Web3) {
-    this.tokenContract = new web3.eth.Contract(
-      Contracts.Token.interface as any,
-      Contracts.Token.getAddress()
-    );
+    web3.eth.net
+      .getId()
+      .then((id: number) => {
+        this.tokenContract = new web3.eth.Contract(
+          Contracts.Token.interface as any,
+          Contracts.Token.getAddress(id.toString())
+        );
+      })
+      .catch((err) => {
+        console.log('Could not connect to Ethereum network.');
+      });
   }
 
   verifyOffer() {
@@ -28,17 +34,14 @@ export class EthereumService implements IEthereumService {
 
   async signMint(
     creatorAddress: string,
-    supply: string,
+    supply: number,
+    expiry: number,
     salt: string
   ): Promise<Result<{ signature: string }>> {
     const privateKey = Buffer.from(process.env.PRIVATE_KEY, 'hex');
 
     const hash = await this.tokenContract.methods
-      .mintHashMsg(
-        creatorAddress,
-        // supply,
-        salt
-      )
+      .getMintHash(creatorAddress, supply, expiry, salt)
       .call();
 
     const signature = sigUtil.personalSign(privateKey, { data: hash });
@@ -47,7 +50,7 @@ export class EthereumService implements IEthereumService {
   }
 
   async checkBalance() {
-    const balance = await this.daiContract.methods.balanceOf();
+    // const balance = await this.daiContract.methods.balanceOf();
   }
 
   recoverAddress(message: string, sig: string): Result<{ address: string }> {

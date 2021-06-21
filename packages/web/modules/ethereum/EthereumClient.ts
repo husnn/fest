@@ -4,20 +4,21 @@ import Web3 from 'web3';
 import { Token, Wallet } from '@fanbase/shared';
 
 export default class EthereumClient {
+  private isInitialized = false;
+
   web3: Web3 = new Web3();
 
   static instance: EthereumClient;
 
   constructor() {
-    this.initWeb3();
-
     EthereumClient.instance = this;
+    return this;
   }
 
-  async initWeb3(): Promise<void> {
+  initWeb3(): void {
     if (typeof window !== 'undefined') {
       let provider: any;
-      let ethereum = (window as any).ethereum;
+      const ethereum = (window as any).ethereum;
 
       if (ethereum) {
         ethereum.request({ method: 'eth_requestAccounts' });
@@ -28,11 +29,13 @@ export default class EthereumClient {
         provider = fm.getProvider();
       }
 
+      this.isInitialized = true;
       this.web3.setProvider(provider);
     }
   }
 
   async getAddress(): Promise<string> {
+    if (!this.isInitialized) this.initWeb3();
     return await this.web3.eth.getCoinbase();
   }
 

@@ -67,8 +67,6 @@ export default function CreateTokenPage() {
         }}
         validationSchema={CreateTokenSchema}
         onSubmit={async (values) => {
-          console.log(values);
-
           const token = await ApiClient.instance?.createToken({
             name: values.name,
             description: values.description,

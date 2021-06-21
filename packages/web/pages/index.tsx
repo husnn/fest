@@ -108,7 +108,7 @@ export default function Home() {
             </h2>
           </Flash>
           <p className={styles.description} style={{ color: '#fff' }}>
-            It's impossible to connect with everyone,
+            It&apos;s impossible to connect with everyone,
             <br />
             prioritize those who love you the most.
           </p>
@@ -120,7 +120,7 @@ export default function Home() {
         </Link> */}
       </div>
       <div className={styles.section}>
-        <Fade delay={1000}>
+        <Fade delay={500}>
           <span>
             <h3
               className={styles.subheadingDescription}

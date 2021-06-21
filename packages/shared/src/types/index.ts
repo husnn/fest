@@ -14,12 +14,20 @@ export interface Request {
   headers?: object;
 }
 
-export interface Response {
+export interface Response<T = any> {
   success: boolean;
   status: number;
-  body?: any;
+  body?: T;
   error?: string;
   message?: string;
+}
+
+export interface PaginatedResponse<T = any> extends Response {
+  body: T[];
+  page: number;
+  count: number;
+  nextPage?: number;
+  hasMore?: boolean;
 }
 
 /**
@@ -28,23 +36,20 @@ export interface Response {
 
 export interface ApproveMintResponse extends Response {
   data: string;
-  signature: string;
+  expiry: number;
   salt: string;
+  signature: string;
 }
 
 export interface ApproveMintRequest extends Request {
   authenticated: 'required';
   body: {
     protocol: Protocol;
-    supply: number;
+    token: string;
   };
 }
 
-export interface GetTokensCreatedResponse extends Response {
-  body: {
-    tokens: Token[];
-  };
-}
+export interface GetTokensCreatedResponse extends PaginatedResponse<Token> {}
 
 export interface GetTokenResponse extends Response {
   token: Token;

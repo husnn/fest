@@ -27,25 +27,27 @@ class TokenController {
 
     this.approveMintUseCase = new ApproveMint(
       walletRepository,
+      tokenRepository,
       ethereumService
     );
   }
 
-  async approveMint(req: Request, res: Response, next: NextFunction) {
-    const { supply } = req.body;
+  async approveMint(req: Request, res: Response) {
+    const { token } = req.body;
 
     const result = await this.approveMintUseCase.exec({
       protocol: Protocol.ETHEREUM,
       user: req.user,
-      supply
+      token
     });
 
-    const { data, signature, salt } = result.data;
+    const { data, expiry, salt, signature } = result.data;
 
     return new HttpResponse<ApproveMintResponse>(res, {
       data,
-      signature,
-      salt
+      expiry,
+      salt,
+      signature
     });
   }
 
@@ -68,12 +70,11 @@ class TokenController {
     try {
       const { name, description, supply }: TokenData = req.body;
 
-      const metadata = '';
-
       const result = await this.createTokenUseCase.exec({
         user: req.user,
-        supply,
-        metadata
+        name,
+        description,
+        supply
       });
 
       return new HttpResponse<CreateTokenResponse>(res, {

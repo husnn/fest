@@ -1,4 +1,4 @@
-import Token from './build/Token.json';
+import Token from './build/TokenV1.json';
 
 export const Contracts = {
   Token: {

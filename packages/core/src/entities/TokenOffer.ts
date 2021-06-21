@@ -15,7 +15,7 @@ export class TokenOffer {
   ownership: TokenOwnership;
 
   currency: Currency;
-  amount: number = 0;
+  amount = 0;
 
   constructor(data?: Partial<TokenOffer>) {
     Object.assign(this, data);

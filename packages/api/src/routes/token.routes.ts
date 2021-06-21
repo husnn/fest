@@ -8,7 +8,7 @@ import { ethConfig } from '../config';
 import TokenController from '../controllers/TokenController';
 import authMiddleware from '../middleware/authMiddleware';
 
-export default function init (router: Router) {
+export default function init(router: Router): Router {
   const userRepository = new UserRepository();
   const tokenRepository = new TokenRepository();
   const walletRepository = new WalletRepository();
@@ -31,17 +31,12 @@ export default function init (router: Router) {
       tokenController.createToken(req, res, next)
   );
 
-  router.get(
-    '/:id',
-    (req: Request, res: Response, next: NextFunction) =>
-      tokenController.getToken(req, res, next)
+  router.get('/:id', (req: Request, res: Response, next: NextFunction) =>
+    tokenController.getToken(req, res, next)
   );
 
-  router.post(
-    '/approve-mint',
-    authMiddleware,
-    (req: Request, res: Response, next: NextFunction) =>
-      tokenController.approveMint(req, res, next)
+  router.post('/approve-mint', authMiddleware, (req: Request, res: Response) =>
+    tokenController.approveMint(req, res)
   );
 
   return router;

@@ -12,7 +12,8 @@ const TokenOwnershipSchema = new EntitySchema<TokenOwnership>({
     },
     ownerId: {
       type: 'uuid',
-      name: 'owner_id'
+      name: 'owner_id',
+      nullable: true
     },
     tokenId: {
       type: 'uuid',

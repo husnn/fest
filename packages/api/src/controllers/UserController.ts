@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 
 import {
-    EditUser, EthereumService, GetTokensCreated, GetUser, MailService, TokenRepository,
-    UserRepository, WalletRepository
+    EditUser, GetTokensCreated, GetUser, TokenRepository, UserRepository, WalletRepository
 } from '@fanbase/core';
 import { GetTokensCreatedResponse, GetUserResponse } from '@fanbase/shared';
 import { EditUserResponse, UserInfo } from '@fanbase/shared/src/types';
@@ -17,30 +16,53 @@ class UserController {
   constructor(
     userRepository: UserRepository,
     walletRepository: WalletRepository,
-    tokenRepository: TokenRepository,
-    ethereumService: EthereumService,
-    mailService: MailService
+    tokenRepository: TokenRepository
   ) {
     this.editUserUseCase = new EditUser(userRepository, walletRepository);
     this.getUserUseCase = new GetUser(userRepository, walletRepository);
     this.getTokensCreatedUseCase = new GetTokensCreated(tokenRepository);
   }
 
-  async getTokensCreated(req: Request, res: Response, next: NextFunction) {
+  async getTokensCreated(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<HttpResponse<GetTokensCreatedResponse>> {
+    const count = req.pagination.count;
+    const page = req.pagination.page;
+
     try {
       const { id } = req.params;
-      const tokens = await this.getTokensCreatedUseCase.exec({ user: id });
-      return new HttpResponse<GetTokensCreatedResponse>(res, {
-        body: {
-          tokens: tokens.data
-        }
+
+      const response = await this.getTokensCreatedUseCase.exec({
+        user: id,
+        count,
+        page
       });
+
+      const { tokens, total } = response.data;
+
+      return new HttpResponse<GetTokensCreatedResponse>(
+        res,
+        {
+          body: tokens
+        },
+        {
+          count,
+          page,
+          total
+        }
+      );
     } catch (err) {
       next(err);
     }
   }
 
-  async editUser(req: Request, res: Response, next: NextFunction) {
+  async editUser(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<HttpResponse<EditUserResponse>> {
     try {
       const data: UserInfo = req.body;
 
@@ -64,10 +86,14 @@ class UserController {
     }
   }
 
-  async get(req: Request, res: Response, next: NextFunction) {
+  async get(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<HttpResponse<GetUserResponse>> {
     try {
       const { id } = req.params;
-      const { username } = req.query as any;
+      const username = req.query.username as string;
 
       const result = await this.getUserUseCase.exec({ id, username });
 

@@ -6,8 +6,9 @@ import { Result } from '../../Result';
 
 export interface CreateTokenInput {
   user: string;
+  name: string;
+  description: string;
   supply: number;
-  metadata: any;
 }
 export type CreateTokenOutput = string;
 
@@ -28,6 +29,8 @@ export class CreateToken extends UseCase<CreateTokenInput, CreateTokenOutput> {
   async exec(data: CreateTokenInput): Promise<Result<CreateTokenOutput>> {
     let token = new Token({
       creatorId: data.user,
+      name: data.name,
+      description: data.description,
       supply: data.supply
     });
 

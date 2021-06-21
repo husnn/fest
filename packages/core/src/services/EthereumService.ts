@@ -16,7 +16,8 @@ export interface EthereumService {
 
   signMint(
     creatorAddress: string,
-    supply: string,
+    supply: number,
+    expiry: number,
     salt: string
   ): Promise<
     Result<{

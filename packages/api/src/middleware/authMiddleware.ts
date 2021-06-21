@@ -10,7 +10,10 @@ export default (req: Request, res: Response, next: NextFunction) => {
   if (token == null) return res.sendStatus(401);
 
   jwt.verify(token, appConfig.jwtSecret, (err: any, data: any) => {
-    if (err) return res.sendStatus(403);
+    if (err) {
+      console.log(err);
+      return res.sendStatus(403);
+    }
     req.user = data.user;
   });
 

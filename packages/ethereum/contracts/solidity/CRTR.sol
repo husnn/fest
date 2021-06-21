@@ -44,15 +44,6 @@ contract CRTR is ERC20, Ownable {
     _mintPrice = mintPrice();
   }
 
-  function _burn(address account, uint256 amount) internal override {
-    super._burn(account, amount);
-    _sync();
-  }
-
-  function burn(uint256 quantity) public {
-    super._burn(msg.sender, quantity);
-  }
-
   function _transfer(
     address sender,
     address recipient,
@@ -95,6 +86,15 @@ contract CRTR is ERC20, Ownable {
     _currency.transferFrom(msg.sender, address(this), price);
 
     super._mint(msg.sender, quantity);
+  }  
+
+  function _burn(address account, uint256 amount) internal override {
+    super._burn(account, amount);
+    _sync();
+  }
+
+  function burn(uint256 quantity) public {
+    super._burn(msg.sender, quantity);
   }
 
   function setBurnOnTransfer(bool on) public onlyOwner {
@@ -102,11 +102,16 @@ contract CRTR is ERC20, Ownable {
   }
 
   function setBurnOnTransferPct(uint256 pct) public onlyOwner {
-    require(
-      pct > 0 && pct <= hundredPct,
-      "Value outside defined constraints."
-    );
-
+    require(pct <= hundredPct, "Value outside defined constraints.");
     burnOnTransferPct = pct;
+  }
+
+  function setFoundersReward(bool on) public onlyOwner {
+    foundersReward = on;
+  }
+
+  function setFoundersRewardPct(uint256 pct) public onlyOwner {
+    require(pct <= hundredPct, "Value outside defined constraints.");
+    foundersRewardPct = pct;
   }
 }

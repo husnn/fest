@@ -1,5 +1,7 @@
+import { Token as TokenDTO } from '@fanbase/shared';
+
 import UseCase from '../../base/UseCase';
-import { Token } from '../../entities';
+import { mapTokenToDTO } from '../../mappers';
 import { TokenRepository } from '../../repositories';
 import { Result } from '../../Result';
 
@@ -8,7 +10,7 @@ export interface GetTokenInput {
 }
 
 export interface GetTokenOutput {
-  token: Token;
+  token: TokenDTO;
 }
 
 export class GetToken extends UseCase<GetTokenInput, GetTokenOutput> {
@@ -23,6 +25,6 @@ export class GetToken extends UseCase<GetTokenInput, GetTokenOutput> {
   async exec(data: GetTokenInput): Promise<Result<GetTokenOutput>> {
     const token = await this.tokenRepository.get(data.id);
 
-    return token ? Result.ok({ token }) : Result.fail();
+    return token ? Result.ok({ token: mapTokenToDTO(token) }) : Result.fail();
   }
 }

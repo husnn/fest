@@ -1,7 +1,5 @@
 import Web3 from 'web3';
 
-const EthereumTx = require('ethereumjs-tx').Transaction;
-
 export class Transaction {
   contract: string;
   tx: any;
@@ -9,12 +7,12 @@ export class Transaction {
 
   data: any;
 
-  constructor (contract: any, data: any) {
+  constructor(contract: any, data: any) {
     this.contract = contract;
     this.data = data;
   }
 
-  build (from: string, nonce: number, gasLimit = 180000, gasPrice = 200) {
+  build(from: string, nonce: number, gasLimit = 180000, gasPrice = 200): this {
     console.log('TO: ' + this.contract);
     const tx = {
       from: Web3.utils.toChecksumAddress(from),
@@ -30,13 +28,13 @@ export class Transaction {
     return this;
   }
 
-  sign (privateKey: string) {
+  sign(privateKey: string): this {
     const privateKeyBuffer = Buffer.from(privateKey, 'hex');
     this.tx.sign(privateKeyBuffer);
     return this;
   }
 
-  serialize () {
+  serialize(): this {
     const serializedTx = this.tx.serialize();
     this.txSerialized = '0x' + serializedTx.toString('hex');
     return this;

@@ -3,8 +3,9 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
-import { User } from '@fanbase/shared';
+import { Token, User } from '@fanbase/shared';
 
+import TokensCreated from '../../components/TokensCreated';
 import ApiClient from '../../modules/api/ApiClient';
 import { getCurrentUser, saveCurrentUser } from '../../modules/auth/authStorage';
 import useAuthentication from '../../modules/auth/useAuthentication';
@@ -14,7 +15,8 @@ import styles from '../../styles/Profile.module.scss';
 import { Button, Link } from '../../ui';
 import ButtonGroup from '../../ui/ButtonGroup';
 import ResponsiveTabs from '../../ui/ResponsiveTabs';
-import { getDisplayName, getProfileUrl } from '../../utils';
+import TokenCollection from '../../ui/TokenCollection';
+import { getDisplayName, getProfileUrl, getTokenUrl } from '../../utils';
 
 export default function ProfilePage() {
   useHeader(['create-token', 'profile']);
@@ -22,6 +24,7 @@ export default function ProfilePage() {
   const router = useRouter();
 
   const [user, setUser] = useState<User>();
+  const [tokensCreated, setTokensCreated] = useState<Token[]>();
 
   const { currentUser, setCurrentUser } = useAuthentication();
 
@@ -46,6 +49,13 @@ export default function ProfilePage() {
 
   const { id } = router.query;
 
+  const fetchTokensCreated = async (): Promise<Token[]> => {
+    try {
+      const response = await ApiClient.instance?.getTokensCreated(user.id);
+      return response.body;
+    } catch (err) {}
+  };
+
   const fetchUser = async () => {
     try {
       const response = await ApiClient.instance?.getUser(id as string);
@@ -64,6 +74,16 @@ export default function ProfilePage() {
     initTabs(TABS);
     fetchUser();
   }, []);
+
+  useEffect(() => {
+    if (tabSelected?.id == TABS.TOKENS_CREATED.id) {
+      if (!tokensCreated) {
+        fetchTokensCreated().then((created: Token[]) => {
+          setTokensCreated(created);
+        });
+      }
+    }
+  }, [tabSelected]);
 
   const isSelf =
     currentUser &&
@@ -102,30 +122,35 @@ export default function ProfilePage() {
             {user?.bio && <p style={{ marginTop: 10 }}>{user.bio}</p>}
           </div>
           <div className={styles.headerActions}>
-            {!isSelf ? (
-              <ButtonGroup
-                dropdown={
-                  <React.Fragment>
-                    <Button color="primary" size="small">
-                      Buy coins
-                    </Button>
-                    <Button color="secondary" size="small">
-                      Message
-                    </Button>
-                  </React.Fragment>
-                }
-              >
-                <Button color={followed ? 'normal' : 'secondary'} size="small">
-                  {followed ? 'Unfollow' : 'Follow'}
-                </Button>
-              </ButtonGroup>
-            ) : (
-              <Link href="/settings">
-                <Button size="small" color="secondary">
-                  Edit profile
-                </Button>
-              </Link>
-            )}
+            {user ? (
+              !isSelf ? (
+                <ButtonGroup
+                  dropdown={
+                    <React.Fragment>
+                      <Button color="primary" size="small">
+                        Buy coins
+                      </Button>
+                      <Button color="secondary" size="small">
+                        Message
+                      </Button>
+                    </React.Fragment>
+                  }
+                >
+                  <Button
+                    color={followed ? 'normal' : 'secondary'}
+                    size="small"
+                  >
+                    {followed ? 'Unfollow' : 'Follow'}
+                  </Button>
+                </ButtonGroup>
+              ) : (
+                <Link href="/settings">
+                  <Button size="small" color="secondary">
+                    Edit profile
+                  </Button>
+                </Link>
+              )
+            ) : null}
           </div>
         </div>
 
@@ -151,9 +176,12 @@ export default function ProfilePage() {
             <div className={styles.postsTab}></div>
           )}
           {tabSelected?.id == TABS.TOKENS_CREATED.id && (
-            <div className={styles.tokensCreated}>
-              <div className="you-created"></div>
-            </div>
+            <TokensCreated
+              user={user.id}
+              onTokenSelected={(token: Token) => {
+                router.push(getTokenUrl(token));
+              }}
+            />
           )}
           {tabSelected?.id == TABS.TOKENS_OWNED.id && (
             <div className={styles.tokensCreated}>

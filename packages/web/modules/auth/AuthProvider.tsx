@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 import { CurrentUser } from '@fanbase/shared';
 
-import { getAuthToken, getCurrentUser, removeAuth, saveCurrentUser } from './authStorage';
+import { getAuthToken, getCurrentUser, removeAuth } from './authStorage';
 
 type AuthContextProps = {
   isAuthenticated: boolean;
@@ -18,7 +18,11 @@ export const AuthContext = React.createContext<AuthContextProps | undefined>(
   undefined
 );
 
-export const AuthProvider: React.FC = ({ children }) => {
+export const AuthProvider: React.FC = ({
+  children
+}: {
+  children: React.ReactChild[];
+}) => {
   const [isAuthenticated, setAuthenticated] = useState(false);
   const [currentUser, setCurrentUser] = useState<CurrentUser>(null);
   const [redirect, setRedirect] = useState(false);
