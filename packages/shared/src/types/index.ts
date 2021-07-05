@@ -1,5 +1,7 @@
-import { CurrentUser, Token, User } from '../dto';
+import { CurrentUserDTO, TokenDTO, TokenOwnedDTO, TokenOwnershipDTO, UserDTO } from '../dto';
 import { Protocol } from '../enums';
+import TokenFee from './TokenFee';
+import TokenMetadata from './TokenMetadata';
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT';
 
@@ -9,9 +11,9 @@ export interface Request {
   method: HttpMethod;
   endpoint: string;
   authentication?: AuthLevel;
-  body?: object;
-  params?: object;
-  headers?: object;
+  body?: any;
+  params?: any;
+  headers?: any;
 }
 
 export interface Response<T = any> {
@@ -49,18 +51,24 @@ export interface ApproveMintRequest extends Request {
   };
 }
 
-export interface GetTokensCreatedResponse extends PaginatedResponse<Token> {}
+export interface GetTokenOwnershipsResponse
+  extends PaginatedResponse<TokenOwnershipDTO> {}
+
+export interface GetTokenOwnershipResponse
+  extends Response<TokenOwnershipDTO> {}
+
+export interface GetTokensCreatedResponse extends PaginatedResponse<TokenDTO> {}
 
 export interface GetTokenResponse extends Response {
-  token: Token;
+  token: TokenDTO;
 }
 
 export interface GetTokenRequest extends Request {}
 
-export interface TokenData {
-  name: string;
-  description?: string;
+export interface TokenData extends TokenMetadata {
+  resource?: string;
   supply: number;
+  fees?: TokenFee[];
 }
 
 export interface CreateTokenResponse extends Response {
@@ -140,8 +148,11 @@ export interface GetOAuthLinkRequest extends Request {
  * User
  */
 
+export interface GetTokensOwnedResponse
+  extends PaginatedResponse<TokenOwnedDTO> {}
+
 export interface GetUserResponse extends Response {
-  user: User;
+  user: UserDTO;
 }
 
 export interface GetUserByIdRequest extends Request {
@@ -165,7 +176,7 @@ export type UserInfo = {
 };
 
 export interface EditUserResponse extends Response {
-  user: CurrentUser;
+  user: CurrentUserDTO;
 }
 
 export interface EditUserRequest extends Request {
@@ -179,7 +190,7 @@ export interface EditUserRequest extends Request {
 
 export interface LoginResponse extends Response {
   token: string;
-  user: CurrentUser;
+  user: CurrentUserDTO;
 }
 
 export interface LoginWithEmailRequest extends Request {
@@ -222,3 +233,7 @@ export interface IdentifyWithWalletRequest extends Request {
     address: string;
   };
 }
+
+export * from './TokenFee';
+export * from './TokenAttributes';
+export * from './TokenMetadata';

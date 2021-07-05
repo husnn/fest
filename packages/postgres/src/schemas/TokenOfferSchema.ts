@@ -11,25 +11,40 @@ const TokenOfferSchema = new EntitySchema<TokenOffer>({
       generated: 'uuid',
       primary: true
     },
+    dateSent: {
+      type: 'timestamp',
+      name: 'date_sent',
+      createDate: true
+    },
     status: {
       type: 'enum',
       enum: OfferStatus
     },
     senderId: {
-      type: 'uuid',
+      type: 'text',
       name: 'sender_id'
     },
     ownershipId: {
-      type: 'uuid',
+      type: 'text',
       name: 'ownership_id'
+    },
+    quantity: {
+      type: 'integer',
+      default: 1
     },
     currency: {
       type: 'enum',
       enum: Currency
     },
-    amount: {
-      type: 'integer',
-      default: 0
+    price: {
+      type: 'integer'
+    },
+    expiry: {
+      type: 'timestamp',
+      name: 'expiry'
+    },
+    signature: {
+      type: 'text'
     }
   },
   relations: {

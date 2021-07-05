@@ -8,12 +8,13 @@ import { ethConfig } from '../config';
 import AuthController from '../controllers/AuthController';
 import MailService from '../services/MailService';
 
-export default function init (router: Router) {
+export default function init(router: Router) {
   const userRepository = new UserRepository();
   const walletRepository = new WalletRepository();
   const tokenRepository = new TokenRepository();
 
   const web3 = new Web3(ethConfig.provider);
+
   const ethereumService = new EthereumService(web3);
 
   const mailService = new MailService();

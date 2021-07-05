@@ -1,7 +1,7 @@
 import React from 'react';
 
 import styled from '@emotion/styled';
-import { Token } from '@fanbase/shared';
+import { TokenDTO } from '@fanbase/shared';
 
 const GridItem = styled.div`
   width: 100%;
@@ -44,8 +44,8 @@ const TokenGridItem = ({
   token,
   onClick
 }: {
-  token: Token;
-  onClick?: (token: Token) => void;
+  token: TokenDTO;
+  onClick?: (token: TokenDTO) => void;
 }) => {
   return (
     <GridItem onClick={() => (onClick ? onClick(token) : null)}>

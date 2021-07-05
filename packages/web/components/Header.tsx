@@ -59,6 +59,7 @@ const HeaderLinksContainer = styled.div`
   }
 
   a {
+    width: 100%;
     opacity: 0.7;
   }
 

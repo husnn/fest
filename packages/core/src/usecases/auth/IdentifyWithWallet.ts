@@ -5,6 +5,7 @@ import { User, Wallet } from '../../entities';
 import UserRepository from '../../repositories/UserRepository';
 import WalletRepository from '../../repositories/WalletRepository';
 import { Result } from '../../Result';
+import { generateUserId, generateWalletId } from '../../utils';
 
 export interface IdentifyWithWalletInput {
   protocol: Protocol;
@@ -41,23 +42,32 @@ export class IdentifyWithWallet extends UseCase<
   ): Promise<Result<IdentifyWithWalletOutput>> {
     let user: User;
 
-    const wallet = await this.walletRepository.findByAddress(
+    let wallet = await this.walletRepository.findByAddress(
       data.protocol,
       data.address
     );
 
-    if (!wallet) {
-      user = new User();
-      user = await this.userRepository.create(user);
-
-      let wallet = new Wallet({
-        type: WalletType.EXTERNAL,
-        protocol: data.protocol,
-        ownerId: user.id,
-        address: data.address.trim().toLowerCase() // @BeforeInsert Trim and convert to lowercase
+    if (!wallet || !wallet.ownerId) {
+      user = new User({
+        id: generateUserId()
       });
 
-      wallet = await this.walletRepository.create(wallet);
+      user = await this.userRepository.create(user);
+
+      if (!wallet) {
+        wallet = new Wallet({
+          id: generateWalletId(),
+          type: WalletType.EXTERNAL,
+          protocol: data.protocol,
+          ownerId: user.id,
+          address: data.address.trim().toLowerCase() // @BeforeInsert Trim and convert to lowercase
+        });
+
+        wallet = await this.walletRepository.create(wallet);
+      } else {
+        wallet.ownerId = user.id;
+        wallet = await this.walletRepository.update(wallet);
+      }
 
       user.walletId = wallet.id;
       user = await this.userRepository.update(user);

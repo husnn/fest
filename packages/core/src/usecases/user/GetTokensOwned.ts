@@ -1,55 +1,52 @@
+import { TokenOwnedDTO } from '@fanbase/shared';
+
 import UseCase from '../../base/UseCase';
-import { Token, TokenOwnership } from '../../entities';
-import { TokenOwnershipRepository, TokenRepository } from '../../repositories';
-import { Result } from '../../Result';
-
-export class Owner {
-  readonly id: string;
-}
-
-export class TokenOwned extends Token {
-  ownerId: string;
-  owner: Owner;
-  quantity: number;
-
-  static from(ownership: TokenOwnership): TokenOwned {
-    const owned = new TokenOwned();
-    return owned;
-  }
-}
+import { TokenOwnership } from '../../entities';
+import { mapOwnershipToTokenOwnedDTO } from '../../mappers/tokenOwned.mapper';
+import { TokenOwnershipRepository, UserRepository } from '../../repositories';
+import Result from '../../Result';
 
 export interface GetTokensOwnedInput {
   user: string;
+  count: number;
+  page: number;
 }
 
-export type GetTokensOwnedOutput = TokenOwned[];
+export type GetTokensOwnedOutput = {
+  tokens: TokenOwnedDTO[];
+  total: number;
+};
 
 export class GetTokensOwned extends UseCase<
   GetTokensOwnedInput,
   GetTokensOwnedOutput
 > {
+  private userRepository: UserRepository;
   private tokenOwnershipRepository: TokenOwnershipRepository;
-  private tokenRepository: TokenRepository;
 
   constructor(
-    tokenOwnershipRepository: TokenOwnershipRepository,
-    tokenRepository: TokenRepository
+    userRepository: UserRepository,
+    tokenOwnershipRepository: TokenOwnershipRepository
   ) {
     super();
 
+    this.userRepository = userRepository;
     this.tokenOwnershipRepository = tokenOwnershipRepository;
-    this.tokenRepository = tokenRepository;
   }
 
   async exec(data: GetTokensOwnedInput): Promise<Result<GetTokensOwnedOutput>> {
-    const tokenOwnerships = await this.tokenOwnershipRepository.findByOwner(
-      data.user
+    const user = await this.userRepository.get(data.user);
+
+    const result = await this.tokenOwnershipRepository.findByWallet(
+      user.walletId,
+      data.count,
+      data.page
     );
 
-    const tokensOwned: TokenOwned[] = tokenOwnerships.map(
-      (ownership: TokenOwnership) => TokenOwned.from(ownership)
+    const tokensOwned: TokenOwnedDTO[] = result.ownerships.map(
+      (ownership: TokenOwnership) => mapOwnershipToTokenOwnedDTO(ownership)
     );
 
-    return Result.ok(tokensOwned);
+    return Result.ok({ tokens: tokensOwned, total: result.total });
   }
 }

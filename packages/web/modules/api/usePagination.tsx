@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { PaginatedResponse } from '@fanbase/shared';
 
@@ -23,7 +23,14 @@ const usePagination = <U extends unknown>(
     });
   };
 
-  useEffect(() => fetch(), []);
+  const isInitialMount = useRef(true);
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      fetch();
+    }
+  }, []);
 
   const loadMore = () => fetch();
 

@@ -1,14 +1,19 @@
 import Token from './Token';
 import User from './User';
+import Wallet from './Wallet';
 
 export class TokenOwnership {
   readonly id: string;
 
-  ownerId?: string;
-  owner?: User;
+  dateCreated: Date;
+
+  walletId: string;
+  wallet?: Wallet;
 
   tokenId: string;
-  token: Token;
+  token?: Token;
+
+  owner?: User;
 
   quantity: number;
 

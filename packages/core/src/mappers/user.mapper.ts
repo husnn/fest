@@ -1,19 +1,22 @@
 import { User } from '@fanbase/core';
-import { CurrentUser, User as UserDTO, Wallet } from '@fanbase/shared';
+import { CurrentUserDTO, UserDTO as UserDTO, WalletDTO } from '@fanbase/shared';
 
-export const mapUserToCurrentDTO = (user: User): CurrentUser => {
-  return new CurrentUser({
+export const mapUserToCurrentDTO = (user: User): CurrentUserDTO => {
+  return new CurrentUserDTO({
     ...user,
-    wallet: new Wallet(user.wallet)
+    wallet: new WalletDTO(user.wallet)
   });
 };
 
 export const mapUserToDTO = (user: User): UserDTO => {
   return new UserDTO({
     ...user,
-    wallet: new Wallet({
-      protocol: user.wallet.protocol,
-      address: user.wallet.address
+    ...(user.wallet && {
+      wallet: new WalletDTO({
+        id: user.walletId,
+        protocol: user.wallet.protocol,
+        address: user.wallet.address
+      })
     })
   });
 };

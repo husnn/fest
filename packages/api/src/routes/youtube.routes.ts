@@ -8,7 +8,7 @@ import authMiddleware from '../middleware/authMiddleware';
 import GoogleService from '../services/GoogleService';
 import YouTubeService from '../services/YouTubeService';
 
-export default function init (router: Router) {
+export default function init(router: Router) {
   const googleService = new GoogleService(googleConfig);
   const oAuthRepository = new OAuthRepository();
   const youTubeService = new YouTubeService(youTubeConfig);

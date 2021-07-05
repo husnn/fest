@@ -13,7 +13,6 @@ import DefaultTheme from '../styles/themes/DefaultTheme';
 
 import type { AppProps } from 'next/app';
 const axiosClient = new AxiosClient();
-
 new ApiClient(axiosClient);
 
 function FanbaseApp({ Component, pageProps }: AppProps) {

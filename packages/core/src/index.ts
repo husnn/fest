@@ -4,3 +4,4 @@ export * from './repositories';
 export * from './usecases';
 export * from './services';
 export * from './Result';
+export * from './utils';

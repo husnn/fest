@@ -1,22 +1,21 @@
 import Web3 from 'web3';
 
 export class Transaction {
-  contract: string;
+  address: string;
   tx: any;
   txSerialized: string;
 
   data: any;
 
-  constructor(contract: any, data: any) {
-    this.contract = contract;
+  constructor(address: string, data: any) {
+    this.address = address;
     this.data = data;
   }
 
   build(from: string, nonce: number, gasLimit = 180000, gasPrice = 200): this {
-    console.log('TO: ' + this.contract);
     const tx = {
       from: Web3.utils.toChecksumAddress(from),
-      to: Web3.utils.toChecksumAddress(this.contract),
+      to: Web3.utils.toChecksumAddress(this.address),
       gasPrice: Web3.utils.toHex(Web3.utils.toWei(gasPrice.toString(), 'Gwei')),
       gasLimit: Web3.utils.toHex(gasLimit),
       nonce: Web3.utils.toHex(nonce),

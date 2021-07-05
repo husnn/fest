@@ -1,4 +1,4 @@
-import { Token as TokenDTO } from '@fanbase/shared';
+import { TokenDTO } from '@fanbase/shared';
 
 import UseCase from '../../base/UseCase';
 import { Token } from '../../entities';

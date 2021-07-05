@@ -1,4 +1,7 @@
-import { TokenRepository } from '@fanbase/core';
+import {
+    generateTokenOwnershipId, TokenOwnership, TokenOwnershipRepository, TokenRepository,
+    WalletRepository
+} from '@fanbase/core';
 import { decryptText, Protocol } from '@fanbase/shared';
 
 import Job from './Job';
@@ -8,6 +11,8 @@ export type TokenMintProps = {
   tx: string;
   contract: string;
   id: string;
+  creator: string;
+  supply: number;
   data: string;
 };
 
@@ -16,6 +21,8 @@ export default class TokenMint extends Job {
   private tx: string;
   private contract: string;
   private id: string;
+  private creator: string;
+  private supply: number;
   private data: string;
 
   constructor(props: TokenMintProps) {
@@ -24,12 +31,13 @@ export default class TokenMint extends Job {
     Object.assign(this, props);
   }
 
-  async execute(tokenRepository: TokenRepository): Promise<void> {
+  async execute(
+    tokenRepository: TokenRepository,
+    walletRepository: WalletRepository,
+    ownershipRepository: TokenOwnershipRepository
+  ): Promise<void> {
     try {
       const tokenId = decryptText(this.data);
-
-      console.log('Data: ' + this.data);
-      console.log('Token ID: ' + tokenId);
 
       const token = await tokenRepository.get(tokenId);
 
@@ -42,12 +50,27 @@ export default class TokenMint extends Job {
         name: 'Creator',
         symbol: 'CRT',
         id: this.id,
+        creator: this.creator,
         transaction: this.tx
       };
 
-      token.minted = true;
+      // token.minted = true;
 
-      tokenRepository.update(token);
+      const creatorWallet = await walletRepository.findByAddress(
+        this.protocol,
+        this.creator
+      );
+
+      const ownership = new TokenOwnership({
+        id: generateTokenOwnershipId(),
+        walletId: creatorWallet.id,
+        tokenId,
+        quantity: this.supply
+      });
+
+      await ownershipRepository.create(ownership);
+
+      await tokenRepository.update(token);
     } catch (err) {
       console.log(err);
     }

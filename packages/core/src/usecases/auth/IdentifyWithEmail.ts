@@ -5,6 +5,7 @@ import UserRepository from '../../repositories/UserRepository';
 import WalletRepository from '../../repositories/WalletRepository';
 import { Result } from '../../Result';
 import { EthereumService, MailService } from '../../services';
+import { generateUserId } from '../../utils';
 
 export interface IdentifyWithEmailInput {
   email: string;
@@ -44,6 +45,7 @@ export class IdentifyWithEmail extends UseCase<
 
     if (!user) {
       user = new User({
+        id: generateUserId(),
         email: data.email.trim().toLowerCase() // @BeforeInsert Trim and convert to lowercase
       });
 

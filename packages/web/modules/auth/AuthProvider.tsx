@@ -1,15 +1,15 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
-import { CurrentUser } from '@fanbase/shared';
+import { CurrentUserDTO } from '@fanbase/shared';
 
 import { getAuthToken, getCurrentUser, removeAuth } from './authStorage';
 
 type AuthContextProps = {
   isAuthenticated: boolean;
   setAuthenticated: (authenticated: boolean) => void;
-  currentUser: CurrentUser | undefined;
-  setCurrentUser: (user: CurrentUser) => void;
+  currentUser: CurrentUserDTO | undefined;
+  setCurrentUser: (user: CurrentUserDTO) => void;
   setRedirect: (redirect: boolean) => void;
   clearAuth: () => void;
 };
@@ -24,7 +24,7 @@ export const AuthProvider: React.FC = ({
   children: React.ReactChild[];
 }) => {
   const [isAuthenticated, setAuthenticated] = useState(false);
-  const [currentUser, setCurrentUser] = useState<CurrentUser>(null);
+  const [currentUser, setCurrentUser] = useState<CurrentUserDTO>(null);
   const [redirect, setRedirect] = useState(false);
 
   const router = useRouter();

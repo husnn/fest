@@ -1,21 +1,21 @@
-import Wallet from './Wallet';
+import WalletDTO from './WalletDTO';
 
-export interface IUser {
+export interface IUserDTO {
   id: string;
   name?: string;
   username?: string;
   bio?: string;
-  wallet: Omit<Wallet, 'type'>;
+  wallet: Omit<WalletDTO, 'type'>;
 }
 
-export class User implements IUser {
+export class UserDTO implements IUserDTO {
   id: string;
   name?: string;
   username?: string;
   bio?: string;
-  wallet: Omit<Wallet, 'type'>;
+  wallet: Omit<WalletDTO, 'type'>;
 
-  constructor(props: IUser) {
+  constructor(props: IUserDTO) {
     this.id = props.id;
     this.name = props.name;
     this.username = props.username;

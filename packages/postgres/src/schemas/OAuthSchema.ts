@@ -12,7 +12,7 @@ const OAuthSchema = new EntitySchema<OAuth>({
       primary: true
     },
     userId: {
-      type: 'uuid',
+      type: 'text',
       name: 'user_id',
       nullable: true
     },

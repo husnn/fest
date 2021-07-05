@@ -9,7 +9,7 @@ import "../openzeppelin/contracts/security/Pausable.sol";
 import "./MarketWalletV1.sol";
 import "./HasSecondarySaleFees.sol";
 
-enum TradeStatus { Open, Sold, Cancelled }
+enum TradeStatus { Active, Sold, Cancelled }
 
 struct Trade {
   uint id;
@@ -60,20 +60,18 @@ contract MarketV1 is AccessControl, Pausable {
   MarketWalletV1 internal _wallet;
 
   event Sell(
+    uint tradeId,
     address seller,
-    uint indexed tradeId,
-    address indexed tokenContract,
-    uint indexed tokenId,
+    address tokenContract,
+    uint tokenId,
     uint quantity,
     address currency,
     uint price
   );
   
   event Buy(
-    uint indexed tradeId,
-    address indexed buyer,
-    address tokenContract,
-    uint tokenId,
+    uint tradeId,
+    address buyer,
     uint quantity
   );
 
@@ -109,7 +107,7 @@ contract MarketV1 is AccessControl, Pausable {
     Trade memory trade = _trades[tradeId];
 
     // Require trade is still open
-    require(trade.status == TradeStatus.Open, "Trade is not open.");
+    require(trade.status == TradeStatus.Active, "Trade is not open.");
 
     // Check quantity
     require(quantity <= trade.available, "Not enough tokens for sale.");
@@ -161,8 +159,6 @@ contract MarketV1 is AccessControl, Pausable {
     emit Buy(
       trade.id,
       msg.sender,
-      trade.token,
-      trade.tokenId,
       quantity
     );
   }
@@ -310,7 +306,7 @@ contract MarketV1 is AccessControl, Pausable {
       quantity,
       currency,
       price,
-      TradeStatus.Open
+      TradeStatus.Active
     );
 
     _trades[_tradeId] = trade;
@@ -323,8 +319,8 @@ contract MarketV1 is AccessControl, Pausable {
     ].push(_tradeId);
 
     emit Sell(
-      seller,
       _tradeId,
+      seller,
       token,
       tokenId,
       quantity,
@@ -337,7 +333,7 @@ contract MarketV1 is AccessControl, Pausable {
     Trade memory trade = _trades[tradeId];
     
     require(
-      trade.status == TradeStatus.Open,
+      trade.status == TradeStatus.Active,
       "Only open trades can be closed."
     );
 

@@ -1,13 +1,13 @@
 import { EntitySchema } from 'typeorm';
 
 import { Token } from '@fanbase/core';
+import { TokenType } from '@fanbase/shared';
 
 const TokenSchema = new EntitySchema<Token>({
   name: 'token',
   columns: {
     id: {
-      type: 'uuid',
-      generated: 'uuid',
+      type: 'text',
       primary: true
     },
     dateCreated: {
@@ -16,13 +16,14 @@ const TokenSchema = new EntitySchema<Token>({
       createDate: true
     },
     creatorId: {
-      type: 'uuid',
+      type: 'text',
       name: 'creator_id',
       nullable: true
     },
-    supply: {
-      type: 'integer',
-      default: 0
+    type: {
+      type: 'enum',
+      enum: TokenType,
+      default: TokenType.BASIC
     },
     name: {
       type: 'text'
@@ -31,13 +32,37 @@ const TokenSchema = new EntitySchema<Token>({
       type: 'text',
       nullable: true
     },
-    minted: {
-      type: 'boolean',
-      default: false
+    supply: {
+      type: 'integer',
+      default: 0
+    },
+    image: {
+      type: 'text',
+      nullable: true
+    },
+    externalUrl: {
+      type: 'text',
+      nullable: true
+    },
+    fees: {
+      type: 'jsonb',
+      nullable: true
+    },
+    attributes: {
+      type: 'simple-json',
+      nullable: true
+    },
+    extra: {
+      type: 'simple-json',
+      nullable: true
     },
     chain: {
       type: 'jsonb',
       nullable: true
+    },
+    minted: {
+      type: 'boolean',
+      default: false
     }
   },
   relations: {

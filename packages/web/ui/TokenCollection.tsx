@@ -1,7 +1,7 @@
 import React from 'react';
 
 import styled from '@emotion/styled';
-import { Token } from '@fanbase/shared';
+import { TokenDTO } from '@fanbase/shared';
 
 import { Button } from './Button';
 import TokenGridItem from './TokenGridItem';
@@ -18,9 +18,9 @@ const CollectionGrid = styled.div`
 `;
 
 type TokenCollectionProps = {
-  tokens: Token[];
+  tokens: TokenDTO[];
   onLoadMore?: () => void;
-  onTokenSelected?: (token: Token) => void;
+  onTokenSelected?: (token: TokenDTO) => void;
 };
 
 const TokenCollection = ({
@@ -31,11 +31,11 @@ const TokenCollection = ({
   return (
     <div className="token-collection">
       <CollectionGrid>
-        {tokens.map((token: Token, index: number) => (
+        {tokens.map((token: TokenDTO, index: number) => (
           <TokenGridItem
             key={index}
             token={token}
-            onClick={(token: Token) =>
+            onClick={(token: TokenDTO) =>
               onTokenSelected ? onTokenSelected(token) : null
             }
           />

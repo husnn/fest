@@ -1,4 +1,4 @@
-import { CurrentUser } from '@fanbase/shared';
+import { CurrentUserDTO } from '@fanbase/shared';
 
 const AUTH_TOKEN = 'AUTH_TOKEN';
 const CURRENT_USER = 'CURRENT_USER';
@@ -10,13 +10,13 @@ export const saveAuthToken = (token: string) => {
     localStorage.setItem(AUTH_TOKEN, token);
 };
 
-export const getCurrentUser = (): CurrentUser | null => {
-  let user: CurrentUser | null;
+export const getCurrentUser = (): CurrentUserDTO | null => {
+  let user: CurrentUserDTO | null;
   const data = localStorage.getItem(CURRENT_USER);
 
   if (data) {
     try {
-      user = JSON.parse(data) as CurrentUser;
+      user = JSON.parse(data) as CurrentUserDTO;
     } catch (err) {
       console.log(err);
     }
@@ -25,7 +25,7 @@ export const getCurrentUser = (): CurrentUser | null => {
   return user;
 };
 
-export const saveCurrentUser = (user: CurrentUser) => {
+export const saveCurrentUser = (user: CurrentUserDTO) => {
   if (user && typeof user === 'object' && Object.keys(user).length > 0)
     localStorage.setItem(CURRENT_USER, JSON.stringify(user));
 };

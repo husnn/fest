@@ -63,10 +63,10 @@ export default function SettingsPage() {
               }}
               validationSchema={UserInfoSchema}
               onSubmit={async (values, { setErrors }) => {
-                let data = {};
+                const data = {};
 
                 for (const key in values) {
-                  let val = values[key];
+                  const val = values[key];
 
                   if (val && val != currentUser[key]) {
                     data[key] = val;

@@ -6,6 +6,8 @@ import User from './User';
 export class TokenOffer {
   readonly id: string;
 
+  dateSent: Date;
+
   status: OfferStatus = OfferStatus.SENT;
 
   senderId: string;
@@ -14,8 +16,14 @@ export class TokenOffer {
   ownershipId: string;
   ownership: TokenOwnership;
 
+  quantity = 1;
+
   currency: Currency;
-  amount = 0;
+  price: number;
+
+  expiry: Date;
+
+  signature: string;
 
   constructor(data?: Partial<TokenOffer>) {
     Object.assign(this, data);

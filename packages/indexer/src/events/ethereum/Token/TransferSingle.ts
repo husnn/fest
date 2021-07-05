@@ -5,19 +5,16 @@ import { Protocol } from '@fanbase/shared';
 
 import { TokenTransferProps } from '../../../jobs/TokenTransfer';
 
-export default async (web3: Web3, callback): Promise<void> => {
-  const networkId = await web3.eth.net.getId();
-
-  const contract = new web3.eth.Contract(
-    Contracts.Token.interface as any,
-    Contracts.Token.getAddress(networkId.toString())
-  );
+export default async (callback): Promise<void> => {
+  const contract = Contracts.Token.get();
 
   contract.events.TransferSingle().on('data', (event: any) => {
     const { address } = event;
     const { from, to, id, value } = event.returnValues;
 
-    if (from == (Web3.utils.toBN(0) || to)) return;
+    if (from == ('0x0000000000000000000000000000000000000000' || to)) return;
+
+    console.log('Transferred');
 
     const job: TokenTransferProps = {
       protocol: Protocol.ETHEREUM,

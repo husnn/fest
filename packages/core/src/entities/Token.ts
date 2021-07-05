@@ -1,18 +1,27 @@
-import { Protocol } from '@fanbase/shared';
+import { Protocol, TokenAttributes, TokenFee, TokenType } from '@fanbase/shared';
 
 import User from './User';
 
 export class Token {
   readonly id: string;
+
   dateCreated: Date;
 
-  userId: string;
   creatorId: string;
   creator: User;
+
+  type: TokenType;
   name: string;
   description: string;
   supply: number;
-  minted: boolean;
+
+  image?: string;
+  externalUrl?: string;
+
+  fees?: TokenFee[];
+
+  attributes?: TokenAttributes;
+  extra?: unknown;
 
   chain?: {
     protocol: Protocol;
@@ -20,8 +29,11 @@ export class Token {
     name: string;
     symbol: string;
     id: string;
+    creator: string;
     transaction: string;
   };
+
+  minted: boolean;
 
   constructor(data?: Partial<Token>) {
     Object.assign(this, data);

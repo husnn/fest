@@ -19,15 +19,29 @@ export class UserRepository
       .add(token);
   }
 
-  async findByEmail(email: string): Promise<User> {
+  get(
+    id: string,
+    relations?: string[],
+    select?: 'user.loginCode'
+  ): Promise<User> {
     return this.db
       .createQueryBuilder('user')
-      .where('LOWER(user.email) = LOWER(:email)', { email })
       .leftJoinAndSelect('user.wallet', 'wallet')
+      .where('user.id = :id', { id })
+      .addSelect(select)
       .getOne();
   }
 
-  async findByUsername(username: string): Promise<User> {
+  findByEmail(email: string, select?: 'user.loginCode'): Promise<User> {
+    return this.db
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.wallet', 'wallet')
+      .where('LOWER(user.email) = LOWER(:email)', { email })
+      .addSelect(select)
+      .getOne();
+  }
+
+  findByUsername(username: string): Promise<User> {
     return this.db
       .createQueryBuilder('user')
       .where('LOWER(user.username) = LOWER(:username)', { username })

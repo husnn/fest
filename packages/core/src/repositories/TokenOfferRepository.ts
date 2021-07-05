@@ -1,6 +1,6 @@
 import { TokenOffer } from '../entities';
 import Repository from './Repository';
 
-export interface TokenOfferRepository extends Repository<TokenOffer> {}
+export type TokenOfferRepository = Repository<TokenOffer>
 
 export default TokenOfferRepository;

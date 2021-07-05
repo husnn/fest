@@ -11,7 +11,7 @@ struct Fee {
   uint pct;
 }
 
-struct TokenData {
+struct Token {
   uint dateCreated;
   address creator;
   uint supply;
@@ -26,7 +26,7 @@ contract TokenV1 is AccessControl, ERC1155, HasSecondarySaleFees {
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
   uint private _tokenId = 0;
-  mapping(uint => TokenData) _tokens;
+  mapping(uint => Token) _tokens;
 
   mapping(uint => Fee[]) _fees;
 
@@ -83,11 +83,11 @@ contract TokenV1 is AccessControl, ERC1155, HasSecondarySaleFees {
     ));
   }
   
-  function get(uint id) public view returns (TokenData memory) {
+  function get(uint id) public view returns (Token memory) {
     return _tokens[id];
   }
 
-  event Minted(uint256 indexed id, TokenData token, Fee[] fees, string data);
+  event Minted(uint256 indexed id, Token token, Fee[] fees, string data);
   event RevokeMint(address operator, address creator, uint256 indexed supply);
 
   function mint(
@@ -121,7 +121,7 @@ contract TokenV1 is AccessControl, ERC1155, HasSecondarySaleFees {
 
     super._mint(creator, _tokenId, supply, EMPTY);
 
-    TokenData memory token = TokenData(
+    Token memory token = Token(
       block.timestamp,
       creator,
       supply

@@ -21,7 +21,7 @@ export const useTabs = () => {
   const findById = (id: string) => tabs.find((tab) => tab.id === id);
 
   useEffect(() => {
-    let selectedTab = findById(tab as string) || tabs[0];
+    const selectedTab = findById(tab as string) || tabs[0];
     setTabSelected(selectedTab);
   }, [tabs, tab]);
 

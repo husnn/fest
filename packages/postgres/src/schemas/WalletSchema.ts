@@ -7,8 +7,7 @@ const WalletSchema = new EntitySchema<Wallet>({
   name: 'wallet',
   columns: {
     id: {
-      type: 'uuid',
-      generated: 'uuid',
+      type: 'text',
       primary: true
     },
     type: {
@@ -24,18 +23,21 @@ const WalletSchema = new EntitySchema<Wallet>({
     },
     publicKey: {
       type: 'text',
-      nullable: true
+      nullable: true,
+      select: false
     },
     privateKey: {
       type: 'text',
-      nullable: true
+      nullable: true,
+      select: false
     },
     seed: {
       type: 'text',
-      nullable: true
+      nullable: true,
+      select: false
     },
     ownerId: {
-      type: 'uuid',
+      type: 'text',
       name: 'owner_id',
       nullable: true
     }

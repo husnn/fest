@@ -1,12 +1,14 @@
 import Fortmatic from 'fortmatic';
 import Web3 from 'web3';
 
-import { Token, Wallet } from '@fanbase/shared';
+import Contracts from '@fanbase/eth-contracts';
+import { MintToken, SignOffer } from '@fanbase/eth-transactions';
+import { TokenDTO } from '@fanbase/shared';
 
 export default class EthereumClient {
   private isInitialized = false;
 
-  web3: Web3 = new Web3();
+  web3: Web3 = new Web3(process.env.NEXT_PUBLIC_ETH_PROVIDER);
 
   static instance: EthereumClient;
 
@@ -15,13 +17,13 @@ export default class EthereumClient {
     return this;
   }
 
-  initWeb3(): void {
+  async initWeb3(): Promise<void> {
     if (typeof window !== 'undefined') {
       let provider: any;
       const ethereum = (window as any).ethereum;
 
       if (ethereum) {
-        ethereum.request({ method: 'eth_requestAccounts' });
+        await ethereum.request({ method: 'eth_requestAccounts' });
         ethereum.web3 = this.web3;
         provider = ethereum;
       } else {
@@ -31,6 +33,8 @@ export default class EthereumClient {
 
       this.isInitialized = true;
       this.web3.setProvider(provider);
+
+      Contracts.init(this.web3);
     }
   }
 
@@ -43,31 +47,60 @@ export default class EthereumClient {
     return this.web3.eth.personal.sign(message, address, '');
   }
 
+  async signOffer(
+    seller: string,
+    contract: string,
+    id: string,
+    quantity: number,
+    currency: string,
+    price: string,
+    expiry: number,
+    salt: string
+  ): Promise<void> {
+    const buyer = await this.getAddress();
+
+    const nonce = await this.web3.eth.getTransactionCount(buyer, 'pending');
+
+    const tx = new SignOffer({
+      offer: {
+        buyer,
+        seller,
+        token: contract,
+        tokenId: id,
+        quantity,
+        currency,
+        price,
+        expiry
+      },
+      salt
+    }).build(buyer, nonce);
+
+    this.web3.eth.call(tx.tx);
+  }
+
   async mintToken(
-    token: Token,
-    wallet: Wallet,
+    token: TokenDTO,
+    data: string,
+    expiry: number,
+    salt: string,
     signature: string
   ): Promise<void> {
-    const nonce = await this.web3.eth.getTransactionCount(
-      wallet.address,
-      'pending'
-    );
+    const creator = await this.getAddress();
 
-    const data = {
-      creator: wallet.address,
+    const nonce = await this.web3.eth.getTransactionCount(creator, 'pending');
+
+    const txData = {
+      creator,
       supply: token.supply,
-      metadataUri: '',
       fees: [],
-      data: '',
-      salt: '',
+      data,
+      expiry,
+      salt,
       signature
     };
 
-    // const tx = new MintToken('', data)
-    //   .build(wallet.address, nonce)
-    //   .sign(wallet.decryptedPrivateKey)
-    //   .serialize()
+    const tx = new MintToken(txData).build(creator, nonce);
 
-    // await this.web3.eth.sendSignedTransaction(tx.txSerialized);
+    this.web3.eth.sendTransaction(tx.tx);
   }
 }

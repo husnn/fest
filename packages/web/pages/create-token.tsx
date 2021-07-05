@@ -21,7 +21,7 @@ export default function CreateTokenPage() {
   useHeader(['home', 'profile']);
 
   const router = useRouter();
-  useAuthentication(true);
+  const { currentUser } = useAuthentication(true);
 
   const tokenTypesOptions: {
     [key: string]: RadioOption;
@@ -57,20 +57,26 @@ export default function CreateTokenPage() {
       <Formik
         initialValues={{
           type: tokenType.id,
-          resource: '',
           name: '',
-          description: '',
-          media: '',
           supply: 1,
-          royaltyPercentage: 10,
-          attributes: {}
+          royaltyPercentage: 10
         }}
         validationSchema={CreateTokenSchema}
         onSubmit={async (values) => {
           const token = await ApiClient.instance?.createToken({
+            type: values.type,
+            resource: values.resource,
             name: values.name,
             description: values.description,
-            supply: values.supply
+            image: values.image,
+            supply: values.supply,
+            fees: [
+              {
+                walletId: currentUser.wallet.id,
+                percentage: values.royaltyPercentage
+              }
+            ],
+            attributes: values.attributes
           });
 
           setCreated(true);
@@ -86,7 +92,9 @@ export default function CreateTokenPage() {
           dirty,
           errors,
           isSubmitting
-        }: FormikProps<any>) => (
+        }: FormikProps<{
+          name: string;
+        }>) => (
           <Form>
             <div className={styles.createTokenForm}>
               <h2>Create a new token</h2>

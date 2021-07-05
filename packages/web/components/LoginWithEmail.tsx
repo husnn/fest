@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { CurrentUser, isEmailAddress } from '@fanbase/shared';
+import { CurrentUserDTO, isEmailAddress } from '@fanbase/shared';
 
 import ApiClient from '../modules/api/ApiClient';
 import styles from '../styles/Login.module.scss';
@@ -9,17 +9,15 @@ import TextInput from '../ui/TextInput';
 import ModalWithSteps, { ModalWithStepsProps } from './ModalWithSteps';
 
 type LoginWithEmailProps = {
-  onLogin: (token: string, user: CurrentUser) => void;
+  onLogin: (token: string, user: CurrentUserDTO) => void;
 };
 
 const LoginWithEmail: React.FC<LoginWithEmailProps & ModalWithStepsProps> = ({
   onLogin,
   stepIndex,
-  step,
   setSteps,
   setOkEnabled,
   goForward,
-  goBack,
   onOkPressed,
   pressOk,
   close,

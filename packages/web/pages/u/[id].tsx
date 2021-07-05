@@ -3,9 +3,10 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
-import { Token, User } from '@fanbase/shared';
+import { TokenDTO, TokenOwnedDTO, UserDTO } from '@fanbase/shared';
 
 import TokensCreated from '../../components/TokensCreated';
+import TokensOwned from '../../components/TokensOwned';
 import ApiClient from '../../modules/api/ApiClient';
 import { getCurrentUser, saveCurrentUser } from '../../modules/auth/authStorage';
 import useAuthentication from '../../modules/auth/useAuthentication';
@@ -15,16 +16,14 @@ import styles from '../../styles/Profile.module.scss';
 import { Button, Link } from '../../ui';
 import ButtonGroup from '../../ui/ButtonGroup';
 import ResponsiveTabs from '../../ui/ResponsiveTabs';
-import TokenCollection from '../../ui/TokenCollection';
-import { getDisplayName, getProfileUrl, getTokenUrl } from '../../utils';
+import { getDisplayName, getProfileUrl, getTokenOwnershipUrl, getTokenUrl } from '../../utils';
 
 export default function ProfilePage() {
   useHeader(['create-token', 'profile']);
 
   const router = useRouter();
 
-  const [user, setUser] = useState<User>();
-  const [tokensCreated, setTokensCreated] = useState<Token[]>();
+  const [user, setUser] = useState<UserDTO>();
 
   const { currentUser, setCurrentUser } = useAuthentication();
 
@@ -49,13 +48,6 @@ export default function ProfilePage() {
 
   const { id } = router.query;
 
-  const fetchTokensCreated = async (): Promise<Token[]> => {
-    try {
-      const response = await ApiClient.instance?.getTokensCreated(user.id);
-      return response.body;
-    } catch (err) {}
-  };
-
   const fetchUser = async () => {
     try {
       const response = await ApiClient.instance?.getUser(id as string);
@@ -67,23 +59,15 @@ export default function ProfilePage() {
       }
 
       setUser(user);
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {
     initTabs(TABS);
     fetchUser();
   }, []);
-
-  useEffect(() => {
-    if (tabSelected?.id == TABS.TOKENS_CREATED.id) {
-      if (!tokensCreated) {
-        fetchTokensCreated().then((created: Token[]) => {
-          setTokensCreated(created);
-        });
-      }
-    }
-  }, [tabSelected]);
 
   const isSelf =
     currentUser &&
@@ -93,7 +77,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (isSelf) {
-      let currentUser = getCurrentUser();
+      const currentUser = getCurrentUser();
 
       if (user) {
         Object.assign(currentUser, user);
@@ -178,15 +162,18 @@ export default function ProfilePage() {
           {tabSelected?.id == TABS.TOKENS_CREATED.id && (
             <TokensCreated
               user={user.id}
-              onTokenSelected={(token: Token) => {
+              onTokenSelected={(token: TokenDTO) => {
                 router.push(getTokenUrl(token));
               }}
             />
           )}
           {tabSelected?.id == TABS.TOKENS_OWNED.id && (
-            <div className={styles.tokensCreated}>
-              <div className="you-own"></div>
-            </div>
+            <TokensOwned
+              user={user.id}
+              onTokenSelected={(token: TokenOwnedDTO) => {
+                router.push(`${getTokenOwnershipUrl(token.ownership)}`);
+              }}
+            />
           )}
         </div>
       </div>

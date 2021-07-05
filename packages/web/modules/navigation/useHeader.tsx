@@ -66,7 +66,7 @@ export const useHeader = (toShow?: string[], toHide?: string[]) => {
     });
 
   useEffect(() => {
-    let linksToShow = filteredLinks();
+    const linksToShow = filteredLinks();
     context.setLinks(linksToShow);
   }, [isAuthenticated, currentUser]);
 

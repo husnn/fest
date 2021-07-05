@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response, Router } from 'express';
 
-import { TokenRepository, UserRepository, WalletRepository } from '@fanbase/postgres';
+import {
+    TokenOwnershipRepository, TokenRepository, UserRepository, WalletRepository
+} from '@fanbase/postgres';
 
 import UserController from '../controllers/UserController';
 import authMiddleware from '../middleware/authMiddleware';
@@ -10,11 +12,13 @@ export default function init(router: Router) {
   const userRepository = new UserRepository();
   const walletRepository = new WalletRepository();
   const tokenRepository = new TokenRepository();
+  const tokenOwnershipRepository = new TokenOwnershipRepository();
 
   const userController = new UserController(
     userRepository,
     walletRepository,
-    tokenRepository
+    tokenRepository,
+    tokenOwnershipRepository
   );
 
   router.post(
@@ -33,6 +37,13 @@ export default function init(router: Router) {
     pagination,
     (req: Request, res: Response, next: NextFunction) =>
       userController.getTokensCreated(req, res, next)
+  );
+
+  router.get(
+    '/:id/tokens-owned',
+    pagination,
+    (req: Request, res: Response, next: NextFunction) =>
+      userController.getTokensOwned(req, res, next)
   );
 
   return router;

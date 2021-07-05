@@ -1,1 +1,1 @@
-export default interface Input {};;;;;;;;;;;;;;;;;;;;
+export default interface Input {};

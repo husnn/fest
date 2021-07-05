@@ -22,6 +22,13 @@ module.exports = {
     '@typescript-eslint'
   ],
   rules: {
-    semi: [2, 'always']
+    semi: [2, 'always'],
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/no-empty-interface': [
+      'error',
+      {
+        'allowSingleExtends': true
+      }
+    ]
   }
 };

@@ -12,6 +12,23 @@ export class TokenRepository
     super(TokenSchema);
   }
 
+  async findByFeeReceiver(
+    data: [{ walletId: string }],
+    count: number,
+    page: number
+  ): Promise<{ tokens: Token[]; total: number }> {
+    const [tokens, total] = await this.db
+      .createQueryBuilder('token')
+      .where('token.fees ::jsonb @> :data', {
+        data: JSON.stringify(data)
+      })
+      .skip((page - 1) * count)
+      .take(count)
+      .getManyAndCount();
+
+    return { tokens, total };
+  }
+
   async findByChainData(data: {
     protocol?: Protocol;
     contract?: string;

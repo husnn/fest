@@ -1,4 +1,4 @@
-import { CurrentUser, decryptText, isExpired, Protocol } from '@fanbase/shared';
+import { CurrentUserDTO, decryptText, isExpired, Protocol } from '@fanbase/shared';
 
 import UseCase from '../../base/UseCase';
 import { User } from '../../entities';
@@ -18,7 +18,7 @@ export interface LoginWithWalletInput {
 
 export interface LoginWithWalletOuput {
   token: string;
-  user: CurrentUser;
+  user: CurrentUserDTO;
 }
 
 export class LoginWithWallet extends UseCase<
@@ -54,7 +54,11 @@ export class LoginWithWallet extends UseCase<
       recoverResult.data.address
     );
 
-    const user = await this.userRepository.get(wallet.ownerId);
+    const user = await this.userRepository.get(
+      wallet.ownerId,
+      null,
+      'user.loginCode'
+    );
 
     const { value: code, expiry } = user.loginCode;
 
@@ -71,7 +75,7 @@ export class LoginWithWallet extends UseCase<
     user.loginCode.expiry = new Date();
     this.userRepository.update(user);
 
-    user.wallet = wallet;
+    // user.wallet = wallet;
 
     return Result.ok({
       token: User.generateJwt(user),

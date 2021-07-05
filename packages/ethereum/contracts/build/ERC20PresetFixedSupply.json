@@ -11880,30 +11880,30 @@
     "absolutePath": "/C/Users/Husnain/Documents/Projects/Fanbase/New/fanbase/packages/ethereum/contracts/solidity/openzeppelin/contracts/token/ERC20/presets/ERC20PresetFixedSupply.sol",
     "exportedSymbols": {
       "Context": [
-        20622
+        20614
       ],
       "ERC20": [
-        14909
+        14901
       ],
       "ERC20Burnable": [
-        15049
+        15041
       ],
       "ERC20PresetFixedSupply": [
-        16614
+        16606
       ],
       "IERC20": [
-        14987
+        14979
       ],
       "IERC20Metadata": [
-        16286
+        16278
       ]
     },
-    "id": 16615,
+    "id": 16607,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 16587,
+        "id": 16579,
         "literals": [
           "solidity",
           "^",
@@ -11916,11 +11916,11 @@
       {
         "absolutePath": "/C/Users/Husnain/Documents/Projects/Fanbase/New/fanbase/packages/ethereum/contracts/solidity/openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol",
         "file": "../extensions/ERC20Burnable.sol",
-        "id": 16588,
+        "id": 16580,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 16615,
-        "sourceUnit": 15050,
+        "scope": 16607,
+        "sourceUnit": 15042,
         "src": "57:41:128",
         "symbolAliases": [],
         "unitAlias": ""
@@ -11930,13 +11930,13 @@
         "baseContracts": [
           {
             "baseName": {
-              "id": 16590,
+              "id": 16582,
               "name": "ERC20Burnable",
               "nodeType": "IdentifierPath",
-              "referencedDeclaration": 15049,
+              "referencedDeclaration": 15041,
               "src": "492:13:128"
             },
-            "id": 16591,
+            "id": 16583,
             "nodeType": "InheritanceSpecifier",
             "src": "492:13:128"
           }
@@ -11944,20 +11944,20 @@
         "contractDependencies": [],
         "contractKind": "contract",
         "documentation": {
-          "id": 16589,
+          "id": 16581,
           "nodeType": "StructuredDocumentation",
           "src": "100:356:128",
           "text": " @dev {ERC20} token, including:\n  - Preminted initial supply\n  - Ability for holders to burn (destroy) their tokens\n  - No access control mechanism (for minting/pausing) and hence no governance\n This contract uses {ERC20Burnable} to include burn capabilities - head to\n its documentation for details.\n _Available since v3.4._"
         },
         "fullyImplemented": true,
-        "id": 16614,
+        "id": 16606,
         "linearizedBaseContracts": [
-          16614,
-          15049,
-          14909,
-          16286,
-          14987,
-          20622
+          16606,
+          15041,
+          14901,
+          16278,
+          14979,
+          20614
         ],
         "name": "ERC20PresetFixedSupply",
         "nameLocation": "466:22:128",
@@ -11965,7 +11965,7 @@
         "nodes": [
           {
             "body": {
-              "id": 16612,
+              "id": 16604,
               "nodeType": "Block",
               "src": "798:44:128",
               "statements": [
@@ -11973,11 +11973,11 @@
                   "expression": {
                     "arguments": [
                       {
-                        "id": 16608,
+                        "id": 16600,
                         "name": "owner",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 16600,
+                        "referencedDeclaration": 16592,
                         "src": "814:5:128",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -11985,11 +11985,11 @@
                         }
                       },
                       {
-                        "id": 16609,
+                        "id": 16601,
                         "name": "initialSupply",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 16598,
+                        "referencedDeclaration": 16590,
                         "src": "821:13:128",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
@@ -12008,18 +12008,18 @@
                           "typeString": "uint256"
                         }
                       ],
-                      "id": 16607,
+                      "id": 16599,
                       "name": "_mint",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 14789,
+                      "referencedDeclaration": 14781,
                       "src": "808:5:128",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_address_$_t_uint256_$returns$__$",
                         "typeString": "function (address,uint256)"
                       }
                     },
-                    "id": 16610,
+                    "id": 16602,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -12034,30 +12034,30 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 16611,
+                  "id": 16603,
                   "nodeType": "ExpressionStatement",
                   "src": "808:27:128"
                 }
               ]
             },
             "documentation": {
-              "id": 16592,
+              "id": 16584,
               "nodeType": "StructuredDocumentation",
               "src": "512:131:128",
               "text": " @dev Mints `initialSupply` amount of token and transfers them to `owner`.\n See {ERC20-constructor}."
             },
-            "id": 16613,
+            "id": 16605,
             "implemented": true,
             "kind": "constructor",
             "modifiers": [
               {
                 "arguments": [
                   {
-                    "id": 16603,
+                    "id": 16595,
                     "name": "name",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 16594,
+                    "referencedDeclaration": 16586,
                     "src": "784:4:128",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_memory_ptr",
@@ -12065,11 +12065,11 @@
                     }
                   },
                   {
-                    "id": 16604,
+                    "id": 16596,
                     "name": "symbol",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 16596,
+                    "referencedDeclaration": 16588,
                     "src": "790:6:128",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_memory_ptr",
@@ -12077,13 +12077,13 @@
                     }
                   }
                 ],
-                "id": 16605,
+                "id": 16597,
                 "kind": "baseConstructorSpecifier",
                 "modifierName": {
-                  "id": 16602,
+                  "id": 16594,
                   "name": "ERC20",
                   "nodeType": "IdentifierPath",
-                  "referencedDeclaration": 14909,
+                  "referencedDeclaration": 14901,
                   "src": "778:5:128"
                 },
                 "nodeType": "ModifierInvocation",
@@ -12094,17 +12094,17 @@
             "nameLocation": "-1:-1:-1",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 16601,
+              "id": 16593,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 16594,
+                  "id": 16586,
                   "mutability": "mutable",
                   "name": "name",
                   "nameLocation": "683:4:128",
                   "nodeType": "VariableDeclaration",
-                  "scope": 16613,
+                  "scope": 16605,
                   "src": "669:18:128",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -12113,7 +12113,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 16593,
+                    "id": 16585,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "669:6:128",
@@ -12126,12 +12126,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 16596,
+                  "id": 16588,
                   "mutability": "mutable",
                   "name": "symbol",
                   "nameLocation": "711:6:128",
                   "nodeType": "VariableDeclaration",
-                  "scope": 16613,
+                  "scope": 16605,
                   "src": "697:20:128",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -12140,7 +12140,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 16595,
+                    "id": 16587,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "697:6:128",
@@ -12153,12 +12153,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 16598,
+                  "id": 16590,
                   "mutability": "mutable",
                   "name": "initialSupply",
                   "nameLocation": "735:13:128",
                   "nodeType": "VariableDeclaration",
-                  "scope": 16613,
+                  "scope": 16605,
                   "src": "727:21:128",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -12167,7 +12167,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 16597,
+                    "id": 16589,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "727:7:128",
@@ -12180,12 +12180,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 16600,
+                  "id": 16592,
                   "mutability": "mutable",
                   "name": "owner",
                   "nameLocation": "766:5:128",
                   "nodeType": "VariableDeclaration",
-                  "scope": 16613,
+                  "scope": 16605,
                   "src": "758:13:128",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -12194,7 +12194,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 16599,
+                    "id": 16591,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "758:7:128",
@@ -12210,19 +12210,19 @@
               "src": "659:118:128"
             },
             "returnParameters": {
-              "id": 16606,
+              "id": 16598,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "798:0:128"
             },
-            "scope": 16614,
+            "scope": 16606,
             "src": "648:194:128",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "public"
           }
         ],
-        "scope": 16615,
+        "scope": 16607,
         "src": "457:387:128",
         "usedErrors": []
       }
@@ -12233,30 +12233,30 @@
     "absolutePath": "/C/Users/Husnain/Documents/Projects/Fanbase/New/fanbase/packages/ethereum/contracts/solidity/openzeppelin/contracts/token/ERC20/presets/ERC20PresetFixedSupply.sol",
     "exportedSymbols": {
       "Context": [
-        20622
+        20614
       ],
       "ERC20": [
-        14909
+        14901
       ],
       "ERC20Burnable": [
-        15049
+        15041
       ],
       "ERC20PresetFixedSupply": [
-        16614
+        16606
       ],
       "IERC20": [
-        14987
+        14979
       ],
       "IERC20Metadata": [
-        16286
+        16278
       ]
     },
-    "id": 16615,
+    "id": 16607,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 16587,
+        "id": 16579,
         "literals": [
           "solidity",
           "^",
@@ -12269,11 +12269,11 @@
       {
         "absolutePath": "/C/Users/Husnain/Documents/Projects/Fanbase/New/fanbase/packages/ethereum/contracts/solidity/openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol",
         "file": "../extensions/ERC20Burnable.sol",
-        "id": 16588,
+        "id": 16580,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 16615,
-        "sourceUnit": 15050,
+        "scope": 16607,
+        "sourceUnit": 15042,
         "src": "57:41:128",
         "symbolAliases": [],
         "unitAlias": ""
@@ -12283,13 +12283,13 @@
         "baseContracts": [
           {
             "baseName": {
-              "id": 16590,
+              "id": 16582,
               "name": "ERC20Burnable",
               "nodeType": "IdentifierPath",
-              "referencedDeclaration": 15049,
+              "referencedDeclaration": 15041,
               "src": "492:13:128"
             },
-            "id": 16591,
+            "id": 16583,
             "nodeType": "InheritanceSpecifier",
             "src": "492:13:128"
           }
@@ -12297,20 +12297,20 @@
         "contractDependencies": [],
         "contractKind": "contract",
         "documentation": {
-          "id": 16589,
+          "id": 16581,
           "nodeType": "StructuredDocumentation",
           "src": "100:356:128",
           "text": " @dev {ERC20} token, including:\n  - Preminted initial supply\n  - Ability for holders to burn (destroy) their tokens\n  - No access control mechanism (for minting/pausing) and hence no governance\n This contract uses {ERC20Burnable} to include burn capabilities - head to\n its documentation for details.\n _Available since v3.4._"
         },
         "fullyImplemented": true,
-        "id": 16614,
+        "id": 16606,
         "linearizedBaseContracts": [
-          16614,
-          15049,
-          14909,
-          16286,
-          14987,
-          20622
+          16606,
+          15041,
+          14901,
+          16278,
+          14979,
+          20614
         ],
         "name": "ERC20PresetFixedSupply",
         "nameLocation": "466:22:128",
@@ -12318,7 +12318,7 @@
         "nodes": [
           {
             "body": {
-              "id": 16612,
+              "id": 16604,
               "nodeType": "Block",
               "src": "798:44:128",
               "statements": [
@@ -12326,11 +12326,11 @@
                   "expression": {
                     "arguments": [
                       {
-                        "id": 16608,
+                        "id": 16600,
                         "name": "owner",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 16600,
+                        "referencedDeclaration": 16592,
                         "src": "814:5:128",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -12338,11 +12338,11 @@
                         }
                       },
                       {
-                        "id": 16609,
+                        "id": 16601,
                         "name": "initialSupply",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 16598,
+                        "referencedDeclaration": 16590,
                         "src": "821:13:128",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
@@ -12361,18 +12361,18 @@
                           "typeString": "uint256"
                         }
                       ],
-                      "id": 16607,
+                      "id": 16599,
                       "name": "_mint",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 14789,
+                      "referencedDeclaration": 14781,
                       "src": "808:5:128",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_address_$_t_uint256_$returns$__$",
                         "typeString": "function (address,uint256)"
                       }
                     },
-                    "id": 16610,
+                    "id": 16602,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -12387,30 +12387,30 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 16611,
+                  "id": 16603,
                   "nodeType": "ExpressionStatement",
                   "src": "808:27:128"
                 }
               ]
             },
             "documentation": {
-              "id": 16592,
+              "id": 16584,
               "nodeType": "StructuredDocumentation",
               "src": "512:131:128",
               "text": " @dev Mints `initialSupply` amount of token and transfers them to `owner`.\n See {ERC20-constructor}."
             },
-            "id": 16613,
+            "id": 16605,
             "implemented": true,
             "kind": "constructor",
             "modifiers": [
               {
                 "arguments": [
                   {
-                    "id": 16603,
+                    "id": 16595,
                     "name": "name",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 16594,
+                    "referencedDeclaration": 16586,
                     "src": "784:4:128",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_memory_ptr",
@@ -12418,11 +12418,11 @@
                     }
                   },
                   {
-                    "id": 16604,
+                    "id": 16596,
                     "name": "symbol",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 16596,
+                    "referencedDeclaration": 16588,
                     "src": "790:6:128",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_memory_ptr",
@@ -12430,13 +12430,13 @@
                     }
                   }
                 ],
-                "id": 16605,
+                "id": 16597,
                 "kind": "baseConstructorSpecifier",
                 "modifierName": {
-                  "id": 16602,
+                  "id": 16594,
                   "name": "ERC20",
                   "nodeType": "IdentifierPath",
-                  "referencedDeclaration": 14909,
+                  "referencedDeclaration": 14901,
                   "src": "778:5:128"
                 },
                 "nodeType": "ModifierInvocation",
@@ -12447,17 +12447,17 @@
             "nameLocation": "-1:-1:-1",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 16601,
+              "id": 16593,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 16594,
+                  "id": 16586,
                   "mutability": "mutable",
                   "name": "name",
                   "nameLocation": "683:4:128",
                   "nodeType": "VariableDeclaration",
-                  "scope": 16613,
+                  "scope": 16605,
                   "src": "669:18:128",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -12466,7 +12466,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 16593,
+                    "id": 16585,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "669:6:128",
@@ -12479,12 +12479,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 16596,
+                  "id": 16588,
                   "mutability": "mutable",
                   "name": "symbol",
                   "nameLocation": "711:6:128",
                   "nodeType": "VariableDeclaration",
-                  "scope": 16613,
+                  "scope": 16605,
                   "src": "697:20:128",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -12493,7 +12493,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 16595,
+                    "id": 16587,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "697:6:128",
@@ -12506,12 +12506,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 16598,
+                  "id": 16590,
                   "mutability": "mutable",
                   "name": "initialSupply",
                   "nameLocation": "735:13:128",
                   "nodeType": "VariableDeclaration",
-                  "scope": 16613,
+                  "scope": 16605,
                   "src": "727:21:128",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -12520,7 +12520,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 16597,
+                    "id": 16589,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "727:7:128",
@@ -12533,12 +12533,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 16600,
+                  "id": 16592,
                   "mutability": "mutable",
                   "name": "owner",
                   "nameLocation": "766:5:128",
                   "nodeType": "VariableDeclaration",
-                  "scope": 16613,
+                  "scope": 16605,
                   "src": "758:13:128",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -12547,7 +12547,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 16599,
+                    "id": 16591,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "758:7:128",
@@ -12563,19 +12563,19 @@
               "src": "659:118:128"
             },
             "returnParameters": {
-              "id": 16606,
+              "id": 16598,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "798:0:128"
             },
-            "scope": 16614,
+            "scope": 16606,
             "src": "648:194:128",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "public"
           }
         ],
-        "scope": 16615,
+        "scope": 16607,
         "src": "457:387:128",
         "usedErrors": []
       }
@@ -12588,7 +12588,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.1",
-  "updatedAt": "2021-06-24T19:55:56.033Z",
+  "updatedAt": "2021-07-05T11:01:09.565Z",
   "devdoc": {
     "details": "{ERC20} token, including:  - Preminted initial supply  - Ability for holders to burn (destroy) their tokens  - No access control mechanism (for minting/pausing) and hence no governance This contract uses {ERC20Burnable} to include burn capabilities - head to its documentation for details. _Available since v3.4._",
     "kind": "dev",

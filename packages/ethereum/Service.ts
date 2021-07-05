@@ -3,25 +3,15 @@ import * as sigUtil from 'eth-sig-util';
 import { hdkey } from 'ethereumjs-wallet';
 import Web3 from 'web3';
 
-import { EthereumService as IEthereumService, Result, Wallet } from '@fanbase/core';
-import { Contracts } from '@fanbase/eth-contracts';
+import {
+    EthereumService as IEthereumService, generateWalletId, Result, Wallet
+} from '@fanbase/core';
+import Contracts from '@fanbase/eth-contracts';
 import { Protocol, WalletType } from '@fanbase/shared';
 
 export class EthereumService implements IEthereumService {
-  private tokenContract?: any;
-
   constructor(web3: Web3) {
-    web3.eth.net
-      .getId()
-      .then((id: number) => {
-        this.tokenContract = new web3.eth.Contract(
-          Contracts.Token.interface as any,
-          Contracts.Token.getAddress(id.toString())
-        );
-      })
-      .catch((err) => {
-        console.log('Could not connect to Ethereum network.');
-      });
+    Contracts.init(web3);
   }
 
   verifyOffer() {
@@ -32,6 +22,36 @@ export class EthereumService implements IEthereumService {
     throw new Error('Method not implemented.');
   }
 
+  async signSale(
+    seller: string,
+    token: string,
+    tokenId: string,
+    quantity: number,
+    currency: string,
+    price: string,
+    expiry: number,
+    salt: string
+  ): Promise<Result<{ signature: string }>> {
+    const privateKey = Buffer.from(process.env.PRIVATE_KEY, 'hex');
+
+    const hash = await Contracts.Contracts.Market.get()
+      .methods.getSaleAuthorizationHash(
+        seller,
+        token,
+        tokenId,
+        quantity,
+        currency,
+        price,
+        expiry,
+        salt
+      )
+      .call();
+
+    const signature = sigUtil.personalSign(privateKey, { data: hash });
+
+    return Result.ok({ signature });
+  }
+
   async signMint(
     creatorAddress: string,
     supply: number,
@@ -40,8 +60,8 @@ export class EthereumService implements IEthereumService {
   ): Promise<Result<{ signature: string }>> {
     const privateKey = Buffer.from(process.env.PRIVATE_KEY, 'hex');
 
-    const hash = await this.tokenContract.methods
-      .getMintHash(creatorAddress, supply, expiry, salt)
+    const hash = await Contracts.Contracts.Token.get()
+      .methods.getMintHash(creatorAddress, supply, expiry, salt)
       .call();
 
     const signature = sigUtil.personalSign(privateKey, { data: hash });
@@ -50,7 +70,7 @@ export class EthereumService implements IEthereumService {
   }
 
   async checkBalance() {
-    // const balance = await this.daiContract.methods.balanceOf();
+    console.log('Balance');
   }
 
   recoverAddress(message: string, sig: string): Result<{ address: string }> {
@@ -73,6 +93,7 @@ export class EthereumService implements IEthereumService {
       .getWallet();
 
     return new Wallet({
+      id: generateWalletId(),
       type: WalletType.INTERNAL,
       protocol: Protocol.ETHEREUM,
       address: wallet.getAddressString(),

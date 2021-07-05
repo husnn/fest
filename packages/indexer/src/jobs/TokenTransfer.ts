@@ -1,5 +1,6 @@
 import {
-    TokenOwnership, TokenOwnershipRepository, TokenRepository, Wallet, WalletRepository
+    generateTokenOwnershipId, generateWalletId, TokenOwnership, TokenOwnershipRepository,
+    TokenRepository, Wallet, WalletRepository
 } from '@fanbase/core';
 import { Protocol, WalletType } from '@fanbase/shared';
 
@@ -48,8 +49,8 @@ export default class TokenTransfer extends Job {
       );
 
       if (fromWallet) {
-        const fromOwnership = await ownershipRepository.findByOwnerAndToken(
-          fromWallet.ownerId,
+        const fromOwnership = await ownershipRepository.findByWalletAndToken(
+          fromWallet.id,
           token.id
         );
 
@@ -73,26 +74,32 @@ export default class TokenTransfer extends Job {
 
       if (!toWallet) {
         toWallet = new Wallet({
+          id: generateWalletId(),
           type: WalletType.EXTERNAL,
-          protocol: this.protocol
+          protocol: this.protocol,
+          address: this.to
         });
 
         await walletRepository.create(toWallet);
 
         const toOwnership = new TokenOwnership({
+          id: generateTokenOwnershipId(),
+          walletId: toWallet.id,
           tokenId: token.id,
           quantity: this.quantity
         });
 
         await ownershipRepository.create(toOwnership);
       } else {
-        let toOwnership = await ownershipRepository.findByOwnerAndToken(
-          toWallet.ownerId,
+        let toOwnership = await ownershipRepository.findByWalletAndToken(
+          toWallet.id,
           token.id
         );
 
         if (!toOwnership) {
           toOwnership = new TokenOwnership({
+            id: generateTokenOwnershipId(),
+            walletId: toWallet.id,
             tokenId: token.id,
             quantity: this.quantity
           });

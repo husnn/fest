@@ -7,7 +7,6 @@ const sigUtil = require('eth-sig-util');
 const { expectEvent, expectRevert } = require('@openzeppelin/test-helpers');
 
 const { assert } = require('chai');
-const BN = require('bn.js');
 
 const Web3 = require('web3');
 

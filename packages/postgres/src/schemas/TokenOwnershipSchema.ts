@@ -6,17 +6,21 @@ const TokenOwnershipSchema = new EntitySchema<TokenOwnership>({
   name: 'token_ownership',
   columns: {
     id: {
-      type: 'uuid',
-      generated: 'uuid',
+      type: 'text',
       primary: true
     },
-    ownerId: {
-      type: 'uuid',
-      name: 'owner_id',
+    dateCreated: {
+      type: 'timestamp',
+      name: 'date_created',
+      createDate: true
+    },
+    walletId: {
+      type: 'text',
+      name: 'wallet_id',
       nullable: true
     },
     tokenId: {
-      type: 'uuid',
+      type: 'text',
       name: 'token_id'
     },
     quantity: {
@@ -25,11 +29,11 @@ const TokenOwnershipSchema = new EntitySchema<TokenOwnership>({
     }
   },
   relations: {
-    owner: {
+    wallet: {
       type: 'many-to-one',
-      target: 'user',
+      target: 'wallet',
       joinColumn: {
-        name: 'owner_id',
+        name: 'wallet_id',
         referencedColumnName: 'id'
       }
     },
@@ -44,7 +48,7 @@ const TokenOwnershipSchema = new EntitySchema<TokenOwnership>({
   },
   indices: [
     {
-      columns: ['ownerId', 'tokenId'],
+      columns: ['walletId', 'tokenId'],
       unique: true
     }
   ]

@@ -10,7 +10,8 @@
   },
   "scripts": {
     "build": "tsc --build tsconfig.build.json",
-    "watch": "tsc --build --watch tsconfig.build.json",
+    "watch": "yarn build --watch",
+    "dev": "concurrently 'yarn watch' 'yarn workspace @fanbase/api dev' 'yarn workspace @fanbase/web dev'",
     "eslint:check": "eslint --ext .js,.jsx,.ts,.tsx .",
     "eslint:fix": "eslint --fix --ext .js,.jsx,.ts,.tsx .",
     "serve:api": "yarn workspace @fanbase/api serve",
@@ -20,6 +21,7 @@
     "@typescript-eslint/eslint-plugin": "^4.26.1",
     "@typescript-eslint/parser": "^4.26.1",
     "@yarnpkg/pnpify": "^3.0.0-rc.6",
+    "concurrently": "^6.2.0",
     "eslint": "^7.28.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-standard": "^16.0.3",

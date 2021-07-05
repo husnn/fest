@@ -1,12 +1,14 @@
 import {
     ApproveMintRequest, ApproveMintResponse, CreateTokenRequest, CreateTokenResponse,
     EditUserRequest, EditUserResponse, GetOAuthLinkRequest, GetOAuthLinkResponse,
-    GetOwnUploadsRequest, GetOwnUploadsResponse, GetTokenRequest, GetTokenResponse,
-    GetTokensCreatedResponse, GetUserByIdRequest, GetUserByUsernameRequest, GetUserResponse,
+    GetOwnUploadsRequest, GetOwnUploadsResponse, GetTokenOwnershipResponse,
+    GetTokenOwnershipsResponse, GetTokenRequest, GetTokenResponse, GetTokensCreatedResponse,
+    GetTokensOwnedResponse, GetUserByIdRequest, GetUserByUsernameRequest, GetUserResponse,
     IdentifyWithEmailRequest, IdentifyWithEmailResponse, IdentifyWithWalletRequest,
-    IdentifyWithWalletResponse, isUUID, LoginResponse, LoginWithEmailRequest,
+    IdentifyWithWalletResponse, isUsername, LoginResponse, LoginWithEmailRequest,
     LoginWithWalletRequest, OAuthCheckLinkRequest, OAuthCheckLinkResponse, OAuthLinkRequest,
-    Protocol, Token, TokenData, UnlinkOAuthRequest, UnlinkOAuthResponse, UserInfo, YouTubeVideo
+    Protocol, TokenData, TokenDTO, TokenOwnershipDTO, UnlinkOAuthRequest, UnlinkOAuthResponse,
+    UserInfo, YouTubeVideo
 } from '@fanbase/shared';
 
 import HttpClient from './HttpClient';
@@ -39,15 +41,15 @@ export default class ApiClient {
   }
 
   async getUser(identifier: string): Promise<GetUserResponse> {
-    if (identifier && isUUID(identifier)) {
-      return this.client.request<GetUserResponse, GetUserByIdRequest>({
-        method: 'GET',
-        endpoint: `/users/${identifier}`,
-        authentication: 'none'
-      });
+    if (isUsername(identifier)) {
+      return this.getUserByUsername(identifier);
     }
 
-    return this.getUserByUsername(identifier);
+    return this.client.request<GetUserResponse, GetUserByIdRequest>({
+      method: 'GET',
+      endpoint: `/users/${identifier}`,
+      authentication: 'none'
+    });
   }
 
   async editUser(data: UserInfo): Promise<EditUserResponse> {
@@ -76,6 +78,21 @@ export default class ApiClient {
     });
   }
 
+  async getTokensOwned(
+    user: string,
+    count?: number,
+    page?: number
+  ): Promise<GetTokensOwnedResponse> {
+    return this.client.request<GetTokensOwnedResponse>({
+      method: 'GET',
+      endpoint: `/users/${user}/tokens-owned`,
+      params: {
+        count,
+        page
+      }
+    });
+  }
+
   async getTokensCreated(
     user: string,
     count?: number,
@@ -91,7 +108,34 @@ export default class ApiClient {
     });
   }
 
-  async getToken(id: string): Promise<Token> {
+  async getTokenOwnerships(
+    token: string,
+    count?: number,
+    page?: number
+  ): Promise<GetTokenOwnershipsResponse> {
+    return this.client.request<GetTokenOwnershipsResponse>({
+      method: 'GET',
+      endpoint: `/tokens/${token}/ownerships`,
+      params: {
+        count,
+        page
+      }
+    });
+  }
+
+  async getTokenOwnership(
+    token: string,
+    ownership: string
+  ): Promise<TokenOwnershipDTO> {
+    const response = await this.client.request<GetTokenOwnershipResponse>({
+      method: 'GET',
+      endpoint: `/tokens/${token}/ownerships/${ownership}`
+    });
+
+    return response.body;
+  }
+
+  async getToken(id: string): Promise<TokenDTO> {
     const response = await this.client.request<
       GetTokenResponse,
       GetTokenRequest

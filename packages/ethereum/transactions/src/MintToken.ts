@@ -1,12 +1,9 @@
-import Web3 from 'web3';
-
 import { Contracts } from '@fanbase/eth-contracts';
 
 import Transaction from './Transaction';
 
 export class MintToken extends Transaction {
   constructor(
-    contract: string,
     data: {
       creator: string;
       supply: number;
@@ -18,15 +15,12 @@ export class MintToken extends Transaction {
       expiry: number;
       salt: string;
       signature: string;
-    }
+    },
+    contractAddress?: string
   ) {
-    const web3 = new Web3();
-    const contract_ = new web3.eth.Contract(
-      Contracts.Token.interface as any,
-      contract
-    );
+    const contract = Contracts.Token.get(contractAddress);
 
-    const txData = contract_.methods
+    const txData = contract.methods
       .mint(
         data.creator,
         data.supply,
@@ -38,9 +32,7 @@ export class MintToken extends Transaction {
       )
       .encodeABI();
 
-    console.log('Contract addr: ' + contract);
-
-    super(contract, txData);
+    super(contract.options.address, txData);
   }
 }
 

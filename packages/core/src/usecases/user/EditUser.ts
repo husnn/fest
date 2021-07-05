@@ -1,4 +1,4 @@
-import { CurrentUser } from '@fanbase/shared';
+import { CurrentUserDTO } from '@fanbase/shared';
 
 import UseCase from '../../base/UseCase';
 import { mapUserToCurrentDTO } from '../../mappers';
@@ -14,7 +14,7 @@ type EditUserInput = {
 };
 
 type EditUserOutput = {
-  user: CurrentUser;
+  user: CurrentUserDTO;
 };
 
 export class EditUser extends UseCase<EditUserInput, EditUserOutput> {
@@ -33,7 +33,7 @@ export class EditUser extends UseCase<EditUserInput, EditUserOutput> {
   async exec(data: EditUserInput): Promise<Result<EditUserOutput>> {
     const { name, username, email, bio } = data;
 
-    let user = await this.userRepository.get(data.user);
+    const user = await this.userRepository.get(data.user);
 
     const original = Object.assign({}, user);
 

@@ -6,15 +6,15 @@ const UserSchema = new EntitySchema<User>({
   name: 'user',
   columns: {
     id: {
-      type: 'uuid',
-      generated: 'uuid',
+      type: 'text',
       primary: true
     },
     email: {
       type: 'text',
       name: 'email',
       unique: true,
-      nullable: true
+      nullable: true,
+      select: false
     },
     username: {
       type: 'text',
@@ -35,7 +35,8 @@ const UserSchema = new EntitySchema<User>({
     loginCode: {
       type: 'simple-json',
       name: 'login_code',
-      nullable: true
+      nullable: true,
+      select: false
     },
     walletId: {
       type: 'uuid',

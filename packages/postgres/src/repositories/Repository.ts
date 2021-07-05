@@ -9,7 +9,7 @@ export abstract class Repository<T> implements IRepository<T> {
     this.db = getRepository<T>(schema);
   }
 
-  get(id: string, relations: string[] = []): Promise<T> {
+  get(id: string, relations?: string[]): Promise<T> {
     return this.db.findOne(id, { relations });
   }
 

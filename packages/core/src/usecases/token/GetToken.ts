@@ -1,4 +1,4 @@
-import { Token as TokenDTO } from '@fanbase/shared';
+import { TokenDTO } from '@fanbase/shared';
 
 import UseCase from '../../base/UseCase';
 import { mapTokenToDTO } from '../../mappers';
@@ -23,7 +23,10 @@ export class GetToken extends UseCase<GetTokenInput, GetTokenOutput> {
   }
 
   async exec(data: GetTokenInput): Promise<Result<GetTokenOutput>> {
-    const token = await this.tokenRepository.get(data.id);
+    const token = await this.tokenRepository.get(data.id, [
+      'creator',
+      'creator.wallet'
+    ]);
 
     return token ? Result.ok({ token: mapTokenToDTO(token) }) : Result.fail();
   }

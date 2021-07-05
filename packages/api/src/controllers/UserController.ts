@@ -1,26 +1,68 @@
 import { NextFunction, Request, Response } from 'express';
 
 import {
-    EditUser, GetTokensCreated, GetUser, TokenRepository, UserRepository, WalletRepository
+    EditUser, GetTokensCreated, GetTokensOwned, GetUser, TokenOwnershipRepository, TokenRepository,
+    UserRepository, WalletRepository
 } from '@fanbase/core';
 import { GetTokensCreatedResponse, GetUserResponse } from '@fanbase/shared';
-import { EditUserResponse, UserInfo } from '@fanbase/shared/src/types';
+import { EditUserResponse, GetTokensOwnedResponse, UserInfo } from '@fanbase/shared/src/types';
 
 import { HttpError, HttpResponse, NotFoundError, ValidationError } from '../http';
 
 class UserController {
   private editUserUseCase: EditUser;
   private getUserUseCase: GetUser;
+  private getTokensOwnedUseCase: GetTokensOwned;
   private getTokensCreatedUseCase: GetTokensCreated;
 
   constructor(
     userRepository: UserRepository,
     walletRepository: WalletRepository,
-    tokenRepository: TokenRepository
+    tokenRepository: TokenRepository,
+    tokenOwnershipRepository: TokenOwnershipRepository
   ) {
     this.editUserUseCase = new EditUser(userRepository, walletRepository);
     this.getUserUseCase = new GetUser(userRepository, walletRepository);
     this.getTokensCreatedUseCase = new GetTokensCreated(tokenRepository);
+    this.getTokensOwnedUseCase = new GetTokensOwned(
+      userRepository,
+      tokenOwnershipRepository
+    );
+  }
+
+  async getTokensOwned(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<HttpResponse<GetTokensOwnedResponse>> {
+    const count = req.pagination.count;
+    const page = req.pagination.page;
+
+    try {
+      const { id } = req.params;
+
+      const response = await this.getTokensOwnedUseCase.exec({
+        user: id,
+        count,
+        page
+      });
+
+      const { tokens, total } = response.data;
+
+      return new HttpResponse<GetTokensOwnedResponse>(
+        res,
+        {
+          body: tokens
+        },
+        {
+          count,
+          page,
+          total
+        }
+      );
+    } catch (err) {
+      next(err);
+    }
   }
 
   async getTokensCreated(

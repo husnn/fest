@@ -13,16 +13,49 @@ export class TokenOwnershipRepository
     super(TokenOwnershipSchema);
   }
 
-  findByOwnerAndToken(user: string, token: string): Promise<TokenOwnership> {
-    return this.db.findOne({ ownerId: user, tokenId: token });
+  findByWalletAndToken(wallet: string, token: string): Promise<TokenOwnership> {
+    return this.db.findOne({ walletId: wallet, tokenId: token });
   }
 
-  findByOwner(user: string): Promise<TokenOwnership[]> {
-    return this.db.find({ ownerId: user });
+  async findByWallet(
+    wallet: string,
+    count: number,
+    page: number
+  ): Promise<{ ownerships: TokenOwnership[]; total: number }> {
+    const [ownerships, total] = await this.db
+      .createQueryBuilder('ownership')
+      .leftJoinAndSelect('ownership.token', 'token')
+      .where('ownership.walletId = :wallet', { wallet })
+      .orderBy('token.dateCreated', 'DESC')
+      .skip((page - 1) * count)
+      .take(count)
+      .getManyAndCount();
+
+    return { ownerships, total };
   }
 
-  findByToken(token: string): Promise<TokenOwnership[]> {
-    return this.db.find({ tokenId: token });
+  async findByToken(
+    token: string,
+    count: number,
+    page: number
+  ): Promise<{ ownerships: TokenOwnership[]; total: number }> {
+    const [ownerships, total] = await this.db
+      .createQueryBuilder('ownership')
+      .leftJoinAndSelect('ownership.wallet', 'wallet')
+      .leftJoinAndMapOne(
+        'ownership.owner',
+        'user',
+        'owner',
+        'owner.walletId = ownership.walletId'
+      )
+      .where('ownership.tokenId = :token', { token })
+      .orderBy('ownership.quantity', 'DESC')
+      .addOrderBy('ownership.dateCreated', 'ASC')
+      .skip((page - 1) * count)
+      .take(count)
+      .getManyAndCount();
+
+    return { ownerships, total };
   }
 }
 

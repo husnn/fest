@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 
 export default (req: Request, res: Response, next: NextFunction) => {
-  let page: string | undefined = req.query.page?.toString();
-  let count: string | undefined = req.query.perPage?.toString();
+  const count: string | undefined = req.query.count?.toString();
+  const page: string | undefined = req.query.page?.toString();
 
   req.pagination = {
     count: count ? parseInt(count) : 15,
