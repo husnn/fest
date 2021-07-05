@@ -23,11 +23,19 @@ export default class EthereumClient {
       const ethereum = (window as any).ethereum;
 
       if (ethereum) {
-        await ethereum.request({ method: 'eth_requestAccounts' });
         ethereum.web3 = this.web3;
         provider = ethereum;
       } else {
-        const fm = new Fortmatic(process.env.NEXT_PUBLIC_FORTMATIC_API_KEY);
+        const fm = new Fortmatic(process.env.NEXT_PUBLIC_FORTMATIC_API_KEY, {
+          rpcUrl: process.env.NEXT_PUBLIC_ETH_PROVIDER,
+          chainId: parseInt(process.env.NEXT_PUBLIC_ETH_CHAIN)
+        });
+
+        // const fm = new Fortmatic(
+        //   process.env.NEXT_PUBLIC_FORTMATIC_API_KEY,
+        //   'ropsten'
+        // );
+
         provider = fm.getProvider();
       }
 
@@ -38,8 +46,15 @@ export default class EthereumClient {
     }
   }
 
-  async getAddress(): Promise<string> {
-    if (!this.isInitialized) this.initWeb3();
+  async getAccount(): Promise<string> {
+    if (!this.isInitialized) await this.initWeb3();
+
+    const ethereum = (window as any).ethereum;
+
+    if (ethereum) {
+      await ethereum.request({ method: 'eth_requestAccounts' });
+    }
+
     return await this.web3.eth.getCoinbase();
   }
 
@@ -57,7 +72,7 @@ export default class EthereumClient {
     expiry: number,
     salt: string
   ): Promise<void> {
-    const buyer = await this.getAddress();
+    const buyer = await this.getAccount();
 
     const nonce = await this.web3.eth.getTransactionCount(buyer, 'pending');
 
@@ -85,7 +100,7 @@ export default class EthereumClient {
     salt: string,
     signature: string
   ): Promise<void> {
-    const creator = await this.getAddress();
+    const creator = await this.getAccount();
 
     const nonce = await this.web3.eth.getTransactionCount(creator, 'pending');
 

@@ -44,16 +44,18 @@ export default function Login() {
   };
 
   const loginWithWallet = async () => {
-    if (!eth.account) return;
+    const account = await eth?.getAccount();
+
+    if (!account) return;
 
     try {
       const identificationData = await ApiClient.instance?.identifyWithWallet(
-        eth.account
+        account
       );
 
       const signature = await EthereumClient.instance?.signMessage(
         identificationData.message,
-        eth.account
+        account
       );
 
       const { token, user } = await ApiClient.instance?.loginWithWallet(

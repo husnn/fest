@@ -3,25 +3,19 @@ import React, { useEffect, useState } from 'react';
 import EthereumClient from './EthereumClient';
 
 const useEthereum = () => {
-  const [account, setAccount] = useState<string>();
-  let eth: EthereumClient;
-
-  const updateAccount = async () => {
-    const coinbase = await eth.getAddress();
-    setAccount(coinbase);
-  };
+  const [ethInstance, setEthInstance] = useState<EthereumClient>();
 
   useEffect(() => {
-    eth = EthereumClient.instance;
+    let eth = EthereumClient.instance;
 
     if (!eth) {
       eth = new EthereumClient();
     }
 
-    updateAccount();
+    setEthInstance(eth);
   }, []);
 
-  return { account };
+  return ethInstance;
 };
 
 export default useEthereum;

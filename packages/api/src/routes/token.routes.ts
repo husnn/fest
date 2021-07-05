@@ -1,12 +1,10 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import Web3 from 'web3';
 
 import { EthereumService } from '@fanbase/ethereum';
 import {
     TokenOwnershipRepository, TokenRepository, UserRepository, WalletRepository
 } from '@fanbase/postgres';
 
-import { ethConfig } from '../config';
 import TokenController from '../controllers/TokenController';
 import authMiddleware from '../middleware/authMiddleware';
 import pagination from '../middleware/pagination';
@@ -26,9 +24,7 @@ export default function init(router: Router): Router {
   const walletRepository = new WalletRepository();
   const tokenOwnershipRepository = new TokenOwnershipRepository();
 
-  const web3 = new Web3(ethConfig.provider);
-
-  const ethereumService = new EthereumService(web3);
+  const ethereumService = EthereumService.instance;
 
   const tokenController = new TokenController(
     tokenRepository,

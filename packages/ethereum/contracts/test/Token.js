@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const Token = artifacts.require("TokenV1");
 const sigUtil = require('eth-sig-util');
 const { expectEvent, expectRevert } = require('@openzeppelin/test-helpers');
@@ -86,7 +88,7 @@ contract('Token', async (accounts) => {
         salt
       );
   
-      const privateKey = Buffer.from('4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d', 'hex');
+      const privateKey = Buffer.from(process.env.DEPLOYER_PRIVATE_KEY, 'hex');
   
       signature = sigUtil.personalSign(privateKey, { data: hash });
     });
@@ -160,7 +162,7 @@ contract('Token', async (accounts) => {
         4321
       );
   
-      const privateKey = Buffer.from('7858295b0365bc2e002b4f4fd81d030955e349d6bc753570253874c83c35755b', 'hex');
+      const privateKey = Buffer.from('2bc1dd2f4cdc608874d887b082700719949d858f179717da275b97c4cca16f8d', 'hex');
   
       signature = sigUtil.personalSign(privateKey, { data: hash });
 
@@ -195,7 +197,7 @@ contract('Token', async (accounts) => {
         salt
       );
   
-      const privateKey = Buffer.from('4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d', 'hex');
+      const privateKey = Buffer.from(process.env.DEPLOYER_PRIVATE_KEY, 'hex');
   
       signature = sigUtil.personalSign(privateKey, { data: hash });
 

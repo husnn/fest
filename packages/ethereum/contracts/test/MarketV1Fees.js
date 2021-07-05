@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const Token = artifacts.require("TokenV1");
 const FAN = artifacts.require("FAN");
 const MarketWallet = artifacts.require("MarketWalletV1");
@@ -47,7 +49,7 @@ contract('MarketV1', async (accounts) => {
         salt
       );
   
-      const privateKey = Buffer.from('4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d', 'hex');
+      const privateKey = Buffer.from(process.env.DEPLOYER_PRIVATE_KEY, 'hex');
   
       signature = sigUtil.personalSign(privateKey, { data: hash });
     });
@@ -85,7 +87,7 @@ contract('MarketV1', async (accounts) => {
         salt
       );
       
-      const privateKey = Buffer.from('4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d', 'hex');
+      const privateKey = Buffer.from(process.env.DEPLOYER_PRIVATE_KEY, 'hex');
   
       signature = sigUtil.personalSign(privateKey, { data: hash });
     });
@@ -110,7 +112,7 @@ contract('MarketV1', async (accounts) => {
     let buyer = accounts[2];
 
     it('list token for sale', async () => {
-      const receipt = await MarketContract.sell(
+      const receipt = await MarketContract.listForSale(
         seller,
         token,
         tokenId,
@@ -125,7 +127,7 @@ contract('MarketV1', async (accounts) => {
         }
       );
 
-      expectEvent(receipt, 'Sell');
+      expectEvent(receipt, 'ListForSale');
 
       tradeId = receipt.logs[0].args.tradeId.toString();
 

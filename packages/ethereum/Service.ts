@@ -10,8 +10,11 @@ import Contracts from '@fanbase/eth-contracts';
 import { Protocol, WalletType } from '@fanbase/shared';
 
 export class EthereumService implements IEthereumService {
-  constructor(web3: Web3) {
-    Contracts.init(web3);
+  static instance: EthereumService;
+
+  static async init(web3: Web3) {
+    await Contracts.init(web3);
+    EthereumService.instance = new EthereumService();
   }
 
   verifyOffer() {

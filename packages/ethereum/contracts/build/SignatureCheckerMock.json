@@ -5664,27 +5664,27 @@
     "absolutePath": "/C/Users/Husnain/Documents/Projects/Fanbase/New/fanbase/packages/ethereum/contracts/solidity/openzeppelin/contracts/mocks/SignatureCheckerMock.sol",
     "exportedSymbols": {
       "Address": [
-        20506
+        20514
       ],
       "ECDSA": [
-        21261
+        21269
       ],
       "IERC1271": [
-        5087
+        5095
       ],
       "SignatureChecker": [
-        21391
+        21399
       ],
       "SignatureCheckerMock": [
-        10840
+        10848
       ]
     },
-    "id": 10841,
+    "id": 10849,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 10817,
+        "id": 10825,
         "literals": [
           "solidity",
           "^",
@@ -5697,11 +5697,11 @@
       {
         "absolutePath": "/C/Users/Husnain/Documents/Projects/Fanbase/New/fanbase/packages/ethereum/contracts/solidity/openzeppelin/contracts/utils/cryptography/SignatureChecker.sol",
         "file": "../utils/cryptography/SignatureChecker.sol",
-        "id": 10818,
+        "id": 10826,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 10841,
-        "sourceUnit": 21392,
+        "scope": 10849,
+        "sourceUnit": 21400,
         "src": "58:52:85",
         "symbolAliases": [],
         "unitAlias": ""
@@ -5712,27 +5712,27 @@
         "contractDependencies": [],
         "contractKind": "contract",
         "fullyImplemented": true,
-        "id": 10840,
+        "id": 10848,
         "linearizedBaseContracts": [
-          10840
+          10848
         ],
         "name": "SignatureCheckerMock",
         "nameLocation": "121:20:85",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
-            "id": 10821,
+            "id": 10829,
             "libraryName": {
-              "id": 10819,
+              "id": 10827,
               "name": "SignatureChecker",
               "nodeType": "IdentifierPath",
-              "referencedDeclaration": 21391,
+              "referencedDeclaration": 21399,
               "src": "154:16:85"
             },
             "nodeType": "UsingForDirective",
             "src": "148:35:85",
             "typeName": {
-              "id": 10820,
+              "id": 10828,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "175:7:85",
@@ -5745,7 +5745,7 @@
           },
           {
             "body": {
-              "id": 10838,
+              "id": 10846,
               "nodeType": "Block",
               "src": "299:67:85",
               "statements": [
@@ -5753,11 +5753,11 @@
                   "expression": {
                     "arguments": [
                       {
-                        "id": 10834,
+                        "id": 10842,
                         "name": "hash",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 10825,
+                        "referencedDeclaration": 10833,
                         "src": "343:4:85",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bytes32",
@@ -5765,11 +5765,11 @@
                         }
                       },
                       {
-                        "id": 10835,
+                        "id": 10843,
                         "name": "signature",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 10827,
+                        "referencedDeclaration": 10835,
                         "src": "349:9:85",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bytes_memory_ptr",
@@ -5789,32 +5789,32 @@
                         }
                       ],
                       "expression": {
-                        "id": 10832,
+                        "id": 10840,
                         "name": "signer",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 10823,
+                        "referencedDeclaration": 10831,
                         "src": "316:6:85",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
                         }
                       },
-                      "id": 10833,
+                      "id": 10841,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "isValidSignatureNow",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 21390,
+                      "referencedDeclaration": 21398,
                       "src": "316:26:85",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_view$_t_address_$_t_bytes32_$_t_bytes_memory_ptr_$returns$_t_bool_$bound_to$_t_address_$",
                         "typeString": "function (address,bytes32,bytes memory) view returns (bool)"
                       }
                     },
-                    "id": 10836,
+                    "id": 10844,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -5829,15 +5829,15 @@
                       "typeString": "bool"
                     }
                   },
-                  "functionReturnParameters": 10831,
-                  "id": 10837,
+                  "functionReturnParameters": 10839,
+                  "id": 10845,
                   "nodeType": "Return",
                   "src": "309:50:85"
                 }
               ]
             },
             "functionSelector": "6ccea652",
-            "id": 10839,
+            "id": 10847,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -5845,17 +5845,17 @@
             "nameLocation": "198:19:85",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 10828,
+              "id": 10836,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 10823,
+                  "id": 10831,
                   "mutability": "mutable",
                   "name": "signer",
                   "nameLocation": "226:6:85",
                   "nodeType": "VariableDeclaration",
-                  "scope": 10839,
+                  "scope": 10847,
                   "src": "218:14:85",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -5864,7 +5864,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 10822,
+                    "id": 10830,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "218:7:85",
@@ -5878,12 +5878,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 10825,
+                  "id": 10833,
                   "mutability": "mutable",
                   "name": "hash",
                   "nameLocation": "242:4:85",
                   "nodeType": "VariableDeclaration",
-                  "scope": 10839,
+                  "scope": 10847,
                   "src": "234:12:85",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -5892,7 +5892,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 10824,
+                    "id": 10832,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "234:7:85",
@@ -5905,12 +5905,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 10827,
+                  "id": 10835,
                   "mutability": "mutable",
                   "name": "signature",
                   "nameLocation": "261:9:85",
                   "nodeType": "VariableDeclaration",
-                  "scope": 10839,
+                  "scope": 10847,
                   "src": "248:22:85",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -5919,7 +5919,7 @@
                     "typeString": "bytes"
                   },
                   "typeName": {
-                    "id": 10826,
+                    "id": 10834,
                     "name": "bytes",
                     "nodeType": "ElementaryTypeName",
                     "src": "248:5:85",
@@ -5934,17 +5934,17 @@
               "src": "217:54:85"
             },
             "returnParameters": {
-              "id": 10831,
+              "id": 10839,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 10830,
+                  "id": 10838,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 10839,
+                  "scope": 10847,
                   "src": "293:4:85",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -5953,7 +5953,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 10829,
+                    "id": 10837,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "293:4:85",
@@ -5967,14 +5967,14 @@
               ],
               "src": "292:6:85"
             },
-            "scope": 10840,
+            "scope": 10848,
             "src": "189:177:85",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "public"
           }
         ],
-        "scope": 10841,
+        "scope": 10849,
         "src": "112:256:85",
         "usedErrors": []
       }
@@ -5985,27 +5985,27 @@
     "absolutePath": "/C/Users/Husnain/Documents/Projects/Fanbase/New/fanbase/packages/ethereum/contracts/solidity/openzeppelin/contracts/mocks/SignatureCheckerMock.sol",
     "exportedSymbols": {
       "Address": [
-        20506
+        20514
       ],
       "ECDSA": [
-        21261
+        21269
       ],
       "IERC1271": [
-        5087
+        5095
       ],
       "SignatureChecker": [
-        21391
+        21399
       ],
       "SignatureCheckerMock": [
-        10840
+        10848
       ]
     },
-    "id": 10841,
+    "id": 10849,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 10817,
+        "id": 10825,
         "literals": [
           "solidity",
           "^",
@@ -6018,11 +6018,11 @@
       {
         "absolutePath": "/C/Users/Husnain/Documents/Projects/Fanbase/New/fanbase/packages/ethereum/contracts/solidity/openzeppelin/contracts/utils/cryptography/SignatureChecker.sol",
         "file": "../utils/cryptography/SignatureChecker.sol",
-        "id": 10818,
+        "id": 10826,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 10841,
-        "sourceUnit": 21392,
+        "scope": 10849,
+        "sourceUnit": 21400,
         "src": "58:52:85",
         "symbolAliases": [],
         "unitAlias": ""
@@ -6033,27 +6033,27 @@
         "contractDependencies": [],
         "contractKind": "contract",
         "fullyImplemented": true,
-        "id": 10840,
+        "id": 10848,
         "linearizedBaseContracts": [
-          10840
+          10848
         ],
         "name": "SignatureCheckerMock",
         "nameLocation": "121:20:85",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
-            "id": 10821,
+            "id": 10829,
             "libraryName": {
-              "id": 10819,
+              "id": 10827,
               "name": "SignatureChecker",
               "nodeType": "IdentifierPath",
-              "referencedDeclaration": 21391,
+              "referencedDeclaration": 21399,
               "src": "154:16:85"
             },
             "nodeType": "UsingForDirective",
             "src": "148:35:85",
             "typeName": {
-              "id": 10820,
+              "id": 10828,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "175:7:85",
@@ -6066,7 +6066,7 @@
           },
           {
             "body": {
-              "id": 10838,
+              "id": 10846,
               "nodeType": "Block",
               "src": "299:67:85",
               "statements": [
@@ -6074,11 +6074,11 @@
                   "expression": {
                     "arguments": [
                       {
-                        "id": 10834,
+                        "id": 10842,
                         "name": "hash",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 10825,
+                        "referencedDeclaration": 10833,
                         "src": "343:4:85",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bytes32",
@@ -6086,11 +6086,11 @@
                         }
                       },
                       {
-                        "id": 10835,
+                        "id": 10843,
                         "name": "signature",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 10827,
+                        "referencedDeclaration": 10835,
                         "src": "349:9:85",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bytes_memory_ptr",
@@ -6110,32 +6110,32 @@
                         }
                       ],
                       "expression": {
-                        "id": 10832,
+                        "id": 10840,
                         "name": "signer",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 10823,
+                        "referencedDeclaration": 10831,
                         "src": "316:6:85",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
                         }
                       },
-                      "id": 10833,
+                      "id": 10841,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "isValidSignatureNow",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 21390,
+                      "referencedDeclaration": 21398,
                       "src": "316:26:85",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_view$_t_address_$_t_bytes32_$_t_bytes_memory_ptr_$returns$_t_bool_$bound_to$_t_address_$",
                         "typeString": "function (address,bytes32,bytes memory) view returns (bool)"
                       }
                     },
-                    "id": 10836,
+                    "id": 10844,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -6150,15 +6150,15 @@
                       "typeString": "bool"
                     }
                   },
-                  "functionReturnParameters": 10831,
-                  "id": 10837,
+                  "functionReturnParameters": 10839,
+                  "id": 10845,
                   "nodeType": "Return",
                   "src": "309:50:85"
                 }
               ]
             },
             "functionSelector": "6ccea652",
-            "id": 10839,
+            "id": 10847,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -6166,17 +6166,17 @@
             "nameLocation": "198:19:85",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 10828,
+              "id": 10836,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 10823,
+                  "id": 10831,
                   "mutability": "mutable",
                   "name": "signer",
                   "nameLocation": "226:6:85",
                   "nodeType": "VariableDeclaration",
-                  "scope": 10839,
+                  "scope": 10847,
                   "src": "218:14:85",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -6185,7 +6185,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 10822,
+                    "id": 10830,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "218:7:85",
@@ -6199,12 +6199,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 10825,
+                  "id": 10833,
                   "mutability": "mutable",
                   "name": "hash",
                   "nameLocation": "242:4:85",
                   "nodeType": "VariableDeclaration",
-                  "scope": 10839,
+                  "scope": 10847,
                   "src": "234:12:85",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -6213,7 +6213,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 10824,
+                    "id": 10832,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "234:7:85",
@@ -6226,12 +6226,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 10827,
+                  "id": 10835,
                   "mutability": "mutable",
                   "name": "signature",
                   "nameLocation": "261:9:85",
                   "nodeType": "VariableDeclaration",
-                  "scope": 10839,
+                  "scope": 10847,
                   "src": "248:22:85",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -6240,7 +6240,7 @@
                     "typeString": "bytes"
                   },
                   "typeName": {
-                    "id": 10826,
+                    "id": 10834,
                     "name": "bytes",
                     "nodeType": "ElementaryTypeName",
                     "src": "248:5:85",
@@ -6255,17 +6255,17 @@
               "src": "217:54:85"
             },
             "returnParameters": {
-              "id": 10831,
+              "id": 10839,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 10830,
+                  "id": 10838,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 10839,
+                  "scope": 10847,
                   "src": "293:4:85",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -6274,7 +6274,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 10829,
+                    "id": 10837,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "293:4:85",
@@ -6288,14 +6288,14 @@
               ],
               "src": "292:6:85"
             },
-            "scope": 10840,
+            "scope": 10848,
             "src": "189:177:85",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "public"
           }
         ],
-        "scope": 10841,
+        "scope": 10849,
         "src": "112:256:85",
         "usedErrors": []
       }
@@ -6308,7 +6308,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.1",
-  "updatedAt": "2021-07-05T11:01:09.281Z",
+  "updatedAt": "2021-07-05T16:18:58.241Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

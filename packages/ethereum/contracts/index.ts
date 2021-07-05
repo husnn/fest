@@ -23,9 +23,7 @@ export const interfaces: { [key: string]: ContractBuild } = {
 
 let network;
 
-let web3Instance = new Web3(
-  process.env.ETH_PROVIDER || process.env.NEXT_PUBLIC_ETH_PROVIDER
-);
+let web3Instance = new Web3(process.env.ETH_PROVIDER);
 
 export const init = async (web3: Web3) => {
   web3Instance = web3;

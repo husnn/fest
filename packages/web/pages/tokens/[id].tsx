@@ -16,7 +16,7 @@ import useAuthentication from '../../modules/auth/useAuthentication';
 import EthereumClient from '../../modules/ethereum/EthereumClient';
 import useEthereum from '../../modules/ethereum/useEthereum';
 import { Button, Link } from '../../ui';
-import { getDisplayName, getProfileUrl, getTokenOwnershipUrl, truncateAddress } from '../../utils';
+import { getDisplayName, getProfileUrl, getTokenOwnershipUrl } from '../../utils';
 
 const TokenContainer = styled.div`
   width: 100%;
@@ -101,7 +101,7 @@ const PreviewContainer = styled.div`
 
 export default function TokenPage() {
   const router = useRouter();
-  const { account } = useEthereum();
+  const eth = useEthereum();
   const { currentUser } = useAuthentication();
 
   const { id, o } = router.query;
@@ -158,11 +158,12 @@ export default function TokenPage() {
   };
 
   const giveToken = async () => {
-    console.log(account);
+    const account = await eth.getAccount();
+
     Contracts.Token.get()
       .methods.safeTransferFrom(
         account,
-        '0xb75D527a27bA01cF43083e105Af95D005f53c05c',
+        '0xFFcf8FDEE72ac11b5c542428B35EEF5769C409f0',
         token.chain?.id,
         1,
         []
@@ -208,7 +209,7 @@ export default function TokenPage() {
 
     hash = EthereumClient.instance.web3.eth.accounts.sign(
       hash,
-      '4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d'
+      process.env.ETH_MARKET_ADMIN_PK
     );
 
     console.log(hash);
@@ -246,7 +247,7 @@ export default function TokenPage() {
       </Head>
       {token && (
         <TokenContainer>
-          {!token.minted && (
+          {token.minted && (
             <TokenHoldersContainer>
               <h3>Top holders</h3>
               <TokenHolders
@@ -308,7 +309,7 @@ export default function TokenPage() {
                     giveToken();
                   }}
                 >
-                  Give to 0xb7...c05c
+                  Give to 0xFF...09f0
                 </Button>
               </TokenActions>
             )}

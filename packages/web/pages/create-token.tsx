@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
-import { CreateTokenSchema, TokenType, YouTubeVideo } from '@fanbase/shared';
+import { CreateTokenSchema, TokenMetadata, TokenType, YouTubeVideo } from '@fanbase/shared';
 
 import YouTubeVideoList, { YouTubeVideoRow } from '../components/YouTubeVideoList';
 import ApiClient from '../modules/api/ApiClient';
@@ -92,9 +92,7 @@ export default function CreateTokenPage() {
           dirty,
           errors,
           isSubmitting
-        }: FormikProps<{
-          name: string;
-        }>) => (
+        }: FormikProps<any>) => (
           <Form>
             <div className={styles.createTokenForm}>
               <h2>Create a new token</h2>

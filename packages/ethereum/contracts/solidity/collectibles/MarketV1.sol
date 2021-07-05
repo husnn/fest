@@ -59,7 +59,7 @@ contract MarketV1 is AccessControl, Pausable {
 
   MarketWalletV1 internal _wallet;
 
-  event Sell(
+  event ListForSale(
     uint tradeId,
     address seller,
     address tokenContract,
@@ -68,7 +68,11 @@ contract MarketV1 is AccessControl, Pausable {
     address currency,
     uint price
   );
-  
+
+  event Sell(
+    uint tradeId
+  );
+
   event Buy(
     uint tradeId,
     address buyer,
@@ -133,10 +137,12 @@ contract MarketV1 is AccessControl, Pausable {
     );
 
     uint available = trade.available - quantity;
-    _trades[_tradeId].available = available;
+    _trades[tradeId].available = available;
 
-    if (available == 0)
-      _trades[_tradeId].status = TradeStatus.Sold;
+    if (available == 0) {
+      _trades[tradeId].status = TradeStatus.Sold;
+      emit Sell(tradeId);
+    }
 
     uint sellerNet = payAfterFees(
       subtotal,
@@ -157,7 +163,7 @@ contract MarketV1 is AccessControl, Pausable {
     );
 
     emit Buy(
-      trade.id,
+      tradeId,
       msg.sender,
       quantity
     );
@@ -237,7 +243,7 @@ contract MarketV1 is AccessControl, Pausable {
     ));
   }
 
-  function sell(
+  function listForSale(
     address seller,
     address token,
     uint tokenId,
@@ -318,7 +324,7 @@ contract MarketV1 is AccessControl, Pausable {
       )
     ].push(_tradeId);
 
-    emit Sell(
+    emit ListForSale(
       _tradeId,
       seller,
       token,
