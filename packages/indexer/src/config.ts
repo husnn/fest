@@ -1,7 +1,10 @@
 import { PostgresConfig } from '@fanbase/postgres';
 
 export const ethConfig = {
-  provider: process.env.ETH_PROVIDER || 'http://localhost:8545'
+  provider:
+    process.env.ETH_PROVIDER_WSS ||
+    process.env.ETH_PROVIDER ||
+    'http://localhost:8545'
 };
 
 export const redisConfig = {
