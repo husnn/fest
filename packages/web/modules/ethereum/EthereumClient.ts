@@ -69,6 +69,7 @@ export default class EthereumClient {
   ): Promise<void> {
     const buyer = await this.getAccount();
 
+    const chainId = await this.web3.eth.getChainId();
     const nonce = await this.web3.eth.getTransactionCount(buyer, 'pending');
 
     const tx = new SignOffer({
@@ -83,7 +84,7 @@ export default class EthereumClient {
         expiry
       },
       salt
-    }).build(buyer, nonce);
+    }).build(buyer, chainId, nonce);
 
     this.web3.eth.call(tx.txData);
   }
@@ -94,13 +95,14 @@ export default class EthereumClient {
     expiry: number,
     salt: string,
     signature: string
-  ): Promise<void> {
-    const creator = await this.getAccount();
+  ): Promise<string> {
+    const account = await this.getAccount();
 
-    const nonce = await this.web3.eth.getTransactionCount(creator, 'pending');
+    const chainId = await this.web3.eth.getChainId();
+    const nonce = await this.web3.eth.getTransactionCount(account, 'pending');
 
     const txData = {
-      creator,
+      creator: account,
       supply: token.supply,
       fees: [],
       data,
@@ -109,8 +111,13 @@ export default class EthereumClient {
       signature
     };
 
-    const tx = new MintToken(txData).build(creator, nonce);
+    const tx = new MintToken(txData).build(account, chainId, nonce);
 
-    await this.web3.eth.sendTransaction(tx.txData);
+    return new Promise((resolve, reject) => {
+      this.web3.eth.sendTransaction(tx.txData, (err: Error, hash: string) => {
+        if (!err) resolve(hash);
+        reject();
+      });
+    });
   }
 }

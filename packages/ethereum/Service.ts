@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import * as BIP39 from 'bip39';
 import * as sigUtil from 'eth-sig-util';
 import { hdkey } from 'ethereumjs-wallet';
@@ -75,8 +77,6 @@ export class EthereumService implements IEthereumService {
       'pending'
     );
 
-    console.log('Nonce: ' + nonce);
-
     const txData = {
       creator: wallet.address,
       supply: token.supply,
@@ -87,18 +87,23 @@ export class EthereumService implements IEthereumService {
       signature
     };
 
+    const chainId = await this.web3.eth.getChainId();
+
     const tx = new MintToken(txData)
-      .build(wallet.address, nonce)
+      .build(wallet.address, chainId, nonce)
       .signAndSerialize(decryptText(wallet.privateKey));
 
-    try {
-      const receipt = await this.web3.eth.sendSignedTransaction(tx);
-      return Result.ok(receipt.transactionHash);
-    } catch (err) {
-      console.log(err);
-    }
-
-    return Result.fail();
+    return new Promise<Result<string>>((resolve) => {
+      this.web3.eth
+        .sendSignedTransaction(tx)
+        .once('transactionHash', (hash: string) => {
+          resolve(Result.ok(hash));
+        })
+        .catch((err) => {
+          console.log(err);
+          resolve(Result.fail());
+        });
+    });
   }
 
   async signMint(

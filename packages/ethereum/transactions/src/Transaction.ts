@@ -3,18 +3,23 @@ import Web3 from 'web3';
 
 export class Transaction {
   address: string;
-  txData: any;
-  txSigned: string;
-  txSerialized: string;
-
   data: any;
+
+  txData: any;
+  tx: EthereumTx;
 
   constructor(address: string, data: any) {
     this.address = address;
     this.data = data;
   }
 
-  build(from: string, nonce: number, gasLimit = 180000, gasPrice = 20): this {
+  build(
+    from: string,
+    chainId: number,
+    nonce: number,
+    gasPrice = 20,
+    gasLimit = 180000
+  ): this {
     const tx = {
       from: Web3.utils.toChecksumAddress(from),
       to: Web3.utils.toChecksumAddress(this.address),
@@ -24,18 +29,18 @@ export class Transaction {
       data: this.data
     };
 
+    this.tx = new EthereumTx(tx, { chain: chainId });
+
     this.txData = tx;
 
     return this;
   }
 
   signAndSerialize(privateKey: string): string {
-    const tx = new EthereumTx(this.txData);
-
     const privateKeyBuffer = Buffer.from(privateKey, 'hex');
-    tx.sign(privateKeyBuffer);
+    this.tx.sign(privateKeyBuffer);
 
-    return '0x' + tx.serialize().toString('hex');
+    return '0x' + this.tx.serialize().toString('hex');
   }
 }
 

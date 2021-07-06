@@ -66,7 +66,7 @@ class TokenController {
         token: id
       });
 
-      if (!result.success) throw new HttpError();
+      if (!result.success) throw new HttpError('Could not mint token.');
 
       return new HttpResponse<MintTokenResponse>(res, {
         txHash: result.data.txHash
