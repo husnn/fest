@@ -54,7 +54,7 @@ export default class TokenMint extends Job {
         transaction: this.tx
       };
 
-      // token.minted = true;
+      token.minted = true;
 
       const creatorWallet = await walletRepository.findByAddress(
         this.protocol,

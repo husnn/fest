@@ -31,11 +31,6 @@ export default class EthereumClient {
           chainId: parseInt(process.env.NEXT_PUBLIC_ETH_CHAIN)
         });
 
-        // const fm = new Fortmatic(
-        //   process.env.NEXT_PUBLIC_FORTMATIC_API_KEY,
-        //   'ropsten'
-        // );
-
         provider = fm.getProvider();
       }
 
