@@ -6,9 +6,9 @@ import {
     GetTokensOwnedResponse, GetUserByIdRequest, GetUserByUsernameRequest, GetUserResponse,
     IdentifyWithEmailRequest, IdentifyWithEmailResponse, IdentifyWithWalletRequest,
     IdentifyWithWalletResponse, isUsername, LoginResponse, LoginWithEmailRequest,
-    LoginWithWalletRequest, OAuthCheckLinkRequest, OAuthCheckLinkResponse, OAuthLinkRequest,
-    Protocol, TokenData, TokenDTO, TokenOwnershipDTO, UnlinkOAuthRequest, UnlinkOAuthResponse,
-    UserInfo, YouTubeVideo
+    LoginWithWalletRequest, MintTokenRequest, MintTokenResponse, OAuthCheckLinkRequest,
+    OAuthCheckLinkResponse, OAuthLinkRequest, Protocol, TokenData, TokenDTO, TokenOwnershipDTO,
+    UnlinkOAuthRequest, UnlinkOAuthResponse, UserInfo, YouTubeVideo
 } from '@fanbase/shared';
 
 import HttpClient from './HttpClient';
@@ -63,17 +63,30 @@ export default class ApiClient {
 
   // Token
 
+  async mintToken(
+    token: string,
+    protocol = Protocol.ETHEREUM
+  ): Promise<MintTokenResponse> {
+    return this.client.request<MintTokenResponse, MintTokenRequest>({
+      method: 'POST',
+      endpoint: `/tokens/${token}/mint`,
+      authenticated: 'required',
+      body: {
+        protocol
+      }
+    });
+  }
+
   async approveMint(
-    protocol = Protocol.ETHEREUM,
-    token: string
+    token: string,
+    protocol = Protocol.ETHEREUM
   ): Promise<ApproveMintResponse> {
     return this.client.request<ApproveMintResponse, ApproveMintRequest>({
       method: 'POST',
-      endpoint: '/tokens/approve-mint',
+      endpoint: `/tokens/${token}/approve-mint`,
       authenticated: 'required',
       body: {
-        protocol,
-        token
+        protocol
       }
     });
   }

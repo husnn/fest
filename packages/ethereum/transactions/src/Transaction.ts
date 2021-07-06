@@ -1,8 +1,10 @@
+import { Transaction as EthereumTx } from 'ethereumjs-tx';
 import Web3 from 'web3';
 
 export class Transaction {
   address: string;
-  tx: any;
+  txData: any;
+  txSigned: string;
   txSerialized: string;
 
   data: any;
@@ -12,7 +14,7 @@ export class Transaction {
     this.data = data;
   }
 
-  build(from: string, nonce: number, gasLimit = 180000, gasPrice = 200): this {
+  build(from: string, nonce: number, gasLimit = 180000, gasPrice = 20): this {
     const tx = {
       from: Web3.utils.toChecksumAddress(from),
       to: Web3.utils.toChecksumAddress(this.address),
@@ -22,21 +24,18 @@ export class Transaction {
       data: this.data
     };
 
-    this.tx = tx;
+    this.txData = tx;
 
     return this;
   }
 
-  sign(privateKey: string): this {
+  signAndSerialize(privateKey: string): string {
+    const tx = new EthereumTx(this.txData);
+
     const privateKeyBuffer = Buffer.from(privateKey, 'hex');
-    this.tx.sign(privateKeyBuffer);
-    return this;
-  }
+    tx.sign(privateKeyBuffer);
 
-  serialize(): this {
-    const serializedTx = this.tx.serialize();
-    this.txSerialized = '0x' + serializedTx.toString('hex');
-    return this;
+    return '0x' + tx.serialize().toString('hex');
   }
 }
 

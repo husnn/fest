@@ -7,6 +7,7 @@ import styled from '@emotion/styled';
 
 import { corners } from '../styles/constants';
 import Button from './Button';
+import Link from './Link';
 
 type ModalProps = {
   show: boolean;
@@ -16,8 +17,10 @@ type ModalProps = {
   description?: string;
   zeroPadding?: boolean;
   backable?: boolean;
+  cancel?: string;
   ok?: string;
   okEnabled?: boolean;
+  hasSteps?: boolean;
   onBackPressed?: () => void;
   onOkPressed?: () => void;
   requestClose?: () => void;
@@ -88,7 +91,7 @@ const ModalContent = styled.div`
   // gap: 20px;
 
   > * + * {
-    margin-top: 15px;
+    margin-top: 10px;
   }
 `;
 
@@ -102,21 +105,28 @@ const ModalTitleBlock = styled.div`
   // gap: 15px;
 
   > * + * {
-    margin-left: 15px;
+    margin-left: 10px;
   }
 `;
 
 const ModalActions = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
   // gap: 15px;
 
+  > button {
+    width: 100%;
+  }
+
   > * + * {
-    margin-top: 15px;
+    margin-top: 10px;
   }
 `;
 
-const ModalBody = styled.div``;
+const ModalBody = styled.div`
+  padding: 10px 0;
+`;
 
 const Modal: React.FC<ModalProps> = ({
   show,
@@ -127,8 +137,10 @@ const Modal: React.FC<ModalProps> = ({
   zeroPadding,
   backable,
   onBackPressed,
+  cancel,
   ok,
   okEnabled,
+  hasSteps,
   onOkPressed,
   requestClose
 }: ModalProps) => {
@@ -184,7 +196,7 @@ const Modal: React.FC<ModalProps> = ({
                 </ModalHead>
               )}
               <ModalBody>{children}</ModalBody>
-              {ok && (
+              {(ok || cancel) && (
                 <ModalActions>
                   {ok && (
                     <Button
@@ -192,11 +204,21 @@ const Modal: React.FC<ModalProps> = ({
                       disabled={!okEnabled}
                       onClick={() => {
                         onOkPressed();
-                        setInProp(true);
+                        if (hasSteps) setInProp(true);
                       }}
                     >
                       {ok}
                     </Button>
+                  )}
+                  {cancel && (
+                    <Link
+                      className="smaller"
+                      onClick={() => {
+                        requestClose();
+                      }}
+                    >
+                      {cancel}
+                    </Link>
                   )}
                 </ModalActions>
               )}

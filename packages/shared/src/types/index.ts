@@ -36,6 +36,16 @@ export interface PaginatedResponse<T = any> extends Response {
  * Token
  */
 
+export interface MintTokenResponse extends Response {
+  txHash: string;
+}
+export interface MintTokenRequest extends Request {
+  authenticated: 'required';
+  body: {
+    protocol: Protocol;
+  };
+}
+
 export interface ApproveMintResponse extends Response {
   data: string;
   expiry: number;
@@ -47,7 +57,6 @@ export interface ApproveMintRequest extends Request {
   authenticated: 'required';
   body: {
     protocol: Protocol;
-    token: string;
   };
 }
 

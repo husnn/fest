@@ -32,38 +32,38 @@ const ModalError = styled.p`
 
 const ModalWithSteps =
   (Component: React.ComponentType<ModalWithStepsProps>) =>
-    ({ showing, setShowing, ...props }) => {
-      const [steps, setSteps] = useState<Step[]>([]);
+  ({ showing, setShowing, ...props }) => {
+    const [steps, setSteps] = useState<Step[]>([]);
 
-      const [currentStepIndex, setCurrentStepIndex] = useState(0);
-      const [currentStep, setCurrentStep] = useState<Step>();
+    const [currentStepIndex, setCurrentStepIndex] = useState(0);
+    const [currentStep, setCurrentStep] = useState<Step>();
 
-      const [okEnabled, setOkEnabled] = useState(false);
-      const [onOkPressed, setOnOkPressed] = useState(false);
+    const [okEnabled, setOkEnabled] = useState(false);
+    const [onOkPressed, setOnOkPressed] = useState(false);
 
-      const [error, setError] = useState('');
+    const [error, setError] = useState('');
 
-      const [closing, setClosing] = useState(false);
+    const [closing, setClosing] = useState(false);
 
-      const goForward = () => {
-        if (currentStepIndex < steps.length - 1) {
-          setCurrentStepIndex(currentStepIndex + 1);
-          setCurrentStep(steps[currentStepIndex + 1]);
-        }
+    const goForward = () => {
+      if (currentStepIndex < steps.length - 1) {
+        setCurrentStepIndex(currentStepIndex + 1);
+        setCurrentStep(steps[currentStepIndex + 1]);
+      }
 
-        setError(null);
-      };
+      setError(null);
+    };
 
-      const goBack = () => {
-        if (currentStepIndex > 0) {
-          setCurrentStepIndex(currentStepIndex - 1);
-          setCurrentStep(steps[currentStepIndex - 1]);
-        }
+    const goBack = () => {
+      if (currentStepIndex > 0) {
+        setCurrentStepIndex(currentStepIndex - 1);
+        setCurrentStep(steps[currentStepIndex - 1]);
+      }
 
-        setError(null);
-      };
+      setError(null);
+    };
 
-      return (
+    return (
       <Modal
         show={showing}
         closing={closing}
@@ -73,6 +73,7 @@ const ModalWithSteps =
         ok={currentStep?.ok}
         onBackPressed={goBack}
         okEnabled={okEnabled}
+        hasSteps={true}
         onOkPressed={() => setOnOkPressed(!onOkPressed)}
         requestClose={() => {
           setClosing(true);
@@ -99,7 +100,7 @@ const ModalWithSteps =
         />
         {error && <ModalError>{error}</ModalError>}
       </Modal>
-      );
-    };
+    );
+  };
 
 export default ModalWithSteps;

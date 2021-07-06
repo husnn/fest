@@ -11,12 +11,21 @@ export class WalletRepository
     super(WalletSchema);
   }
 
-  async findByUser(protocol: string, user: string): Promise<Wallet> {
-    return await this.db
+  async findByUser(
+    protocol: string,
+    user: string,
+    options?: { select?: Array<keyof Wallet> }
+  ): Promise<Wallet> {
+    const query = this.db
       .createQueryBuilder('wallet')
       .where('wallet.protocol = :protocol', { protocol })
-      .andWhere('wallet.ownerId = :user', { user })
-      .getOne();
+      .andWhere('wallet.ownerId = :user', { user });
+
+    if (options?.select) {
+      query.addSelect(options.select.map((property) => `wallet.${property}`));
+    }
+
+    return query.getOne();
   }
 
   async findByAddress(protocol: string, address: string): Promise<Wallet> {

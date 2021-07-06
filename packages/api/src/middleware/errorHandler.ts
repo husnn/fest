@@ -9,7 +9,7 @@ export interface ErrorResponse extends Response {
   message: string;
 }
 
-function errorHandler (
+function errorHandler(
   err: Error,
   req: Request,
   res: ExpressResponse,

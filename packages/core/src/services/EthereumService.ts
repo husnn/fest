@@ -1,5 +1,6 @@
 import { Wallet } from '@fanbase/core';
 
+import { Token } from '../entities';
 import { Result } from '../Result';
 
 export interface EthereumService {
@@ -24,6 +25,15 @@ export interface EthereumService {
       signature: string;
     }>
   >;
+
+  mintToken(
+    token: Token,
+    wallet: Wallet,
+    data: string,
+    expiry: number,
+    salt: string,
+    signature: string
+  ): Promise<Result<string>>;
 
   getOfferHash();
   verifyOffer();

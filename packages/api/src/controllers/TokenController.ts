@@ -2,21 +2,22 @@ import { NextFunction, Request, Response } from 'express';
 
 import {
     ApproveMint, CreateToken, EthereumService, GetToken, GetTokenOwnership, GetTokenOwnerships,
-    IPFSService, TokenRepository, UserRepository, WalletRepository
+    IPFSService, MintToken, TokenRepository, UserRepository, WalletRepository
 } from '@fanbase/core';
 import { TokenOwnershipRepository } from '@fanbase/postgres';
 import {
     ApproveMintResponse, CreateTokenResponse, GetTokenOwnershipResponse, GetTokenOwnershipsResponse,
-    GetTokenResponse, Protocol, TokenData
+    GetTokenResponse, MintTokenResponse, TokenData
 } from '@fanbase/shared';
 
-import { NotFoundError } from '../http';
+import { HttpError, NotFoundError } from '../http';
 import HttpResponse from '../http/HttpResponse';
 
 class TokenController {
   private createTokenUseCase: CreateToken;
   private getTokenUseCase: GetToken;
   private approveMintUseCase: ApproveMint;
+  private mintTokenUseCase: MintToken;
   private getOwnershipUseCase: GetTokenOwnership;
   private getOwnershipsUseCase: GetTokenOwnerships;
 
@@ -42,19 +43,47 @@ class TokenController {
       ethereumService
     );
 
+    this.mintTokenUseCase = new MintToken(
+      walletRepository,
+      tokenRepository,
+      ethereumService
+    );
+
     this.getOwnershipUseCase = new GetTokenOwnership(tokenOwnershipRepository);
     this.getOwnershipsUseCase = new GetTokenOwnerships(
       tokenOwnershipRepository
     );
   }
 
-  async approveMint(req: Request, res: Response) {
-    const { token } = req.body;
+  async mint(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      const { protocol } = req.body;
+
+      const result = await this.mintTokenUseCase.exec({
+        protocol,
+        user: req.user,
+        token: id
+      });
+
+      if (!result.success) throw new HttpError();
+
+      return new HttpResponse<MintTokenResponse>(res, {
+        txHash: result.data.txHash
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async approveMint(req: Request, res: Response, next: NextFunction) {
+    const { id } = req.params;
+    const { protocol } = req.body;
 
     const result = await this.approveMintUseCase.exec({
-      protocol: Protocol.ETHEREUM,
+      protocol,
       user: req.user,
-      token
+      token: id
     });
 
     const { data, expiry, salt, signature } = result.data;

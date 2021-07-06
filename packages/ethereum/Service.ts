@@ -4,17 +4,24 @@ import { hdkey } from 'ethereumjs-wallet';
 import Web3 from 'web3';
 
 import {
-    EthereumService as IEthereumService, generateWalletId, Result, Wallet
+    EthereumService as IEthereumService, generateWalletId, Result, Token, Wallet
 } from '@fanbase/core';
 import Contracts from '@fanbase/eth-contracts';
-import { Protocol, WalletType } from '@fanbase/shared';
+import { MintToken } from '@fanbase/eth-transactions';
+import { decryptText, Protocol, WalletType } from '@fanbase/shared';
 
 export class EthereumService implements IEthereumService {
   static instance: EthereumService;
 
+  private web3: Web3;
+
+  constructor(web3: Web3) {
+    this.web3 = web3;
+  }
+
   static async init(web3: Web3) {
+    EthereumService.instance = new EthereumService(web3);
     await Contracts.init(web3);
-    EthereumService.instance = new EthereumService();
   }
 
   verifyOffer() {
@@ -53,6 +60,45 @@ export class EthereumService implements IEthereumService {
     const signature = sigUtil.personalSign(privateKey, { data: hash });
 
     return Result.ok({ signature });
+  }
+
+  async mintToken(
+    token: Token,
+    wallet: Wallet,
+    data: string,
+    expiry: number,
+    salt: string,
+    signature: string
+  ): Promise<Result<string>> {
+    const nonce = await this.web3.eth.getTransactionCount(
+      wallet.address,
+      'pending'
+    );
+
+    console.log('Nonce: ' + nonce);
+
+    const txData = {
+      creator: wallet.address,
+      supply: token.supply,
+      fees: [],
+      data,
+      expiry,
+      salt,
+      signature
+    };
+
+    const tx = new MintToken(txData)
+      .build(wallet.address, nonce)
+      .signAndSerialize(decryptText(wallet.privateKey));
+
+    try {
+      const receipt = await this.web3.eth.sendSignedTransaction(tx);
+      return Result.ok(receipt.transactionHash);
+    } catch (err) {
+      console.log(err);
+    }
+
+    return Result.fail();
   }
 
   async signMint(

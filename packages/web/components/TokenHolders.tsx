@@ -17,8 +17,9 @@ const HolderRow = styled.div<{
   display: flex;
   flex-direction: column;
   background: #fafafa;
-  opacity: ${(props) => (props.selected ? 1 : '0.5')};
-  border: ${(props) => (props.selected ? `1px solid #ccc` : 0)};
+  opacity: ${(props) => (props.selected ? 1 : '0.7')};
+  // border: ${(props) => props.selected && `1px solid #9a9a9a`};
+  box-shadow: ${(props) => props.selected && '2px 2px 10px 2px #ccc'};
   border-radius: 10px;
   cursor: pointer;
 

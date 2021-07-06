@@ -85,7 +85,7 @@ export default class EthereumClient {
       salt
     }).build(buyer, nonce);
 
-    this.web3.eth.call(tx.tx);
+    this.web3.eth.call(tx.txData);
   }
 
   async mintToken(
@@ -111,6 +111,6 @@ export default class EthereumClient {
 
     const tx = new MintToken(txData).build(creator, nonce);
 
-    this.web3.eth.sendTransaction(tx.tx);
+    await this.web3.eth.sendTransaction(tx.txData);
   }
 }

@@ -1,9 +1,9 @@
 import { TokenDTO, TokenOwnershipDTO, UserDTO, WalletDTO } from '@fanbase/shared';
 
-export const getTokenUrl = (token?: TokenDTO, id?: string) =>
+export const getTokenUrl = (token?: TokenDTO, id?: string): string =>
   `/tokens/${token ? token.id : id}`;
 
-export const getTokenOwnershipUrl = (ownership: TokenOwnershipDTO) =>
+export const getTokenOwnershipUrl = (ownership: TokenOwnershipDTO): string =>
   `${getTokenUrl(null, ownership.tokenId)}?o=${ownership.id}`;
 
 export const getProfileUrl = ({
@@ -12,11 +12,11 @@ export const getProfileUrl = ({
 }: {
   username?: string;
   id?: string;
-}) => `/u/${username || id}`;
+}): string => `/u/${username || id}`;
 
 export const specific =
   <T>() =>
-  <U extends T>(argument: U) =>
+  <U extends T>(argument: U): U =>
     argument;
 
 export const truncateAddress = (
@@ -31,7 +31,7 @@ export const truncateAddress = (
   );
 };
 
-export const getDisplayName = (user?: UserDTO, wallet?: WalletDTO) =>
+export const getDisplayName = (user?: UserDTO, wallet?: WalletDTO): string =>
   (user &&
     (user.name ||
       user.username ||

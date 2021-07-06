@@ -1,13 +1,13 @@
-import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import { setTimeout } from 'timers';
 
 import styled from '@emotion/styled';
 import { Contracts } from '@fanbase/eth-contracts';
 import {
-    getExpiryDate, Protocol, randomNumericString, TokenDTO, TokenOwnershipDTO
+    getExpiryDate, Protocol, randomNumericString, TokenDTO, TokenOwnershipDTO, WalletType
 } from '@fanbase/shared';
 
 import TokenHolders from '../../components/TokenHolders';
@@ -15,7 +15,9 @@ import ApiClient from '../../modules/api/ApiClient';
 import useAuthentication from '../../modules/auth/useAuthentication';
 import EthereumClient from '../../modules/ethereum/EthereumClient';
 import useEthereum from '../../modules/ethereum/useEthereum';
+import SpinnerSvg from '../../public/images/spinner.svg';
 import { Button, Link } from '../../ui';
+import Modal from '../../ui/Modal';
 import { getDisplayName, getProfileUrl, getTokenOwnershipUrl } from '../../utils';
 
 const TokenContainer = styled.div`
@@ -49,13 +51,17 @@ const TokenHeading = styled.div`
 `;
 
 const TokenCreatorCard = styled.div`
-  margin-top: 20px;
-  padding: 20px;
-  background: #fafafa;
+  margin-top: 10px;
+  padding: 20px 0;
   display: flex;
   align-items: center;
   border-radius: 10px;
-  cursor: pointer;
+
+  .token-creator-info {
+    > * + * {
+      margin-top: 5px;
+    }
+  }
 
   > * + * {
     margin-left: 20px;
@@ -110,11 +116,15 @@ export default function TokenPage() {
   const [isOwn, setOwn] = useState(false);
   const [ownership, setOwnership] = useState<TokenOwnershipDTO>();
 
+  const [minting, setMinting] = useState(false);
+
   useEffect(() => {
+    if (!id) return;
+
     ApiClient.instance?.getToken(id as string).then(async (token: TokenDTO) => {
       setToken(token);
     });
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     if (!ownership && o) {
@@ -138,23 +148,68 @@ export default function TokenPage() {
       );
   }, [token, ownership]);
 
-  const mintToken = async () => {
-    const approval = await ApiClient.instance.approveMint(
-      Protocol.ETHEREUM,
-      token.id
-    );
+  const MintToken = ({ onExecuted }: { onExecuted: () => void }) => {
+    const [executing, setExecuting] = useState(false);
+    const [executed, setExecuted] = useState(false);
 
-    try {
-      EthereumClient.instance.mintToken(
-        token,
-        approval.data,
-        approval.expiry,
-        approval.salt,
-        approval.signature
-      );
-    } catch (err) {
-      console.log(err);
-    }
+    const execute = async () => {
+      setExecuting(true);
+
+      try {
+        if (currentUser.wallet.type == WalletType.INTERNAL) {
+          await ApiClient.instance?.mintToken(token.id, Protocol.ETHEREUM);
+        } else {
+          const approval = await ApiClient.instance.approveMint(
+            token.id,
+            Protocol.ETHEREUM
+          );
+
+          await EthereumClient.instance.mintToken(
+            token,
+            approval.data,
+            approval.expiry,
+            approval.salt,
+            approval.signature
+          );
+        }
+
+        onExecuted();
+        setExecuted(true);
+      } catch (err) {
+        console.log(err);
+      }
+
+      setExecuting(false);
+    };
+
+    return !executed ? (
+      <Modal
+        show={true}
+        title="Are you sure?"
+        description="This cannot be undone."
+        ok="Confirm"
+        onOkPressed={() => execute()}
+        okEnabled={!executing}
+        cancel="Cancel"
+        requestClose={() => setMinting(false)}
+      >
+        <p>Mint this token.</p>
+      </Modal>
+    ) : (
+      <Modal
+        show={true}
+        title="All done."
+        description="The transaction has been sent. It may take a few seconds for it to be
+      processed. You may close this now."
+        cancel="Close"
+        requestClose={() => setMinting(false)}
+      >
+        <SpinnerSvg fill="#000" />
+        <span style={{ marginLeft: 10, fontSize: 14, verticalAlign: 'top' }}>
+          Processing...
+        </span>
+      </Modal>
+    );
   };
 
   const giveToken = async () => {
@@ -245,6 +300,20 @@ export default function TokenPage() {
       <Head>
         <title>{token?.name || id}</title>
       </Head>
+
+      {minting && (
+        <MintToken
+          onExecuted={() => {
+            setTimeout(() => {
+              setMinting(false);
+              setTimeout(() => {
+                router.reload();
+              }, 500);
+            }, 2000);
+          }}
+        />
+      )}
+
       {token && (
         <TokenContainer>
           {token.minted && (
@@ -282,9 +351,12 @@ export default function TokenPage() {
 
             <TokenCreatorCard>
               <Avatar className="avatar"></Avatar>
-              <Link href={getProfileUrl({ id: token.creatorId })}>
-                <h4>{getDisplayName(token.creator)}</h4>
-              </Link>
+              <div className="token-creator-info">
+                <Link href={getProfileUrl({ id: token.creatorId })}>
+                  <h4>{getDisplayName(token.creator)}</h4>
+                </Link>
+                <p className="small">{token.creator.bio}</p>
+              </div>
             </TokenCreatorCard>
 
             {token?.creatorId == currentUser?.id && !token?.minted && (
@@ -293,7 +365,7 @@ export default function TokenPage() {
                   size="small"
                   color="primary"
                   onClick={() => {
-                    mintToken();
+                    setMinting(true);
                   }}
                 >
                   Mint token
@@ -319,9 +391,3 @@ export default function TokenPage() {
     </div>
   );
 }
-
-export const getServerSideProps: GetServerSideProps = async () => {
-  return {
-    props: {}
-  };
-};

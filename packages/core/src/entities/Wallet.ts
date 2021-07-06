@@ -26,10 +26,6 @@ export class Wallet {
   set privateKey(value: string) {
     if (value) this._privateKey = encryptText(value);
   }
-
-  get decryptedPrivateKey() {
-    return decryptText(this._privateKey);
-  }
 }
 
 export default Wallet;

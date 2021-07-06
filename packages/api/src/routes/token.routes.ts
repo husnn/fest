@@ -35,10 +35,6 @@ export default function init(router: Router): Router {
     tokenOwnershipRepository
   );
 
-  router.post('/approve-mint', authMiddleware, (req: Request, res: Response) =>
-    tokenController.approveMint(req, res)
-  );
-
   router.get('/image-upload-url', async (req: Request, res: Response) => {
     const url = await mediaStore.getImageUploadUrl(
       req.query.filename as string,
@@ -70,6 +66,21 @@ export default function init(router: Router): Router {
     '/:id/ownerships/:ownershipId',
     (req: Request, res: Response, next: NextFunction) =>
       tokenController.getOwnership(req, res, next)
+  );
+
+  router.post(
+    '/:id/approve-mint',
+    authMiddleware,
+    (req: Request, res: Response, next: NextFunction) =>
+      tokenController.approveMint(req, res, next)
+  );
+
+  router.post(
+    '/:id/mint',
+    authMiddleware,
+    (req: Request, res: Response, next: NextFunction) => {
+      tokenController.mint(req, res, next);
+    }
   );
 
   return router;
