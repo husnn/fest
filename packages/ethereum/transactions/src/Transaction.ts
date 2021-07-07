@@ -1,6 +1,8 @@
 import { Transaction as EthereumTx } from 'ethereumjs-tx';
 import Web3 from 'web3';
 
+import Common from '@ethereumjs/common';
+
 export class Transaction {
   address: string;
   data: any;
@@ -18,7 +20,7 @@ export class Transaction {
     chainId: number,
     nonce: number,
     gasPrice = 20,
-    gasLimit = 180000
+    gasLimit = 200000
   ): this {
     const tx = {
       from: Web3.utils.toChecksumAddress(from),
@@ -28,6 +30,16 @@ export class Transaction {
       nonce: Web3.utils.toHex(nonce),
       data: this.data
     };
+
+    // const customCommon = Common.forCustomChain(
+    //   'mainnet',
+    //   {
+    //     name: 'polygon-mumbai',
+    //     networkId: 80001,
+    //     chainId: 80001
+    //   },
+    //   'petersburg'
+    // );
 
     this.tx = new EthereumTx(tx, { chain: chainId });
 

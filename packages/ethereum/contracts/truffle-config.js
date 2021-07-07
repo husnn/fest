@@ -1,9 +1,6 @@
 require('dotenv').config();
 
-const web3 = require('web3');
 const HDWalletProvider = require('@truffle/hdwallet-provider');
-
-console.log(process.env.MNEMONIC);
 
 module.exports = {
   contracts_directory: './solidity',
@@ -20,25 +17,20 @@ module.exports = {
       },
       network_id: 3,
       gas: 8000000,
-      gasPrice: 20000000000
+      gasPrice: 10000000000
     },
     mumbai: {
-      provider: () =>
-        new HDWalletProvider(process.env.MNEMONIC, 'https://rpc-mumbai.maticvigil.com'),
-        // new HDWalletProvider(process.env.MNEMONIC, process.env.PROVIDER_POLYGON_MUMBAI, 1),
+      provider: () => new HDWalletProvider(process.env.MNEMONIC_TEST, process.env.PROVIDER_POLYGON_MUMBAI),
       network_id: 80001,
+      gasPrice: 3000000000,
       confirmations: 2,
       timeoutBlocks: 200,
-      skipDryRun: true
-    }
+      skipDryRun: true,
+    },
   },
   compilers: {
     solc: {
-      version: '>=0.5.0 <0.9.0',
-      optimizer: {
-        enabled: true,
-        runs: 200
-      }
+      version: '^0.8.0'
     }
   }
 };

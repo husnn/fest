@@ -4509,6 +4509,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./packages/ethereum/transactions/",
           "packageDependencies": [
             ["@fanbase/eth-transactions", "workspace:packages/ethereum/transactions"],
+            ["@ethereumjs/common", "npm:2.3.1"],
             ["@fanbase/core", "workspace:packages/core"],
             ["@fanbase/eth-contracts", "workspace:packages/ethereum/contracts"],
             ["@types/ethereumjs-tx", "npm:2.0.0"],
