@@ -9,6 +9,7 @@ const ResponsiveTabGroup = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
+  overflow: scroll;
 
   @media screen and (max-width: 800px) {
     padding-bottom: 20px;

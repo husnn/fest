@@ -23,21 +23,18 @@ import { getDisplayName, getProfileUrl, getTokenOwnershipUrl } from '../../utils
 const TokenContainer = styled.div`
   width: 100%;
   display: flex;
+  flex-direction: row-reverse;
   justify-content: center;
 
   @media screen and (max-width: 500px) {
     flex-direction: column-reverse;
-  }
-
-  > * {
-    flex: 0.3;
   }
 `;
 
 const TokenInfo = styled.div`
   width: 100%;
   max-width: 500px;
-  flex: 0.7;
+  flex: 1;
 
   > * + * {
     margin-top: 20px;
@@ -89,7 +86,9 @@ const TokenActions = styled.div`
 
 const TokenHoldersContainer = styled.div`
   width: 100%;
-  margin-right: 30px;
+  min-width: 200px;
+  margin-left: 30px;
+  flex: 0.4;
 
   @media screen and (max-width: 500px) {
     margin: 30px 0;

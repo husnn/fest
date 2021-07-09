@@ -23,7 +23,7 @@ const SettingsSheet = styled.div`
   // gap: 50px;
 
   > * + * {
-    margin-top: 30px;
+    margin-top: 50px;
   }
 `;
 

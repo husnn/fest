@@ -7,7 +7,7 @@ const GridItem = styled.div`
   width: 100%;
   max-width: 180px;
   min-height: 200px;
-  padding: 20px 0;
+  padding: 20px 10px 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -16,7 +16,7 @@ const GridItem = styled.div`
   cursor: pointer;
 
   &:hover {
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
   }
 `;
 
@@ -27,13 +27,20 @@ const Preview = styled.div`
   background-size: 70%;
   background-position: center;
   background-repeat: no-repeat;
-  background-color: #f5f5f5;
-  border-radius: 50%;
+  background-color: #fafafa;
+  border-radius: 30px;
 `;
 
 const TokenInfo = styled.div`
   margin-top: 10px;
   padding: 0 10px;
+
+  h4 {
+    width: 120px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
   > * + * {
     margin-top: 5px;

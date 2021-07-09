@@ -19,8 +19,9 @@ const HolderRow = styled.div<{
   background: #fafafa;
   opacity: ${(props) => (props.selected ? 1 : '0.7')};
   // border: ${(props) => props.selected && `1px solid #9a9a9a`};
-  box-shadow: ${(props) => props.selected && '2px 2px 10px 2px #ccc'};
-  border-radius: 10px;
+  box-shadow: ${(props) =>
+    props.selected && '2px 2px 8px 4px rgba(0, 0, 0, 0.05);'};
+  border-radius: 20px;
   cursor: pointer;
 
   div:first-of-type {

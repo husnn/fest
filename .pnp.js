@@ -4626,6 +4626,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["next-http-proxy-middleware", "npm:1.0.10"],
             ["next-transpile-modules", "npm:7.3.0"],
             ["react", "npm:17.0.2"],
+            ["react-device-detect", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:1.17.0"],
             ["react-dom", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:17.0.2"],
             ["react-reveal", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:1.2.2"],
             ["react-transition-group", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:4.4.2"],
@@ -23000,6 +23001,33 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react", "npm:17.0.2"],
             ["loose-envify", "npm:1.4.0"],
             ["object-assign", "npm:4.1.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["react-device-detect", [
+        ["npm:1.17.0", {
+          "packageLocation": "./.yarn/cache/react-device-detect-npm-1.17.0-d5e8931ab0-e6416af2a5.zip/node_modules/react-device-detect/",
+          "packageDependencies": [
+            ["react-device-detect", "npm:1.17.0"]
+          ],
+          "linkType": "SOFT",
+        }],
+        ["virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:1.17.0", {
+          "packageLocation": "./.yarn/$$virtual/react-device-detect-virtual-b743ec7491/0/cache/react-device-detect-npm-1.17.0-d5e8931ab0-e6416af2a5.zip/node_modules/react-device-detect/",
+          "packageDependencies": [
+            ["react-device-detect", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:1.17.0"],
+            ["@types/react", "npm:17.0.6"],
+            ["@types/react-dom", "npm:17.0.8"],
+            ["react", "npm:17.0.2"],
+            ["react-dom", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:17.0.2"],
+            ["ua-parser-js", "npm:0.7.28"]
+          ],
+          "packagePeers": [
+            "@types/react-dom",
+            "@types/react",
+            "react-dom",
+            "react"
           ],
           "linkType": "HARD",
         }]

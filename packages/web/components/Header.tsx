@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 
-import React from 'react';
+import React, { useState } from 'react';
 
 import styled from '@emotion/styled';
 
@@ -31,7 +31,7 @@ const HeaderContainer = styled.div`
   top: 0;
   left: 0;
   right: 0;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.9);
   border-bottom: 1px solid #eee;
   z-index: 99;
   backdrop-filter: blur(5px);
@@ -46,6 +46,7 @@ const HeaderWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  z-index: 100;
 `;
 
 const HeaderLinksContainer = styled.div`
@@ -65,6 +66,10 @@ const HeaderLinksContainer = styled.div`
 
   a:hover {
     opacity: 0.9;
+  }
+
+  @media screen and (max-width: 500px) {
+    display: none;
   }
 `;
 
@@ -96,6 +101,8 @@ const LinkDropdown = styled.div`
       width: 100%;
       margin: 0;
       padding: 10px 20px;
+      display: flex;
+      flex-direction: column;
       cursor: pointer;
 
       a {
@@ -119,7 +126,66 @@ const HeaderLinkContainer = styled.span`
   }
 `;
 
+const MobileMenu = styled.div<{ open: boolean }>`
+  width: 100%;
+  position: fixed;
+  top: 80px;
+  right: 0;
+  left: 0;
+  padding: 20px 0;
+  background: #fff;
+  flex-direction: column;
+  border-radius: 0 0 20px 20px;
+  box-shadow: 4px 8px 20px 4px rgba(0, 0, 0, 0.05);
+  z-index: 98;
+
+  > * + * {
+    margin-top: 30px;
+  }
+
+  .links {
+    display: flex;
+    flex-direction: column-reverse;
+
+    .mobile-link > a {
+      display: block;
+      padding: 20px 20px;
+
+      &:hover {
+        background-color: #eee;
+      }
+    }
+  }
+
+  .mobile-link {
+    opacity: 0.9;
+  }
+
+  display: none;
+
+  @media screen and (max-width: 500px) {
+    display: ${(props) => (props.open ? 'flex' : 'none')};
+  }
+`;
+
+const MenuClose = styled.div<{ open: boolean }>`
+  width: 16px;
+  height: 16px;
+  background-image: url('/images/${(props) =>
+    props.open ? 'ic-close.svg' : 'ic-menu.svg'}');
+  background-size: cover;
+  background-repeat: no-repeat;
+  cursor: pointer;
+
+  display: none;
+
+  @media screen and (max-width: 500px) {
+    display: block;
+  }
+`;
+
 const Header: React.FC<HeaderProps> = () => {
+  const [mobileOpen, setMobileOpen] = useState(false);
   const { links } = useHeader();
 
   // const [linksOpen, setLinksOpen] = useState<{ [level: string]: number }>();
@@ -174,7 +240,24 @@ const Header: React.FC<HeaderProps> = () => {
           <h2>Fanbase</h2>
         </Link>
         {links && <HeaderLinks links={links} />}
+        <MenuClose
+          open={mobileOpen}
+          onClick={() => setMobileOpen(!mobileOpen)}
+        />
       </HeaderWrapper>
+      <MobileMenu open={mobileOpen}>
+        <div className="links">
+          {links.map((link: HeaderLinkType, index: number) =>
+            link.visible ? (
+              <div className="mobile-link" key={index}>
+                <Link href={link.route}>
+                  <h4>{link.title}</h4>
+                </Link>
+              </div>
+            ) : null
+          )}
+        </div>
+      </MobileMenu>
     </HeaderContainer>
   );
 };
