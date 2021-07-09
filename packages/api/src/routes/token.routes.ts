@@ -55,6 +55,20 @@ export default function init(router: Router): Router {
     tokenController.getToken(req, res, next)
   );
 
+  router.post(
+    '/:id/list-for-sale',
+    authMiddleware,
+    (req: Request, res: Response, next: NextFunction) =>
+      tokenController.listForSale(req, res, next)
+  );
+
+  router.post(
+    '/:id/approve-sale',
+    authMiddleware,
+    (req: Request, res: Response, next: NextFunction) =>
+      tokenController.approveSale(req, res, next)
+  );
+
   router.get(
     '/:id/ownerships',
     pagination,

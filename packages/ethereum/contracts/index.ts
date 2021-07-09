@@ -1,5 +1,6 @@
 import Web3 from 'web3';
 
+import FAN from './build/FAN.json';
 import MarketWallet from './build/MarketWalletV1.json';
 import Market from './build/OfferMarketV1.json';
 import Token from './build/TokenV1.json';
@@ -16,6 +17,7 @@ type ContractBuild = {
 };
 
 export const interfaces: { [key: string]: ContractBuild } = {
+  FAN,
   Token,
   Market,
   MarketWallet
@@ -48,6 +50,9 @@ const getContract = (name: keyof typeof interfaces, address?: string) => {
 };
 
 export const Contracts = {
+  FAN: {
+    get: (address?: string) => getContract('FAN', address)
+  },
   Token: {
     get: (address?: string) => getContract('Token', address)
   },

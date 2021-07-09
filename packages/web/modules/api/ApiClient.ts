@@ -1,14 +1,15 @@
 import {
-    ApproveMintRequest, ApproveMintResponse, CreateTokenRequest, CreateTokenResponse,
-    EditUserRequest, EditUserResponse, GetOAuthLinkRequest, GetOAuthLinkResponse,
-    GetOwnUploadsRequest, GetOwnUploadsResponse, GetTokenOwnershipResponse,
+    ApproveMintRequest, ApproveMintResponse, ApproveTokenSaleRequest, ApproveTokenSaleResponse,
+    CreateTokenRequest, CreateTokenResponse, EditUserRequest, EditUserResponse, GetOAuthLinkRequest,
+    GetOAuthLinkResponse, GetOwnUploadsRequest, GetOwnUploadsResponse, GetTokenOwnershipResponse,
     GetTokenOwnershipsResponse, GetTokenRequest, GetTokenResponse, GetTokensCreatedResponse,
     GetTokensOwnedResponse, GetUserByIdRequest, GetUserByUsernameRequest, GetUserResponse,
     IdentifyWithEmailRequest, IdentifyWithEmailResponse, IdentifyWithWalletRequest,
-    IdentifyWithWalletResponse, isUsername, LoginResponse, LoginWithEmailRequest,
-    LoginWithWalletRequest, MintTokenRequest, MintTokenResponse, OAuthCheckLinkRequest,
-    OAuthCheckLinkResponse, OAuthLinkRequest, Protocol, TokenData, TokenDTO, TokenOwnershipDTO,
-    UnlinkOAuthRequest, UnlinkOAuthResponse, UserInfo, YouTubeVideo
+    IdentifyWithWalletResponse, isUsername, ListTokenForSaleRequest, ListTokenForSaleResponse,
+    LoginResponse, LoginWithEmailRequest, LoginWithWalletRequest, MintTokenRequest,
+    MintTokenResponse, OAuthCheckLinkRequest, OAuthCheckLinkResponse, OAuthLinkRequest, Protocol,
+    TokenData, TokenDTO, TokenOwnershipDTO, UnlinkOAuthRequest, UnlinkOAuthResponse, UserInfo,
+    YouTubeVideo
 } from '@fanbase/shared';
 
 import HttpClient from './HttpClient';
@@ -25,6 +26,52 @@ export default class ApiClient {
   constructor(client: HttpClient) {
     this.client = client;
     ApiClient.instance = this;
+  }
+
+  // Token Market
+
+  async listForSale(
+    token: string,
+    quantity: number,
+    currency: string,
+    price: number
+  ): Promise<string> {
+    const response = await this.client.request<
+      ListTokenForSaleResponse,
+      ListTokenForSaleRequest
+    >({
+      authentication: 'required',
+      method: 'POST',
+      endpoint: `/tokens/${token}/list-for-sale`,
+      body: {
+        quantity,
+        currency,
+        price
+      }
+    });
+
+    return response.txHash;
+  }
+
+  async approveSale(
+    token: string,
+    quantity: number,
+    currency: string,
+    price: number
+  ): Promise<ApproveTokenSaleResponse> {
+    return this.client.request<
+      ApproveTokenSaleResponse,
+      ApproveTokenSaleRequest
+    >({
+      authentication: 'required',
+      method: 'POST',
+      endpoint: `/tokens/${token}/approve-sale`,
+      body: {
+        quantity,
+        currency,
+        price
+      }
+    });
   }
 
   // User

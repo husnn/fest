@@ -1,13 +1,15 @@
 import { NextFunction, Request, Response } from 'express';
 
 import {
-    ApproveMint, CreateToken, EthereumService, GetToken, GetTokenOwnership, GetTokenOwnerships,
-    IPFSService, MintToken, TokenRepository, UserRepository, WalletRepository
+    ApproveMint, ApproveTokenSale, CreateToken, EthereumService, GetToken, GetTokenOwnership,
+    GetTokenOwnerships, IPFSService, ListTokenForSale, MintToken, TokenRepository, UserRepository,
+    WalletRepository
 } from '@fanbase/core';
 import { TokenOwnershipRepository } from '@fanbase/postgres';
 import {
-    ApproveMintResponse, CreateTokenResponse, GetTokenOwnershipResponse, GetTokenOwnershipsResponse,
-    GetTokenResponse, MintTokenResponse, TokenData
+    ApproveMintResponse, ApproveTokenSaleResponse, CreateTokenResponse, GetTokenOwnershipResponse,
+    GetTokenOwnershipsResponse, GetTokenResponse, ListTokenForSaleResponse, MintTokenResponse,
+    TokenData
 } from '@fanbase/shared';
 
 import { HttpError, NotFoundError } from '../http';
@@ -20,6 +22,9 @@ class TokenController {
   private mintTokenUseCase: MintToken;
   private getOwnershipUseCase: GetTokenOwnership;
   private getOwnershipsUseCase: GetTokenOwnerships;
+
+  private approveTokenSaleUseCase: ApproveTokenSale;
+  private listTokenForSaleUseCase: ListTokenForSale;
 
   constructor(
     tokenRepository: TokenRepository,
@@ -53,6 +58,72 @@ class TokenController {
     this.getOwnershipsUseCase = new GetTokenOwnerships(
       tokenOwnershipRepository
     );
+
+    this.approveTokenSaleUseCase = new ApproveTokenSale(
+      walletRepository,
+      tokenRepository,
+      tokenOwnershipRepository,
+      ethereumService
+    );
+
+    this.listTokenForSaleUseCase = new ListTokenForSale(
+      walletRepository,
+      tokenRepository,
+      tokenOwnershipRepository,
+      ethereumService
+    );
+  }
+
+  async listForSale(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+
+      const { quantity, currency, price } = req.body;
+
+      const result = await this.listTokenForSaleUseCase.exec({
+        user: req.user,
+        token: id,
+        quantity,
+        currency,
+        price
+      });
+
+      if (!result.success)
+        throw new HttpError('Could not list token for sale.');
+
+      return new HttpResponse<ListTokenForSaleResponse>(res, {
+        txHash: result.data.txHash
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async approveSale(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      const { quantity, currency, price } = req.body;
+
+      const result = await this.approveTokenSaleUseCase.exec({
+        user: req.user,
+        token: id,
+        quantity,
+        currency,
+        price
+      });
+
+      if (!result.success) throw new HttpError('Could not approve token sale.');
+
+      const { expiry, salt, signature } = result.data;
+
+      return new HttpResponse<ApproveTokenSaleResponse>(res, {
+        expiry,
+        salt,
+        signature
+      });
+    } catch (err) {
+      next(err);
+    }
   }
 
   async mint(req: Request, res: Response, next: NextFunction) {

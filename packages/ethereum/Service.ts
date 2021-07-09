@@ -9,7 +9,7 @@ import {
     EthereumService as IEthereumService, generateWalletId, Result, Token, Wallet
 } from '@fanbase/core';
 import Contracts from '@fanbase/eth-contracts';
-import { MintToken } from '@fanbase/eth-transactions';
+import { ApproveTokenMarket, ListTokenForSale, MintToken } from '@fanbase/eth-transactions';
 import { decryptText, Protocol, WalletType } from '@fanbase/shared';
 
 export class EthereumService implements IEthereumService {
@@ -34,13 +34,61 @@ export class EthereumService implements IEthereumService {
     throw new Error('Method not implemented.');
   }
 
-  async signSale(
+  async listTokenForSale(
+    wallet: Wallet,
+    tokenContract: string,
+    tokenId: string,
+    quantity: number,
+    currency: string,
+    price: number,
+    expiry: number,
+    salt: string,
+    signature: string
+  ): Promise<Result<string>> {
+    const nonce = await this.web3.eth.getTransactionCount(
+      wallet.address,
+      'pending'
+    );
+
+    const networkId = await this.web3.eth.net.getId();
+    const chainId = await this.web3.eth.getChainId();
+
+    const txData = {
+      seller: wallet.address,
+      tokenContract,
+      tokenId,
+      quantity,
+      currencyContract: currency,
+      price,
+      expiry,
+      salt,
+      signature
+    };
+
+    const tx = new ListTokenForSale(txData)
+      .build(wallet.address, networkId, chainId, nonce, 385000)
+      .signAndSerialize(decryptText(wallet.privateKey));
+
+    return new Promise<Result<string>>((resolve) => {
+      this.web3.eth
+        .sendSignedTransaction(tx)
+        .once('transactionHash', (hash: string) => {
+          resolve(Result.ok(hash));
+        })
+        .catch((err) => {
+          console.log(err);
+          resolve(Result.fail());
+        });
+    });
+  }
+
+  async signTokenSale(
     seller: string,
     token: string,
     tokenId: string,
     quantity: number,
     currency: string,
-    price: string,
+    price: number,
     expiry: number,
     salt: string
   ): Promise<Result<{ signature: string }>> {
@@ -53,7 +101,7 @@ export class EthereumService implements IEthereumService {
         tokenId,
         quantity,
         currency,
-        price,
+        Web3.utils.toWei(price.toString()),
         expiry,
         salt
       )
@@ -62,6 +110,49 @@ export class EthereumService implements IEthereumService {
     const signature = sigUtil.personalSign(privateKey, { data: hash });
 
     return Result.ok({ signature });
+  }
+
+  async approveMarket(
+    tokenContract: string,
+    wallet: Wallet
+  ): Promise<Result<string>> {
+    const nonce = await this.web3.eth.getTransactionCount(
+      wallet.address,
+      'pending'
+    );
+
+    const networkId = await this.web3.eth.net.getId();
+    const chainId = await this.web3.eth.getChainId();
+
+    const tx = new ApproveTokenMarket(tokenContract)
+      .build(wallet.address, networkId, chainId, nonce)
+      .signAndSerialize(decryptText(wallet.privateKey));
+
+    return new Promise<Result<string>>((resolve) => {
+      this.web3.eth
+        .sendSignedTransaction(tx)
+        .once('transactionHash', (hash: string) => {
+          resolve(Result.ok(hash));
+        })
+        .catch((err) => {
+          console.log(err);
+          resolve(Result.fail());
+        });
+    });
+  }
+
+  async checkMarketApproved(
+    tokenContract: string,
+    walletAddress: string
+  ): Promise<boolean> {
+    const marketWalletContract = Contracts.Contracts.MarketWallet.get();
+
+    return await Contracts.Contracts.Token.get(tokenContract)
+      .methods.isApprovedForAll(
+        walletAddress,
+        marketWalletContract.options.address
+      )
+      .call();
   }
 
   async mintToken(
@@ -87,10 +178,11 @@ export class EthereumService implements IEthereumService {
       signature
     };
 
+    const networkId = await this.web3.eth.net.getId();
     const chainId = await this.web3.eth.getChainId();
 
     const tx = new MintToken(txData)
-      .build(wallet.address, chainId, nonce)
+      .build(wallet.address, networkId, chainId, nonce)
       .signAndSerialize(decryptText(wallet.privateKey));
 
     return new Promise<Result<string>>((resolve) => {
@@ -114,8 +206,10 @@ export class EthereumService implements IEthereumService {
   ): Promise<Result<{ signature: string }>> {
     const privateKey = Buffer.from(process.env.PRIVATE_KEY, 'hex');
 
-    const hash = await Contracts.Contracts.Token.get()
-      .methods.getMintHash(creatorAddress, supply, expiry, salt)
+    const contract = Contracts.Contracts.Token.get();
+
+    const hash = await contract.methods
+      .getMintHash(creatorAddress, supply, expiry, salt)
       .call();
 
     const signature = sigUtil.personalSign(privateKey, { data: hash });

@@ -1,16 +1,18 @@
+import Web3 from 'web3';
+
 import { Contracts } from '@fanbase/eth-contracts';
 
 import Transaction from './Transaction';
 
-export class SellToken extends Transaction {
+export class ListTokenForSale extends Transaction {
   constructor(
     data: {
       seller: string;
-      token: string;
+      tokenContract: string;
       tokenId: string;
       quantity: number;
-      currency: string;
-      price: string;
+      currencyContract: string;
+      price: number;
       expiry: number;
       salt: string;
       signature: string;
@@ -20,13 +22,13 @@ export class SellToken extends Transaction {
     const contract = Contracts.Market.get(contractAddress);
 
     const txData = contract.methods
-      .sell(
+      .listForSale(
         data.seller,
-        data.token,
+        data.tokenContract,
         data.tokenId,
         data.quantity,
-        data.currency,
-        data.price,
+        data.currencyContract,
+        Web3.utils.toWei(data.price.toString()),
         data.expiry,
         data.salt,
         data.signature
@@ -37,4 +39,4 @@ export class SellToken extends Transaction {
   }
 }
 
-export default SellToken;
+export default ListTokenForSale;

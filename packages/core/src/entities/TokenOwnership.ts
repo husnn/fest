@@ -6,6 +6,7 @@ export class TokenOwnership {
   readonly id: string;
 
   dateCreated: Date;
+  dateUpdated: Date;
 
   walletId: string;
   wallet?: Wallet;

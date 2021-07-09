@@ -11,8 +11,8 @@ import Postgres, {
 import { ethConfig, postgresConfig, redisConfig } from './config';
 import EthereumListener from './events/ethereum/EthereumListener';
 import TokenBuy, { TokenBuyProps } from './jobs/TokenBuy';
+import TokenListForSale, { TokenListForSaleProps } from './jobs/TokenListForSale';
 import TokenMint, { TokenMintProps } from './jobs/TokenMint';
-import TokenSell, { TokenSellProps } from './jobs/TokenSell';
 import TokenTransfer, { TokenTransferProps } from './jobs/TokenTransfer';
 
 const redisClient = redis.createClient(redisConfig.url);
@@ -39,7 +39,7 @@ ethereumListener.on('token-transfer', (event: TokenTransferProps) => {
   transferQueue.createJob(event).save();
 });
 
-ethereumListener.on('market-sell', (event: TokenSellProps) => {
+ethereumListener.on('market-list', (event: TokenListForSaleProps) => {
   tokenTradeQueue.createJob(event).save();
 });
 
@@ -68,10 +68,10 @@ Postgres.init(postgresConfig).then(() => {
   });
 
   tokenTradeQueue.process(
-    async (job: Queue.Job<TokenSellProps | TokenBuyProps>, done) => {
-      if ((job.data as TokenSellProps).seller !== undefined) {
+    async (job: Queue.Job<TokenListForSaleProps | TokenBuyProps>, done) => {
+      if ((job.data as TokenListForSaleProps).seller !== undefined) {
         // Sell event
-        return new TokenSell(job.data as TokenSellProps).execute(
+        return new TokenListForSale(job.data as TokenListForSaleProps).execute(
           tokenRepository,
           walletRepository,
           tokenTradeRepository

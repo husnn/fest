@@ -54,9 +54,15 @@ type TokenHoldersProps = {
   selected?: TokenOwnershipDTO;
   setSelected?: (ownership: TokenOwnershipDTO) => void;
   currentUser?: CurrentUserDTO;
+  listForSale?: (ownnership: TokenOwnershipDTO) => void;
 };
 
-const TokenHolders = ({ token, selected, setSelected }: TokenHoldersProps) => {
+const TokenHolders = ({
+  token,
+  selected,
+  setSelected,
+  listForSale
+}: TokenHoldersProps) => {
   const { currentUser } = useAuthentication();
 
   const { data, loadMore, hasMore } = usePagination<TokenOwnershipDTO>(
@@ -97,11 +103,11 @@ const TokenHolders = ({ token, selected, setSelected }: TokenHoldersProps) => {
                 ownership?.walletId == currentUser?.wallet.id ? (
                   <Button
                     size="small"
-                    onClick={() => {
-                      // sell token
-                    }}
+                    onClick={() =>
+                      listForSale ? listForSale(ownership) : null
+                    }
                   >
-                    Sell token
+                    List for sale
                   </Button>
                 ) : (
                   <Button

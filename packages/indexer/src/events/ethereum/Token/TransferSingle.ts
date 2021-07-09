@@ -1,5 +1,3 @@
-import Web3 from 'web3';
-
 import { Contracts } from '@fanbase/eth-contracts';
 import { Protocol } from '@fanbase/shared';
 

@@ -14,6 +14,11 @@ const TokenOwnershipSchema = new EntitySchema<TokenOwnership>({
       name: 'date_created',
       createDate: true
     },
+    dateUpdated: {
+      type: 'timestamp',
+      name: 'date_updated',
+      updateDate: true
+    },
     walletId: {
       type: 'text',
       name: 'wallet_id',

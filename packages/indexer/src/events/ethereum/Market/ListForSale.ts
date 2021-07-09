@@ -1,12 +1,12 @@
 import { Contracts } from '@fanbase/eth-contracts';
 import { Protocol } from '@fanbase/shared';
 
-import { TokenSellProps } from '../../../jobs/TokenSell';
+import { TokenListForSaleProps } from '../../../jobs/TokenListForSale';
 
 export default async (callback): Promise<void> => {
   const contract = Contracts.Market.get();
 
-  contract.events.Sell().on('data', (event: any) => {
+  contract.events.ListForSale().on('data', (event: any) => {
     const { transactionHash, address, returnValues } = event;
 
     console.log('List for sale...');
@@ -22,7 +22,7 @@ export default async (callback): Promise<void> => {
       price
     } = returnValues;
 
-    const job: TokenSellProps = {
+    const job: TokenListForSaleProps = {
       protocol: Protocol.ETHEREUM,
       tx: transactionHash,
       contract: address,

@@ -17,10 +17,11 @@ export class Transaction {
 
   build(
     from: string,
-    chainId: number,
-    nonce: number,
-    gasPrice = 20,
-    gasLimit = 200000
+    networkId?: number,
+    chainId?: number,
+    nonce?: number,
+    gasLimit = 200000,
+    gasPrice = 20
   ): this {
     const tx = {
       from: Web3.utils.toChecksumAddress(from),
@@ -31,17 +32,19 @@ export class Transaction {
       data: this.data
     };
 
-    // const customCommon = Common.forCustomChain(
-    //   'mainnet',
-    //   {
-    //     name: 'polygon-mumbai',
-    //     networkId: 80001,
-    //     chainId: 80001
-    //   },
-    //   'petersburg'
-    // );
+    const common = Common.forCustomChain(
+      'mainnet',
+      {
+        name: 'fannet',
+        networkId,
+        chainId
+      },
+      'petersburg'
+    );
 
-    this.tx = new EthereumTx(tx, { chain: chainId });
+    // eslint-disable-next-line
+    // @ts-ignore
+    this.tx = new EthereumTx(tx, { common });
 
     this.txData = tx;
 

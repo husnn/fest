@@ -1,4 +1,4 @@
-import { Protocol, TokenAttributes, TokenFee, TokenType } from '@fanbase/shared';
+import { TokenAttributes, TokenChainData, TokenFee, TokenType } from '@fanbase/shared';
 
 import User from './User';
 
@@ -23,15 +23,7 @@ export class Token {
   attributes?: TokenAttributes;
   extra?: unknown;
 
-  chain?: {
-    protocol: Protocol;
-    contract: string;
-    name: string;
-    symbol: string;
-    id: string;
-    creator: string;
-    transaction: string;
-  };
+  chain?: TokenChainData;
 
   minted: boolean;
 

@@ -2,7 +2,9 @@ import Fortmatic from 'fortmatic';
 import Web3 from 'web3';
 
 import Contracts from '@fanbase/eth-contracts';
-import { MintToken, SignOffer } from '@fanbase/eth-transactions';
+import {
+    ApproveTokenMarket, ListTokenForSale, MintToken, SignOffer, TransferToken
+} from '@fanbase/eth-transactions';
 import { TokenDTO } from '@fanbase/shared';
 
 export default class EthereumClient {
@@ -69,6 +71,7 @@ export default class EthereumClient {
   ): Promise<void> {
     const buyer = await this.getAccount();
 
+    const networkId = await this.web3.eth.net.getId();
     const chainId = await this.web3.eth.getChainId();
     const nonce = await this.web3.eth.getTransactionCount(buyer, 'pending');
 
@@ -84,9 +87,120 @@ export default class EthereumClient {
         expiry
       },
       salt
-    }).build(buyer, chainId, nonce);
+    }).build(buyer, networkId, chainId, nonce);
 
     this.web3.eth.call(tx.txData);
+  }
+
+  async listForSale(
+    token: TokenDTO,
+    quantity: number,
+    currency: string,
+    price: number,
+    expiry: number,
+    salt: string,
+    signature: string
+  ): Promise<string> {
+    const account = await this.getAccount();
+
+    const networkId = await this.web3.eth.net.getId();
+    const chainId = await this.web3.eth.getChainId();
+    const nonce = await this.web3.eth.getTransactionCount(account, 'pending');
+
+    const txData = {
+      seller: account,
+      tokenContract: token.chain.contract,
+      tokenId: token.chain.id,
+      quantity,
+      currencyContract: currency,
+      price,
+      expiry,
+      salt,
+      signature
+    };
+
+    const tx = new ListTokenForSale(txData).build(
+      account,
+      networkId,
+      chainId,
+      nonce,
+      385000
+    );
+
+    return new Promise((resolve, reject) => {
+      this.web3.eth.sendTransaction(tx.txData, (err: Error, hash: string) => {
+        if (!err) resolve(hash);
+        reject();
+      });
+    });
+  }
+
+  async checkMarketApproval(address?: string): Promise<boolean> {
+    const account = address || (await this.getAccount());
+
+    const tokenContract = Contracts.Contracts.Token.get();
+    const marketWalletContract = Contracts.Contracts.MarketWallet.get();
+
+    const isApproved = await tokenContract.methods
+      .isApprovedForAll(account, marketWalletContract.options.address)
+      .call();
+
+    return isApproved;
+  }
+
+  async giveToken(
+    token: TokenDTO,
+    to: string,
+    quantity: number
+  ): Promise<string> {
+    const account = await this.getAccount();
+
+    const networkId = await this.web3.eth.net.getId();
+    const chainId = await this.web3.eth.getChainId();
+    const nonce = await this.web3.eth.getTransactionCount(account, 'pending');
+
+    const txData = {
+      from: account,
+      to,
+      id: token.chain.id,
+      quantity
+    };
+
+    const tx = new TransferToken(txData).build(
+      account,
+      networkId,
+      chainId,
+      nonce
+    );
+
+    return new Promise((resolve, reject) => {
+      this.web3.eth.sendTransaction(tx.txData, (err: Error, hash: string) => {
+        if (!err) resolve(hash);
+        reject();
+      });
+    });
+  }
+
+  async approveMarket(): Promise<string> {
+    const account = await this.getAccount();
+
+    const networkId = await this.web3.eth.net.getId();
+    const chainId = await this.web3.eth.getChainId();
+    const nonce = await this.web3.eth.getTransactionCount(account, 'pending');
+
+    const tx = new ApproveTokenMarket().build(
+      account,
+      networkId,
+      chainId,
+      nonce
+    );
+
+    return new Promise((resolve, reject) => {
+      this.web3.eth.sendTransaction(tx.txData, (err: Error, hash: string) => {
+        if (!err) resolve(hash);
+        reject();
+      });
+    });
   }
 
   async mintToken(
@@ -98,6 +212,7 @@ export default class EthereumClient {
   ): Promise<string> {
     const account = await this.getAccount();
 
+    const networkId = await this.web3.eth.net.getId();
     const chainId = await this.web3.eth.getChainId();
     const nonce = await this.web3.eth.getTransactionCount(account, 'pending');
 
@@ -111,7 +226,7 @@ export default class EthereumClient {
       signature
     };
 
-    const tx = new MintToken(txData).build(account, chainId, nonce);
+    const tx = new MintToken(txData).build(account, networkId, chainId, nonce);
 
     return new Promise((resolve, reject) => {
       this.web3.eth.sendTransaction(tx.txData, (err: Error, hash: string) => {
@@ -119,5 +234,9 @@ export default class EthereumClient {
         reject();
       });
     });
+  }
+
+  async awaitTxConfirmation(hash: string): Promise<boolean> {
+    return true;
   }
 }

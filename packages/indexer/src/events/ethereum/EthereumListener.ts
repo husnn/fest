@@ -5,7 +5,7 @@ import Web3 from 'web3';
 import Contracts from '@fanbase/eth-contracts';
 
 import Buy from './Market/Buy';
-import Sell from './Market/Sell';
+import ListForSale from './Market/ListForSale';
 import Minted from './Token/Minted';
 import TransferSingle from './Token/TransferSingle';
 
@@ -35,8 +35,8 @@ export default class EthereumListener extends EventEmitter {
         this.emit('token-transfer', job);
       });
 
-      Sell((job) => {
-        this.emit('market-sell', job);
+      ListForSale((job) => {
+        this.emit('market-list', job);
       });
 
       Buy((job) => {

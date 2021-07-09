@@ -15,6 +15,45 @@ export interface EthereumService {
 
   checkBalance();
 
+  listTokenForSale(
+    wallet: Wallet,
+    tokenContract: string,
+    tokenId: string,
+    quantity: number,
+    currency: string,
+    price: number,
+    expiry: number,
+    salt: string,
+    signature: string
+  ): Promise<Result<string>>;
+
+  signTokenSale(
+    seller: string,
+    token: string,
+    tokenId: string,
+    quantity: number,
+    currency: string,
+    price: number,
+    expiry: number,
+    salt: string
+  ): Promise<Result<{ signature: string }>>;
+
+  approveMarket(tokenContract: string, wallet: Wallet): Promise<Result<string>>;
+
+  checkMarketApproved(
+    tokenContract: string,
+    walletAddress: string
+  ): Promise<boolean>;
+
+  mintToken(
+    token: Token,
+    wallet: Wallet,
+    data: string,
+    expiry: number,
+    salt: string,
+    signature: string
+  ): Promise<Result<string>>;
+
   signMint(
     creatorAddress: string,
     supply: number,
@@ -25,15 +64,6 @@ export interface EthereumService {
       signature: string;
     }>
   >;
-
-  mintToken(
-    token: Token,
-    wallet: Wallet,
-    data: string,
-    expiry: number,
-    salt: string,
-    signature: string
-  ): Promise<Result<string>>;
 
   getOfferHash();
   verifyOffer();

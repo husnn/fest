@@ -1,15 +1,5 @@
-import { Protocol } from '../enums';
+import ChainData from '../types/TokenChainData';
 import { UserDTO } from './UserDTO';
-
-type ChainData = {
-  protocol: Protocol;
-  contract: string;
-  name: string;
-  symbol: string;
-  id: string;
-  creator: string;
-  transaction: string;
-};
 
 export class TokenDTO {
   id: string;

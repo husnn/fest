@@ -10,6 +10,7 @@ import {
     getExpiryDate, Protocol, randomNumericString, TokenDTO, TokenOwnershipDTO, WalletType
 } from '@fanbase/shared';
 
+import CreateTokenListing from '../../components/CreateTokenListing';
 import TokenHolders from '../../components/TokenHolders';
 import ApiClient from '../../modules/api/ApiClient';
 import useAuthentication from '../../modules/auth/useAuthentication';
@@ -106,8 +107,9 @@ const PreviewContainer = styled.div`
 
 export default function TokenPage() {
   const router = useRouter();
-  const eth = useEthereum();
   const { currentUser } = useAuthentication();
+
+  useEthereum();
 
   const { id, o } = router.query;
 
@@ -116,6 +118,7 @@ export default function TokenPage() {
   const [ownership, setOwnership] = useState<TokenOwnershipDTO>();
 
   const [minting, setMinting] = useState(false);
+  const [creatingListing, setCreatingListing] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -163,7 +166,7 @@ export default function TokenPage() {
             Protocol.ETHEREUM
           );
 
-          await EthereumClient.instance.mintToken(
+          await EthereumClient.instance?.mintToken(
             token,
             approval.data,
             approval.expiry,
@@ -212,17 +215,11 @@ export default function TokenPage() {
   };
 
   const giveToken = async () => {
-    const account = await eth.getAccount();
-
-    Contracts.Token.get()
-      .methods.safeTransferFrom(
-        account,
-        '0xFFcf8FDEE72ac11b5c542428B35EEF5769C409f0',
-        token.chain?.id,
-        1,
-        []
-      )
-      .send({ from: account });
+    EthereumClient.instance?.giveToken(
+      token,
+      '0xFFcf8FDEE72ac11b5c542428B35EEF5769C409f0',
+      1
+    );
   };
 
   const listForSale = async () => {
@@ -313,6 +310,17 @@ export default function TokenPage() {
         />
       )}
 
+      {creatingListing && (
+        <Modal
+          show={creatingListing}
+          requestClose={() => setCreatingListing(false)}
+          title="List your token for sale"
+          cancel="Cancel"
+        >
+          <CreateTokenListing token={token} ownership={ownership} />
+        </Modal>
+      )}
+
       {token && (
         <TokenContainer>
           {token.minted && (
@@ -323,6 +331,9 @@ export default function TokenPage() {
                 selected={ownership}
                 setSelected={(o: TokenOwnershipDTO) => setOwnership(o)}
                 currentUser={currentUser}
+                listForSale={() => {
+                  setCreatingListing(true);
+                }}
               />
             </TokenHoldersContainer>
           )}
