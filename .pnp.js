@@ -4609,7 +4609,9 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@fanbase/eth-contracts", "workspace:packages/ethereum/contracts"],
             ["@fanbase/eth-transactions", "workspace:packages/ethereum/transactions"],
             ["@fanbase/shared", "workspace:packages/shared"],
+            ["@ramp-network/ramp-instant-sdk", "npm:2.4.6"],
             ["@svgr/webpack", "npm:5.5.0"],
+            ["@transak/transak-sdk", "npm:1.0.111"],
             ["@types/axios", "npm:0.14.0"],
             ["@types/node", "npm:15.14.1"],
             ["@types/react", "npm:17.0.6"],
@@ -5917,6 +5919,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["@ramp-network/ramp-instant-sdk", [
+        ["npm:2.4.6", {
+          "packageLocation": "./.yarn/cache/@ramp-network-ramp-instant-sdk-npm-2.4.6-aa37fe6803-cbd3f0e92f.zip/node_modules/@ramp-network/ramp-instant-sdk/",
+          "packageDependencies": [
+            ["@ramp-network/ramp-instant-sdk", "npm:2.4.6"],
+            ["body-scroll-lock", "npm:2.7.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["@redux-saga/core", [
         ["npm:1.1.3", {
           "packageLocation": "./.yarn/cache/@redux-saga-core-npm-1.1.3-64c8305f87-9ef144af0f.zip/node_modules/@redux-saga/core/",
@@ -6511,6 +6523,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@tootallnate-once-npm-1.1.2-0517220057-d030f3fb14.zip/node_modules/@tootallnate/once/",
           "packageDependencies": [
             ["@tootallnate/once", "npm:1.1.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@transak/transak-sdk", [
+        ["npm:1.0.111", {
+          "packageLocation": "./.yarn/cache/@transak-transak-sdk-npm-1.0.111-446e70c8c9-67935d3aba.zip/node_modules/@transak/transak-sdk/",
+          "packageDependencies": [
+            ["@transak/transak-sdk", "npm:1.0.111"],
+            ["events", "npm:3.3.0"],
+            ["request", "npm:2.88.2"]
           ],
           "linkType": "HARD",
         }]
@@ -9895,6 +9918,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["qs", "npm:6.7.0"],
             ["raw-body", "npm:2.4.0"],
             ["type-is", "npm:1.6.18"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["body-scroll-lock", [
+        ["npm:2.7.1", {
+          "packageLocation": "./.yarn/cache/body-scroll-lock-npm-2.7.1-51fc1fe127-d8ca7825c7.zip/node_modules/body-scroll-lock/",
+          "packageDependencies": [
+            ["body-scroll-lock", "npm:2.7.1"]
           ],
           "linkType": "HARD",
         }]

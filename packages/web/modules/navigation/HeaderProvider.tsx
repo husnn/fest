@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { HeaderLinkType } from '../../components/Header';
+import { LinkType } from '../../components/Header';
 
 export const HeaderContext = React.createContext(null);
 
@@ -11,7 +11,7 @@ type HeaderProviderProps = {
 export const HeaderProvider: React.FC<HeaderProviderProps> = ({
   children
 }: HeaderProviderProps) => {
-  const [links, setLinks] = useState<HeaderLinkType[]>([]);
+  const [links, setLinks] = useState<LinkType[]>([]);
 
   return (
     <HeaderContext.Provider value={{ links, setLinks }}>

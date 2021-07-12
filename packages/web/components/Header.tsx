@@ -1,18 +1,19 @@
 /** @jsxImportSource @emotion/react */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import styled from '@emotion/styled';
 
 import { useHeader } from '../modules/navigation';
 import { Link } from '../ui';
+import MobileMenu from './MobileMenu';
 
-export type HeaderLinkType = {
+export type LinkType = {
   id: string;
   title?: string;
   route?: string;
   visible?: boolean;
-  children?: HeaderLinkType[];
+  children?: LinkType[];
   render?: () => React.ReactNode;
   onClick?: () => void;
 };
@@ -22,7 +23,7 @@ export type HeaderLinkProps = {
 };
 
 type HeaderProps = {
-  links?: HeaderLinkType[];
+  links?: LinkType[];
 };
 
 const HeaderContainer = styled.div`
@@ -49,22 +50,25 @@ const HeaderWrapper = styled.div`
   z-index: 100;
 `;
 
-const HeaderLinksContainer = styled.div`
+const HeaderMenu = styled.div`
   font-weight: bold;
   display: flex;
   flex-direction: row;
   align-items: center;
 
   > * + * {
-    margin-left: 30px;
+    margin-left: 10px;
   }
 
   a {
     width: 100%;
+    padding: 10px;
+    border-radius: 10px;
     opacity: 0.7;
   }
 
   a:hover {
+    background: #f5f5f5;
     opacity: 0.9;
   }
 
@@ -89,13 +93,10 @@ const LinkDropdown = styled.div`
   transition: all 200ms ease 100ms;
   z-index: 1;
 
-  // gap: 20px;
-
   > div {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    // gap: 20px;
 
     span {
       width: 100%;
@@ -107,7 +108,12 @@ const LinkDropdown = styled.div`
 
       a {
         width: 100%;
+        padding: 0;
         float: left;
+
+        &:hover {
+          background: none;
+        }
       }
 
       &:hover {
@@ -117,54 +123,12 @@ const LinkDropdown = styled.div`
   }
 `;
 
-const HeaderLinkContainer = styled.span`
+const HeaderItem = styled.span`
   &:hover {
     > div {
       opacity: 1;
       visibility: visible;
     }
-  }
-`;
-
-const MobileMenu = styled.div<{ open: boolean }>`
-  width: 100%;
-  position: fixed;
-  top: 80px;
-  right: 0;
-  left: 0;
-  padding: 20px 0;
-  background: #fff;
-  flex-direction: column;
-  border-radius: 0 0 20px 20px;
-  box-shadow: 4px 8px 20px 4px rgba(0, 0, 0, 0.05);
-  z-index: 98;
-
-  > * + * {
-    margin-top: 30px;
-  }
-
-  .links {
-    display: flex;
-    flex-direction: column-reverse;
-
-    .mobile-link > a {
-      display: block;
-      padding: 20px 20px;
-
-      &:hover {
-        background-color: #eee;
-      }
-    }
-  }
-
-  .mobile-link {
-    opacity: 0.9;
-  }
-
-  display: none;
-
-  @media screen and (max-width: 500px) {
-    display: ${(props) => (props.open ? 'flex' : 'none')};
   }
 `;
 
@@ -185,15 +149,14 @@ const MenuClose = styled.div<{ open: boolean }>`
 `;
 
 const Header: React.FC<HeaderProps> = () => {
-  const [mobileOpen, setMobileOpen] = useState(false);
   const { links } = useHeader();
 
-  // const [linksOpen, setLinksOpen] = useState<{ [level: string]: number }>();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-  const HeaderLink = ({ link }: { link: HeaderLinkType }) => (
+  const HeaderLink = ({ link }: { link: LinkType }) => (
     <Link
       href={link.route}
-      expandable={link.children != null && !link.render}
+      expandable={link.children != null}
       onClick={() => (link.onClick ? link.onClick() : null)}
     >
       {link.render ? link.render() : link.title}
@@ -204,34 +167,37 @@ const Header: React.FC<HeaderProps> = () => {
     links,
     level = 0
   }: {
-    links: HeaderLinkType[];
+    links: LinkType[];
     level?: number;
   }) => (
-    <HeaderLinksContainer>
-      {links.map((link: HeaderLinkType, index: number) => {
-        if (link.visible === false) return null;
-
-        return (
-          <HeaderLinkContainer
-            key={index}
-            onMouseEnter={() => {
-              // setLinksOpen({ ...linksOpen, [level]: index });
-            }}
-            onMouseLeave={() => {
-              // setLinksOpen({ ...linksOpen, [level]: null });
-            }}
-          >
+    <HeaderMenu>
+      {links.map((link: LinkType, index: number) => {
+        return link.visible != false ? (
+          <HeaderItem key={index}>
             <HeaderLink link={link} />
             {link.children && (
               <LinkDropdown>
                 <HeaderLinks links={link.children} level={level + 1} />
               </LinkDropdown>
             )}
-          </HeaderLinkContainer>
-        );
+          </HeaderItem>
+        ) : null;
       })}
-    </HeaderLinksContainer>
+    </HeaderMenu>
   );
+
+  const [visibleCount, setVisibleCount] = useState(0);
+  const [singleLink, setSingleLink] = useState(null);
+
+  useEffect(() => {
+    const visible = links.filter((link: LinkType) => link.visible);
+
+    setVisibleCount(visible.length);
+
+    setSingleLink(
+      visible.length == 1 && !visible[0].children ? visible[0] : null
+    );
+  }, [links]);
 
   return (
     <HeaderContainer>
@@ -239,25 +205,18 @@ const Header: React.FC<HeaderProps> = () => {
         <Link href="/">
           <h2>Fanbase</h2>
         </Link>
-        {links && <HeaderLinks links={links} />}
-        <MenuClose
-          open={mobileOpen}
-          onClick={() => setMobileOpen(!mobileOpen)}
-        />
+        {links && !singleLink && <HeaderLinks links={links} />}
+        {links.length > 0 &&
+          (!singleLink ? (
+            <MenuClose
+              open={mobileOpen}
+              onClick={() => setMobileOpen(!mobileOpen)}
+            />
+          ) : (
+            <HeaderLink link={singleLink} />
+          ))}
       </HeaderWrapper>
-      <MobileMenu open={mobileOpen}>
-        <div className="links">
-          {links.map((link: HeaderLinkType, index: number) =>
-            link.visible ? (
-              <div className="mobile-link" key={index}>
-                <Link href={link.route}>
-                  <h4>{link.title}</h4>
-                </Link>
-              </div>
-            ) : null
-          )}
-        </div>
-      </MobileMenu>
+      <MobileMenu open={mobileOpen && visibleCount > 0} links={links} />
     </HeaderContainer>
   );
 };

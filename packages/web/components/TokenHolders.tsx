@@ -12,13 +12,13 @@ import { getDisplayName, getProfileUrl } from '../utils';
 const HolderRow = styled.div<{
   selected: boolean;
 }>`
-  margin-top: 20px;
+  margin-top: 10px;
   padding: 20px;
   display: flex;
   flex-direction: column;
   background: #fafafa;
-  opacity: ${(props) => (props.selected ? 1 : '0.7')};
-  // border: ${(props) => props.selected && `1px solid #9a9a9a`};
+  opacity: ${(props) => (props.selected ? 1 : '0.85')};
+  border: ${(props) => props.selected && `1px solid #aaa`};
   box-shadow: ${(props) =>
     props.selected && '2px 2px 8px 4px rgba(0, 0, 0, 0.05);'};
   border-radius: 20px;

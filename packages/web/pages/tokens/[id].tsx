@@ -49,8 +49,8 @@ const TokenHeading = styled.div`
 `;
 
 const TokenCreatorCard = styled.div`
-  margin-top: 10px;
-  padding: 20px 0;
+  margin-top: 20px;
+  // padding: 20px 0;
   display: flex;
   align-items: center;
   border-radius: 10px;
@@ -74,8 +74,7 @@ const Avatar = styled.div`
 const TokenActions = styled.div`
   width: 100%;
   margin-top: 20px;
-  padding: 30px;
-  background-color: #fafafa;
+  // background-color: #fafafa;
   display: flex;
   flex-direction: column;
   border-radius: 30px;
@@ -349,8 +348,6 @@ export default function TokenPage() {
               {/* {ownership && <p>Owned: {ownership?.quantity}</p>} */}
             </TokenHeading>
 
-            {token.description && <p>{token.description}</p>}
-
             <PreviewContainer>
               <Image
                 src="/images/token-sample-1.jpg"
@@ -369,6 +366,8 @@ export default function TokenPage() {
               </div>
             </TokenCreatorCard>
 
+            {token.description && <p>{token.description}</p>}
+
             {token?.creatorId == currentUser?.id && !token?.minted && (
               <TokenActions>
                 <Button
@@ -383,7 +382,7 @@ export default function TokenPage() {
               </TokenActions>
             )}
 
-            {isOwn && (
+            {/* {isOwn && (
               <TokenActions>
                 <Button
                   size="small"
@@ -394,7 +393,7 @@ export default function TokenPage() {
                   Give to 0xFF...09f0
                 </Button>
               </TokenActions>
-            )}
+            )} */}
           </TokenInfo>
         </TokenContainer>
       )}

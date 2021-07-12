@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { HeaderLinkType } from '../../components/Header';
+import { LinkType } from '../../components/Header';
 import { Button } from '../../ui';
 import { getDisplayName, getProfileUrl } from '../../utils';
 import useAuthentication from '../auth/useAuthentication';
@@ -11,7 +11,7 @@ export const useHeader = (toShow?: string[], toHide?: string[]) => {
 
   const { isAuthenticated, currentUser, clearAuth } = useAuthentication();
 
-  const links: HeaderLinkType[] = [
+  const links: LinkType[] = [
     // {
     //   id: 'home',
     //   title: 'Home',
@@ -21,6 +21,12 @@ export const useHeader = (toShow?: string[], toHide?: string[]) => {
       id: 'create-token',
       title: 'Create token',
       route: '/create-token',
+      visible: isAuthenticated
+    },
+    {
+      id: 'wallet',
+      title: 'Wallet',
+      route: '/wallet',
       visible: isAuthenticated
     },
     {
@@ -55,7 +61,7 @@ export const useHeader = (toShow?: string[], toHide?: string[]) => {
   ];
 
   const filteredLinks = () =>
-    links.filter((link: HeaderLinkType) => {
+    links.filter((link: LinkType) => {
       if (toShow) {
         return toShow.includes(link.id);
       } else if (toHide) {

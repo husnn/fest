@@ -18,6 +18,7 @@ import { getProfileUrl } from '../utils';
 const SettingsSheet = styled.div`
   max-width: 400px;
   margin: 0 auto;
+  padding-bottom: 50px;
   display: flex;
   flex-direction: column;
   // gap: 50px;

@@ -43,6 +43,36 @@ export default class EthereumClient {
     }
   }
 
+  async getERC20Balance(
+    contractAddr: string,
+    account: string
+  ): Promise<string> {
+    if (!contractAddr || !account) return;
+
+    const abi = [
+      {
+        constant: true,
+        inputs: [{ name: '_owner', type: 'address' }],
+        name: 'balanceOf',
+        outputs: [{ name: 'balance', type: 'uint256' }],
+        payable: false,
+        stateMutability: 'view',
+        type: 'function'
+      }
+    ];
+
+    const contract = new this.web3.eth.Contract(abi as any, contractAddr);
+
+    const balance = await contract.methods.balanceOf(account).call();
+
+    return Web3.utils.fromWei(balance, 'ether');
+  }
+
+  async getEtherBalance(account: string): Promise<string> {
+    const balance = await this.web3.eth.getBalance(account);
+    return Web3.utils.fromWei(balance, 'ether');
+  }
+
   async getAccount(): Promise<string> {
     if (!this.isInitialized) await this.initWeb3();
 

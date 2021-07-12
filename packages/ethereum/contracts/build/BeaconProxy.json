@@ -6899,30 +6899,30 @@
     "absolutePath": "/C/Users/Husnain/Documents/Projects/Fanbase/New/fanbase/packages/ethereum/contracts/solidity/openzeppelin/contracts/proxy/beacon/BeaconProxy.sol",
     "exportedSymbols": {
       "Address": [
-        20514
+        20520
       ],
       "BeaconProxy": [
-        11869
+        11875
       ],
       "ERC1967Upgrade": [
-        11735
+        11741
       ],
       "IBeacon": [
-        11879
+        11885
       ],
       "Proxy": [
-        11787
+        11793
       ],
       "StorageSlot": [
-        20922
+        20928
       ]
     },
-    "id": 11870,
+    "id": 11876,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 11789,
+        "id": 11795,
         "literals": [
           "solidity",
           "^",
@@ -6935,11 +6935,11 @@
       {
         "absolutePath": "/C/Users/Husnain/Documents/Projects/Fanbase/New/fanbase/packages/ethereum/contracts/solidity/openzeppelin/contracts/proxy/beacon/IBeacon.sol",
         "file": "./IBeacon.sol",
-        "id": 11790,
+        "id": 11796,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 11870,
-        "sourceUnit": 11880,
+        "scope": 11876,
+        "sourceUnit": 11886,
         "src": "58:23:96",
         "symbolAliases": [],
         "unitAlias": ""
@@ -6947,11 +6947,11 @@
       {
         "absolutePath": "/C/Users/Husnain/Documents/Projects/Fanbase/New/fanbase/packages/ethereum/contracts/solidity/openzeppelin/contracts/proxy/Proxy.sol",
         "file": "../Proxy.sol",
-        "id": 11791,
+        "id": 11797,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 11870,
-        "sourceUnit": 11788,
+        "scope": 11876,
+        "sourceUnit": 11794,
         "src": "82:22:96",
         "symbolAliases": [],
         "unitAlias": ""
@@ -6959,11 +6959,11 @@
       {
         "absolutePath": "/C/Users/Husnain/Documents/Projects/Fanbase/New/fanbase/packages/ethereum/contracts/solidity/openzeppelin/contracts/proxy/ERC1967/ERC1967Upgrade.sol",
         "file": "../ERC1967/ERC1967Upgrade.sol",
-        "id": 11792,
+        "id": 11798,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 11870,
-        "sourceUnit": 11736,
+        "scope": 11876,
+        "sourceUnit": 11742,
         "src": "105:39:96",
         "symbolAliases": [],
         "unitAlias": ""
@@ -6973,25 +6973,25 @@
         "baseContracts": [
           {
             "baseName": {
-              "id": 11794,
+              "id": 11800,
               "name": "Proxy",
               "nodeType": "IdentifierPath",
-              "referencedDeclaration": 11787,
+              "referencedDeclaration": 11793,
               "src": "524:5:96"
             },
-            "id": 11795,
+            "id": 11801,
             "nodeType": "InheritanceSpecifier",
             "src": "524:5:96"
           },
           {
             "baseName": {
-              "id": 11796,
+              "id": 11802,
               "name": "ERC1967Upgrade",
               "nodeType": "IdentifierPath",
-              "referencedDeclaration": 11735,
+              "referencedDeclaration": 11741,
               "src": "531:14:96"
             },
-            "id": 11797,
+            "id": 11803,
             "nodeType": "InheritanceSpecifier",
             "src": "531:14:96"
           }
@@ -6999,17 +6999,17 @@
         "contractDependencies": [],
         "contractKind": "contract",
         "documentation": {
-          "id": 11793,
+          "id": 11799,
           "nodeType": "StructuredDocumentation",
           "src": "146:353:96",
           "text": " @dev This contract implements a proxy that gets the implementation address for each call from a {UpgradeableBeacon}.\n The beacon address is stored in storage slot `uint256(keccak256('eip1967.proxy.beacon')) - 1`, so that it doesn't\n conflict with the storage layout of the implementation behind the proxy.\n _Available since v3.4._"
         },
         "fullyImplemented": true,
-        "id": 11869,
+        "id": 11875,
         "linearizedBaseContracts": [
-          11869,
-          11735,
-          11787
+          11875,
+          11741,
+          11793
         ],
         "name": "BeaconProxy",
         "nameLocation": "509:11:96",
@@ -7017,7 +7017,7 @@
         "nodes": [
           {
             "body": {
-              "id": 11827,
+              "id": 11833,
               "nodeType": "Block",
               "src": "1037:150:96",
               "statements": [
@@ -7029,17 +7029,17 @@
                           "typeIdentifier": "t_bytes32",
                           "typeString": "bytes32"
                         },
-                        "id": 11818,
+                        "id": 11824,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
                         "lValueRequested": false,
                         "leftExpression": {
-                          "id": 11806,
+                          "id": 11812,
                           "name": "_BEACON_SLOT",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 11680,
+                          "referencedDeclaration": 11686,
                           "src": "1054:12:96",
                           "typeDescriptions": {
                             "typeIdentifier": "t_bytes32",
@@ -7055,7 +7055,7 @@
                                 "typeIdentifier": "t_uint256",
                                 "typeString": "uint256"
                               },
-                              "id": 11816,
+                              "id": 11822,
                               "isConstant": false,
                               "isLValue": false,
                               "isPure": true,
@@ -7066,7 +7066,7 @@
                                     "arguments": [
                                       {
                                         "hexValue": "656970313936372e70726f78792e626561636f6e",
-                                        "id": 11812,
+                                        "id": 11818,
                                         "isConstant": false,
                                         "isLValue": false,
                                         "isPure": true,
@@ -7088,7 +7088,7 @@
                                           "typeString": "literal_string \"eip1967.proxy.beacon\""
                                         }
                                       ],
-                                      "id": 11811,
+                                      "id": 11817,
                                       "name": "keccak256",
                                       "nodeType": "Identifier",
                                       "overloadedDeclarations": [],
@@ -7099,7 +7099,7 @@
                                         "typeString": "function (bytes memory) pure returns (bytes32)"
                                       }
                                     },
-                                    "id": 11813,
+                                    "id": 11819,
                                     "isConstant": false,
                                     "isLValue": false,
                                     "isPure": true,
@@ -7122,7 +7122,7 @@
                                       "typeString": "bytes32"
                                     }
                                   ],
-                                  "id": 11810,
+                                  "id": 11816,
                                   "isConstant": false,
                                   "isLValue": false,
                                   "isPure": true,
@@ -7134,14 +7134,14 @@
                                     "typeString": "type(uint256)"
                                   },
                                   "typeName": {
-                                    "id": 11809,
+                                    "id": 11815,
                                     "name": "uint256",
                                     "nodeType": "ElementaryTypeName",
                                     "src": "1078:7:96",
                                     "typeDescriptions": {}
                                   }
                                 },
-                                "id": 11814,
+                                "id": 11820,
                                 "isConstant": false,
                                 "isLValue": false,
                                 "isPure": true,
@@ -7160,7 +7160,7 @@
                               "operator": "-",
                               "rightExpression": {
                                 "hexValue": "31",
-                                "id": 11815,
+                                "id": 11821,
                                 "isConstant": false,
                                 "isLValue": false,
                                 "isPure": true,
@@ -7188,7 +7188,7 @@
                                 "typeString": "uint256"
                               }
                             ],
-                            "id": 11808,
+                            "id": 11814,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": true,
@@ -7200,14 +7200,14 @@
                               "typeString": "type(bytes32)"
                             },
                             "typeName": {
-                              "id": 11807,
+                              "id": 11813,
                               "name": "bytes32",
                               "nodeType": "ElementaryTypeName",
                               "src": "1070:7:96",
                               "typeDescriptions": {}
                             }
                           },
-                          "id": 11817,
+                          "id": 11823,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
@@ -7236,7 +7236,7 @@
                           "typeString": "bool"
                         }
                       ],
-                      "id": 11805,
+                      "id": 11811,
                       "name": "assert",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
@@ -7247,7 +7247,7 @@
                         "typeString": "function (bool) pure"
                       }
                     },
-                    "id": 11819,
+                    "id": 11825,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -7262,7 +7262,7 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 11820,
+                  "id": 11826,
                   "nodeType": "ExpressionStatement",
                   "src": "1047:79:96"
                 },
@@ -7270,11 +7270,11 @@
                   "expression": {
                     "arguments": [
                       {
-                        "id": 11822,
+                        "id": 11828,
                         "name": "beacon",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 11800,
+                        "referencedDeclaration": 11806,
                         "src": "1160:6:96",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -7282,11 +7282,11 @@
                         }
                       },
                       {
-                        "id": 11823,
+                        "id": 11829,
                         "name": "data",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 11802,
+                        "referencedDeclaration": 11808,
                         "src": "1168:4:96",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bytes_memory_ptr",
@@ -7295,7 +7295,7 @@
                       },
                       {
                         "hexValue": "66616c7365",
-                        "id": 11824,
+                        "id": 11830,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -7325,18 +7325,18 @@
                           "typeString": "bool"
                         }
                       ],
-                      "id": 11821,
+                      "id": 11827,
                       "name": "_upgradeBeaconToAndCall",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 11609,
+                      "referencedDeclaration": 11615,
                       "src": "1136:23:96",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_address_$_t_bytes_memory_ptr_$_t_bool_$returns$__$",
                         "typeString": "function (address,bytes memory,bool)"
                       }
                     },
-                    "id": 11825,
+                    "id": 11831,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -7351,19 +7351,19 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 11826,
+                  "id": 11832,
                   "nodeType": "ExpressionStatement",
                   "src": "1136:44:96"
                 }
               ]
             },
             "documentation": {
-              "id": 11798,
+              "id": 11804,
               "nodeType": "StructuredDocumentation",
               "src": "552:425:96",
               "text": " @dev Initializes the proxy with `beacon`.\n If `data` is nonempty, it's used as data in a delegate call to the implementation returned by the beacon. This\n will typically be an encoded function call, and allows initializating the storage of the proxy like a Solidity\n constructor.\n Requirements:\n - `beacon` must be a contract with the interface {IBeacon}."
             },
-            "id": 11828,
+            "id": 11834,
             "implemented": true,
             "kind": "constructor",
             "modifiers": [],
@@ -7371,17 +7371,17 @@
             "nameLocation": "-1:-1:-1",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 11803,
+              "id": 11809,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 11800,
+                  "id": 11806,
                   "mutability": "mutable",
                   "name": "beacon",
                   "nameLocation": "1002:6:96",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11828,
+                  "scope": 11834,
                   "src": "994:14:96",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -7390,7 +7390,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 11799,
+                    "id": 11805,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "994:7:96",
@@ -7404,12 +7404,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 11802,
+                  "id": 11808,
                   "mutability": "mutable",
                   "name": "data",
                   "nameLocation": "1023:4:96",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11828,
+                  "scope": 11834,
                   "src": "1010:17:96",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -7418,7 +7418,7 @@
                     "typeString": "bytes"
                   },
                   "typeName": {
-                    "id": 11801,
+                    "id": 11807,
                     "name": "bytes",
                     "nodeType": "ElementaryTypeName",
                     "src": "1010:5:96",
@@ -7433,12 +7433,12 @@
               "src": "993:35:96"
             },
             "returnParameters": {
-              "id": 11804,
+              "id": 11810,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1037:0:96"
             },
-            "scope": 11869,
+            "scope": 11875,
             "src": "982:205:96",
             "stateMutability": "payable",
             "virtual": false,
@@ -7446,7 +7446,7 @@
           },
           {
             "body": {
-              "id": 11837,
+              "id": 11843,
               "nodeType": "Block",
               "src": "1316:36:96",
               "statements": [
@@ -7455,18 +7455,18 @@
                     "arguments": [],
                     "expression": {
                       "argumentTypes": [],
-                      "id": 11834,
+                      "id": 11840,
                       "name": "_getBeacon",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 11698,
+                      "referencedDeclaration": 11704,
                       "src": "1333:10:96",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_view$__$returns$_t_address_$",
                         "typeString": "function () view returns (address)"
                       }
                     },
-                    "id": 11835,
+                    "id": 11841,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -7481,20 +7481,20 @@
                       "typeString": "address"
                     }
                   },
-                  "functionReturnParameters": 11833,
-                  "id": 11836,
+                  "functionReturnParameters": 11839,
+                  "id": 11842,
                   "nodeType": "Return",
                   "src": "1326:19:96"
                 }
               ]
             },
             "documentation": {
-              "id": 11829,
+              "id": 11835,
               "nodeType": "StructuredDocumentation",
               "src": "1193:59:96",
               "text": " @dev Returns the current beacon address."
             },
-            "id": 11838,
+            "id": 11844,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -7502,23 +7502,23 @@
             "nameLocation": "1266:7:96",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 11830,
+              "id": 11836,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1273:2:96"
             },
             "returnParameters": {
-              "id": 11833,
+              "id": 11839,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 11832,
+                  "id": 11838,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11838,
+                  "scope": 11844,
                   "src": "1307:7:96",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -7527,7 +7527,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 11831,
+                    "id": 11837,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1307:7:96",
@@ -7542,7 +7542,7 @@
               ],
               "src": "1306:9:96"
             },
-            "scope": 11869,
+            "scope": 11875,
             "src": "1257:95:96",
             "stateMutability": "view",
             "virtual": true,
@@ -7550,10 +7550,10 @@
           },
           {
             "baseFunctions": [
-              11752
+              11758
             ],
             "body": {
-              "id": 11852,
+              "id": 11858,
               "nodeType": "Block",
               "src": "1531:62:96",
               "statements": [
@@ -7568,18 +7568,18 @@
                             "arguments": [],
                             "expression": {
                               "argumentTypes": [],
-                              "id": 11846,
+                              "id": 11852,
                               "name": "_getBeacon",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 11698,
+                              "referencedDeclaration": 11704,
                               "src": "1556:10:96",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_function_internal_view$__$returns$_t_address_$",
                                 "typeString": "function () view returns (address)"
                               }
                             },
-                            "id": 11847,
+                            "id": 11853,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": false,
@@ -7602,18 +7602,18 @@
                               "typeString": "address"
                             }
                           ],
-                          "id": 11845,
+                          "id": 11851,
                           "name": "IBeacon",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 11879,
+                          "referencedDeclaration": 11885,
                           "src": "1548:7:96",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_type$_t_contract$_IBeacon_$11879_$",
+                            "typeIdentifier": "t_type$_t_contract$_IBeacon_$11885_$",
                             "typeString": "type(contract IBeacon)"
                           }
                         },
-                        "id": 11848,
+                        "id": 11854,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -7624,25 +7624,25 @@
                         "src": "1548:21:96",
                         "tryCall": false,
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_IBeacon_$11879",
+                          "typeIdentifier": "t_contract$_IBeacon_$11885",
                           "typeString": "contract IBeacon"
                         }
                       },
-                      "id": 11849,
+                      "id": 11855,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "implementation",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 11878,
+                      "referencedDeclaration": 11884,
                       "src": "1548:36:96",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_view$__$returns$_t_address_$",
                         "typeString": "function () view external returns (address)"
                       }
                     },
-                    "id": 11850,
+                    "id": 11856,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -7657,20 +7657,20 @@
                       "typeString": "address"
                     }
                   },
-                  "functionReturnParameters": 11844,
-                  "id": 11851,
+                  "functionReturnParameters": 11850,
+                  "id": 11857,
                   "nodeType": "Return",
                   "src": "1541:45:96"
                 }
               ]
             },
             "documentation": {
-              "id": 11839,
+              "id": 11845,
               "nodeType": "StructuredDocumentation",
               "src": "1358:92:96",
               "text": " @dev Returns the current implementation address of the associated beacon."
             },
-            "id": 11853,
+            "id": 11859,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -7678,29 +7678,29 @@
             "nameLocation": "1464:15:96",
             "nodeType": "FunctionDefinition",
             "overrides": {
-              "id": 11841,
+              "id": 11847,
               "nodeType": "OverrideSpecifier",
               "overrides": [],
               "src": "1504:8:96"
             },
             "parameters": {
-              "id": 11840,
+              "id": 11846,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1479:2:96"
             },
             "returnParameters": {
-              "id": 11844,
+              "id": 11850,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 11843,
+                  "id": 11849,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11853,
+                  "scope": 11859,
                   "src": "1522:7:96",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -7709,7 +7709,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 11842,
+                    "id": 11848,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1522:7:96",
@@ -7724,7 +7724,7 @@
               ],
               "src": "1521:9:96"
             },
-            "scope": 11869,
+            "scope": 11875,
             "src": "1455:138:96",
             "stateMutability": "view",
             "virtual": true,
@@ -7732,7 +7732,7 @@
           },
           {
             "body": {
-              "id": 11867,
+              "id": 11873,
               "nodeType": "Block",
               "src": "2043:61:96",
               "statements": [
@@ -7740,11 +7740,11 @@
                   "expression": {
                     "arguments": [
                       {
-                        "id": 11862,
+                        "id": 11868,
                         "name": "beacon",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 11856,
+                        "referencedDeclaration": 11862,
                         "src": "2077:6:96",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -7752,11 +7752,11 @@
                         }
                       },
                       {
-                        "id": 11863,
+                        "id": 11869,
                         "name": "data",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 11858,
+                        "referencedDeclaration": 11864,
                         "src": "2085:4:96",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bytes_memory_ptr",
@@ -7765,7 +7765,7 @@
                       },
                       {
                         "hexValue": "66616c7365",
-                        "id": 11864,
+                        "id": 11870,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -7795,18 +7795,18 @@
                           "typeString": "bool"
                         }
                       ],
-                      "id": 11861,
+                      "id": 11867,
                       "name": "_upgradeBeaconToAndCall",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 11609,
+                      "referencedDeclaration": 11615,
                       "src": "2053:23:96",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_address_$_t_bytes_memory_ptr_$_t_bool_$returns$__$",
                         "typeString": "function (address,bytes memory,bool)"
                       }
                     },
-                    "id": 11865,
+                    "id": 11871,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -7821,19 +7821,19 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 11866,
+                  "id": 11872,
                   "nodeType": "ExpressionStatement",
                   "src": "2053:44:96"
                 }
               ]
             },
             "documentation": {
-              "id": 11854,
+              "id": 11860,
               "nodeType": "StructuredDocumentation",
               "src": "1599:367:96",
               "text": " @dev Changes the proxy to use a new beacon. Deprecated: see {_upgradeBeaconToAndCall}.\n If `data` is nonempty, it's used as data in a delegate call to the implementation returned by the beacon.\n Requirements:\n - `beacon` must be a contract.\n - The implementation returned by `beacon` must be a contract."
             },
-            "id": 11868,
+            "id": 11874,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -7841,17 +7841,17 @@
             "nameLocation": "1980:10:96",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 11859,
+              "id": 11865,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 11856,
+                  "id": 11862,
                   "mutability": "mutable",
                   "name": "beacon",
                   "nameLocation": "1999:6:96",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11868,
+                  "scope": 11874,
                   "src": "1991:14:96",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -7860,7 +7860,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 11855,
+                    "id": 11861,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1991:7:96",
@@ -7874,12 +7874,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 11858,
+                  "id": 11864,
                   "mutability": "mutable",
                   "name": "data",
                   "nameLocation": "2020:4:96",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11868,
+                  "scope": 11874,
                   "src": "2007:17:96",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -7888,7 +7888,7 @@
                     "typeString": "bytes"
                   },
                   "typeName": {
-                    "id": 11857,
+                    "id": 11863,
                     "name": "bytes",
                     "nodeType": "ElementaryTypeName",
                     "src": "2007:5:96",
@@ -7903,19 +7903,19 @@
               "src": "1990:35:96"
             },
             "returnParameters": {
-              "id": 11860,
+              "id": 11866,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "2043:0:96"
             },
-            "scope": 11869,
+            "scope": 11875,
             "src": "1971:133:96",
             "stateMutability": "nonpayable",
             "virtual": true,
             "visibility": "internal"
           }
         ],
-        "scope": 11870,
+        "scope": 11876,
         "src": "500:1606:96",
         "usedErrors": []
       }
@@ -7926,30 +7926,30 @@
     "absolutePath": "/C/Users/Husnain/Documents/Projects/Fanbase/New/fanbase/packages/ethereum/contracts/solidity/openzeppelin/contracts/proxy/beacon/BeaconProxy.sol",
     "exportedSymbols": {
       "Address": [
-        20514
+        20520
       ],
       "BeaconProxy": [
-        11869
+        11875
       ],
       "ERC1967Upgrade": [
-        11735
+        11741
       ],
       "IBeacon": [
-        11879
+        11885
       ],
       "Proxy": [
-        11787
+        11793
       ],
       "StorageSlot": [
-        20922
+        20928
       ]
     },
-    "id": 11870,
+    "id": 11876,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 11789,
+        "id": 11795,
         "literals": [
           "solidity",
           "^",
@@ -7962,11 +7962,11 @@
       {
         "absolutePath": "/C/Users/Husnain/Documents/Projects/Fanbase/New/fanbase/packages/ethereum/contracts/solidity/openzeppelin/contracts/proxy/beacon/IBeacon.sol",
         "file": "./IBeacon.sol",
-        "id": 11790,
+        "id": 11796,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 11870,
-        "sourceUnit": 11880,
+        "scope": 11876,
+        "sourceUnit": 11886,
         "src": "58:23:96",
         "symbolAliases": [],
         "unitAlias": ""
@@ -7974,11 +7974,11 @@
       {
         "absolutePath": "/C/Users/Husnain/Documents/Projects/Fanbase/New/fanbase/packages/ethereum/contracts/solidity/openzeppelin/contracts/proxy/Proxy.sol",
         "file": "../Proxy.sol",
-        "id": 11791,
+        "id": 11797,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 11870,
-        "sourceUnit": 11788,
+        "scope": 11876,
+        "sourceUnit": 11794,
         "src": "82:22:96",
         "symbolAliases": [],
         "unitAlias": ""
@@ -7986,11 +7986,11 @@
       {
         "absolutePath": "/C/Users/Husnain/Documents/Projects/Fanbase/New/fanbase/packages/ethereum/contracts/solidity/openzeppelin/contracts/proxy/ERC1967/ERC1967Upgrade.sol",
         "file": "../ERC1967/ERC1967Upgrade.sol",
-        "id": 11792,
+        "id": 11798,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 11870,
-        "sourceUnit": 11736,
+        "scope": 11876,
+        "sourceUnit": 11742,
         "src": "105:39:96",
         "symbolAliases": [],
         "unitAlias": ""
@@ -8000,25 +8000,25 @@
         "baseContracts": [
           {
             "baseName": {
-              "id": 11794,
+              "id": 11800,
               "name": "Proxy",
               "nodeType": "IdentifierPath",
-              "referencedDeclaration": 11787,
+              "referencedDeclaration": 11793,
               "src": "524:5:96"
             },
-            "id": 11795,
+            "id": 11801,
             "nodeType": "InheritanceSpecifier",
             "src": "524:5:96"
           },
           {
             "baseName": {
-              "id": 11796,
+              "id": 11802,
               "name": "ERC1967Upgrade",
               "nodeType": "IdentifierPath",
-              "referencedDeclaration": 11735,
+              "referencedDeclaration": 11741,
               "src": "531:14:96"
             },
-            "id": 11797,
+            "id": 11803,
             "nodeType": "InheritanceSpecifier",
             "src": "531:14:96"
           }
@@ -8026,17 +8026,17 @@
         "contractDependencies": [],
         "contractKind": "contract",
         "documentation": {
-          "id": 11793,
+          "id": 11799,
           "nodeType": "StructuredDocumentation",
           "src": "146:353:96",
           "text": " @dev This contract implements a proxy that gets the implementation address for each call from a {UpgradeableBeacon}.\n The beacon address is stored in storage slot `uint256(keccak256('eip1967.proxy.beacon')) - 1`, so that it doesn't\n conflict with the storage layout of the implementation behind the proxy.\n _Available since v3.4._"
         },
         "fullyImplemented": true,
-        "id": 11869,
+        "id": 11875,
         "linearizedBaseContracts": [
-          11869,
-          11735,
-          11787
+          11875,
+          11741,
+          11793
         ],
         "name": "BeaconProxy",
         "nameLocation": "509:11:96",
@@ -8044,7 +8044,7 @@
         "nodes": [
           {
             "body": {
-              "id": 11827,
+              "id": 11833,
               "nodeType": "Block",
               "src": "1037:150:96",
               "statements": [
@@ -8056,17 +8056,17 @@
                           "typeIdentifier": "t_bytes32",
                           "typeString": "bytes32"
                         },
-                        "id": 11818,
+                        "id": 11824,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
                         "lValueRequested": false,
                         "leftExpression": {
-                          "id": 11806,
+                          "id": 11812,
                           "name": "_BEACON_SLOT",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 11680,
+                          "referencedDeclaration": 11686,
                           "src": "1054:12:96",
                           "typeDescriptions": {
                             "typeIdentifier": "t_bytes32",
@@ -8082,7 +8082,7 @@
                                 "typeIdentifier": "t_uint256",
                                 "typeString": "uint256"
                               },
-                              "id": 11816,
+                              "id": 11822,
                               "isConstant": false,
                               "isLValue": false,
                               "isPure": true,
@@ -8093,7 +8093,7 @@
                                     "arguments": [
                                       {
                                         "hexValue": "656970313936372e70726f78792e626561636f6e",
-                                        "id": 11812,
+                                        "id": 11818,
                                         "isConstant": false,
                                         "isLValue": false,
                                         "isPure": true,
@@ -8115,7 +8115,7 @@
                                           "typeString": "literal_string \"eip1967.proxy.beacon\""
                                         }
                                       ],
-                                      "id": 11811,
+                                      "id": 11817,
                                       "name": "keccak256",
                                       "nodeType": "Identifier",
                                       "overloadedDeclarations": [],
@@ -8126,7 +8126,7 @@
                                         "typeString": "function (bytes memory) pure returns (bytes32)"
                                       }
                                     },
-                                    "id": 11813,
+                                    "id": 11819,
                                     "isConstant": false,
                                     "isLValue": false,
                                     "isPure": true,
@@ -8149,7 +8149,7 @@
                                       "typeString": "bytes32"
                                     }
                                   ],
-                                  "id": 11810,
+                                  "id": 11816,
                                   "isConstant": false,
                                   "isLValue": false,
                                   "isPure": true,
@@ -8161,14 +8161,14 @@
                                     "typeString": "type(uint256)"
                                   },
                                   "typeName": {
-                                    "id": 11809,
+                                    "id": 11815,
                                     "name": "uint256",
                                     "nodeType": "ElementaryTypeName",
                                     "src": "1078:7:96",
                                     "typeDescriptions": {}
                                   }
                                 },
-                                "id": 11814,
+                                "id": 11820,
                                 "isConstant": false,
                                 "isLValue": false,
                                 "isPure": true,
@@ -8187,7 +8187,7 @@
                               "operator": "-",
                               "rightExpression": {
                                 "hexValue": "31",
-                                "id": 11815,
+                                "id": 11821,
                                 "isConstant": false,
                                 "isLValue": false,
                                 "isPure": true,
@@ -8215,7 +8215,7 @@
                                 "typeString": "uint256"
                               }
                             ],
-                            "id": 11808,
+                            "id": 11814,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": true,
@@ -8227,14 +8227,14 @@
                               "typeString": "type(bytes32)"
                             },
                             "typeName": {
-                              "id": 11807,
+                              "id": 11813,
                               "name": "bytes32",
                               "nodeType": "ElementaryTypeName",
                               "src": "1070:7:96",
                               "typeDescriptions": {}
                             }
                           },
-                          "id": 11817,
+                          "id": 11823,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
@@ -8263,7 +8263,7 @@
                           "typeString": "bool"
                         }
                       ],
-                      "id": 11805,
+                      "id": 11811,
                       "name": "assert",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
@@ -8274,7 +8274,7 @@
                         "typeString": "function (bool) pure"
                       }
                     },
-                    "id": 11819,
+                    "id": 11825,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -8289,7 +8289,7 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 11820,
+                  "id": 11826,
                   "nodeType": "ExpressionStatement",
                   "src": "1047:79:96"
                 },
@@ -8297,11 +8297,11 @@
                   "expression": {
                     "arguments": [
                       {
-                        "id": 11822,
+                        "id": 11828,
                         "name": "beacon",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 11800,
+                        "referencedDeclaration": 11806,
                         "src": "1160:6:96",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -8309,11 +8309,11 @@
                         }
                       },
                       {
-                        "id": 11823,
+                        "id": 11829,
                         "name": "data",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 11802,
+                        "referencedDeclaration": 11808,
                         "src": "1168:4:96",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bytes_memory_ptr",
@@ -8322,7 +8322,7 @@
                       },
                       {
                         "hexValue": "66616c7365",
-                        "id": 11824,
+                        "id": 11830,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -8352,18 +8352,18 @@
                           "typeString": "bool"
                         }
                       ],
-                      "id": 11821,
+                      "id": 11827,
                       "name": "_upgradeBeaconToAndCall",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 11609,
+                      "referencedDeclaration": 11615,
                       "src": "1136:23:96",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_address_$_t_bytes_memory_ptr_$_t_bool_$returns$__$",
                         "typeString": "function (address,bytes memory,bool)"
                       }
                     },
-                    "id": 11825,
+                    "id": 11831,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -8378,19 +8378,19 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 11826,
+                  "id": 11832,
                   "nodeType": "ExpressionStatement",
                   "src": "1136:44:96"
                 }
               ]
             },
             "documentation": {
-              "id": 11798,
+              "id": 11804,
               "nodeType": "StructuredDocumentation",
               "src": "552:425:96",
               "text": " @dev Initializes the proxy with `beacon`.\n If `data` is nonempty, it's used as data in a delegate call to the implementation returned by the beacon. This\n will typically be an encoded function call, and allows initializating the storage of the proxy like a Solidity\n constructor.\n Requirements:\n - `beacon` must be a contract with the interface {IBeacon}."
             },
-            "id": 11828,
+            "id": 11834,
             "implemented": true,
             "kind": "constructor",
             "modifiers": [],
@@ -8398,17 +8398,17 @@
             "nameLocation": "-1:-1:-1",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 11803,
+              "id": 11809,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 11800,
+                  "id": 11806,
                   "mutability": "mutable",
                   "name": "beacon",
                   "nameLocation": "1002:6:96",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11828,
+                  "scope": 11834,
                   "src": "994:14:96",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -8417,7 +8417,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 11799,
+                    "id": 11805,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "994:7:96",
@@ -8431,12 +8431,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 11802,
+                  "id": 11808,
                   "mutability": "mutable",
                   "name": "data",
                   "nameLocation": "1023:4:96",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11828,
+                  "scope": 11834,
                   "src": "1010:17:96",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -8445,7 +8445,7 @@
                     "typeString": "bytes"
                   },
                   "typeName": {
-                    "id": 11801,
+                    "id": 11807,
                     "name": "bytes",
                     "nodeType": "ElementaryTypeName",
                     "src": "1010:5:96",
@@ -8460,12 +8460,12 @@
               "src": "993:35:96"
             },
             "returnParameters": {
-              "id": 11804,
+              "id": 11810,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1037:0:96"
             },
-            "scope": 11869,
+            "scope": 11875,
             "src": "982:205:96",
             "stateMutability": "payable",
             "virtual": false,
@@ -8473,7 +8473,7 @@
           },
           {
             "body": {
-              "id": 11837,
+              "id": 11843,
               "nodeType": "Block",
               "src": "1316:36:96",
               "statements": [
@@ -8482,18 +8482,18 @@
                     "arguments": [],
                     "expression": {
                       "argumentTypes": [],
-                      "id": 11834,
+                      "id": 11840,
                       "name": "_getBeacon",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 11698,
+                      "referencedDeclaration": 11704,
                       "src": "1333:10:96",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_view$__$returns$_t_address_$",
                         "typeString": "function () view returns (address)"
                       }
                     },
-                    "id": 11835,
+                    "id": 11841,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -8508,20 +8508,20 @@
                       "typeString": "address"
                     }
                   },
-                  "functionReturnParameters": 11833,
-                  "id": 11836,
+                  "functionReturnParameters": 11839,
+                  "id": 11842,
                   "nodeType": "Return",
                   "src": "1326:19:96"
                 }
               ]
             },
             "documentation": {
-              "id": 11829,
+              "id": 11835,
               "nodeType": "StructuredDocumentation",
               "src": "1193:59:96",
               "text": " @dev Returns the current beacon address."
             },
-            "id": 11838,
+            "id": 11844,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -8529,23 +8529,23 @@
             "nameLocation": "1266:7:96",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 11830,
+              "id": 11836,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1273:2:96"
             },
             "returnParameters": {
-              "id": 11833,
+              "id": 11839,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 11832,
+                  "id": 11838,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11838,
+                  "scope": 11844,
                   "src": "1307:7:96",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -8554,7 +8554,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 11831,
+                    "id": 11837,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1307:7:96",
@@ -8569,7 +8569,7 @@
               ],
               "src": "1306:9:96"
             },
-            "scope": 11869,
+            "scope": 11875,
             "src": "1257:95:96",
             "stateMutability": "view",
             "virtual": true,
@@ -8577,10 +8577,10 @@
           },
           {
             "baseFunctions": [
-              11752
+              11758
             ],
             "body": {
-              "id": 11852,
+              "id": 11858,
               "nodeType": "Block",
               "src": "1531:62:96",
               "statements": [
@@ -8595,18 +8595,18 @@
                             "arguments": [],
                             "expression": {
                               "argumentTypes": [],
-                              "id": 11846,
+                              "id": 11852,
                               "name": "_getBeacon",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 11698,
+                              "referencedDeclaration": 11704,
                               "src": "1556:10:96",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_function_internal_view$__$returns$_t_address_$",
                                 "typeString": "function () view returns (address)"
                               }
                             },
-                            "id": 11847,
+                            "id": 11853,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": false,
@@ -8629,18 +8629,18 @@
                               "typeString": "address"
                             }
                           ],
-                          "id": 11845,
+                          "id": 11851,
                           "name": "IBeacon",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 11879,
+                          "referencedDeclaration": 11885,
                           "src": "1548:7:96",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_type$_t_contract$_IBeacon_$11879_$",
+                            "typeIdentifier": "t_type$_t_contract$_IBeacon_$11885_$",
                             "typeString": "type(contract IBeacon)"
                           }
                         },
-                        "id": 11848,
+                        "id": 11854,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -8651,25 +8651,25 @@
                         "src": "1548:21:96",
                         "tryCall": false,
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_IBeacon_$11879",
+                          "typeIdentifier": "t_contract$_IBeacon_$11885",
                           "typeString": "contract IBeacon"
                         }
                       },
-                      "id": 11849,
+                      "id": 11855,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "implementation",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 11878,
+                      "referencedDeclaration": 11884,
                       "src": "1548:36:96",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_view$__$returns$_t_address_$",
                         "typeString": "function () view external returns (address)"
                       }
                     },
-                    "id": 11850,
+                    "id": 11856,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -8684,20 +8684,20 @@
                       "typeString": "address"
                     }
                   },
-                  "functionReturnParameters": 11844,
-                  "id": 11851,
+                  "functionReturnParameters": 11850,
+                  "id": 11857,
                   "nodeType": "Return",
                   "src": "1541:45:96"
                 }
               ]
             },
             "documentation": {
-              "id": 11839,
+              "id": 11845,
               "nodeType": "StructuredDocumentation",
               "src": "1358:92:96",
               "text": " @dev Returns the current implementation address of the associated beacon."
             },
-            "id": 11853,
+            "id": 11859,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -8705,29 +8705,29 @@
             "nameLocation": "1464:15:96",
             "nodeType": "FunctionDefinition",
             "overrides": {
-              "id": 11841,
+              "id": 11847,
               "nodeType": "OverrideSpecifier",
               "overrides": [],
               "src": "1504:8:96"
             },
             "parameters": {
-              "id": 11840,
+              "id": 11846,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1479:2:96"
             },
             "returnParameters": {
-              "id": 11844,
+              "id": 11850,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 11843,
+                  "id": 11849,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11853,
+                  "scope": 11859,
                   "src": "1522:7:96",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -8736,7 +8736,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 11842,
+                    "id": 11848,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1522:7:96",
@@ -8751,7 +8751,7 @@
               ],
               "src": "1521:9:96"
             },
-            "scope": 11869,
+            "scope": 11875,
             "src": "1455:138:96",
             "stateMutability": "view",
             "virtual": true,
@@ -8759,7 +8759,7 @@
           },
           {
             "body": {
-              "id": 11867,
+              "id": 11873,
               "nodeType": "Block",
               "src": "2043:61:96",
               "statements": [
@@ -8767,11 +8767,11 @@
                   "expression": {
                     "arguments": [
                       {
-                        "id": 11862,
+                        "id": 11868,
                         "name": "beacon",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 11856,
+                        "referencedDeclaration": 11862,
                         "src": "2077:6:96",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -8779,11 +8779,11 @@
                         }
                       },
                       {
-                        "id": 11863,
+                        "id": 11869,
                         "name": "data",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 11858,
+                        "referencedDeclaration": 11864,
                         "src": "2085:4:96",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bytes_memory_ptr",
@@ -8792,7 +8792,7 @@
                       },
                       {
                         "hexValue": "66616c7365",
-                        "id": 11864,
+                        "id": 11870,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -8822,18 +8822,18 @@
                           "typeString": "bool"
                         }
                       ],
-                      "id": 11861,
+                      "id": 11867,
                       "name": "_upgradeBeaconToAndCall",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 11609,
+                      "referencedDeclaration": 11615,
                       "src": "2053:23:96",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_address_$_t_bytes_memory_ptr_$_t_bool_$returns$__$",
                         "typeString": "function (address,bytes memory,bool)"
                       }
                     },
-                    "id": 11865,
+                    "id": 11871,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -8848,19 +8848,19 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 11866,
+                  "id": 11872,
                   "nodeType": "ExpressionStatement",
                   "src": "2053:44:96"
                 }
               ]
             },
             "documentation": {
-              "id": 11854,
+              "id": 11860,
               "nodeType": "StructuredDocumentation",
               "src": "1599:367:96",
               "text": " @dev Changes the proxy to use a new beacon. Deprecated: see {_upgradeBeaconToAndCall}.\n If `data` is nonempty, it's used as data in a delegate call to the implementation returned by the beacon.\n Requirements:\n - `beacon` must be a contract.\n - The implementation returned by `beacon` must be a contract."
             },
-            "id": 11868,
+            "id": 11874,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -8868,17 +8868,17 @@
             "nameLocation": "1980:10:96",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 11859,
+              "id": 11865,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 11856,
+                  "id": 11862,
                   "mutability": "mutable",
                   "name": "beacon",
                   "nameLocation": "1999:6:96",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11868,
+                  "scope": 11874,
                   "src": "1991:14:96",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -8887,7 +8887,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 11855,
+                    "id": 11861,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1991:7:96",
@@ -8901,12 +8901,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 11858,
+                  "id": 11864,
                   "mutability": "mutable",
                   "name": "data",
                   "nameLocation": "2020:4:96",
                   "nodeType": "VariableDeclaration",
-                  "scope": 11868,
+                  "scope": 11874,
                   "src": "2007:17:96",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -8915,7 +8915,7 @@
                     "typeString": "bytes"
                   },
                   "typeName": {
-                    "id": 11857,
+                    "id": 11863,
                     "name": "bytes",
                     "nodeType": "ElementaryTypeName",
                     "src": "2007:5:96",
@@ -8930,19 +8930,19 @@
               "src": "1990:35:96"
             },
             "returnParameters": {
-              "id": 11860,
+              "id": 11866,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "2043:0:96"
             },
-            "scope": 11869,
+            "scope": 11875,
             "src": "1971:133:96",
             "stateMutability": "nonpayable",
             "virtual": true,
             "visibility": "internal"
           }
         ],
-        "scope": 11870,
+        "scope": 11876,
         "src": "500:1606:96",
         "usedErrors": []
       }
@@ -8955,7 +8955,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.1",
-  "updatedAt": "2021-07-06T14:02:46.039Z",
+  "updatedAt": "2021-07-12T17:20:01.734Z",
   "devdoc": {
     "details": "This contract implements a proxy that gets the implementation address for each call from a {UpgradeableBeacon}. The beacon address is stored in storage slot `uint256(keccak256('eip1967.proxy.beacon')) - 1`, so that it doesn't conflict with the storage layout of the implementation behind the proxy. _Available since v3.4._",
     "kind": "dev",

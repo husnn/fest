@@ -19,7 +19,7 @@ import ResponsiveTabs from '../../ui/ResponsiveTabs';
 import { getDisplayName, getProfileUrl, getTokenOwnershipUrl, getTokenUrl } from '../../utils';
 
 export default function ProfilePage() {
-  useHeader(['create-token', 'profile']);
+  useHeader(['create-token', 'wallet', 'profile']);
 
   const router = useRouter();
 
