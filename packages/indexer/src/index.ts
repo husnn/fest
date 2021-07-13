@@ -10,10 +10,10 @@ import Postgres, {
 
 import { ethConfig, postgresConfig, redisConfig } from './config';
 import EthereumListener from './events/ethereum/EthereumListener';
-import TokenBuy, { TokenBuyProps } from './jobs/TokenBuy';
-import TokenListForSale, { TokenListForSaleProps } from './jobs/TokenListForSale';
-import TokenMint, { TokenMintProps } from './jobs/TokenMint';
-import TokenTransfer, { TokenTransferProps } from './jobs/TokenTransfer';
+import TokenBuy, { TokenBuyJob } from './jobs/TokenBuy';
+import TokenListForSale, { TokenListForSaleJob } from './jobs/TokenListForSale';
+import TokenMint, { TokenMintJob } from './jobs/TokenMint';
+import TokenTransfer, { TokenTransferJob } from './jobs/TokenTransfer';
 
 const redisClient = redis.createClient(redisConfig.url);
 
@@ -26,28 +26,29 @@ const transferQueue = new Queue('TOKENS_TRANSFERRED', config);
 
 const tokenTradeQueue = new Queue('TOKEN_TRADES', config);
 
-const provider = new Web3.providers.WebsocketProvider(ethConfig.provider);
+const provider = process.env.ETH_PROVIDER_WSS
+  ? new Web3.providers.WebsocketProvider(ethConfig.provider)
+  : new Web3.providers.HttpProvider(ethConfig.provider);
+
 const web3 = new Web3(provider);
 
 const ethereumListener = new EthereumListener(web3, redisClient);
 
-ethereumListener.on('token-mint', (event: TokenMintProps) => {
+ethereumListener.on('token-mint', (event: TokenMintJob) => {
   mintQueue.createJob(event).save();
 });
 
-ethereumListener.on('token-transfer', (event: TokenTransferProps) => {
+ethereumListener.on('token-transfer', (event: TokenTransferJob) => {
   transferQueue.createJob(event).save();
 });
 
-ethereumListener.on('market-list', (event: TokenListForSaleProps) => {
+ethereumListener.on('market-list', (event: TokenListForSaleJob) => {
   tokenTradeQueue.createJob(event).save();
 });
 
-ethereumListener.on('market-buy', (event: TokenBuyProps) => {
+ethereumListener.on('market-buy', (event: TokenBuyJob) => {
   tokenTradeQueue.createJob(event).save();
 });
-
-console.log('Listening to events on the Ethereum network.');
 
 Postgres.init(postgresConfig).then(() => {
   console.log('Connected to database.');
@@ -57,28 +58,28 @@ Postgres.init(postgresConfig).then(() => {
   const walletRepository = new WalletRepository();
   const ownershipRepository = new TokenOwnershipRepository();
 
-  mintQueue.process(async (job: Queue.Job<TokenMintProps>) => {
+  mintQueue.process(async (job: Queue.Job<TokenMintJob>) => {
     const task = new TokenMint(job.data);
     await task.execute(tokenRepository, walletRepository, ownershipRepository);
   });
 
-  transferQueue.process(async (job: Queue.Job<TokenTransferProps>) => {
+  transferQueue.process(async (job: Queue.Job<TokenTransferJob>) => {
     const task = new TokenTransfer(job.data);
     return task.execute(tokenRepository, walletRepository, ownershipRepository);
   });
 
   tokenTradeQueue.process(
-    async (job: Queue.Job<TokenListForSaleProps | TokenBuyProps>, done) => {
-      if ((job.data as TokenListForSaleProps).seller !== undefined) {
+    async (job: Queue.Job<TokenListForSaleJob | TokenBuyJob>, done) => {
+      if ((job.data as TokenListForSaleJob).seller !== undefined) {
         // Sell event
-        return new TokenListForSale(job.data as TokenListForSaleProps).execute(
+        return new TokenListForSale(job.data as TokenListForSaleJob).execute(
           tokenRepository,
           walletRepository,
           tokenTradeRepository
         );
-      } else if ((job.data as TokenBuyProps).buyer !== undefined) {
+      } else if ((job.data as TokenBuyJob).buyer !== undefined) {
         // Buy event
-        return new TokenBuy(job.data as TokenBuyProps).execute(
+        return new TokenBuy(job.data as TokenBuyJob).execute(
           tokenTradeRepository
         );
       }

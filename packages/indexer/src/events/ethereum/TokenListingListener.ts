@@ -1,16 +1,13 @@
-import { Contracts } from '@fanbase/eth-contracts';
 import { Protocol } from '@fanbase/shared';
 
-import { TokenListForSaleProps } from '../../../jobs/TokenListForSale';
+import { TokenListForSaleJob } from '../../jobs/TokenListForSale';
+import EventListener from './EventListener';
 
-export default async (callback): Promise<void> => {
-  const contract = Contracts.Market.get();
+export class TokenListingListener extends EventListener<TokenListForSaleJob> {
+  EVENT_NAME = 'ListForSale';
 
-  contract.events.ListForSale().on('data', (event: any) => {
+  prepareJob(event: any): TokenListForSaleJob {
     const { transactionHash, address, returnValues } = event;
-
-    console.log('List for sale...');
-    console.log(returnValues);
 
     const {
       tradeId,
@@ -22,7 +19,7 @@ export default async (callback): Promise<void> => {
       price
     } = returnValues;
 
-    const job: TokenListForSaleProps = {
+    const job: TokenListForSaleJob = {
       protocol: Protocol.ETHEREUM,
       tx: transactionHash,
       contract: address,
@@ -35,6 +32,8 @@ export default async (callback): Promise<void> => {
       price
     };
 
-    callback(job);
-  });
-};
+    return job;
+  }
+}
+
+export default TokenListingListener;

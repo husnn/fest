@@ -3,7 +3,7 @@ import { Protocol, TokenTradeStatus } from '@fanbase/shared';
 
 import Job from './Job';
 
-export type TokenBuyProps = {
+export type TokenBuyJob = {
   protocol: Protocol;
   tx: string;
   contract: string;
@@ -20,7 +20,7 @@ export default class TokenBuy extends Job {
   private buyer: string;
   private quantity: number;
 
-  constructor(props: TokenBuyProps) {
+  constructor(props: TokenBuyJob) {
     super();
 
     Object.assign(this, props);

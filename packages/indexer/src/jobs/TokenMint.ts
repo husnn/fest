@@ -6,7 +6,7 @@ import { decryptText, Protocol } from '@fanbase/shared';
 
 import Job from './Job';
 
-export type TokenMintProps = {
+export type TokenMintJob = {
   protocol: Protocol;
   tx: string;
   contract: string;
@@ -25,7 +25,7 @@ export default class TokenMint extends Job {
   private supply: number;
   private data: string;
 
-  constructor(props: TokenMintProps) {
+  constructor(props: TokenMintJob) {
     super();
 
     Object.assign(this, props);

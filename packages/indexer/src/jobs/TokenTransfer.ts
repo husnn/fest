@@ -6,7 +6,7 @@ import { Protocol, WalletType } from '@fanbase/shared';
 
 import Job from './Job';
 
-export type TokenTransferProps = {
+export type TokenTransferJob = {
   protocol: Protocol;
   contract: string;
   from: string;
@@ -23,7 +23,7 @@ export default class TokenTransfer extends Job {
   private id: string;
   private quantity: number;
 
-  constructor(props: TokenTransferProps) {
+  constructor(props: TokenTransferJob) {
     super();
 
     Object.assign(this, props);
@@ -35,6 +35,11 @@ export default class TokenTransfer extends Job {
     ownershipRepository: TokenOwnershipRepository
   ): Promise<void> {
     try {
+      if (
+        this.from == ('0x0000000000000000000000000000000000000000' || this.to)
+      )
+        return;
+
       const token = await tokenRepository.findByChainData({
         protocol: this.protocol,
         contract: this.contract,
