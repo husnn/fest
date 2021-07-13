@@ -112,7 +112,7 @@ type Currency = {
 };
 
 export const WalletPage = () => {
-  const { currentUser } = useAuthentication();
+  const { currentUser } = useAuthentication(true);
 
   const [currencies] = useState<Currency[]>([
     {
@@ -235,25 +235,23 @@ export const WalletPage = () => {
               </CurrencyTab>
             ))}
           </CurrencySelection>
-          {currencySelected && (
-            <Balance>
-              <p>Your balance</p>
-              <h1>{currencySelected.balance || '0.00'}</h1>
-              <p>{currencySelected.symbol}</p>
-              <BalanceActions>
-                <Button
-                  size="small"
-                  color="secondary"
-                  onClick={() => sendFunds()}
-                >
-                  Send
-                </Button>
-                <Button size="small" color="primary" onClick={() => addFunds()}>
-                  Add
-                </Button>
-              </BalanceActions>
-            </Balance>
-          )}
+          <Balance>
+            <p>Your balance</p>
+            <h1>{currencySelected?.balance || '0.00'}</h1>
+            <p>{currencySelected?.symbol}</p>
+            <BalanceActions>
+              <Button
+                size="small"
+                color="secondary"
+                onClick={() => sendFunds()}
+              >
+                Send
+              </Button>
+              <Button size="small" color="primary" onClick={() => addFunds()}>
+                Add
+              </Button>
+            </BalanceActions>
+          </Balance>
         </BalanceContainer>
       </WalletContainer>
       {/* <TransactionContainer>

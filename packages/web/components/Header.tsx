@@ -216,7 +216,10 @@ const Header: React.FC<HeaderProps> = () => {
             <HeaderLink link={singleLink} />
           ))}
       </HeaderWrapper>
-      <MobileMenu open={mobileOpen && visibleCount > 0} links={links} />
+      <MobileMenu
+        open={mobileOpen && !singleLink && visibleCount > 0}
+        links={links}
+      />
     </HeaderContainer>
   );
 };
