@@ -7,6 +7,8 @@ import {
 } from '@fanbase/eth-transactions';
 import { TokenDTO } from '@fanbase/shared';
 
+import { waitFor } from '../../utils';
+
 export default class EthereumClient {
   private isInitialized = false;
 
@@ -266,7 +268,14 @@ export default class EthereumClient {
     });
   }
 
-  async awaitTxConfirmation(hash: string): Promise<boolean> {
-    return true;
+  checkTxConfirmation(hash: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      setInterval(() => {
+        this.web3.eth.getTransactionReceipt(hash, (err, receipt) => {
+          if (err) reject();
+          if (receipt) resolve();
+        });
+      }, 5000);
+    });
   }
 }

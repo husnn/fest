@@ -113,8 +113,11 @@ export default class ApiClient {
   async mintToken(
     token: string,
     protocol = Protocol.ETHEREUM
-  ): Promise<MintTokenResponse> {
-    return this.client.request<MintTokenResponse, MintTokenRequest>({
+  ): Promise<string> {
+    const response = await this.client.request<
+      MintTokenResponse,
+      MintTokenRequest
+    >({
       method: 'POST',
       endpoint: `/tokens/${token}/mint`,
       authenticated: 'required',
@@ -122,6 +125,8 @@ export default class ApiClient {
         protocol
       }
     });
+
+    return response.txHash;
   }
 
   async approveMint(

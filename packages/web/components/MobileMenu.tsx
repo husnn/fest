@@ -31,7 +31,7 @@ const MenuLink = styled.div<{ indentLevel?: number }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  ${(props) => `padding: 10px ${20 + 10 * props.indentLevel}px`};
+  ${(props) => `padding: 15px ${20 + 10 * props.indentLevel}px`};
 
   a {
     font-weight: bold;

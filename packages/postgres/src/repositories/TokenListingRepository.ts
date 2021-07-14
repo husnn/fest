@@ -1,21 +1,21 @@
-import { TokenTrade, TokenTradeRepository as ITokenTradeRepository } from '@fanbase/core';
+import { TokenListing, TokenListingRepository as ITokenListingRepository } from '@fanbase/core';
 import { Protocol } from '@fanbase/shared';
 
-import TokenTradeSchema from '../schemas/TokenTradeSchema';
+import TokenListingSchema from '../schemas/TokenListingSchema';
 import Repository from './Repository';
 
-export class TokenTradeRepository
-  extends Repository<TokenTrade>
-  implements ITokenTradeRepository
+export class TokenListingRepository
+  extends Repository<TokenListing>
+  implements ITokenListingRepository
 {
   constructor() {
-    super(TokenTradeSchema);
+    super(TokenListingSchema);
   }
 
   async findByChainData(
     protocol: Protocol,
     data: { contract: string; id: string }
-  ): Promise<TokenTrade> {
+  ): Promise<TokenListing> {
     const token = await this.db
       .createQueryBuilder('trade')
       .where('trade.protocol = :protocol', { protocol })
@@ -26,4 +26,4 @@ export class TokenTradeRepository
   }
 }
 
-export default TokenTradeRepository;
+export default TokenListingRepository;

@@ -1,5 +1,7 @@
-import { TokenRepository, TokenTrade, TokenTradeRepository, WalletRepository } from '@fanbase/core';
-import { Protocol, TokenTradeStatus } from '@fanbase/shared';
+import {
+    TokenListing, TokenListingRepository, TokenRepository, WalletRepository
+} from '@fanbase/core';
+import { Protocol, TokenListingStatus } from '@fanbase/shared';
 
 import Job from './Job';
 
@@ -37,7 +39,7 @@ export default class TokenListForSale extends Job {
   async execute(
     tokenRepository: TokenRepository,
     walletRepository: WalletRepository,
-    tokenTradeRepository: TokenTradeRepository
+    tokenTradeRepository: TokenListingRepository
   ): Promise<void> {
     try {
       const token = await tokenRepository.findByChainData({
@@ -51,9 +53,9 @@ export default class TokenListForSale extends Job {
         this.seller
       );
 
-      const trade = new TokenTrade({
+      const trade = new TokenListing({
         protocol: this.protocol,
-        sellerWalletId: wallet.id,
+        sellerId: wallet.ownerId,
         tokenId: token.id,
         quantity: this.quantity,
         available: this.quantity,
@@ -64,7 +66,7 @@ export default class TokenListForSale extends Job {
           id: this.id,
           tx: this.tx
         },
-        status: TokenTradeStatus.Active
+        status: TokenListingStatus.Active
       });
 
       await tokenTradeRepository.create(trade);

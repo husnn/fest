@@ -1,10 +1,10 @@
 import { EntitySchema } from 'typeorm';
 
-import { TokenTrade } from '@fanbase/core';
-import { Protocol, TokenTradeStatus } from '@fanbase/shared';
+import { TokenListing } from '@fanbase/core';
+import { Protocol, TokenListingStatus } from '@fanbase/shared';
 
-const TokenTradeSchema = new EntitySchema<TokenTrade>({
-  name: 'token_trade',
+const TokenListingSchema = new EntitySchema<TokenListing>({
+  name: 'token_listing',
   columns: {
     id: {
       type: 'uuid',
@@ -20,15 +20,13 @@ const TokenTradeSchema = new EntitySchema<TokenTrade>({
       type: 'enum',
       enum: Protocol
     },
-    sellerWalletId: {
+    sellerId: {
       type: 'uuid',
-      name: 'seller_wallet_id',
-      nullable: true
+      name: 'seller_id'
     },
     tokenId: {
       type: 'uuid',
-      name: 'token_id',
-      nullable: true
+      name: 'token_id'
     },
     quantity: {
       type: 'integer',
@@ -50,15 +48,15 @@ const TokenTradeSchema = new EntitySchema<TokenTrade>({
     },
     status: {
       type: 'enum',
-      enum: TokenTradeStatus
+      enum: TokenListingStatus
     }
   },
   relations: {
-    sellerWallet: {
+    seller: {
       type: 'many-to-one',
-      target: 'wallet',
+      target: 'user',
       joinColumn: {
-        name: 'seller_wallet_id',
+        name: 'seller_id',
         referencedColumnName: 'id'
       }
     },
@@ -73,4 +71,4 @@ const TokenTradeSchema = new EntitySchema<TokenTrade>({
   }
 });
 
-export default TokenTradeSchema;
+export default TokenListingSchema;

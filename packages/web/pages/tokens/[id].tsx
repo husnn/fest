@@ -73,7 +73,7 @@ const Avatar = styled.div`
 
 const TokenActions = styled.div`
   width: 100%;
-  margin-top: 20px;
+  margin-top: 30px;
   // background-color: #fafafa;
   display: flex;
   flex-direction: column;
@@ -157,15 +157,20 @@ export default function TokenPage() {
       setExecuting(true);
 
       try {
+        let hash;
+
         if (currentUser.wallet.type == WalletType.INTERNAL) {
-          await ApiClient.instance?.mintToken(token.id, Protocol.ETHEREUM);
+          hash = await ApiClient.instance?.mintToken(
+            token.id,
+            Protocol.ETHEREUM
+          );
         } else {
           const approval = await ApiClient.instance.approveMint(
             token.id,
             Protocol.ETHEREUM
           );
 
-          await EthereumClient.instance?.mintToken(
+          hash = await EthereumClient.instance?.mintToken(
             token,
             approval.data,
             approval.expiry,
@@ -174,8 +179,11 @@ export default function TokenPage() {
           );
         }
 
-        onExecuted();
         setExecuted(true);
+
+        await EthereumClient.instance.checkTxConfirmation(hash);
+
+        onExecuted();
       } catch (err) {
         console.log(err);
       }
@@ -300,11 +308,8 @@ export default function TokenPage() {
         <MintToken
           onExecuted={() => {
             setTimeout(() => {
-              setMinting(false);
-              setTimeout(() => {
-                router.reload();
-              }, 500);
-            }, 2000);
+              router.reload();
+            }, 1000);
           }}
         />
       )}
@@ -316,7 +321,15 @@ export default function TokenPage() {
           title="List your token for sale"
           cancel="Cancel"
         >
-          <CreateTokenListing token={token} ownership={ownership} />
+          <CreateTokenListing
+            token={token}
+            ownership={ownership}
+            onSuccess={() => {
+              setTimeout(() => {
+                router.reload();
+              }, 1000);
+            }}
+          />
         </Modal>
       )}
 
@@ -366,7 +379,9 @@ export default function TokenPage() {
               </div>
             </TokenCreatorCard>
 
-            {token.description && <p>{token.description}</p>}
+            {token.description && (
+              <p style={{ whiteSpace: 'pre-line' }}>{token.description}</p>
+            )}
 
             {token?.creatorId == currentUser?.id && !token?.minted && (
               <TokenActions>

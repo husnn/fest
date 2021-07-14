@@ -37,3 +37,6 @@ export const getDisplayName = (user?: UserDTO, wallet?: WalletDTO): string =>
       user.username ||
       (user.wallet && truncateAddress(user.wallet.address)))) ||
   (wallet && truncateAddress(wallet.address));
+
+export const waitFor = (ms: number): Promise<void> =>
+  new Promise((res) => setTimeout(res, ms));

@@ -1,4 +1,4 @@
-import { decryptText, encryptText, Protocol, WalletType } from '@fanbase/shared';
+import { encryptText, Protocol, WalletType } from '@fanbase/shared';
 
 import User from './User';
 

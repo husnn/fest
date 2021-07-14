@@ -1,5 +1,5 @@
-import { TokenTradeRepository } from '@fanbase/core';
-import { Protocol, TokenTradeStatus } from '@fanbase/shared';
+import { TokenListingRepository } from '@fanbase/core';
+import { Protocol, TokenListingStatus } from '@fanbase/shared';
 
 import Job from './Job';
 
@@ -26,19 +26,22 @@ export default class TokenBuy extends Job {
     Object.assign(this, props);
   }
 
-  async execute(tokenTradeRepository: TokenTradeRepository): Promise<void> {
+  async execute(tokenListingRepository: TokenListingRepository): Promise<void> {
     try {
-      const trade = await tokenTradeRepository.findByChainData(this.protocol, {
-        contract: this.contract,
-        id: this.id
-      });
+      const trade = await tokenListingRepository.findByChainData(
+        this.protocol,
+        {
+          contract: this.contract,
+          id: this.id
+        }
+      );
 
       const available =
         this.quantity < trade.available ? trade.available - this.quantity : 0;
 
-      if (available == 0) trade.status = TokenTradeStatus.Sold;
+      if (available == 0) trade.status = TokenListingStatus.Sold;
 
-      await tokenTradeRepository.update(trade);
+      await tokenListingRepository.update(trade);
     } catch (err) {
       console.log(err);
     }

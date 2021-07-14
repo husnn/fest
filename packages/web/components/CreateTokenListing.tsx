@@ -7,13 +7,14 @@ import { TokenDTO, TokenOwnershipDTO, WalletType } from '@fanbase/shared';
 
 import ApiClient from '../modules/api/ApiClient';
 import useAuthentication from '../modules/auth/useAuthentication';
+import EthereumClient from '../modules/ethereum/EthereumClient';
 import useEthereum from '../modules/ethereum/useEthereum';
 import { Button, FormInput, TextInput } from '../ui';
 
 type CreateTokenListingProps = {
   token: TokenDTO;
   ownership: TokenOwnershipDTO;
-  onSuccess?: (txHash: string) => void;
+  onSuccess?: () => void;
 };
 
 const Container = styled.div`
@@ -82,7 +83,9 @@ export const CreateTokenListing = ({
       );
     }
 
-    onSuccess(txHash);
+    await EthereumClient.instance.checkTxConfirmation(txHash);
+
+    onSuccess();
   };
 
   return (

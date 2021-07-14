@@ -1,17 +1,19 @@
 import OAuthSchema from './OAuthSchema';
+import TokenListingSchema from './TokenListingSchema';
 import TokenOfferSchema from './TokenOfferSchema';
+import TokenOrderSchema from './TokenOrderSchema';
 import TokenOwnershipSchema from './TokenOwnershipSchema';
 import TokenSchema from './TokenSchema';
-import TokenTradeSchema from './TokenTradeSchema';
 import UserSchema from './UserSchema';
 import WalletSchema from './WalletSchema';
 
 export default [
-  UserSchema,
-  WalletSchema,
-  TokenSchema,
-  TokenTradeSchema,
   OAuthSchema,
+  TokenListingSchema,
+  TokenOfferSchema,
+  TokenOrderSchema,
   TokenOwnershipSchema,
-  TokenOfferSchema
+  TokenSchema,
+  UserSchema,
+  WalletSchema
 ];

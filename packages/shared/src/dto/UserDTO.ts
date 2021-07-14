@@ -23,3 +23,5 @@ export class UserDTO implements IUserDTO {
     this.wallet = props.wallet;
   }
 }
+
+export default UserDTO;

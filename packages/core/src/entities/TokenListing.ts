@@ -1,17 +1,17 @@
-import { Protocol, TokenTradeStatus } from '@fanbase/shared';
+import { Protocol, TokenListingStatus } from '@fanbase/shared';
 
 import Token from './Token';
-import Wallet from './Wallet';
+import User from './User';
 
-export class TokenTrade {
+export class TokenListing {
   readonly id: string;
 
   dateCreated: Date;
 
   protocol: Protocol;
 
-  sellerWalletId: string;
-  sellerWallet: Wallet;
+  sellerId: string;
+  seller: User;
 
   tokenId: string;
   token: Token;
@@ -28,11 +28,11 @@ export class TokenTrade {
     tx: string;
   };
 
-  status: TokenTradeStatus;
+  status: TokenListingStatus;
 
-  constructor(data?: Partial<TokenTrade>) {
+  constructor(data?: Partial<TokenListing>) {
     Object.assign(this, data);
   }
 }
 
-export default TokenTrade;
+export default TokenListing;

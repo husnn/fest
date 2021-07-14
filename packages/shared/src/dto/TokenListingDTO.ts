@@ -1,8 +1,10 @@
 import TokenDTO from './TokenDTO';
+import UserDTO from './UserDTO';
 
-export class TokenTradeDTO {
+export class TokenListingDTO {
   readonly id: string;
 
+  seller: UserDTO;
   token: TokenDTO;
 
   quantity: number;
@@ -11,9 +13,9 @@ export class TokenTradeDTO {
   currency: string;
   price: string;
 
-  constructor(data?: Partial<TokenTradeDTO>) {
+  constructor(data?: Partial<TokenListingDTO>) {
     Object.assign(this, data);
   }
 }
 
-export default TokenTradeDTO;
+export default TokenListingDTO;

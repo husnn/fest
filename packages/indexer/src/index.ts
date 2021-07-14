@@ -5,7 +5,7 @@ import redis from 'redis';
 import Web3 from 'web3';
 
 import Postgres, {
-    TokenOwnershipRepository, TokenRepository, TokenTradeRepository, WalletRepository
+    TokenListingRepository, TokenOwnershipRepository, TokenRepository, WalletRepository
 } from '@fanbase/postgres';
 
 import { ethConfig, postgresConfig, redisConfig } from './config';
@@ -54,7 +54,7 @@ Postgres.init(postgresConfig).then(() => {
   console.log('Connected to database.');
 
   const tokenRepository = new TokenRepository();
-  const tokenTradeRepository = new TokenTradeRepository();
+  const tokenTradeRepository = new TokenListingRepository();
   const walletRepository = new WalletRepository();
   const ownershipRepository = new TokenOwnershipRepository();
 
