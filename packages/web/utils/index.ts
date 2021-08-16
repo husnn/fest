@@ -1,3 +1,5 @@
+import Web3 from 'web3';
+
 import { TokenDTO, TokenOwnershipDTO, UserDTO, WalletDTO } from '@fanbase/shared';
 
 export const getTokenUrl = (token?: TokenDTO, id?: string): string =>
@@ -40,3 +42,10 @@ export const getDisplayName = (user?: UserDTO, wallet?: WalletDTO): string =>
 
 export const waitFor = (ms: number): Promise<void> =>
   new Promise((res) => setTimeout(res, ms));
+
+export const getPrice = (contract: string, wei: string) => {
+  return {
+    currency: 'DAI',
+    amount: Web3.utils.fromWei(wei)
+  };
+};

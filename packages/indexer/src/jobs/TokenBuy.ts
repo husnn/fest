@@ -12,32 +12,25 @@ export type TokenBuyJob = {
   quantity: number;
 };
 
-export default class TokenBuy extends Job {
-  private protocol: Protocol;
-  private tx: string;
-  private contract: string;
-  private id: string;
-  private buyer: string;
-  private quantity: number;
-
+export default class TokenBuy extends Job<TokenBuyJob> {
   constructor(props: TokenBuyJob) {
-    super();
-
-    Object.assign(this, props);
+    super(props);
   }
 
   async execute(tokenListingRepository: TokenListingRepository): Promise<void> {
     try {
       const trade = await tokenListingRepository.findByChainData(
-        this.protocol,
+        this.props.protocol,
         {
-          contract: this.contract,
-          id: this.id
+          contract: this.props.contract,
+          id: this.props.id
         }
       );
 
       const available =
-        this.quantity < trade.available ? trade.available - this.quantity : 0;
+        this.props.quantity < trade.available
+          ? trade.available - this.props.quantity
+          : 0;
 
       if (available == 0) trade.status = TokenListingStatus.Sold;
 

@@ -1,7 +1,7 @@
 import TokenListing from './TokenListing';
 import User from './User';
 
-export class TokenOrder {
+export class TokenTrade {
   readonly id: string;
 
   dateCreated: Date;
@@ -16,11 +16,11 @@ export class TokenOrder {
   tokenListing: TokenListing;
 
   quantity: number;
-  price: number;
+  price: string;
 
-  constructor(data?: Partial<TokenOrder>) {
+  constructor(data?: Partial<TokenTrade>) {
     Object.assign(this, data);
   }
 }
 
-export default TokenOrder;
+export default TokenTrade;

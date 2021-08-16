@@ -1,2 +1,2 @@
-web: yarn serve:$PACKAGE_NAME
+web: yarn serve:api
 worker: yarn serve:indexer

@@ -13,13 +13,16 @@ export class TokenOffer {
   senderId: string;
   sender: User;
 
+  receiverId: string;
+  receiver: User;
+
   ownershipId: string;
   ownership: TokenOwnership;
 
   quantity = 1;
 
   currency: Currency;
-  price: number;
+  price: string;
 
   expiry: Date;
 

@@ -11,6 +11,13 @@ export interface TokenListingRepository extends Repository<TokenListing> {
       id: string;
     }
   ): Promise<TokenListing>;
+
+  findBySeller(
+    seller: string,
+    options: { onlyActive: boolean },
+    count?: number,
+    page?: number
+  ): Promise<{ listings: TokenListing[]; total: number }>;
 }
 
 export default TokenListingRepository;

@@ -15,18 +15,9 @@ export type TokenTransferJob = {
   quantity: number;
 };
 
-export default class TokenTransfer extends Job {
-  private protocol: Protocol;
-  private contract: string;
-  private from: string;
-  private to: string;
-  private id: string;
-  private quantity: number;
-
+export default class TokenTransfer extends Job<TokenTransferJob> {
   constructor(props: TokenTransferJob) {
-    super();
-
-    Object.assign(this, props);
+    super(props);
   }
 
   async execute(
@@ -36,21 +27,22 @@ export default class TokenTransfer extends Job {
   ): Promise<void> {
     try {
       if (
-        this.from == ('0x0000000000000000000000000000000000000000' || this.to)
+        this.props.from ==
+        ('0x0000000000000000000000000000000000000000' || this.props.to)
       )
         return;
 
       const token = await tokenRepository.findByChainData({
-        protocol: this.protocol,
-        contract: this.contract,
-        id: this.id
+        protocol: this.props.protocol,
+        contract: this.props.contract,
+        id: this.props.id
       });
 
       if (!token) return;
 
       const fromWallet = await walletRepository.findByAddress(
-        this.protocol,
-        this.from
+        this.props.protocol,
+        this.props.from
       );
 
       if (fromWallet) {
@@ -59,12 +51,12 @@ export default class TokenTransfer extends Job {
           token.id
         );
 
-        console.log(`From ownership: \n${JSON.stringify(fromOwnership)}`);
+        // console.log(`From ownership: \n${JSON.stringify(fromOwnership)}`);
 
         if (fromOwnership) {
           const newQuantity =
-            this.quantity < fromOwnership.quantity
-              ? fromOwnership.quantity - this.quantity
+            this.props.quantity < fromOwnership.quantity
+              ? fromOwnership.quantity - this.props.quantity
               : 0;
 
           fromOwnership.quantity = newQuantity;
@@ -73,16 +65,16 @@ export default class TokenTransfer extends Job {
       }
 
       let toWallet = await walletRepository.findByAddress(
-        this.protocol,
-        this.to
+        this.props.protocol,
+        this.props.to
       );
 
       if (!toWallet) {
         toWallet = new Wallet({
           id: generateWalletId(),
           type: WalletType.EXTERNAL,
-          protocol: this.protocol,
-          address: this.to
+          protocol: this.props.protocol,
+          address: this.props.to
         });
 
         await walletRepository.create(toWallet);
@@ -91,7 +83,7 @@ export default class TokenTransfer extends Job {
           id: generateTokenOwnershipId(),
           walletId: toWallet.id,
           tokenId: token.id,
-          quantity: this.quantity
+          quantity: this.props.quantity
         });
 
         await ownershipRepository.create(toOwnership);
@@ -106,15 +98,15 @@ export default class TokenTransfer extends Job {
             id: generateTokenOwnershipId(),
             walletId: toWallet.id,
             tokenId: token.id,
-            quantity: this.quantity
+            quantity: this.props.quantity
           });
         } else {
-          toOwnership.quantity += this.quantity;
+          toOwnership.quantity += this.props.quantity;
         }
 
         await ownershipRepository.update(toOwnership);
 
-        console.log(`To ownership: \n${JSON.stringify(toOwnership)}`);
+        // console.log(`To ownership: \n${JSON.stringify(toOwnership)}`);
       }
     } catch (err) {
       console.log(err);

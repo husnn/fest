@@ -161,11 +161,21 @@ export const CreateTokenListing = ({
             </ListingInfo>
             {currentUser.wallet.type == WalletType.EXTERNAL &&
             !marketApproved ? (
-              <Button type="submit" color="secondary" disabled={isSubmitting}>
+              <Button
+                type="submit"
+                color="secondary"
+                disabled={isSubmitting}
+                loading={isSubmitting}
+              >
                 Approve market
               </Button>
             ) : (
-              <Button type="submit" color="primary" disabled={isSubmitting}>
+              <Button
+                type="submit"
+                color="primary"
+                disabled={isSubmitting}
+                loading={isSubmitting}
+              >
                 List for sale
               </Button>
             )}

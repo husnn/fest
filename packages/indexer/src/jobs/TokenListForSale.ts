@@ -18,22 +18,9 @@ export type TokenListForSaleJob = {
   price: string;
 };
 
-export default class TokenListForSale extends Job {
-  private protocol: Protocol;
-  private tx: string;
-  private contract: string;
-  private id: string;
-  private seller: string;
-  private token: string;
-  private tokenId: string;
-  private quantity: number;
-  private currency: string;
-  private price: string;
-
+export default class TokenListForSale extends Job<TokenListForSaleJob> {
   constructor(props: TokenListForSaleJob) {
-    super();
-
-    Object.assign(this, props);
+    super(props);
   }
 
   async execute(
@@ -43,28 +30,28 @@ export default class TokenListForSale extends Job {
   ): Promise<void> {
     try {
       const token = await tokenRepository.findByChainData({
-        protocol: this.protocol,
-        contract: this.token,
-        id: this.tokenId
+        protocol: this.props.protocol,
+        contract: this.props.token,
+        id: this.props.tokenId
       });
 
       const wallet = await walletRepository.findByAddress(
-        this.protocol,
-        this.seller
+        this.props.protocol,
+        this.props.seller
       );
 
       const trade = new TokenListing({
-        protocol: this.protocol,
+        protocol: this.props.protocol,
         sellerId: wallet.ownerId,
         tokenId: token.id,
-        quantity: this.quantity,
-        available: this.quantity,
-        currency: this.currency,
-        price: this.price,
+        quantity: this.props.quantity,
+        available: this.props.quantity,
+        currency: this.props.currency,
+        price: this.props.price,
         chain: {
-          contract: this.contract,
-          id: this.id,
-          tx: this.tx
+          contract: this.props.contract,
+          id: this.props.id,
+          tx: this.props.tx
         },
         status: TokenListingStatus.Active
       });

@@ -4,7 +4,7 @@ import React from 'react';
 
 import { css, Global } from '@emotion/react';
 import styled from '@emotion/styled';
-import UserInfoSchema from '@fanbase/shared/src/validation/UserInfoSchema';
+import { UserInfoSchema } from '@fanbase/shared';
 
 import { GoogleButton } from '../components';
 import ApiClient from '../modules/api/ApiClient';

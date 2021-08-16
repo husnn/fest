@@ -7,7 +7,7 @@ import GoogleController from '../controllers/GoogleController';
 import authMiddleware from '../middleware/authMiddleware';
 import GoogleService from '../services/GoogleService';
 
-export default function init (router: Router) {
+export default function init(router: Router) {
   const googleService = new GoogleService(googleConfig);
   const oAuthRepository = new OAuthRepository();
   const googleController = new GoogleController(oAuthRepository, googleService);

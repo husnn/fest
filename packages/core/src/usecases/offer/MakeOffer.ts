@@ -2,7 +2,7 @@ import { Currency } from '@fanbase/shared';
 
 import UseCase from '../../base/UseCase';
 import OfferReceivedEmail from '../../emails/OfferReceivedEmail';
-import TokenOffer from '../../entities/TokenOffer';
+import TokenTrade from '../../entities/TokenOffer';
 import { TokenOwnershipRepository, UserRepository, WalletRepository } from '../../repositories';
 import TokenOfferRepository from '../../repositories/TokenOfferRepository';
 import Result from '../../Result';
@@ -13,7 +13,7 @@ type MakeOfferInput = {
   ownership: string;
   quantity: number;
   currency: Currency;
-  price: number;
+  price: string;
   signature: string;
 };
 
@@ -56,7 +56,7 @@ export class MakeOffer extends UseCase<MakeOfferInput, MakeOfferOutput> {
     // TODO: Check buyer's balance
     // TODO: Verify signature
 
-    const offer = new TokenOffer({
+    const offer = new TokenTrade({
       senderId: data.buyer,
       ownershipId: data.ownership,
       quantity: data.quantity,

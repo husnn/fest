@@ -5,10 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { setTimeout } from 'timers';
 
 import styled from '@emotion/styled';
-import { Contracts } from '@fanbase/eth-contracts';
-import {
-    getExpiryDate, Protocol, randomNumericString, TokenDTO, TokenOwnershipDTO, WalletType
-} from '@fanbase/shared';
+import { Protocol, TokenDTO, TokenOwnershipDTO, WalletType } from '@fanbase/shared';
 
 import CreateTokenListing from '../../components/CreateTokenListing';
 import TokenHolders from '../../components/TokenHolders';
@@ -50,7 +47,7 @@ const TokenHeading = styled.div`
 
 const TokenCreatorCard = styled.div`
   margin-top: 20px;
-  // padding: 20px 0;
+  padding: 10px 0;
   display: flex;
   align-items: center;
   border-radius: 10px;
@@ -74,7 +71,6 @@ const Avatar = styled.div`
 const TokenActions = styled.div`
   width: 100%;
   margin-top: 30px;
-  // background-color: #fafafa;
   display: flex;
   flex-direction: column;
   border-radius: 30px;
@@ -139,14 +135,7 @@ export default function TokenPage() {
 
   useEffect(() => {
     setOwn(currentUser && ownership?.walletId == currentUser?.wallet.id);
-    if (ownership)
-      router.push(
-        {
-          pathname: getTokenOwnershipUrl(ownership)
-        },
-        undefined,
-        { shallow: true }
-      );
+    if (ownership) router.push({ query: { o: ownership.id } });
   }, [token, ownership]);
 
   const MintToken = ({ onExecuted }: { onExecuted: () => void }) => {
@@ -219,83 +208,6 @@ export default function TokenPage() {
         </span>
       </Modal>
     );
-  };
-
-  const giveToken = async () => {
-    EthereumClient.instance?.giveToken(
-      token,
-      '0xFFcf8FDEE72ac11b5c542428B35EEF5769C409f0',
-      1
-    );
-  };
-
-  const listForSale = async () => {
-    const expiry = getExpiryDate().getTime();
-    const salt = randomNumericString();
-
-    console.log(token.chain.creator);
-
-    let hash = await Contracts.Market.get()
-      .methods.getSaleAuthorizationHash(
-        token.chain.creator,
-        token.chain.contract,
-        token.chain.id,
-        1,
-        '0x9561C133DD8580860B6b7E504bC5Aa500f0f06a7',
-        100000,
-        expiry,
-        salt
-      )
-      .call();
-
-    const accounts = await EthereumClient.instance.web3.eth.getAccounts();
-
-    // await Contracts.Market.get()
-    //   .methods.setTokenApproval(token.chain.contract, true)
-    //   .send({ from: accounts[0] });
-
-    // console.log('approved token');
-
-    // await Contracts.Market.get()
-    //   .methods.setCurrencyApproval(
-    //     '0x9561C133DD8580860B6b7E504bC5Aa500f0f06a7',
-    //     true
-    //   )
-    //   .send({ from: accounts[0] });
-
-    // console.log('approved currency');
-
-    hash = EthereumClient.instance.web3.eth.accounts.sign(
-      hash,
-      process.env.ETH_MARKET_ADMIN_PK
-    );
-
-    console.log(hash);
-
-    await Contracts.Token.get()
-      .methods.setApprovalForAll(
-        Contracts.MarketWallet.get().options.address,
-        true
-      )
-      .send({ from: token.chain.creator });
-
-    await Contracts.Market.get()
-      .methods.sell(
-        token.chain.creator,
-        token.chain.contract,
-        token.chain.id,
-        1,
-        '0x9561C133DD8580860B6b7E504bC5Aa500f0f06a7',
-        100000,
-        expiry,
-        salt,
-        hash.signature
-      )
-      .send({
-        from: token.chain.creator
-      });
-
-    console.log('listed token');
   };
 
   return (
@@ -396,19 +308,6 @@ export default function TokenPage() {
                 </Button>
               </TokenActions>
             )}
-
-            {/* {isOwn && (
-              <TokenActions>
-                <Button
-                  size="small"
-                  onClick={() => {
-                    giveToken();
-                  }}
-                >
-                  Give to 0xFF...09f0
-                </Button>
-              </TokenActions>
-            )} */}
           </TokenInfo>
         </TokenContainer>
       )}

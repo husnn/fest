@@ -1,4 +1,7 @@
-import { CurrentUserDTO, TokenDTO, TokenOwnedDTO, TokenOwnershipDTO, UserDTO } from '../dto';
+import {
+    CurrentUserDTO, TokenDTO, TokenListingDTO, TokenOfferDTO, TokenOwnedDTO, TokenOwnershipDTO,
+    TokenTradeDTO, UserDTO
+} from '../dto';
 import { Protocol } from '../enums';
 import TokenFee from './TokenFee';
 import TokenMetadata from './TokenMetadata';
@@ -35,6 +38,32 @@ export interface PaginatedResponse<T = any> extends Response {
 /**
  * Token Market
  */
+
+export interface CancelTokenListingResponse extends Response {
+  txHash: string;
+}
+
+export interface CancelTokenListingRequest extends Request {
+  method: 'POST';
+  authentication: 'required';
+}
+
+export interface GetListingsForTokenResponse extends Response {
+  body: TokenListingDTO[];
+}
+
+export interface GetListingsForTokenRequest extends Request {}
+
+export interface GetTokenMarketSummaryResponse extends Response {
+  offers: TokenOfferDTO[];
+  listings: TokenListingDTO[];
+  trades: TokenTradeDTO[];
+}
+
+export interface GetTokenMarketSummaryRequest extends Request {
+  method: 'GET';
+  authentication: 'required';
+}
 
 export interface ListTokenForSaleResponse extends Response {
   txHash: string;

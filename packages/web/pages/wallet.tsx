@@ -25,7 +25,6 @@ const WalletContainer = styled.div`
 const BalanceContainer = styled.div`
   margin: 0 auto;
   display: grid;
-  align-items: center;
   grid-template-columns: 1fr;
 
   @media screen and (min-width: 500px) {
@@ -75,7 +74,7 @@ const Balance = styled.div`
   border-radius: 30px;
 
   @media screen and (max-width: 500px) {
-    width: 95%;
+    width: 100%;
     margin: 0 auto;
     border-radius: 30px 30px 0 0;
   }
@@ -207,12 +206,12 @@ export const WalletPage = () => {
         See your balances and most recent transactions.
       </p>
       <WalletInfo>
-        <p style={{ textTransform: 'capitalize' }}>
+        {/* <p style={{ textTransform: 'capitalize' }}>
           {currentUser?.wallet.type.toLowerCase()}
-        </p>
+        </p> */}
         <p
           style={{
-            marginTop: 10,
+            // marginTop: 10,
             wordBreak: 'break-all',
             fontWeight: 'bold'
           }}

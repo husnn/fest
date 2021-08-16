@@ -1,6 +1,6 @@
 import { Wallet } from '@fanbase/core';
 
-import { Token } from '../entities';
+import { Token, TokenListing } from '../entities';
 import { Result } from '../Result';
 
 export interface EthereumService {
@@ -37,6 +37,11 @@ export interface EthereumService {
     expiry: number,
     salt: string
   ): Promise<Result<{ signature: string }>>;
+
+  cancelTokenListing(
+    wallet: Wallet,
+    listing: TokenListing
+  ): Promise<Result<string>>;
 
   approveMarket(tokenContract: string, wallet: Wallet): Promise<Result<string>>;
 

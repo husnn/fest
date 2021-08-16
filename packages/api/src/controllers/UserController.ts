@@ -4,8 +4,9 @@ import {
     EditUser, GetTokensCreated, GetTokensOwned, GetUser, TokenOwnershipRepository, TokenRepository,
     UserRepository, WalletRepository
 } from '@fanbase/core';
-import { GetTokensCreatedResponse, GetUserResponse } from '@fanbase/shared';
-import { EditUserResponse, GetTokensOwnedResponse, UserInfo } from '@fanbase/shared/src/types';
+import {
+    EditUserResponse, GetTokensCreatedResponse, GetTokensOwnedResponse, GetUserResponse, UserInfo
+} from '@fanbase/shared';
 
 import { HttpError, HttpResponse, NotFoundError, ValidationError } from '../http';
 

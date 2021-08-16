@@ -351,16 +351,16 @@ contract MarketV1 is AccessControl, Pausable {
     // Mark trade as cancelled
     _trades[tradeId].status = TradeStatus.Cancelled;
 
+    emit Cancel(
+      tradeId,
+      msg.sender
+    );
+
     _wallet.give(
       trade.token,
       msg.sender,
       trade.tokenId,
       trade.available
-    );
-
-    emit Cancel(
-      tradeId,
-      msg.sender
     );
   }
 

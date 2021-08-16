@@ -19,7 +19,7 @@ import ResponsiveTabs from '../../ui/ResponsiveTabs';
 import { getDisplayName, getProfileUrl, getTokenOwnershipUrl, getTokenUrl } from '../../utils';
 
 export default function ProfilePage() {
-  useHeader(['create-token', 'wallet', 'profile']);
+  useHeader(['create-token', 'market', 'wallet', 'profile']);
 
   const router = useRouter();
 
@@ -80,7 +80,11 @@ export default function ProfilePage() {
       const currentUser = getCurrentUser();
 
       if (user) {
-        Object.assign(currentUser, user);
+        for (const key in user) {
+          if (key in currentUser) {
+            currentUser[key] = user[key];
+          }
+        }
 
         setCurrentUser(currentUser);
         saveCurrentUser(currentUser);
@@ -147,14 +151,12 @@ export default function ProfilePage() {
       </div>
 
       <div className={styles.content}>
-        <div className={styles.sidebar}>
-          <ResponsiveTabs
-            tabs={Object.values(TABS)}
-            onTabSelected={(tab: Tab) => {
-              selectTab(tab);
-            }}
-          />
-        </div>
+        <ResponsiveTabs
+          tabs={Object.values(TABS)}
+          onTabSelected={(tab: Tab) => {
+            selectTab(tab);
+          }}
+        />
         <div className={styles.tabContent}>
           {tabSelected?.id == TABS.POSTS.id && (
             <div className={styles.postsTab}></div>

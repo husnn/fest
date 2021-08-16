@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import styled from '@emotion/styled';
 import { CurrentUserDTO, TokenOwnershipDTO } from '@fanbase/shared';
@@ -17,10 +17,9 @@ const HolderRow = styled.div<{
   display: flex;
   flex-direction: column;
   background: #fafafa;
-  opacity: ${(props) => (props.selected ? 1 : '0.85')};
-  border: ${(props) => props.selected && `1px solid #aaa`};
+  opacity: ${(props) => (props.selected ? 1 : '0.5')};
   box-shadow: ${(props) =>
-    props.selected && '2px 2px 8px 4px rgba(0, 0, 0, 0.05);'};
+    props.selected && '0px 5px 10px 5px rgba(0, 0, 0, 0.05);'};
   border-radius: 20px;
   cursor: pointer;
 
@@ -39,8 +38,8 @@ const HolderRow = styled.div<{
 `;
 
 const Avatar = styled.div`
-  width: 50px;
-  height: 50px;
+  min-width: 50px;
+  min-height: 50px;
 `;
 
 const HolderInfo = styled.div`
@@ -70,6 +69,10 @@ const TokenHolders = ({
       ApiClient.instance.getTokenOwnerships(token, count, page)
   );
 
+  useEffect(() => {
+    if (data && !selected) setSelected(data[0]);
+  }, [data]);
+
   return (
     <div>
       {data &&
@@ -82,7 +85,7 @@ const TokenHolders = ({
             }}
           >
             <div>
-              <Avatar className="avatar"></Avatar>
+              <Avatar className="avatar" />
               <HolderInfo style={{ cursor: 'default' }}>
                 <Link
                   href={
@@ -92,7 +95,9 @@ const TokenHolders = ({
                       : null
                   }
                 >
-                  <h4>{getDisplayName(ownership.owner, ownership.wallet)}</h4>
+                  <h4 style={{ wordBreak: 'break-all' }}>
+                    {getDisplayName(ownership.owner, ownership.wallet)}
+                  </h4>
                 </Link>
                 <p className="smaller">{ownership.quantity} owned</p>
               </HolderInfo>

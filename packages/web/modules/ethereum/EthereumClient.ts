@@ -3,11 +3,9 @@ import Web3 from 'web3';
 
 import Contracts from '@fanbase/eth-contracts';
 import {
-    ApproveTokenMarket, ListTokenForSale, MintToken, SignOffer, TransferToken
+    ApproveTokenMarket, CancelTokenListing, ListTokenForSale, MintToken, SignOffer, TransferToken
 } from '@fanbase/eth-transactions';
 import { TokenDTO } from '@fanbase/shared';
-
-import { waitFor } from '../../utils';
 
 export default class EthereumClient {
   private isInitialized = false;
@@ -159,12 +157,7 @@ export default class EthereumClient {
       385000
     );
 
-    return new Promise((resolve, reject) => {
-      this.web3.eth.sendTransaction(tx.txData, (err: Error, hash: string) => {
-        if (!err) resolve(hash);
-        reject();
-      });
-    });
+    return this.sendTransaction(tx);
   }
 
   async checkMarketApproval(address?: string): Promise<boolean> {
@@ -205,12 +198,7 @@ export default class EthereumClient {
       nonce
     );
 
-    return new Promise((resolve, reject) => {
-      this.web3.eth.sendTransaction(tx.txData, (err: Error, hash: string) => {
-        if (!err) resolve(hash);
-        reject();
-      });
-    });
+    return this.sendTransaction(tx);
   }
 
   async approveMarket(): Promise<string> {
@@ -227,12 +215,28 @@ export default class EthereumClient {
       nonce
     );
 
-    return new Promise((resolve, reject) => {
-      this.web3.eth.sendTransaction(tx.txData, (err: Error, hash: string) => {
-        if (!err) resolve(hash);
-        reject();
-      });
-    });
+    return this.sendTransaction(tx);
+  }
+
+  async cancelTokenListing(listingId: string): Promise<string> {
+    const account = await this.getAccount();
+
+    const networkId = await this.web3.eth.net.getId();
+    const chainId = await this.web3.eth.getChainId();
+    const nonce = await this.web3.eth.getTransactionCount(account, 'pending');
+
+    const txData = {
+      tradeId: listingId
+    };
+
+    const tx = new CancelTokenListing(txData).build(
+      account,
+      networkId,
+      chainId,
+      nonce
+    );
+
+    return this.sendTransaction(tx);
   }
 
   async mintToken(
@@ -260,6 +264,10 @@ export default class EthereumClient {
 
     const tx = new MintToken(txData).build(account, networkId, chainId, nonce);
 
+    return this.sendTransaction(tx);
+  }
+
+  async sendTransaction(tx): Promise<string> {
     return new Promise((resolve, reject) => {
       this.web3.eth.sendTransaction(tx.txData, (err: Error, hash: string) => {
         if (!err) resolve(hash);
@@ -270,10 +278,19 @@ export default class EthereumClient {
 
   checkTxConfirmation(hash: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      setInterval(() => {
+      const interval = setInterval(() => {
         this.web3.eth.getTransactionReceipt(hash, (err, receipt) => {
-          if (err) reject();
-          if (receipt) resolve();
+          console.log(receipt);
+
+          if (err) {
+            clearInterval(interval);
+            reject();
+          }
+
+          if (receipt) {
+            clearInterval(interval);
+            resolve();
+          }
         });
       }, 5000);
     });

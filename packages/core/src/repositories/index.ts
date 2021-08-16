@@ -2,7 +2,7 @@ export * from './OAuthRepository';
 export * from './Repository';
 export * from './TokenListingRepository';
 export * from './TokenOfferRepository';
-export * from './TokenOrderRepository';
+export * from './TokenTradeRepository';
 export * from './TokenOwnershipRepository';
 export * from './TokenRepository';
 export * from './UserRepository';

@@ -16,19 +16,9 @@ export type TokenMintJob = {
   data: string;
 };
 
-export default class TokenMint extends Job {
-  private protocol: Protocol;
-  private tx: string;
-  private contract: string;
-  private id: string;
-  private creator: string;
-  private supply: number;
-  private data: string;
-
+export default class TokenMint extends Job<TokenMintJob> {
   constructor(props: TokenMintJob) {
-    super();
-
-    Object.assign(this, props);
+    super(props);
   }
 
   async execute(
@@ -37,7 +27,7 @@ export default class TokenMint extends Job {
     ownershipRepository: TokenOwnershipRepository
   ): Promise<void> {
     try {
-      const tokenId = decryptText(this.data);
+      const tokenId = decryptText(this.props.data);
 
       const token = await tokenRepository.get(tokenId);
 
@@ -45,27 +35,27 @@ export default class TokenMint extends Job {
       if (token.minted) throw new Error('Token has already been minted.');
 
       token.chain = {
-        protocol: this.protocol,
-        contract: this.contract,
+        protocol: this.props.protocol,
+        contract: this.props.contract,
         name: 'Creator',
         symbol: 'CRT',
-        id: this.id,
-        creator: this.creator,
-        transaction: this.tx
+        id: this.props.id,
+        creator: this.props.creator,
+        transaction: this.props.tx
       };
 
       token.minted = true;
 
       const creatorWallet = await walletRepository.findByAddress(
-        this.protocol,
-        this.creator
+        this.props.protocol,
+        this.props.creator
       );
 
       const ownership = new TokenOwnership({
         id: generateTokenOwnershipId(),
         walletId: creatorWallet.id,
         tokenId,
-        quantity: this.supply
+        quantity: this.props.supply
       });
 
       await ownershipRepository.create(ownership);

@@ -94,6 +94,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-node", "virtual:c854f68d252b5f7f0a12089c0a8d378315a510bb72adea1f39c1b0225be487e8e77397c9f31c6e3c75f21f0105f5fcce3119b6da233eea7c419991cac2d6f94e#npm:11.1.0"],
             ["eslint-plugin-promise", "virtual:c854f68d252b5f7f0a12089c0a8d378315a510bb72adea1f39c1b0225be487e8e77397c9f31c6e3c75f21f0105f5fcce3119b6da233eea7c419991cac2d6f94e#npm:5.1.0"],
             ["eslint-plugin-react", "virtual:c854f68d252b5f7f0a12089c0a8d378315a510bb72adea1f39c1b0225be487e8e77397c9f31c6e3c75f21f0105f5fcce3119b6da233eea7c419991cac2d6f94e#npm:7.24.0"],
+            ["kill-port", "npm:1.6.1"],
             ["prettier", "npm:2.3.2"],
             ["typescript", "patch:typescript@npm%3A4.3.5#builtin<compat/typescript>::version=4.3.5&hash=ddfc1b"]
           ],
@@ -14382,6 +14383,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-node", "virtual:c854f68d252b5f7f0a12089c0a8d378315a510bb72adea1f39c1b0225be487e8e77397c9f31c6e3c75f21f0105f5fcce3119b6da233eea7c419991cac2d6f94e#npm:11.1.0"],
             ["eslint-plugin-promise", "virtual:c854f68d252b5f7f0a12089c0a8d378315a510bb72adea1f39c1b0225be487e8e77397c9f31c6e3c75f21f0105f5fcce3119b6da233eea7c419991cac2d6f94e#npm:5.1.0"],
             ["eslint-plugin-react", "virtual:c854f68d252b5f7f0a12089c0a8d378315a510bb72adea1f39c1b0225be487e8e77397c9f31c6e3c75f21f0105f5fcce3119b6da233eea7c419991cac2d6f94e#npm:7.24.0"],
+            ["kill-port", "npm:1.6.1"],
             ["prettier", "npm:2.3.2"],
             ["typescript", "patch:typescript@npm%3A4.3.5#builtin<compat/typescript>::version=4.3.5&hash=ddfc1b"]
           ],
@@ -15248,6 +15250,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["get-stream", "npm:5.2.0"],
             ["pump", "npm:3.0.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["get-them-args", [
+        ["npm:1.3.2", {
+          "packageLocation": "./.yarn/cache/get-them-args-npm-1.3.2-fca835a30c-675ba82758.zip/node_modules/get-them-args/",
+          "packageDependencies": [
+            ["get-them-args", "npm:1.3.2"]
           ],
           "linkType": "HARD",
         }]
@@ -18130,6 +18141,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["keyv", "npm:4.0.3"],
             ["json-buffer", "npm:3.0.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["kill-port", [
+        ["npm:1.6.1", {
+          "packageLocation": "./.yarn/cache/kill-port-npm-1.6.1-0b328689ea-878c474b37.zip/node_modules/kill-port/",
+          "packageDependencies": [
+            ["kill-port", "npm:1.6.1"],
+            ["get-them-args", "npm:1.3.2"],
+            ["shell-exec", "npm:1.0.2"]
           ],
           "linkType": "HARD",
         }]
@@ -24576,6 +24598,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/shebang-regex-npm-3.0.0-899a0cd65e-ea18044ffa.zip/node_modules/shebang-regex/",
           "packageDependencies": [
             ["shebang-regex", "npm:3.0.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["shell-exec", [
+        ["npm:1.0.2", {
+          "packageLocation": "./.yarn/cache/shell-exec-npm-1.0.2-439b1acf5b-1e0c32f949.zip/node_modules/shell-exec/",
+          "packageDependencies": [
+            ["shell-exec", "npm:1.0.2"]
           ],
           "linkType": "HARD",
         }]

@@ -30,7 +30,7 @@ const TokenOwnershipSchema = new EntitySchema<TokenOwnership>({
     },
     quantity: {
       type: 'integer',
-      default: 0
+      default: 1
     }
   },
   relations: {

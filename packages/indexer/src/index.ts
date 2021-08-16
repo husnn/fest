@@ -11,6 +11,7 @@ import Postgres, {
 import { ethConfig, postgresConfig, redisConfig } from './config';
 import EthereumListener from './events/ethereum/EthereumListener';
 import TokenBuy, { TokenBuyJob } from './jobs/TokenBuy';
+import TokenCancelListing, { TokenCancelListingJob } from './jobs/TokenCancelListing';
 import TokenListForSale, { TokenListForSaleJob } from './jobs/TokenListForSale';
 import TokenMint, { TokenMintJob } from './jobs/TokenMint';
 import TokenTransfer, { TokenTransferJob } from './jobs/TokenTransfer';
@@ -50,11 +51,15 @@ ethereumListener.on('market-buy', (event: TokenBuyJob) => {
   tokenTradeQueue.createJob(event).save();
 });
 
+ethereumListener.on('market-cancel', (event: TokenCancelListingJob) => {
+  tokenTradeQueue.createJob(event).save();
+});
+
 Postgres.init(postgresConfig).then(() => {
   console.log('Connected to database.');
 
   const tokenRepository = new TokenRepository();
-  const tokenTradeRepository = new TokenListingRepository();
+  const tokenListingRepository = new TokenListingRepository();
   const walletRepository = new WalletRepository();
   const ownershipRepository = new TokenOwnershipRepository();
 
@@ -69,19 +74,27 @@ Postgres.init(postgresConfig).then(() => {
   });
 
   tokenTradeQueue.process(
-    async (job: Queue.Job<TokenListForSaleJob | TokenBuyJob>, done) => {
+    async (
+      job: Queue.Job<TokenListForSaleJob | TokenBuyJob | TokenCancelListingJob>,
+      done
+    ) => {
       if ((job.data as TokenListForSaleJob).seller !== undefined) {
         // Sell event
         return new TokenListForSale(job.data as TokenListForSaleJob).execute(
           tokenRepository,
           walletRepository,
-          tokenTradeRepository
+          tokenListingRepository
         );
       } else if ((job.data as TokenBuyJob).buyer !== undefined) {
         // Buy event
         return new TokenBuy(job.data as TokenBuyJob).execute(
-          tokenTradeRepository
+          tokenListingRepository
         );
+      } else if ((job.data as TokenCancelListingJob).canceller !== undefined) {
+        // Cancellation event
+        return new TokenCancelListing(
+          job.data as TokenCancelListingJob
+        ).execute(tokenListingRepository);
       }
 
       done();

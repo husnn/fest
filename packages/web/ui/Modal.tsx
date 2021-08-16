@@ -61,7 +61,6 @@ const ModalContainer = styled.div<ModalContainerProps>`
   background-color: white;
   z-index: 999;
   overflow-y: scroll;
-  // gap: 20px;
 
   > * + * {
     margin-top: 20px;
@@ -88,7 +87,6 @@ const ModalContainer = styled.div<ModalContainerProps>`
 const ModalContent = styled.div`
   display: flex;
   flex-direction: column;
-  // gap: 20px;
 
   > * + * {
     margin-top: 10px;
@@ -102,7 +100,6 @@ const ModalHead = styled.div`
 const ModalTitleBlock = styled.div`
   display: flex;
   flex-direction: row;
-  // gap: 15px;
 
   > * + * {
     margin-left: 10px;
@@ -113,14 +110,13 @@ const ModalActions = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  // gap: 15px;
 
   > button {
     width: 100%;
   }
 
   > * + * {
-    margin-top: 10px;
+    margin-top: 20px;
   }
 `;
 

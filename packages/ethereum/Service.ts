@@ -6,10 +6,12 @@ import { hdkey } from 'ethereumjs-wallet';
 import Web3 from 'web3';
 
 import {
-    EthereumService as IEthereumService, generateWalletId, Result, Token, Wallet
+    EthereumService as IEthereumService, generateWalletId, Result, Token, TokenListing, Wallet
 } from '@fanbase/core';
 import Contracts from '@fanbase/eth-contracts';
-import { ApproveTokenMarket, ListTokenForSale, MintToken } from '@fanbase/eth-transactions';
+import {
+    ApproveTokenMarket, CancelTokenListing, ListTokenForSale, MintToken
+} from '@fanbase/eth-transactions';
 import { decryptText, Protocol, WalletType } from '@fanbase/shared';
 
 export class EthereumService implements IEthereumService {
@@ -69,6 +71,33 @@ export class EthereumService implements IEthereumService {
       .build(wallet.address, networkId, chainId, nonce, 385000)
       .signAndSerialize(decryptText(wallet.privateKey));
 
+    return this.sendTransaction(tx);
+  }
+
+  async cancelTokenListing(
+    wallet: Wallet,
+    listing: TokenListing
+  ): Promise<Result<string>> {
+    const nonce = await this.web3.eth.getTransactionCount(
+      wallet.address,
+      'pending'
+    );
+
+    const networkId = await this.web3.eth.net.getId();
+    const chainId = await this.web3.eth.getChainId();
+
+    const txData = {
+      tradeId: listing.chain.id
+    };
+
+    const tx = new CancelTokenListing(txData)
+      .build(wallet.address, networkId, chainId, nonce, 385000)
+      .signAndSerialize(decryptText(wallet.privateKey));
+
+    return this.sendTransaction(tx);
+  }
+
+  async sendTransaction(tx: any): Promise<Result<string>> {
     return new Promise<Result<string>>((resolve) => {
       this.web3.eth
         .sendSignedTransaction(tx)

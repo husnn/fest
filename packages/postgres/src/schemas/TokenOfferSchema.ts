@@ -24,6 +24,10 @@ const TokenOfferSchema = new EntitySchema<TokenOffer>({
       type: 'text',
       name: 'sender_id'
     },
+    receiverId: {
+      type: 'text',
+      name: 'receiver_id'
+    },
     ownershipId: {
       type: 'text',
       name: 'ownership_id'
@@ -37,7 +41,7 @@ const TokenOfferSchema = new EntitySchema<TokenOffer>({
       enum: Currency
     },
     price: {
-      type: 'integer'
+      type: 'text'
     },
     expiry: {
       type: 'timestamp',
@@ -53,6 +57,14 @@ const TokenOfferSchema = new EntitySchema<TokenOffer>({
       target: 'user',
       joinColumn: {
         name: 'sender_id',
+        referencedColumnName: 'id'
+      }
+    },
+    receiver: {
+      type: 'many-to-one',
+      target: 'user',
+      joinColumn: {
+        name: 'receiver_id',
         referencedColumnName: 'id'
       }
     },

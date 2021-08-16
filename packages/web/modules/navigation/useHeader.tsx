@@ -24,6 +24,12 @@ export const useHeader = (toShow?: string[], toHide?: string[]) => {
       visible: isAuthenticated
     },
     {
+      id: 'market',
+      title: 'Market',
+      route: '/market',
+      visible: isAuthenticated
+    },
+    {
       id: 'wallet',
       title: 'Wallet',
       route: '/wallet',

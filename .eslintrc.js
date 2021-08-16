@@ -25,6 +25,7 @@ module.exports = {
     semi: [2, 'always'],
     "react/display-name": 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-empty-interface': [
       'error',
       {

@@ -8,8 +8,7 @@ import {
     IdentifyWithEmailResponse, IdentifyWithWalletResponse, LoginResponse
 } from '@fanbase/shared';
 
-import { HttpError, HttpResponse } from '../http';
-import ValidationError from '../http/errors/ValidationError';
+import { HttpError, HttpResponse, ValidationError } from '../http';
 
 class AuthController {
   private identifyWithEmailUseCase: IdentifyWithEmail;

@@ -5,6 +5,7 @@ import Web3 from 'web3';
 import Contracts from '@fanbase/eth-contracts';
 
 import TokenBuyListener from './TokenBuyListener';
+import TokenCancelListingListener from './TokenCancelListingListener';
 import TokenListingListener from './TokenListingListener';
 import TokenMintListener from './TokenMintListener';
 import TokenTransferListener from './TokenTransferListener';
@@ -16,35 +17,31 @@ export default class EthereumListener extends EventEmitter {
     Contracts.init(web3).then(async () => {
       console.log('Listening to events on the Ethereum network...');
 
-      new TokenMintListener(
-        web3,
-        redis,
-        Contracts.Contracts.Token.get()
-      ).listen((job) => {
+      const tokenContract = Contracts.Contracts.Token.get();
+      const marketContract = Contracts.Contracts.Market.get();
+
+      console.log(`\nToken contract: ${tokenContract.options.address}`);
+      console.log(`Market contract: ${marketContract.options.address}\n`);
+
+      new TokenMintListener(web3, redis, tokenContract).listen((job) => {
         this.emit('token-mint', job);
       });
 
-      new TokenTransferListener(
-        web3,
-        redis,
-        Contracts.Contracts.Token.get()
-      ).listen((job) => {
+      new TokenTransferListener(web3, redis, tokenContract).listen((job) => {
         this.emit('token-transfer', job);
       });
 
-      new TokenListingListener(
-        web3,
-        redis,
-        Contracts.Contracts.Market.get()
-      ).listen((job) => {
+      new TokenListingListener(web3, redis, marketContract).listen((job) => {
         this.emit('market-list', job);
       });
 
-      new TokenBuyListener(
-        web3,
-        redis,
-        Contracts.Contracts.Market.get()
-      ).listen((job) => {
+      new TokenCancelListingListener(web3, redis, marketContract).listen(
+        (job) => {
+          this.emit('market-cancel', job);
+        }
+      );
+
+      new TokenBuyListener(web3, redis, marketContract).listen((job) => {
         this.emit('market-buy', job);
       });
     });

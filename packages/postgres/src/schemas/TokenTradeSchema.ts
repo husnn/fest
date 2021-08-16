@@ -1,9 +1,9 @@
 import { EntitySchema } from 'typeorm';
 
-import { TokenOrder } from '@fanbase/core';
+import { TokenTrade } from '@fanbase/core';
 
-const TokenOrderSchema = new EntitySchema<TokenOrder>({
-  name: 'token_order',
+const TokenTradeSchema = new EntitySchema<TokenTrade>({
+  name: 'token_trade',
   columns: {
     id: {
       type: 'uuid',
@@ -29,11 +29,10 @@ const TokenOrderSchema = new EntitySchema<TokenOrder>({
     },
     quantity: {
       type: 'integer',
-      default: 0
+      default: 1
     },
     price: {
-      type: 'text',
-      default: 0
+      type: 'text'
     }
   },
   relations: {
@@ -64,4 +63,4 @@ const TokenOrderSchema = new EntitySchema<TokenOrder>({
   }
 });
 
-export default TokenOrderSchema;
+export default TokenTradeSchema;

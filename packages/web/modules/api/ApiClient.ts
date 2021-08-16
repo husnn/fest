@@ -1,20 +1,21 @@
 import {
     ApproveMintRequest, ApproveMintResponse, ApproveTokenSaleRequest, ApproveTokenSaleResponse,
-    CreateTokenRequest, CreateTokenResponse, EditUserRequest, EditUserResponse, GetOAuthLinkRequest,
-    GetOAuthLinkResponse, GetOwnUploadsRequest, GetOwnUploadsResponse, GetTokenOwnershipResponse,
-    GetTokenOwnershipsResponse, GetTokenRequest, GetTokenResponse, GetTokensCreatedResponse,
-    GetTokensOwnedResponse, GetUserByIdRequest, GetUserByUsernameRequest, GetUserResponse,
-    IdentifyWithEmailRequest, IdentifyWithEmailResponse, IdentifyWithWalletRequest,
-    IdentifyWithWalletResponse, isUsername, ListTokenForSaleRequest, ListTokenForSaleResponse,
-    LoginResponse, LoginWithEmailRequest, LoginWithWalletRequest, MintTokenRequest,
-    MintTokenResponse, OAuthCheckLinkRequest, OAuthCheckLinkResponse, OAuthLinkRequest, Protocol,
-    TokenData, TokenDTO, TokenOwnershipDTO, UnlinkOAuthRequest, UnlinkOAuthResponse, UserInfo,
-    YouTubeVideo
+    CancelTokenListingRequest, CancelTokenListingResponse, CreateTokenRequest, CreateTokenResponse,
+    EditUserRequest, EditUserResponse, GetOAuthLinkRequest, GetOAuthLinkResponse,
+    GetOwnUploadsRequest, GetOwnUploadsResponse, GetTokenMarketSummaryRequest,
+    GetTokenMarketSummaryResponse, GetTokenOwnershipResponse, GetTokenOwnershipsResponse,
+    GetTokenRequest, GetTokenResponse, GetTokensCreatedResponse, GetTokensOwnedResponse,
+    GetUserByIdRequest, GetUserByUsernameRequest, GetUserResponse, IdentifyWithEmailRequest,
+    IdentifyWithEmailResponse, IdentifyWithWalletRequest, IdentifyWithWalletResponse, isUsername,
+    ListTokenForSaleRequest, ListTokenForSaleResponse, LoginResponse, LoginWithEmailRequest,
+    LoginWithWalletRequest, MintTokenRequest, MintTokenResponse, OAuthCheckLinkRequest,
+    OAuthCheckLinkResponse, OAuthLinkRequest, Protocol, TokenData, TokenDTO, TokenOwnershipDTO,
+    UnlinkOAuthRequest, UnlinkOAuthResponse, UserInfo, YouTubeVideo
 } from '@fanbase/shared';
 
 import HttpClient from './HttpClient';
 
-export default class ApiClient {
+export class ApiClient {
   private client: HttpClient;
 
   static instance: ApiClient | undefined;
@@ -29,6 +30,30 @@ export default class ApiClient {
   }
 
   // Token Market
+
+  async cancelTokenListing(listingId: string): Promise<string> {
+    const response = await this.client.request<
+      CancelTokenListingResponse,
+      CancelTokenListingRequest
+    >({
+      method: 'POST',
+      endpoint: `/market/listings/${listingId}/cancel`,
+      authentication: 'required'
+    });
+
+    return response.txHash;
+  }
+
+  async getTokenMarketSummary(): Promise<GetTokenMarketSummaryResponse> {
+    return this.client.request<
+      GetTokenMarketSummaryResponse,
+      GetTokenMarketSummaryRequest
+    >({
+      method: 'GET',
+      endpoint: '/market/summary',
+      authentication: 'required'
+    });
+  }
 
   async listForSale(
     token: string,
@@ -372,3 +397,5 @@ export default class ApiClient {
     });
   }
 }
+
+export default ApiClient;
