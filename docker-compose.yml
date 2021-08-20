@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: "redis:alpine"
+
+  indexer:
+    build: .
+    command: yarn indexer serve
+    environment:
+      PG_HOST: postgres
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      - postgres
+      - redis
+
+  api:
+    build: .
+    command: yarn api serve
+    environment:
+      PG_HOST: postgres
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgres
+      - indexer
+
+volumes:
+  postgres_data:
