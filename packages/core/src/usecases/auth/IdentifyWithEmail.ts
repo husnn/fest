@@ -63,7 +63,7 @@ export class IdentifyWithEmail extends UseCase<
       user = await this.userRepository.update(user);
     }
 
-    this.mailService.send(new LoginCodeEmail(user.email, user.loginCode.value));
+    this.mailService.send(new LoginCodeEmail(data.email, user.loginCode.value));
 
     return Result.ok({ user: user.id });
   }

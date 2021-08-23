@@ -16,7 +16,9 @@ class MailService implements IMailService {
       text: email.content
     };
 
-    sgMail.send(msg);
+    sgMail.send(msg).catch((err: string) => {
+      console.log(err);
+    });
   }
 }
 
