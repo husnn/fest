@@ -3,6 +3,7 @@ version: "3.8"
 services:
   indexer:
     build: .
+    image: fanbase/indexer
     command: yarn indexer serve
     environment:
       REDIS_URL: $REDIS_URL
@@ -13,9 +14,11 @@ services:
       RDS_PASSWORD: $RDS_PASSWORD
       SECRET: $SECRET
       ETH_PROVIDER: $ETH_PROVIDER
+    restart: always
 
   api:
     build: .
+    image: fanbase/api
     command: yarn api serve
     environment:
       API_URL: $API_URL
@@ -46,3 +49,4 @@ services:
       - 5000:5000
     depends_on:
       - indexer
+    restart: always
