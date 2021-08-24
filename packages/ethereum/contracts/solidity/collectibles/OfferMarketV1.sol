@@ -21,7 +21,7 @@ struct Offer {
 contract OfferMarketV1 is MarketV1 {
   using ECDSA for bytes32;
 
-  event Accept(
+  event AcceptOffer(
     address indexed seller,
     address indexed buyer,
     address token,
@@ -31,7 +31,7 @@ contract OfferMarketV1 is MarketV1 {
     uint price
   );
 
-  event Cancel(
+  event CancelOffer(
     address indexed sender,
     address token,
     address tokenId,

@@ -39,8 +39,6 @@ export abstract class EventListener<T extends JobData> {
 
     setInterval(() => {
       this.checkForEvents((events) => {
-        // console.log(`Listening to new events for ${this.EVENT_NAME}`);
-
         for (const event of events) {
           console.log(`\nNew event: ${this.EVENT_NAME}`);
 

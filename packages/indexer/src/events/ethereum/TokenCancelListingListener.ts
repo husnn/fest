@@ -4,7 +4,7 @@ import { TokenCancelListingJob } from '../../jobs/TokenCancelListing';
 import EventListener from './EventListener';
 
 export class TokenCancelListingListener extends EventListener<TokenCancelListingJob> {
-  EVENT_NAME = 'Cancel';
+  EVENT_NAME = 'CancelListing';
 
   prepareJob(event: any): TokenCancelListingJob {
     const { address, returnValues } = event;
@@ -17,8 +17,6 @@ export class TokenCancelListingListener extends EventListener<TokenCancelListing
       tradeId,
       canceller: operator
     };
-
-    console.log(job);
 
     return job;
   }

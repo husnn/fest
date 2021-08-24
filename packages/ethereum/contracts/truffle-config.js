@@ -25,7 +25,7 @@ module.exports = {
       gasPrice: 3000000000,
       confirmations: 2,
       timeoutBlocks: 200,
-      skipDryRun: true,
+      skipDryRun: true
     },
   },
   compilers: {

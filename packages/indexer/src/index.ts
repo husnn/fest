@@ -64,13 +64,19 @@ Postgres.init(postgresConfig).then(() => {
   const ownershipRepository = new TokenOwnershipRepository();
 
   mintQueue.process(async (job: Queue.Job<TokenMintJob>) => {
-    const task = new TokenMint(job.data);
-    await task.execute(tokenRepository, walletRepository, ownershipRepository);
+    return new TokenMint(job.data).execute(
+      tokenRepository,
+      walletRepository,
+      ownershipRepository
+    );
   });
 
   transferQueue.process(async (job: Queue.Job<TokenTransferJob>) => {
-    const task = new TokenTransfer(job.data);
-    return task.execute(tokenRepository, walletRepository, ownershipRepository);
+    return new TokenTransfer(job.data).execute(
+      tokenRepository,
+      walletRepository,
+      ownershipRepository
+    );
   });
 
   tokenTradeQueue.process(

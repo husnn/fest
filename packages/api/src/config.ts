@@ -8,10 +8,10 @@ const appConfig: AppConfig = {
   isProduction: process.env.NODE_ENV === 'production',
   protocol: 'http',
   host: process.env.HOST || '0.0.0.0',
-  port: parseInt(process.env.PORT) || 3000,
+  port: parseInt(process.env.PORT) || 5000,
   jwtSecret: process.env.JWT_SECRET,
   apiVersion: 'v1',
-  clientUrl: process.env.CLIENT_URL || 'http://localhost:3000'
+  clientUrl: process.env.CLIENT_URL || `http://localhost:5000`
 };
 
 const getApiUrl = () =>

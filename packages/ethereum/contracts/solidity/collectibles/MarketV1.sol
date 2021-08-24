@@ -79,9 +79,12 @@ contract MarketV1 is AccessControl, Pausable {
     uint quantity
   );
 
-  event Cancel(
-    uint indexed tradeId,
-    address operator
+  event CancelListing(
+    address operator,
+    uint tradeId,
+    address tokenContract,
+    uint tokenId,
+    uint returned
   );
   
   bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
@@ -351,14 +354,17 @@ contract MarketV1 is AccessControl, Pausable {
     // Mark trade as cancelled
     _trades[tradeId].status = TradeStatus.Cancelled;
 
-    emit Cancel(
-      tradeId,
-      msg.sender
-    );
-
     _wallet.give(
       trade.token,
       msg.sender,
+      trade.tokenId,
+      trade.available
+    );
+
+    emit CancelListing(
+      msg.sender,
+      tradeId,
+      trade.token,
       trade.tokenId,
       trade.available
     );

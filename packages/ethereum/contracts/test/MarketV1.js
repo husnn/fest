@@ -257,7 +257,7 @@ contract('MarketV1', async (accounts) => {
 
       it('cancel trade and return tokens', async () => {  
         const receipt = await MarketContract.cancel(tradeId, { from: seller });
-        expectEvent(receipt, 'Cancel');
+        expectEvent(receipt, 'CancelListing');
 
         const tokensOwned = await TokenContract.balanceOf(seller, tokenId);
 
