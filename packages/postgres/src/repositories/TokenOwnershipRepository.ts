@@ -26,6 +26,7 @@ export class TokenOwnershipRepository
       .createQueryBuilder('ownership')
       .leftJoinAndSelect('ownership.token', 'token')
       .where('ownership.walletId = :wallet', { wallet })
+      .andWhere('ownership.quantity > 0')
       .orderBy('token.dateCreated', 'DESC')
       .skip((page - 1) * count)
       .take(count)
@@ -49,6 +50,7 @@ export class TokenOwnershipRepository
         'owner.walletId = ownership.walletId'
       )
       .where('ownership.tokenId = :token', { token })
+      .andWhere('ownership.quantity > 0')
       .orderBy('ownership.quantity', 'DESC')
       .addOrderBy('ownership.dateCreated', 'ASC')
       .skip((page - 1) * count)

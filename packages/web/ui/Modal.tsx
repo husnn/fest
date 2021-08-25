@@ -9,7 +9,7 @@ import { corners } from '../styles/constants';
 import Button from './Button';
 import Link from './Link';
 
-type ModalProps = {
+export type ModalProps = {
   show: boolean;
   closing?: boolean;
   children: React.ReactNode;
@@ -116,7 +116,7 @@ const ModalActions = styled.div`
   }
 
   > * + * {
-    margin-top: 20px;
+    margin-top: 15px;
   }
 `;
 

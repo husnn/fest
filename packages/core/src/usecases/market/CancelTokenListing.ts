@@ -6,6 +6,7 @@ import { Result } from '../../Result';
 import { EthereumService } from '../../services';
 
 type CancelTokenListingInput = {
+  user: string;
   listing: string;
 };
 
@@ -38,6 +39,8 @@ export class CancelTokenListing extends UseCase<
   ): Promise<Result<CancelTokenListingOutput>> {
     const listing = await this.listingRepository.get(data.listing);
     if (!listing) return Result.fail();
+
+    if (listing.sellerId != data.user) return Result.fail();
 
     const wallet = await this.walletRepository.findByUser(
       listing.protocol,

@@ -8,7 +8,7 @@ import { HttpError, HttpResponse } from '../http';
 class YouTubeController {
   private getYouTubeUploadsUseCase: GetYouTubeUploads;
 
-  constructor (
+  constructor(
     oAuthRepository: OAuthRepository,
     googleService: GoogleService,
     youTubeService: YouTubeService
@@ -20,7 +20,7 @@ class YouTubeController {
     );
   }
 
-  async getOwnUploads (req: Request, res: Response, next: NextFunction) {
+  async getOwnUploads(req: Request, res: Response, next: NextFunction) {
     try {
       const { count, playlist, page } = req.query;
 
@@ -30,6 +30,8 @@ class YouTubeController {
         playlist: playlist as any,
         page: page as any
       });
+
+      if (!result.success) throw new HttpError('Could not get video uploads.');
 
       return new HttpResponse<GetOwnUploadsResponse>(res, {
         videos: result.data.videos,

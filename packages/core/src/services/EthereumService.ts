@@ -15,6 +15,9 @@ export interface EthereumService {
 
   checkBalance();
 
+  fromWei(amount: string): number;
+  toWei(amount: number): string;
+
   listTokenForSale(
     wallet: Wallet,
     tokenContract: string,
@@ -37,6 +40,28 @@ export interface EthereumService {
     expiry: number,
     salt: string
   ): Promise<Result<{ signature: string }>>;
+
+  buyTokenListing(
+    wallet: Pick<Wallet, 'address' | 'privateKey'>,
+    listingContract: string,
+    listingId: string,
+    quantity: number
+  ): Promise<Result<string>>;
+
+  getERC20Balance(erc20Address: string, walletAddress: string): Promise<number>;
+
+  getMarketApprovedERC20Amount(
+    erc20Address: string,
+    walletAddress: string,
+    spenderAddress: string
+  ): Promise<string>;
+
+  approveMarketToSpendERC20(
+    erc20Address: string,
+    wallet: Pick<Wallet, 'address' | 'privateKey'>,
+    spenderAddress: string,
+    amount: string
+  ): Promise<Result<string>>;
 
   cancelTokenListing(
     wallet: Wallet,

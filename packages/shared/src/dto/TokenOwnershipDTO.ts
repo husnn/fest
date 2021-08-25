@@ -11,10 +11,18 @@ export class TokenOwnershipDTO {
 
   constructor(props: TokenOwnershipDTO) {
     this.id = props.id;
+
     this.tokenId = props.tokenId;
     this.walletId = props.walletId;
-    this.wallet = props.wallet;
-    this.owner = props.owner;
+
+    if (props.wallet) {
+      this.wallet = new WalletDTO(props.wallet);
+    }
+
+    if (props.owner) {
+      this.owner = new UserDTO(props.owner);
+    }
+
     this.quantity = props.quantity;
   }
 }

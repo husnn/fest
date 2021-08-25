@@ -1,5 +1,5 @@
 .header {
-  padding: 10px 10px 0;
+  padding: 10px 10px;
   display: flex;
   flex-direction: column;
 
@@ -88,6 +88,10 @@
   padding: 0 20px 80px;
   display: flex;
   flex-direction: column;
+
+  @media screen and (max-width: 600px) {
+    padding: 0 10px 50px;
+  }
 
   > * + * {
     margin-top: 20px;

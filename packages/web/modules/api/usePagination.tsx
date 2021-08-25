@@ -5,10 +5,10 @@ import { PaginatedResponse } from '@fanbase/shared';
 const usePagination = <U extends unknown>(
   query?: (count: number, page: number) => Promise<PaginatedResponse<U>>
 ) => {
-  const [data, setData] = useState<U | any>([]);
+  const [data, setData] = useState<U[]>([]);
 
-  const [count, setCount] = useState(null);
-  const [page, setPage] = useState(null);
+  const [count, setCount] = useState(undefined);
+  const [page, setPage] = useState(undefined);
 
   const [hasMore, setHasMore] = useState(false);
 

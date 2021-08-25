@@ -19,8 +19,13 @@ export class TokenDTO {
   constructor(props: TokenDTO) {
     this.id = props.id;
     this.dateCreated = props.dateCreated;
+
     this.creatorId = props.creatorId;
-    this.creator = props.creator;
+
+    if (props.creator) {
+      this.creator = new UserDTO(props.creator);
+    }
+
     this.name = props.name;
     this.description = props.description;
     this.supply = props.supply;

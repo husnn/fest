@@ -1,28 +1,49 @@
 import { TokenListingDTO } from '@fanbase/shared';
 
 import UseCase from '../../base/UseCase';
-import { TokenRepository } from '../../repositories';
+import { mapTokenListingToDTO } from '../../mappers';
+import { TokenListingRepository } from '../../repositories';
 import Result from '../../Result';
 
-type GetListingsForTokenInput = {};
-type GetListingsForTokenOutput = TokenListingDTO[];
+type GetListingsForTokenInput = {
+  token: string;
+  count: number;
+  page: number;
+};
+
+type GetListingsForTokenOutput = {
+  listings: TokenListingDTO[];
+  total: number;
+};
 
 export class GetListingsForToken extends UseCase<
   GetListingsForTokenInput,
   GetListingsForTokenOutput
 > {
-  private tokenRepository: TokenRepository;
+  private listingRepository: TokenListingRepository;
 
-  constructor(tokenRepository: TokenRepository) {
+  constructor(listingRepository: TokenListingRepository) {
     super();
 
-    this.tokenRepository = tokenRepository;
+    this.listingRepository = listingRepository;
   }
 
-  exec(
+  async exec(
     data: GetListingsForTokenInput
   ): Promise<Result<GetListingsForTokenOutput>> {
-    throw new Error('Method not implemented.');
+    const result = await this.listingRepository.findByToken(
+      data.token,
+      {
+        onlyActive: true
+      },
+      data.count,
+      data.page
+    );
+    const listings = result.listings.map((listing) =>
+      mapTokenListingToDTO(listing)
+    );
+
+    return Result.ok({ listings, total: result.total });
   }
 }
 

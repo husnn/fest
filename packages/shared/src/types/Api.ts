@@ -35,6 +35,13 @@ export interface PaginatedResponse<T = any> extends Response {
   hasMore?: boolean;
 }
 
+export interface PaginatedRequest extends Request {
+  params?: {
+    count?: number;
+    page?: number;
+  };
+}
+
 /**
  * Token Market
  */
@@ -48,11 +55,24 @@ export interface CancelTokenListingRequest extends Request {
   authentication: 'required';
 }
 
-export interface GetListingsForTokenResponse extends Response {
-  body: TokenListingDTO[];
+export interface BuyTokenListingResponse extends Response {
+  txHash: string;
 }
 
-export interface GetListingsForTokenRequest extends Request {}
+export interface BuyTokenListingRequest extends Request {
+  method: 'POST';
+  authentication: 'required';
+  body: {
+    quantity: number;
+  };
+}
+
+export interface GetListingsForTokenResponse
+  extends PaginatedResponse<TokenListingDTO> {}
+
+export interface GetListingsForTokenRequest extends PaginatedRequest {
+  method: 'GET';
+}
 
 export interface GetTokenMarketSummaryResponse extends Response {
   offers: TokenOfferDTO[];

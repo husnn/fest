@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 
 import {
-    CancelTokenListing, GetListingsForToken, GetTokenMarketSummary, TokenRepository
+    BuyTokenListing, CancelTokenListing, GetListingsForToken, GetTokenMarketSummary, TokenRepository
 } from '@fanbase/core';
 import { EthereumService } from '@fanbase/ethereum';
 import {
@@ -16,6 +16,7 @@ import { HttpError, HttpResponse, ValidationError } from '../http';
 export class MarketController {
   private getTokenMarketSummaryUseCase: GetTokenMarketSummary;
   private getListingsForTokenUseCase: GetListingsForToken;
+  private buyTokenListingUseCase: BuyTokenListing;
   private cancelTokenListingUseCase: CancelTokenListing;
 
   constructor(
@@ -31,7 +32,14 @@ export class MarketController {
       tokenListingRepository,
       tokenTradeRepository
     );
-    this.getListingsForTokenUseCase = new GetListingsForToken(tokenRepository);
+    this.getListingsForTokenUseCase = new GetListingsForToken(
+      tokenListingRepository
+    );
+    this.buyTokenListingUseCase = new BuyTokenListing(
+      tokenListingRepository,
+      walletRepository,
+      ethereumService
+    );
     this.cancelTokenListingUseCase = new CancelTokenListing(
       tokenListingRepository,
       walletRepository,
@@ -46,6 +54,7 @@ export class MarketController {
       if (!listingId) throw new ValidationError();
 
       const result = await this.cancelTokenListingUseCase.exec({
+        user: req.user,
         listing: listingId
       });
 
@@ -59,13 +68,55 @@ export class MarketController {
     }
   }
 
-  async getListingsForToken(req: Request, res: Response, next: NextFunction) {
+  async buyTokenListing(req: Request, res: Response, next: NextFunction) {
     try {
-      const result = await this.getListingsForTokenUseCase.exec({});
+      const { listingId } = req.params;
+      const { quantity } = req.body;
 
-      return new HttpResponse<GetListingsForTokenResponse>(res, {
-        body: result.data
+      if (!listingId) throw new ValidationError();
+
+      const result = await this.buyTokenListingUseCase.exec({
+        buyer: req.user,
+        listing: listingId,
+        quantity
       });
+
+      if (!result.success) throw new HttpError();
+
+      return new HttpResponse<CancelTokenListingResponse>(res, {
+        txHash: result.data.txHash
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async getListingsForToken(req: Request, res: Response, next: NextFunction) {
+    const count = req.pagination.count;
+    const page = req.pagination.page;
+
+    try {
+      const { tokenId } = req.params;
+      const result = await this.getListingsForTokenUseCase.exec({
+        token: tokenId,
+        count,
+        page
+      });
+
+      if (!result.success)
+        throw new HttpError('Could not get listings for token.');
+
+      return new HttpResponse<GetListingsForTokenResponse>(
+        res,
+        {
+          body: result.data.listings
+        },
+        {
+          count,
+          page,
+          total: result.data.total
+        }
+      );
     } catch (err) {
       next(err);
     }

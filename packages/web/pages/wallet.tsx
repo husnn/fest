@@ -108,6 +108,7 @@ type Currency = {
   name: string;
   symbol: string;
   balance?: string;
+  precision?: number;
 };
 
 export const WalletPage = () => {
@@ -116,7 +117,8 @@ export const WalletPage = () => {
   const [currencies] = useState<Currency[]>([
     {
       name: 'Ether',
-      symbol: 'ETH'
+      symbol: 'ETH',
+      precision: 5
     },
     {
       name: 'Dai',
@@ -151,7 +153,7 @@ export const WalletPage = () => {
 
   const selectCurrency = async (currency: Currency) => {
     const balance = await getBalance(currency);
-    currency.balance = balance && parseFloat(balance).toFixed(5);
+    currency.balance = balance;
     setCurrencySelected(currency);
   };
 
@@ -236,7 +238,11 @@ export const WalletPage = () => {
           </CurrencySelection>
           <Balance>
             <p>Your balance</p>
-            <h1>{currencySelected?.balance || '0.00'}</h1>
+            <h1>
+              {Number(currencySelected?.balance || 0).toFixed(
+                currencySelected?.precision || 3
+              )}
+            </h1>
             <p>{currencySelected?.symbol}</p>
             <BalanceActions>
               <Button

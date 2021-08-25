@@ -1,4 +1,5 @@
 export * from './AcceptOffer';
+export * from './ApproveSpender';
 export * from './ApproveTokenMarket';
 export * from './BuyToken';
 export * from './CancelTokenListing';

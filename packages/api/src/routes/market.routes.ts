@@ -8,6 +8,7 @@ import {
 
 import MarketController from '../controllers/MarketController';
 import authMiddleware from '../middleware/authMiddleware';
+import pagination from '../middleware/pagination';
 
 export default function init(router: Router): Router {
   const tokenRepository = new TokenRepository();
@@ -34,12 +35,21 @@ export default function init(router: Router): Router {
 
   router.post(
     '/listings/:listingId/cancel',
+    authMiddleware,
     (req: Request, res: Response, next: NextFunction) =>
       marketController.cancelTokenListing(req, res, next)
   );
 
+  router.post(
+    '/listings/:listingId/buy',
+    authMiddleware,
+    (req: Request, res: Response, next: NextFunction) =>
+      marketController.buyTokenListing(req, res, next)
+  );
+
   router.get(
     '/tokens/:tokenId/listings',
+    pagination,
     (req: Request, res: Response, next: NextFunction) =>
       marketController.getListingsForToken(req, res, next)
   );

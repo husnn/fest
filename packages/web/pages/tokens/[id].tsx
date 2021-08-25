@@ -9,6 +9,7 @@ import { Protocol, TokenDTO, TokenOwnershipDTO, WalletType } from '@fanbase/shar
 
 import CreateTokenListing from '../../components/CreateTokenListing';
 import TokenHolders from '../../components/TokenHolders';
+import TokenListings from '../../components/TokenListings';
 import ApiClient from '../../modules/api/ApiClient';
 import useAuthentication from '../../modules/auth/useAuthentication';
 import EthereumClient from '../../modules/ethereum/EthereumClient';
@@ -16,7 +17,7 @@ import useEthereum from '../../modules/ethereum/useEthereum';
 import SpinnerSvg from '../../public/images/spinner.svg';
 import { Button, Link } from '../../ui';
 import Modal from '../../ui/Modal';
-import { getDisplayName, getProfileUrl, getTokenOwnershipUrl } from '../../utils';
+import { getDisplayName, getProfileUrl } from '../../utils';
 
 const TokenContainer = styled.div`
   width: 100%;
@@ -29,7 +30,7 @@ const TokenContainer = styled.div`
   }
 `;
 
-const TokenInfo = styled.div`
+const TokenMain = styled.div`
   width: 100%;
   max-width: 500px;
   flex: 1;
@@ -135,7 +136,8 @@ export default function TokenPage() {
 
   useEffect(() => {
     setOwn(currentUser && ownership?.walletId == currentUser?.wallet.id);
-    if (ownership) router.push({ query: { o: ownership.id } });
+    if (ownership)
+      router.push({ query: { o: ownership.id } }, undefined, { scroll: false });
   }, [token, ownership]);
 
   const MintToken = ({ onExecuted }: { onExecuted: () => void }) => {
@@ -261,7 +263,7 @@ export default function TokenPage() {
               />
             </TokenHoldersContainer>
           )}
-          <TokenInfo>
+          <TokenMain>
             <TokenHeading>
               <h1>{token?.name}</h1>
               <h3>
@@ -308,7 +310,9 @@ export default function TokenPage() {
                 </Button>
               </TokenActions>
             )}
-          </TokenInfo>
+
+            <TokenListings token={token} />
+          </TokenMain>
         </TokenContainer>
       )}
     </div>

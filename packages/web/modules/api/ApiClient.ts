@@ -1,8 +1,9 @@
 import {
     ApproveMintRequest, ApproveMintResponse, ApproveTokenSaleRequest, ApproveTokenSaleResponse,
-    CancelTokenListingRequest, CancelTokenListingResponse, CreateTokenRequest, CreateTokenResponse,
-    EditUserRequest, EditUserResponse, GetOAuthLinkRequest, GetOAuthLinkResponse,
-    GetOwnUploadsRequest, GetOwnUploadsResponse, GetTokenMarketSummaryRequest,
+    BuyTokenListingRequest, BuyTokenListingResponse, CancelTokenListingRequest,
+    CancelTokenListingResponse, CreateTokenRequest, CreateTokenResponse, EditUserRequest,
+    EditUserResponse, GetListingsForTokenRequest, GetListingsForTokenResponse, GetOAuthLinkRequest,
+    GetOAuthLinkResponse, GetOwnUploadsRequest, GetOwnUploadsResponse, GetTokenMarketSummaryRequest,
     GetTokenMarketSummaryResponse, GetTokenOwnershipResponse, GetTokenOwnershipsResponse,
     GetTokenRequest, GetTokenResponse, GetTokensCreatedResponse, GetTokensOwnedResponse,
     GetUserByIdRequest, GetUserByUsernameRequest, GetUserResponse, IdentifyWithEmailRequest,
@@ -42,6 +43,40 @@ export class ApiClient {
     });
 
     return response.txHash;
+  }
+
+  async buyTokenListing(listingId: string, quantity: number): Promise<string> {
+    const response = await this.client.request<
+      BuyTokenListingResponse,
+      BuyTokenListingRequest
+    >({
+      method: 'POST',
+      endpoint: `/market/listings/${listingId}/buy`,
+      authentication: 'required',
+      body: {
+        quantity
+      }
+    });
+
+    return response.txHash;
+  }
+
+  async getListingsForToken(
+    tokenId: string,
+    count?: number,
+    page?: number
+  ): Promise<GetListingsForTokenResponse> {
+    return this.client.request<
+      GetListingsForTokenResponse,
+      GetListingsForTokenRequest
+    >({
+      method: 'GET',
+      endpoint: `/market/tokens/${tokenId}/listings`,
+      params: {
+        count,
+        page
+      }
+    });
   }
 
   async getTokenMarketSummary(): Promise<GetTokenMarketSummaryResponse> {

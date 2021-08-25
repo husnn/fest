@@ -7,7 +7,7 @@ export class TokenOwnedDTO extends TokenDTO {
   constructor(props: TokenOwnedDTO) {
     super(props);
 
-    this.ownership = props.ownership;
+    this.ownership = new TokenOwnershipDTO(props.ownership);
   }
 }
 

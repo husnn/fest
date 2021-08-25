@@ -10,7 +10,7 @@ import {
 } from '@fanbase/core';
 import Contracts from '@fanbase/eth-contracts';
 import {
-    ApproveTokenMarket, CancelTokenListing, ListTokenForSale, MintToken
+    ApproveSpender, ApproveTokenMarket, BuyToken, CancelTokenListing, ListTokenForSale, MintToken
 } from '@fanbase/eth-transactions';
 import { decryptText, Protocol, WalletType } from '@fanbase/shared';
 
@@ -34,6 +34,136 @@ export class EthereumService implements IEthereumService {
 
   getOfferHash() {
     throw new Error('Method not implemented.');
+  }
+
+  fromWei(amount: string): number {
+    return parseInt(Web3.utils.fromWei(amount));
+  }
+
+  toWei(amount: number): string {
+    return Web3.utils.toWei(amount.toString());
+  }
+
+  async getPrice(contract: string, wei: string) {
+    return {
+      currency: 'DAI',
+      amount: parseInt(Web3.utils.fromWei(wei))
+    };
+  }
+
+  async buyTokenListing(
+    wallet: Pick<Wallet, 'address' | 'privateKey'>,
+    listingContract: string,
+    listingId: string,
+    quantity: number
+  ) {
+    const nonce = await this.web3.eth.getTransactionCount(
+      wallet.address,
+      'pending'
+    );
+
+    const networkId = await this.web3.eth.net.getId();
+    const chainId = await this.web3.eth.getChainId();
+
+    const txData = {
+      listingId,
+      quantity
+    };
+
+    const tx = new BuyToken(txData, listingContract)
+      .build(wallet.address, networkId, chainId, nonce, 385000)
+      .signAndSerialize(decryptText(wallet.privateKey));
+
+    return this.sendTransaction(tx);
+  }
+
+  async getMarketApprovedERC20Amount(
+    erc20Address: string,
+    walletAddress: string,
+    spenderAddress: string
+  ): Promise<string> {
+    const abi = [
+      {
+        constant: true,
+        inputs: [
+          {
+            name: '_owner',
+            type: 'address'
+          },
+          {
+            name: '_spender',
+            type: 'address'
+          }
+        ],
+        name: 'allowance',
+        outputs: [
+          {
+            name: '',
+            type: 'uint256'
+          }
+        ],
+        payable: false,
+        stateMutability: 'view',
+        type: 'function'
+      }
+    ];
+
+    const contract = new this.web3.eth.Contract(abi as any, erc20Address);
+
+    const amount = await contract.methods
+      .allowance(walletAddress, spenderAddress)
+      .call();
+
+    return amount;
+  }
+
+  async approveMarketToSpendERC20(
+    erc20Address: string,
+    wallet: Pick<Wallet, 'address' | 'privateKey'>,
+    spenderAddress: string,
+    amount: string
+  ): Promise<Result<string>> {
+    const nonce = await this.web3.eth.getTransactionCount(
+      wallet.address,
+      'pending'
+    );
+
+    const networkId = await this.web3.eth.net.getId();
+    const chainId = await this.web3.eth.getChainId();
+
+    const tx = new ApproveSpender(
+      this.web3,
+      erc20Address,
+      spenderAddress,
+      amount
+    )
+      .build(wallet.address, networkId, chainId, nonce, 385000)
+      .signAndSerialize(decryptText(wallet.privateKey));
+
+    return this.sendTransaction(tx);
+  }
+
+  async getERC20Balance(
+    erc20Address: string,
+    walletAddress: string
+  ): Promise<number> {
+    const abi = [
+      {
+        constant: true,
+        inputs: [{ name: '_owner', type: 'address' }],
+        name: 'balanceOf',
+        outputs: [{ name: 'balance', type: 'uint256' }],
+        payable: false,
+        stateMutability: 'view',
+        type: 'function'
+      }
+    ];
+
+    const contract = new this.web3.eth.Contract(abi as any, erc20Address);
+
+    const balance = await contract.methods.balanceOf(walletAddress).call();
+
+    return parseInt(Web3.utils.fromWei(balance, 'ether'));
   }
 
   async listTokenForSale(

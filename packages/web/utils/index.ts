@@ -45,7 +45,7 @@ export const waitFor = (ms: number): Promise<void> =>
 
 export const getPrice = (contract: string, wei: string) => {
   return {
-    currency: 'DAI',
-    amount: Web3.utils.fromWei(wei)
+    currency: '$',
+    amount: parseFloat(Web3.utils.fromWei(wei))
   };
 };

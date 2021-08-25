@@ -13,13 +13,13 @@ export class GetGoogleAuthLink extends UseCase<
 > {
   private googleService: GoogleService;
 
-  constructor (googleService: GoogleService) {
+  constructor(googleService: GoogleService) {
     super();
 
     this.googleService = googleService;
   }
 
-  async exec (
+  async exec(
     data?: GetGoogleAuthLinkInput
   ): Promise<Result<GetGoogleAuthLinkOutput>> {
     const result = this.googleService.getOAuthLink(data?.state);

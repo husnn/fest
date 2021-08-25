@@ -157,27 +157,29 @@ export default function ProfilePage() {
             selectTab(tab);
           }}
         />
-        <div className={styles.tabContent}>
-          {tabSelected?.id == TABS.POSTS.id && (
-            <div className={styles.postsTab}></div>
-          )}
-          {tabSelected?.id == TABS.TOKENS_CREATED.id && (
-            <TokensCreated
-              user={user.id}
-              onTokenSelected={(token: TokenDTO) => {
-                router.push(getTokenUrl(token));
-              }}
-            />
-          )}
-          {tabSelected?.id == TABS.TOKENS_OWNED.id && (
-            <TokensOwned
-              user={user.id}
-              onTokenSelected={(token: TokenOwnedDTO) => {
-                router.push(`${getTokenOwnershipUrl(token.ownership)}`);
-              }}
-            />
-          )}
-        </div>
+        {user && (
+          <div className={styles.tabContent}>
+            {tabSelected?.id == TABS.POSTS.id && (
+              <div className={styles.postsTab}></div>
+            )}
+            {tabSelected?.id == TABS.TOKENS_CREATED.id && (
+              <TokensCreated
+                user={user.id}
+                onTokenSelected={(token: TokenDTO) => {
+                  router.push(getTokenUrl(token));
+                }}
+              />
+            )}
+            {tabSelected?.id == TABS.TOKENS_OWNED.id && (
+              <TokensOwned
+                user={user.id}
+                onTokenSelected={(token: TokenOwnedDTO) => {
+                  router.push(`${getTokenOwnershipUrl(token.ownership)}`);
+                }}
+              />
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -111,8 +111,8 @@ export const CreateTokenListing = ({
             }`;
           }
 
-          if (!values.price || values.price < 1 || values.price > 999999) {
-            errors.price = `Price needs to be between 0 and 1,000,000`;
+          if (!values.price || values.price < 1 || values.price > 99999999) {
+            errors.price = `Price needs to be between 0 and 100,000,000`;
           }
 
           return errors;
@@ -149,7 +149,7 @@ export const CreateTokenListing = ({
                   onChange={handleChange}
                 />
               </FormInput>
-              <FormInput label="Price" error={errors.price as string}>
+              <FormInput label="Price per token" error={errors.price as string}>
                 <Field
                   type="number"
                   id="price"

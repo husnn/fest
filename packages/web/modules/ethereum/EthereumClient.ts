@@ -3,7 +3,8 @@ import Web3 from 'web3';
 
 import Contracts from '@fanbase/eth-contracts';
 import {
-    ApproveTokenMarket, CancelTokenListing, ListTokenForSale, MintToken, SignOffer, TransferToken
+    ApproveSpender, ApproveTokenMarket, BuyToken, CancelTokenListing, ListTokenForSale, MintToken,
+    SignOffer, TransferToken
 } from '@fanbase/eth-transactions';
 import { TokenDTO } from '@fanbase/shared';
 
@@ -122,6 +123,33 @@ export default class EthereumClient {
     this.web3.eth.call(tx.txData);
   }
 
+  async buyTokenListing(
+    listingAddress: string,
+    listingId: string,
+    quantity: number
+  ): Promise<string> {
+    const account = await this.getAccount();
+
+    const networkId = await this.web3.eth.net.getId();
+    const chainId = await this.web3.eth.getChainId();
+    const nonce = await this.web3.eth.getTransactionCount(account, 'pending');
+
+    const txData = {
+      listingId,
+      quantity
+    };
+
+    const tx = new BuyToken(txData, listingAddress).build(
+      account,
+      networkId,
+      chainId,
+      nonce,
+      385000
+    );
+
+    return this.sendTransaction(tx);
+  }
+
   async listForSale(
     token: TokenDTO,
     quantity: number,
@@ -214,6 +242,69 @@ export default class EthereumClient {
       chainId,
       nonce
     );
+
+    return this.sendTransaction(tx);
+  }
+
+  async getApprovedAllowance(
+    erc20Address: string,
+    spenderAddress: string
+  ): Promise<number> {
+    const account = await this.getAccount();
+
+    const abi = [
+      {
+        constant: true,
+        inputs: [
+          {
+            name: '_owner',
+            type: 'address'
+          },
+          {
+            name: '_spender',
+            type: 'address'
+          }
+        ],
+        name: 'allowance',
+        outputs: [
+          {
+            name: '',
+            type: 'uint256'
+          }
+        ],
+        payable: false,
+        stateMutability: 'view',
+        type: 'function'
+      }
+    ];
+
+    const contract = new this.web3.eth.Contract(abi as any, erc20Address);
+
+    const amount = await contract.methods
+      .allowance(account, spenderAddress)
+      .call();
+
+    return amount;
+  }
+
+  async approveSpender(
+    erc20Address: string,
+    spenderAddress: string,
+    amount: string
+  ): Promise<string> {
+    const account = await this.getAccount();
+
+    const networkId = await this.web3.eth.net.getId();
+    const chainId = await this.web3.eth.getChainId();
+
+    const nonce = await this.web3.eth.getTransactionCount(account, 'pending');
+
+    const tx = new ApproveSpender(
+      this.web3,
+      erc20Address,
+      spenderAddress,
+      amount
+    ).build(account, networkId, chainId, nonce);
 
     return this.sendTransaction(tx);
   }

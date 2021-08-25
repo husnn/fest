@@ -9,13 +9,23 @@ export class TokenOfferDTO {
 
   token: TokenDTO;
 
-  quantity: number;
-
   currency: string;
   price: string;
 
-  constructor(data?: Partial<TokenOfferDTO>) {
-    Object.assign(this, data);
+  quantity: number;
+
+  constructor(props?: Partial<TokenOfferDTO>) {
+    this.id = props.id;
+
+    this.buyer = new UserDTO(props.buyer);
+    this.seller = new UserDTO(props.seller);
+
+    this.token = new TokenDTO(props.token);
+
+    this.currency = props.currency;
+    this.price = props.price;
+
+    this.quantity = props.quantity;
   }
 }
 

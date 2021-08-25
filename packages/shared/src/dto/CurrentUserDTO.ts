@@ -14,6 +14,6 @@ export class CurrentUserDTO {
     this.email = props.email;
     this.username = props.username;
     this.bio = props.bio;
-    this.wallet = props.wallet;
+    this.wallet = new WalletDTO(props.wallet);
   }
 }

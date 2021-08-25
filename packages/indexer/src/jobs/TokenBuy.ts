@@ -19,7 +19,7 @@ export default class TokenBuy extends Job<TokenBuyJob> {
 
   async execute(tokenListingRepository: TokenListingRepository): Promise<void> {
     try {
-      const trade = await tokenListingRepository.findByChainData(
+      const listing = await tokenListingRepository.findByChainData(
         this.props.protocol,
         {
           contract: this.props.contract,
@@ -27,14 +27,14 @@ export default class TokenBuy extends Job<TokenBuyJob> {
         }
       );
 
-      const available =
-        this.props.quantity < trade.available
-          ? trade.available - this.props.quantity
+      listing.available =
+        this.props.quantity < listing.available
+          ? listing.available - this.props.quantity
           : 0;
 
-      if (available == 0) trade.status = TokenListingStatus.Sold;
+      if (listing.available == 0) listing.status = TokenListingStatus.Sold;
 
-      await tokenListingRepository.update(trade);
+      await tokenListingRepository.update(listing);
     } catch (err) {
       console.log(err);
     }

@@ -7,6 +7,7 @@ export class TokenListingDTO {
 
   dateCreated: Date;
 
+  sellerId: string;
   seller: UserDTO;
 
   tokenId: string;
@@ -18,13 +19,22 @@ export class TokenListingDTO {
   currency: string;
   price: string;
 
-  chain: any;
+  chain: {
+    id: string;
+    contract: string;
+  };
 
   status: TokenListingStatus;
 
   constructor(data?: Partial<TokenListingDTO>) {
     this.id = data.id;
     this.dateCreated = data.dateCreated;
+
+    if (data.seller) {
+      this.seller = new UserDTO(data.seller);
+    } else {
+      this.sellerId = data.sellerId;
+    }
 
     if (data.token) {
       this.token = new TokenDTO(data.token);

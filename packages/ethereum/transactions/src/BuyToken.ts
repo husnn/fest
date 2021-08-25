@@ -5,15 +5,15 @@ import Transaction from './Transaction';
 export class BuyToken extends Transaction {
   constructor(
     data: {
-      tradeId: string;
-      quantity: string;
+      listingId: string;
+      quantity: number;
     },
     contractAddress?: string
   ) {
     const contract = Contracts.Market.get(contractAddress);
 
     const txData = contract.methods
-      .buy(data.tradeId, data.quantity)
+      .buy(data.listingId, data.quantity)
       .encodeABI();
 
     super(contract.options.address, txData);

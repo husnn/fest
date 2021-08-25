@@ -6,56 +6,40 @@ import { ApiClient } from '../modules/api';
 import useAuthentication from '../modules/auth/useAuthentication';
 import EthereumClient from '../modules/ethereum/EthereumClient';
 import Modal from '../ui/Modal';
+import TransactionModal from './TransactionModal';
 
 type CancelTokenListingProps = {
   listing: TokenListingDTO;
+  onClose: () => void;
   onDone: () => void;
 };
 
 export const CancelTokenListing = ({
   listing,
+  onClose,
   onDone
 }: CancelTokenListingProps) => {
   const { currentUser } = useAuthentication(true);
-  const [isCancelling, setCancelling] = useState(false);
-
-  const cancelListing = async (listing: TokenListingDTO) => {
-    setCancelling(true);
-
-    try {
-      let hash;
-
-      if (currentUser.wallet.type == WalletType.INTERNAL) {
-        hash = await ApiClient.instance?.cancelTokenListing(listing.id);
-      } else {
-        hash = await EthereumClient.instance?.cancelTokenListing(
-          listing.chain.id
-        );
-      }
-
-      await EthereumClient.instance.checkTxConfirmation(hash);
-
-      onDone();
-    } catch (err) {
-      console.log(err);
-    }
-
-    setCancelling(false);
-  };
-
   return (
-    <Modal
+    <TransactionModal
       show={true}
-      requestClose={() => onDone()}
-      title="Are you sure?"
-      description="This action cannot be reversed"
-      ok="Confirm"
-      okEnabled={!isCancelling}
-      onOkPressed={() => cancelListing(listing)}
-      cancel="Cancel"
+      requestClose={() => onClose()}
+      executeTransaction={() => {
+        if (currentUser.wallet.type == WalletType.INTERNAL) {
+          return ApiClient.instance?.cancelTokenListing(listing.id);
+        } else {
+          return EthereumClient.instance?.cancelTokenListing(listing.chain.id);
+        }
+      }}
+      onTransactionSent={async (hash: string, end) => {
+        end();
+      }}
+      onFinished={() => {
+        onDone();
+      }}
     >
       <p>The remaining tokens will be returned to you.</p>
-    </Modal>
+    </TransactionModal>
   );
 };
 

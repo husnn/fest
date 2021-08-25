@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
 import styled from '@emotion/styled';
@@ -110,6 +111,8 @@ export default function MarketPage() {
 
   useHeader(['wallet', 'profile']);
 
+  const router = useRouter();
+
   const [listingToCancel, setListingToCancel] = useState(null);
 
   /**
@@ -155,7 +158,12 @@ export default function MarketPage() {
       {listingToCancel && (
         <CancelTokenListing
           listing={listingToCancel}
-          onDone={() => setListingToCancel(null)}
+          onClose={() => setListingToCancel(null)}
+          onDone={() => {
+            setTimeout(() => {
+              router.reload();
+            }, 2000);
+          }}
         />
       )}
     </div>

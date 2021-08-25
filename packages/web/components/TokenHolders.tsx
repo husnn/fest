@@ -9,6 +9,12 @@ import useAuthentication from '../modules/auth/useAuthentication';
 import { Button, Link } from '../ui';
 import { getDisplayName, getProfileUrl } from '../utils';
 
+const Container = styled.div`
+  > * + * {
+    margin-top: 20px;
+  }
+`;
+
 const HolderRow = styled.div<{
   selected: boolean;
 }>`
@@ -66,7 +72,7 @@ const TokenHolders = ({
 
   const { data, loadMore, hasMore } = usePagination<TokenOwnershipDTO>(
     (count: number, page: number) =>
-      ApiClient.instance.getTokenOwnerships(token, count, page)
+      ApiClient.instance.getTokenOwnerships(token, count || 10, page)
   );
 
   useEffect(() => {
@@ -74,62 +80,69 @@ const TokenHolders = ({
   }, [data]);
 
   return (
-    <div>
-      {data &&
-        data.map((ownership: TokenOwnershipDTO, index: number) => (
-          <HolderRow
-            key={index}
-            selected={ownership?.id == selected?.id}
-            onClick={() => {
-              setSelected(ownership);
-            }}
-          >
-            <div>
-              <Avatar className="avatar" />
-              <HolderInfo style={{ cursor: 'default' }}>
-                <Link
-                  href={
-                    selected?.id == ownership?.id
-                      ? ownership.owner &&
-                        getProfileUrl({ id: ownership.owner.id })
-                      : null
-                  }
-                >
-                  <h4 style={{ wordBreak: 'break-all' }}>
-                    {getDisplayName(ownership.owner, ownership.wallet)}
-                  </h4>
-                </Link>
-                <p className="smaller">{ownership.quantity} owned</p>
-              </HolderInfo>
-            </div>
-            {selected?.id == ownership?.id && (
-              <React.Fragment>
-                {currentUser &&
-                ownership?.walletId == currentUser?.wallet.id ? (
-                  <Button
-                    size="small"
-                    onClick={() =>
-                      listForSale ? listForSale(ownership) : null
+    <Container>
+      <div>
+        {data &&
+          data.map((ownership: TokenOwnershipDTO, index: number) => (
+            <HolderRow
+              key={index}
+              selected={ownership?.id == selected?.id}
+              onClick={() => {
+                setSelected(ownership);
+              }}
+            >
+              <div>
+                <Avatar className="avatar" />
+                <HolderInfo style={{ cursor: 'default' }}>
+                  <Link
+                    href={
+                      selected?.id == ownership?.id
+                        ? ownership.owner &&
+                          getProfileUrl({ id: ownership.owner.id })
+                        : null
                     }
                   >
-                    List for sale
-                  </Button>
-                ) : (
-                  <Button
-                    size="small"
-                    color="secondary"
-                    onClick={() => {
-                      // Make and send offer
-                    }}
-                  >
-                    Make offer
-                  </Button>
-                )}
-              </React.Fragment>
-            )}
-          </HolderRow>
-        ))}
-    </div>
+                    <h4 style={{ wordBreak: 'break-all' }}>
+                      {getDisplayName(ownership.owner, ownership.wallet)}
+                    </h4>
+                  </Link>
+                  <p className="smaller">{ownership.quantity} owned</p>
+                </HolderInfo>
+              </div>
+              {selected?.id == ownership?.id && (
+                <React.Fragment>
+                  {currentUser &&
+                  ownership?.walletId == currentUser?.wallet.id ? (
+                    <Button
+                      size="small"
+                      onClick={() =>
+                        listForSale ? listForSale(ownership) : null
+                      }
+                    >
+                      List for sale
+                    </Button>
+                  ) : (
+                    <Button
+                      size="small"
+                      color="secondary"
+                      onClick={() => {
+                        // Make and send offer
+                      }}
+                    >
+                      Make offer
+                    </Button>
+                  )}
+                </React.Fragment>
+              )}
+            </HolderRow>
+          ))}
+      </div>
+      {hasMore && (
+        <Button size="small" onClick={() => loadMore()}>
+          Load more
+        </Button>
+      )}
+    </Container>
   );
 };
 

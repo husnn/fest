@@ -19,8 +19,29 @@ export class TokenTradeDTO {
 
   price: string;
 
-  constructor(data?: Partial<TokenTradeDTO>) {
-    Object.assign(this, data);
+  constructor(props?: Partial<TokenTradeDTO>) {
+    this.id = props.id;
+
+    this.dateCreated = props.dateCreated;
+
+    this.sellerId = props.sellerId;
+    if (props.seller) {
+      this.seller = new UserDTO(props.seller);
+    }
+
+    this.buyerId = props.buyerId;
+    if (props.buyer) {
+      this.buyer = new UserDTO(props.buyer);
+    }
+
+    this.tokenListingId = props.tokenListingId;
+    if (props.tokenListing) {
+      this.tokenListing = new TokenListingDTO(props.tokenListing);
+    }
+
+    this.quantity = props.quantity;
+
+    this.price = props.price;
   }
 }
 
