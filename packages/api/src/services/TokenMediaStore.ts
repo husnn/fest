@@ -1,3 +1,5 @@
+// import './allow_s3_cors';
+
 import { nanoid } from 'nanoid';
 import path from 'path';
 
@@ -19,22 +21,30 @@ export class TokenMediaStore {
   }
 
   async getImageUploadUrl(
-    fileName: string,
-    fileType: string
-  ): Promise<Result<string>> {
-    const ext = path.extname(fileName);
+    filename: string,
+    filetype: string
+  ): Promise<
+    Result<{
+      signedUrl: string;
+      url: string;
+    }>
+  > {
+    const ext = path.extname(filename);
     const filePath = `media/full/${nanoid()}${ext}`;
 
     const command = new PutObjectCommand({
       Bucket: process.env.S3_TOKEN_MEDIA_NAME,
       Key: filePath,
-      ContentType: fileType,
+      ContentType: filetype,
       ACL: 'public-read'
     });
 
-    const url = await getSignedUrl(this.s3, command, { expiresIn: 10 });
+    const signedUrl = await getSignedUrl(this.s3, command, { expiresIn: 30 });
 
-    return Result.ok(url);
+    return Result.ok({
+      signedUrl,
+      url: `${process.env.S3_TOKEN_MEDIA_URL}/${process.env.S3_TOKEN_MEDIA_NAME}/${filePath}`
+    });
   }
 }
 

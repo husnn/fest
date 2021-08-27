@@ -18,7 +18,7 @@ const Container = styled.div`
 const HolderRow = styled.div<{
   selected: boolean;
 }>`
-  margin-top: 10px;
+  margin-top: 20px;
   padding: 20px;
   display: flex;
   flex-direction: column;

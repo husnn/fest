@@ -1,3 +1,5 @@
+import React from 'react';
+
 import styled from '@emotion/styled';
 
 import fontSize from '../styles/constants/fontSize';
@@ -6,11 +8,6 @@ import Spinner from './Spinner';
 type ButtonStyle = 'normal' | 'primary' | 'secondary' | 'ghost';
 
 type ButtonSize = 'regular' | 'small' | 'smaller' | 'large';
-
-type ButtonProps = {
-  color?: ButtonStyle;
-  size?: ButtonSize;
-};
 
 const ButtonStyled = styled.button<ButtonProps>`
   max-height: 50px;
@@ -60,13 +57,7 @@ const ButtonStyled = styled.button<ButtonProps>`
     return color;
   }};
   font-size: ${(props) => {
-    let size = fontSize.sm;
-
-    if (props.size === 'small') {
-      size = fontSize.sm;
-    }
-
-    return size;
+    return fontSize.regular;
   }};
   font-weight: bold;
   border: ${(props) => {
@@ -87,7 +78,17 @@ const ButtonStyled = styled.button<ButtonProps>`
   }
 `;
 
-export const Button = ({ loading = false, children, ...props }) => {
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  color?: ButtonStyle;
+  size?: ButtonSize;
+  loading?: boolean;
+}
+
+export const Button = ({
+  loading = false,
+  children,
+  ...props
+}: ButtonProps) => {
   return (
     <ButtonStyled disabled={loading || props.disabled} {...props}>
       {loading ? <Spinner /> : children}

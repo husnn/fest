@@ -1,10 +1,13 @@
+import axios from 'axios';
 import { Field, Form, Formik, FormikProps } from 'formik';
+import { statSync } from 'fs';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
 import { CreateTokenSchema, TokenMetadata, TokenType, YouTubeVideo } from '@fanbase/shared';
 
+import MediaUploader from '../components/MediaUploader';
 import YouTubeVideoList, { YouTubeVideoRow } from '../components/YouTubeVideoList';
 import ApiClient from '../modules/api/ApiClient';
 import useAuthentication from '../modules/auth/useAuthentication';
@@ -147,9 +150,12 @@ export default function CreateTokenPage() {
                 <YouTubeVideoList
                   onSelected={(video: YouTubeVideo) => {
                     setYouTubeVideo(video);
+
+                    setFieldValue('name', video.title);
                     setFieldValue('resource', video.id);
 
                     setYouTubeVideosClosing(true);
+
                     setTimeout(() => {
                       setYouTubeVideosClosing(false);
                       setShowYouTubeVideo(false);
@@ -157,6 +163,31 @@ export default function CreateTokenPage() {
                   }}
                 />
               </Modal>
+
+              {values.type == tokenTypesOptions.BASIC.id && (
+                <FormInput label="Image" optional>
+                  <MediaUploader
+                    onRead={async (file: File) => {
+                      try {
+                        const response =
+                          await ApiClient.instance.getTokenImageUploadUrl(
+                            file.name,
+                            file.type
+                          );
+
+                        setFieldValue('image', response.url);
+
+                        await ApiClient.instance.uploadImageToS3(
+                          response.signedUrl,
+                          file
+                        );
+                      } catch (err) {
+                        console.log(err);
+                      }
+                    }}
+                  />
+                </FormInput>
+              )}
 
               <FormInput label="Name" error={errors.name as string}>
                 <Field

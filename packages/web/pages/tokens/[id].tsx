@@ -21,6 +21,7 @@ import { getDisplayName, getProfileUrl } from '../../utils';
 
 const TokenContainer = styled.div`
   width: 100%;
+  padding-bottom: 50px;
   display: flex;
   flex-direction: row-reverse;
   justify-content: center;
@@ -83,9 +84,9 @@ const TokenActions = styled.div`
 
 const TokenHoldersContainer = styled.div`
   width: 100%;
-  min-width: 200px;
+  min-width: 300px;
   margin-left: 30px;
-  flex: 0.4;
+  flex: 0.5;
 
   @media screen and (max-width: 500px) {
     margin: 30px 0;
@@ -95,10 +96,17 @@ const TokenHoldersContainer = styled.div`
 const PreviewContainer = styled.div`
   position: relative;
   width: 100%;
-  height: 250px;
-  max-height: auto;
-  border-radius: 10px;
+  min-height: 250px;
+  height: auto;
   overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 100% 100%;
+    border-radius: 10px;
+  }
 `;
 
 export default function TokenPage() {
@@ -276,11 +284,7 @@ export default function TokenPage() {
             </TokenHeading>
 
             <PreviewContainer>
-              <Image
-                src="/images/token-sample-1.jpg"
-                layout="fill"
-                objectFit="cover"
-              />
+              <img src={token.image || '/images/token-sample-1.jpg'} />
             </PreviewContainer>
 
             <TokenCreatorCard>

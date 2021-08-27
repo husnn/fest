@@ -171,6 +171,21 @@ export interface CreateTokenRequest extends Request {
   body: TokenData;
 }
 
+export interface GetTokenImageUploadUrlResponse extends Response {
+  signedUrl: string;
+  url: string;
+}
+
+export interface GetTokenImageUploadUrlRequest extends Request {
+  method: 'GET';
+  authentication: 'required';
+  endpoint: '/tokens/image-upload-url';
+  params: {
+    filename: string;
+    filetype: string;
+  };
+}
+
 /**
  * YouTube
  */
@@ -178,9 +193,11 @@ export interface CreateTokenRequest extends Request {
 export interface YouTubeVideo {
   id: string;
   datePublished: string;
+  channelId: string;
   thumbnail: string;
   title: string;
   description: string;
+  url: string;
 }
 
 export interface GetOwnUploadsResponse extends Response {

@@ -64,7 +64,7 @@ const HeaderMenu = styled.div`
     width: 100%;
     padding: 10px;
     border-radius: 10px;
-    opacity: 0.7;
+    opacity: 0.5;
   }
 
   a:hover {
@@ -203,7 +203,7 @@ const Header: React.FC<HeaderProps> = () => {
     <HeaderContainer>
       <HeaderWrapper>
         <Link href="/">
-          <h2>Fanbase</h2>
+          <h2 style={{ fontFamily: 'Gilmer' }}>Fanbase</h2>
         </Link>
         {links && !singleLink && <HeaderLinks links={links} />}
         {links.length > 0 &&

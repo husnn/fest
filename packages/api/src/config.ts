@@ -11,7 +11,7 @@ const appConfig: AppConfig = {
   port: parseInt(process.env.PORT) || 5000,
   jwtSecret: process.env.JWT_SECRET,
   apiVersion: 'v1',
-  clientUrl: process.env.CLIENT_URL || `http://localhost:5000`
+  clientUrl: process.env.CLIENT_URL || `http://localhost:3000`
 };
 
 const getApiUrl = () =>

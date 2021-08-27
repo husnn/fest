@@ -13,6 +13,8 @@ export class TokenDTO {
   description?: string;
   supply?: number;
 
+  image?: string;
+
   chain?: ChainData;
   minted = false;
 
@@ -29,6 +31,9 @@ export class TokenDTO {
     this.name = props.name;
     this.description = props.description;
     this.supply = props.supply;
+
+    this.image = props.image;
+
     this.chain = props.chain;
     this.minted = props.minted;
   }

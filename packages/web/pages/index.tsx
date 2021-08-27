@@ -21,7 +21,14 @@ export default function Home() {
       <div className={styles.main}>
         <h1 className={styles.mainHeading}>
           Build your own{' '}
-          <span style={{ fontFamily: 'inherit', whiteSpace: 'nowrap' }}>
+          <span
+            style={{
+              fontFamily: 'inherit',
+              fontSize: 'inherit',
+              fontWeight: 'inherit',
+              whiteSpace: 'nowrap'
+            }}
+          >
             NFT-backed
           </span>
           <br />

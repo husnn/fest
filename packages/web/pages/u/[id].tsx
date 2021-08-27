@@ -54,9 +54,9 @@ export default function ProfilePage() {
 
       const { user } = response;
 
-      if (user.username) {
-        router.replace(getProfileUrl(user));
-      }
+      // if (user.username) {
+      //   router.replace(getProfileUrl(user));
+      // }
 
       setUser(user);
     } catch (err) {
@@ -104,9 +104,9 @@ export default function ProfilePage() {
         <div className={'avatar ' + styles.headerAvatar}></div>
         <div className={styles.headerContent}>
           <div className={styles.headerUserInfo}>
-            <h3 className={styles.headerName}>
+            <h4 className={styles.headerName}>
               {user ? getDisplayName(user) : null}
-            </h3>
+            </h4>
             {user?.bio && <p style={{ marginTop: 10 }}>{user.bio}</p>}
           </div>
           <div className={styles.headerActions}>
@@ -115,9 +115,9 @@ export default function ProfilePage() {
                 <ButtonGroup
                   dropdown={
                     <React.Fragment>
-                      <Button color="primary" size="small">
+                      {/* <Button color="primary" size="small">
                         Buy coins
-                      </Button>
+                      </Button> */}
                       <Button color="secondary" size="small">
                         Message
                       </Button>

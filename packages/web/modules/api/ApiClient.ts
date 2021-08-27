@@ -3,7 +3,8 @@ import {
     BuyTokenListingRequest, BuyTokenListingResponse, CancelTokenListingRequest,
     CancelTokenListingResponse, CreateTokenRequest, CreateTokenResponse, EditUserRequest,
     EditUserResponse, GetListingsForTokenRequest, GetListingsForTokenResponse, GetOAuthLinkRequest,
-    GetOAuthLinkResponse, GetOwnUploadsRequest, GetOwnUploadsResponse, GetTokenMarketSummaryRequest,
+    GetOAuthLinkResponse, GetOwnUploadsRequest, GetOwnUploadsResponse,
+    GetTokenImageUploadUrlRequest, GetTokenImageUploadUrlResponse, GetTokenMarketSummaryRequest,
     GetTokenMarketSummaryResponse, GetTokenOwnershipResponse, GetTokenOwnershipsResponse,
     GetTokenRequest, GetTokenResponse, GetTokensCreatedResponse, GetTokensOwnedResponse,
     GetUserByIdRequest, GetUserByUsernameRequest, GetUserResponse, IdentifyWithEmailRequest,
@@ -284,6 +285,33 @@ export class ApiClient {
     });
 
     return response.body.token;
+  }
+
+  async uploadImageToS3(url: string, file: File): Promise<any> {
+    return this.client.request({
+      method: 'PUT',
+      endpoint: url,
+      authentication: 'none',
+      body: file
+    });
+  }
+
+  async getTokenImageUploadUrl(
+    filename: string,
+    filetype: string
+  ): Promise<GetTokenImageUploadUrlResponse> {
+    return this.client.request<
+      GetTokenImageUploadUrlResponse,
+      GetTokenImageUploadUrlRequest
+    >({
+      method: 'GET',
+      endpoint: '/tokens/image-upload-url',
+      authentication: 'required',
+      params: {
+        filename,
+        filetype
+      }
+    });
   }
 
   // YouTube

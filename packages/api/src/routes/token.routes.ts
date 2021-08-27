@@ -2,14 +2,19 @@ import { NextFunction, Request, Response, Router } from 'express';
 
 import { EthereumService } from '@fanbase/ethereum';
 import {
-    TokenOwnershipRepository, TokenRepository, UserRepository, WalletRepository
+    OAuthRepository, TokenOwnershipRepository, TokenRepository, UserRepository, WalletRepository
 } from '@fanbase/postgres';
+import { GetTokenImageUploadUrlResponse } from '@fanbase/shared';
 
+import { googleConfig, youTubeConfig } from '../config';
 import TokenController from '../controllers/TokenController';
+import { HttpError, HttpResponse } from '../http';
 import authMiddleware from '../middleware/authMiddleware';
 import pagination from '../middleware/pagination';
+import GoogleService from '../services/GoogleService';
 import { MetadataStore } from '../services/MetadataStore';
 import TokenMediaStore from '../services/TokenMediaStore';
+import YouTubeService from '../services/YouTubeService';
 
 export default function init(router: Router): Router {
   const userRepository = new UserRepository();
@@ -24,6 +29,11 @@ export default function init(router: Router): Router {
   const walletRepository = new WalletRepository();
   const tokenOwnershipRepository = new TokenOwnershipRepository();
 
+  const oAuthRepository = new OAuthRepository();
+
+  const googleService = new GoogleService(googleConfig);
+  const youTubeService = new YouTubeService(youTubeConfig);
+
   const ethereumService = EthereumService.instance;
 
   const tokenController = new TokenController(
@@ -32,17 +42,35 @@ export default function init(router: Router): Router {
     userRepository,
     walletRepository,
     ethereumService,
-    tokenOwnershipRepository
+    tokenOwnershipRepository,
+    oAuthRepository,
+    googleService,
+    youTubeService
   );
 
-  router.get('/image-upload-url', async (req: Request, res: Response) => {
-    const url = await mediaStore.getImageUploadUrl(
-      req.query.filename as string,
-      req.query.type as string
-    );
+  router.get(
+    '/image-upload-url',
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const result = await mediaStore.getImageUploadUrl(
+          req.query.filename as string,
+          req.query.filetype as string
+        );
 
-    res.send(url);
-  });
+        if (!result.success)
+          throw new HttpError('Could not create upload URL.');
+
+        const { signedUrl, url } = result.data;
+
+        return new HttpResponse<GetTokenImageUploadUrlResponse>(res, {
+          signedUrl,
+          url
+        });
+      } catch (err) {
+        next(err);
+      }
+    }
+  );
 
   router.put(
     '/',

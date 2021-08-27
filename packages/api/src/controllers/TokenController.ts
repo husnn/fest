@@ -2,10 +2,10 @@ import { NextFunction, Request, Response } from 'express';
 
 import {
     ApproveMint, ApproveTokenSale, CreateToken, EthereumService, GetToken, GetTokenOwnership,
-    GetTokenOwnerships, IPFSService, ListTokenForSale, MintToken, TokenRepository, UserRepository,
-    WalletRepository
+    GetTokenOwnerships, GetYouTubeChannel, GoogleService, IPFSService, ListTokenForSale, MintToken,
+    OAuthRepository, TokenOwnershipRepository, TokenRepository, UserRepository, WalletRepository,
+    YouTubeService
 } from '@fanbase/core';
-import { TokenOwnershipRepository } from '@fanbase/postgres';
 import {
     ApproveMintResponse, ApproveTokenSaleResponse, CreateTokenResponse, GetTokenOwnershipResponse,
     GetTokenOwnershipsResponse, GetTokenResponse, ListTokenForSaleResponse, MintTokenResponse,
@@ -32,12 +32,23 @@ class TokenController {
     userRepository: UserRepository,
     walletRepository: WalletRepository,
     ethereumService: EthereumService,
-    tokenOwnershipRepository: TokenOwnershipRepository
+    tokenOwnershipRepository: TokenOwnershipRepository,
+    oAuthRepository: OAuthRepository,
+    googleService: GoogleService,
+    youtubeService: YouTubeService
   ) {
+    const getYouTubeChannelUseCase = new GetYouTubeChannel(
+      oAuthRepository,
+      googleService,
+      youtubeService
+    );
+
     this.createTokenUseCase = new CreateToken(
       tokenRepository,
       userRepository,
-      metadataStore
+      metadataStore,
+      youtubeService,
+      getYouTubeChannelUseCase
     );
 
     this.getTokenUseCase = new GetToken(tokenRepository);

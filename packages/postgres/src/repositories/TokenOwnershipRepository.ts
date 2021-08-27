@@ -25,6 +25,7 @@ export class TokenOwnershipRepository
     const [ownerships, total] = await this.db
       .createQueryBuilder('ownership')
       .leftJoinAndSelect('ownership.token', 'token')
+      .leftJoinAndSelect('token.creator', 'creator')
       .where('ownership.walletId = :wallet', { wallet })
       .andWhere('ownership.quantity > 0')
       .orderBy('token.dateCreated', 'DESC')

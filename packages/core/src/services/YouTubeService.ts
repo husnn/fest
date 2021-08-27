@@ -1,8 +1,11 @@
 import { YouTubeVideo } from '@fanbase/shared';
 
+import { YouTubeChannel } from '../entities';
 import { Result } from '../Result';
 
 export interface YouTubeService {
+  getOwnChannel(accessToken: string): Promise<Result<YouTubeChannel>>;
+
   getOwnUploads(
     accessToken: string,
     count?: number,

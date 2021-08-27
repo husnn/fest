@@ -1,6 +1,6 @@
 import Axios from 'axios';
 
-import { Result, YouTubeService as IYouTubeService } from '@fanbase/core';
+import { Result, YouTubeChannel, YouTubeService as IYouTubeService } from '@fanbase/core';
 import { YouTubeVideo } from '@fanbase/shared';
 
 export interface YouTubeConfig {
@@ -10,21 +10,35 @@ export interface YouTubeConfig {
 class YouTubeService implements IYouTubeService {
   private config: YouTubeConfig;
 
-  constructor (config: YouTubeConfig) {
+  constructor(config: YouTubeConfig) {
     this.config = config;
   }
 
-  static MapToVideo (data: any): YouTubeVideo {
+  static MapToVideo(data: any): YouTubeVideo {
     return {
-      id: data.snippet.resourceId.videoId,
+      id: data.id,
       datePublished: data.snippet.publishedAt,
-      thumbnail: data.snippet.thumbnails.standard.url,
+      channelId: data.snippet.channelId,
+      thumbnail: data.snippet.thumbnails.maxres.url,
       title: data.snippet.title,
-      description: data.snippet.description
+      description: data.snippet.description,
+      url: `https://www.youtube.com/watch?v=${data.id}`
     };
   }
 
-  async getOwnChannel (accessToken: string): Promise<Result<any>> {
+  static MapPlaylistItemToVideo(data: any): YouTubeVideo {
+    return {
+      id: data.snippet.resourceId.videoId,
+      datePublished: data.snippet.publishedAt,
+      channelId: data.snippet.channelId,
+      thumbnail: data.snippet.thumbnails.standard.url,
+      title: data.snippet.title,
+      description: data.snippet.description,
+      url: `https://www.youtube.com/watch?v=${data.snippet.resourceId.videoId}`
+    };
+  }
+
+  async getOwnChannel(accessToken: string): Promise<Result<YouTubeChannel>> {
     const response = await Axios.get(
       'https://www.googleapis.com/youtube/v3/channels',
       {
@@ -36,7 +50,7 @@ class YouTubeService implements IYouTubeService {
       }
     );
 
-    return Result.ok(response.data.items[0]);
+    return Result.ok(new YouTubeChannel(response.data.items[0]));
   }
 
   // async getUploadPlaylist(channel: string): Promise<
@@ -60,17 +74,17 @@ class YouTubeService implements IYouTubeService {
   //   return Result.ok({ id: uploads });
   // }
 
-  async getOwnUploadPlaylist (accessToken: string): Promise<Result<string>> {
+  async getOwnUploadPlaylist(accessToken: string): Promise<Result<string>> {
     const ownChannelResult = await this.getOwnChannel(accessToken);
     if (!ownChannelResult.success) return Result.fail();
 
     const uploadPlaylist =
-      ownChannelResult.data.contentDetails.relatedPlaylists.uploads;
+      ownChannelResult.data.contentDetails.relatedPlaylists['uploads'];
 
     return uploadPlaylist ? Result.ok(uploadPlaylist) : Result.fail();
   }
 
-  async getPlaylistVideos (
+  async getPlaylistVideos(
     playlist: string,
     page?: string,
     count = 10
@@ -97,7 +111,9 @@ class YouTubeService implements IYouTubeService {
 
     const { items, nextPageToken: nextPage } = response.data;
 
-    const videos = items.map((item: any) => YouTubeService.MapToVideo(item));
+    const videos = items.map((item: any) =>
+      YouTubeService.MapPlaylistItemToVideo(item)
+    );
 
     return Result.ok({
       videos,
@@ -107,7 +123,7 @@ class YouTubeService implements IYouTubeService {
     });
   }
 
-  async getOwnUploads (
+  async getOwnUploads(
     accessToken: string,
     count?: number,
     playlist?: string,
@@ -138,7 +154,7 @@ class YouTubeService implements IYouTubeService {
       : Result.fail();
   }
 
-  async getVideo (id: string): Promise<Result<YouTubeVideo>> {
+  async getVideo(id: string): Promise<Result<YouTubeVideo>> {
     const response = await Axios.get(
       'https://www.googleapis.com/youtube/v3/videos',
       {
@@ -150,7 +166,7 @@ class YouTubeService implements IYouTubeService {
       }
     );
 
-    const video = YouTubeService.MapToVideo(response.data);
+    const video = YouTubeService.MapToVideo(response.data.items[0]);
 
     return Result.ok(video);
   }

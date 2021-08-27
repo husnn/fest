@@ -54,7 +54,7 @@ export default function SettingsPage() {
             </FormInput>
           </SettingsBlock>
           <SettingsBlock>
-            <h4>Edit profile</h4>
+            <h3>Edit profile</h3>
             <Formik
               initialValues={{
                 name: currentUser.name || '',
@@ -171,7 +171,7 @@ export default function SettingsPage() {
             </Formik>
           </SettingsBlock>
           <SettingsBlock>
-            <h4>Connect to YouTube</h4>
+            <h3>Connect to YouTube</h3>
             <GoogleButton
               onLinkReceived={(link: string) => {
                 router.push(link);

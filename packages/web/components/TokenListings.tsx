@@ -132,7 +132,7 @@ export const TokenListings = ({ token }: TokenListingsProps) => {
     //   }
     // });
 
-    data.sort((a) => a.seller.id == currentUser.id && -1);
+    data.sort((a) => a.seller.id == currentUser?.id && -1);
 
     setListings(data);
   }, [data]);

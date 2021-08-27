@@ -4,11 +4,24 @@
   font-weight: normal;
   font-style: normal;
 }
+@font-face {
+  font-family: 'Gilmer';
+  src: url('../public/fonts/Gilmer/Gilmer-Medium.otf');
+  font-weight: 500;
+  font-style: normal;
+}
 
 @font-face {
   font-family: 'Gilmer';
   src: url('../public/fonts/Gilmer/Gilmer-Bold.otf');
-  font-weight: bold;
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Gilmer';
+  src: url('../public/fonts/Gilmer/Gilmer-Heavy.otf');
+  font-weight: 900;
   font-style: normal;
 }
 
@@ -33,6 +46,7 @@ p, a {
 }
 
 a {
+  font-weight: 900;
   color: inherit;
   text-decoration: none;
 }
@@ -48,15 +62,19 @@ p.smaller, a.smaller {
 label {
   display: block;
   padding: 10px 0;
+  // font-family: Greycliff CF;
+  font-weight: 800;
   font-size: 10pt;
-  opacity: 0.9;
-  letter-spacing: 0.015rem;
+  opacity: 0.5;
+  letter-spacing: 0.05rem;
 }
 
 * {
   box-sizing: border-box;
   font-family: Gilmer, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-size: 11pt;
+  font-weight: 500;
 }
 
 h1, h2, h3, h4, h5 {
@@ -64,6 +82,21 @@ h1, h2, h3, h4, h5 {
   padding: 0;
   letter-spacing: 0.025rem;
 }
+
+h1, h2, h3 {
+  // font-family: Greycliff CF;
+  font-weight: bold;
+}
+
+h4, h5 {
+  font-weight: 700;
+}
+
+h1 { font-size: xx-large; }
+h2 { font-size: x-large; }
+h3 { font-size: larger; }
+h4 { font-size: 13pt; }
+h5 { font-size: medium; }
 
 input[type=text],
 input[type=email],
@@ -78,7 +111,7 @@ input[type=email],
 input[type=number],
 textarea {
   width: 100%;
-  border: 1px solid #ccc;
+  border: 2px solid #ebebeb;
   border-radius: 5px;
 }
 
@@ -94,11 +127,11 @@ textarea {
 }
 
 input:hover, textarea:hover {
-  border: 1px solid #aaa;
+  border: 2px solid #ebebeb;
 }
 
 input:focus, textarea:focus {
-  border: 1px solid #aaa;
+  border: 2px solid #ebebeb;
 }
 
 ::-webkit-scrollbar {
