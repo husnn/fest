@@ -50,6 +50,8 @@ export default function CreateTokenPage() {
   const [hasRoyalties, setHasRoyalties] = useState(true);
   const [hasAttributes, setHasAttributes] = useState(false);
 
+  const [isUploading, setUploading] = useState(false);
+
   const [created, setCreated] = useState(false);
 
   return (
@@ -177,6 +179,8 @@ export default function CreateTokenPage() {
 
                         setFieldValue('image', response.url);
 
+                        setUploading(true);
+
                         await ApiClient.instance.uploadImageToS3(
                           response.signedUrl,
                           file
@@ -184,6 +188,8 @@ export default function CreateTokenPage() {
                       } catch (err) {
                         console.log(err);
                       }
+
+                      setUploading(false);
                     }}
                   />
                 </FormInput>
@@ -306,7 +312,7 @@ export default function CreateTokenPage() {
                 <Button
                   type="submit"
                   color="primary"
-                  loading={isSubmitting}
+                  loading={isUploading || isSubmitting}
                   disabled={!dirty || !isValid || created}
                 >
                   Create

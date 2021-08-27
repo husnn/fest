@@ -293,6 +293,9 @@ export class ApiClient {
       endpoint: url,
       authentication: 'none',
       body: file
+      // headers: {
+      //   'Content-Type': file.type
+      // }
     });
   }
 
