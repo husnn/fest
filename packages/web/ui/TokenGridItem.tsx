@@ -3,7 +3,7 @@ import React from 'react';
 import styled from '@emotion/styled';
 import { TokenDTO } from '@fanbase/shared';
 
-import { getDisplayName } from '../utils';
+import { getDisplayName, getImageUrl } from '../utils';
 
 const GridItem = styled.div`
   width: 100%;
@@ -107,7 +107,11 @@ const TokenGridItem = ({
 
   return (
     <GridItem onClick={() => (onClick ? onClick(token) : null)}>
-      <Preview>{token.image && <img src={token.image} />}</Preview>
+      <Preview>
+        {token.image && (
+          <img src={getImageUrl(token.image, { width: 250, height: 250 })} />
+        )}
+      </Preview>
       <TokenInfo>
         <p className={`small ${isExclusive ? ' exclusive' : ''}`}>
           {isExclusive ? 'Exclusive' : `1 / ${token.supply}`}

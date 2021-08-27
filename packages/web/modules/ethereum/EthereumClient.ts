@@ -249,7 +249,7 @@ export default class EthereumClient {
   async getApprovedAllowance(
     erc20Address: string,
     spenderAddress: string
-  ): Promise<number> {
+  ): Promise<string> {
     const account = await this.getAccount();
 
     const abi = [

@@ -49,3 +49,46 @@ export const getPrice = (contract: string, wei: string) => {
     amount: parseFloat(Web3.utils.fromWei(wei))
   };
 };
+
+export const getImageUrl = (
+  sourceUrl: string,
+  params?: {
+    width?: number;
+    height?: number;
+    maxWidth?: number;
+    maxHeight?: number;
+    fit?: 'crop';
+  },
+  override = false
+) => {
+  let endpoint;
+  const baseUrl = process.env.NEXT_PUBLIC_IMAGES_URL;
+
+  if (!override) {
+    const el = document.createElement('a');
+    el.href = sourceUrl;
+
+    endpoint = el.pathname.split('/').pop();
+  }
+
+  const p = params
+    ? {
+        ...(params.width && { w: params.width }),
+        ...(params.height && { h: params.height }),
+        ...(params.maxWidth && { 'max-w': params.maxWidth }),
+        ...(params.maxHeight && { 'max-h': params.maxHeight }),
+        ...(params.fit && { fit: params.fit })
+      }
+    : undefined;
+
+  const qs = Object.keys(p)
+    .map((key) => `${key}=${p[key]}`)
+    .join('&');
+
+  const url =
+    baseUrl && !override
+      ? `${baseUrl}/${endpoint || sourceUrl}?${qs}`
+      : sourceUrl;
+
+  return url;
+};

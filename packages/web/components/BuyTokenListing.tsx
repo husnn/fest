@@ -69,7 +69,7 @@ const BuyTokenListing = ({
     if (!isCustodialWallet) {
       EthereumClient.instance
         .getApprovedAllowance(listing.currency, listing.chain.contract)
-        .then((allowance: number) => {
+        .then((allowance: string) => {
           setApprovedAllowance(parseFloat(Web3.utils.fromWei(allowance)));
         });
     }
