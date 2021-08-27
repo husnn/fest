@@ -1,2 +1,2 @@
-web: yarn serve:api
-worker: yarn serve:indexer
+web: yarn api serve
+worker: yarn indexer serve
