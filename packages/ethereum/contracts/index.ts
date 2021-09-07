@@ -35,7 +35,8 @@ export const init = async (web3: Web3) => {
 const contractInstances: { [key: string]: any } = {};
 
 const getContract = (name: keyof typeof interfaces, address?: string) => {
-  let instance = contractInstances[name];
+  const instanceKey = `${name}:${network}`;
+  let instance = contractInstances[instanceKey];
 
   if (!instance) {
     instance = new web3Instance.eth.Contract(
@@ -43,7 +44,7 @@ const getContract = (name: keyof typeof interfaces, address?: string) => {
       address || getAddress(name as string, network)
     );
 
-    contractInstances[name] = instance;
+    contractInstances[instanceKey] = instance;
   }
 
   return instance;

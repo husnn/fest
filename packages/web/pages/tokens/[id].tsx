@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { setTimeout } from 'timers';
@@ -96,7 +95,6 @@ const TokenHoldersContainer = styled.div`
 const PreviewContainer = styled.div`
   position: relative;
   width: 100%;
-  min-height: 250px;
   height: auto;
   overflow: hidden;
 

@@ -3,10 +3,15 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
 import styled from '@emotion/styled';
+import Contracts from '@fanbase/eth-contracts';
 import { TokenListingDTO, TokenOfferDTO, TokenTradeDTO } from '@fanbase/shared';
 
 import CancelTokenListing from '../components/CancelTokenListing';
+import Wallet, { WalletCurrency } from '../components/Wallet';
+import WithdrawEarnings from '../components/WithdrawEarnings';
 import { ApiClient } from '../modules/api';
+import useAuthentication from '../modules/auth/useAuthentication';
+import EthereumClient from '../modules/ethereum/EthereumClient';
 import { useHeader } from '../modules/navigation';
 import { Button, Link } from '../ui';
 import { getPrice, getTokenUrl } from '../utils';
@@ -113,7 +118,10 @@ export default function MarketPage() {
 
   const router = useRouter();
 
+  const { currentUser } = useAuthentication(true);
+
   const [listingToCancel, setListingToCancel] = useState(null);
+  const [isWithdrawing, setWithdrawing] = useState(false);
 
   /**
    * Single API call to retrieve a condensed list of offers, listings and trades
@@ -126,8 +134,70 @@ export default function MarketPage() {
       });
   }, []);
 
-  return (
+  const getEarnings = async (currency: WalletCurrency): Promise<string> => {
+    let currencyContract;
+
+    switch (currency.symbol) {
+      case 'DAI':
+        currencyContract = process.env.ETH_CONTRACT_DAI_ADDRESS;
+        break;
+      case 'FAN':
+        currencyContract = Contracts.Contracts.FAN.get().options.address;
+        break;
+    }
+
+    return EthereumClient.instance.getMarketEarnings(
+      currencyContract,
+      currentUser.wallet.address
+    );
+  };
+
+  const [earnings, setEarnings] = useState<{
+    currency: string;
+    amount: string;
+  }>(undefined);
+
+  return currentUser ? (
     <div className="container boxed" style={{ maxWidth: 600 }}>
+      <MarketSection>
+        <h2>Earnings</h2>
+        <Wallet
+          currencies={[
+            {
+              name: 'Fan Coin',
+              symbol: 'FAN'
+            },
+            {
+              name: 'Dai',
+              symbol: 'DAI'
+            }
+          ]}
+          onCurrencySelected={async (currency: WalletCurrency, callback) => {
+            getEarnings(currency)
+              .then((balance: string) => {
+                setEarnings({
+                  currency: currency.symbol,
+                  amount: balance
+                });
+
+                console.log(earnings);
+
+                const b = getPrice('', balance);
+
+                callback(b.amount);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          }}
+        >
+          {earnings && (
+            <Button size="small" onClick={() => setWithdrawing(true)}>
+              Withdraw
+            </Button>
+          )}
+        </Wallet>
+      </MarketSection>
       {tokenMarketSummary?.offers?.length > 0 && (
         <MarketSection>
           <h2>Offers</h2>
@@ -166,6 +236,18 @@ export default function MarketPage() {
           }}
         />
       )}
+      {isWithdrawing && (
+        <WithdrawEarnings
+          currency={earnings.currency}
+          amount={earnings.amount}
+          onClose={() => setWithdrawing(false)}
+          onDone={() => {
+            setTimeout(() => {
+              router.reload();
+            }, 2000);
+          }}
+        />
+      )}
     </div>
-  );
+  ) : null;
 }

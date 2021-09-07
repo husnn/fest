@@ -5,6 +5,7 @@ import styled from '@emotion/styled';
 import contracts from '@fanbase/eth-contracts';
 import { RampInstantSDK } from '@ramp-network/ramp-instant-sdk';
 
+import Wallet, { WalletCurrency } from '../components/Wallet';
 // import TransakSDK from '@transak/transak-sdk';
 import useAuthentication from '../modules/auth/useAuthentication';
 import EthereumClient from '../modules/ethereum/EthereumClient';
@@ -18,103 +19,10 @@ const WalletInfo = styled.div`
   border-radius: 20px;
 `;
 
-const WalletContainer = styled.div`
-  margin: 20px 0;
-`;
-
-const BalanceContainer = styled.div`
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr;
-
-  @media screen and (min-width: 500px) {
-    grid-template-columns: 3fr 2fr;
-
-    > * + * {
-      margin-left: 20px;
-    }
-  }
-`;
-
-const CurrencySelection = styled.div`
-  padding: 20px 10px;
-  background: #fff;
-  border-radius: 20px;
-  box-shadow: 2px 2px 20px 10px rgba(0, 0, 0, 0.03);
-
-  @media screen and (max-width: 500px) {
-    margin-top: -20px;
-    order: 1;
-  }
-
-  > * + * {
-    margin-top: 5px;
-  }
-`;
-
-const CurrencyTab = styled.div<{ selected: boolean }>`
-  padding: 15px 30px;
-  background: ${(props) => props.selected && '#f5f5f5'};
-  font-weight: ${(props) => props.selected && 'bold'};
-  border-radius: 10px;
-  cursor: pointer;
-
-  &:hover {
-    background: #f5f5f5;
-  }
-`;
-
-const Balance = styled.div`
-  padding: 50px;
-  background: #f5f5f5;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  border-radius: 30px;
-
-  @media screen and (max-width: 500px) {
-    width: 100%;
-    margin: 0 auto;
-    border-radius: 30px 30px 0 0;
-  }
-
-  h1 {
-    word-break: break-word;
-  }
-
-  > * + * {
-    margin-top: 5px;
-  }
-`;
-
-const BalanceActions = styled.div`
-  width: 200px;
-  margin-top: 20px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-
-  > * + * {
-    margin-left: 10px;
-  }
-`;
-
-const TransactionContainer = styled.div`
-  margin: 30px 0;
-`;
-
-type Currency = {
-  name: string;
-  symbol: string;
-  balance?: string;
-  precision?: number;
-};
-
 export const WalletPage = () => {
   const { currentUser } = useAuthentication(true);
 
-  const [currencies] = useState<Currency[]>([
+  const [currencies] = useState<WalletCurrency[]>([
     {
       name: 'Ether',
       symbol: 'ETH',
@@ -130,31 +38,23 @@ export const WalletPage = () => {
     }
   ]);
 
-  const [currencySelected, setCurrencySelected] = useState<Currency>();
-
-  const getBalance = async (currency: Currency) => {
+  const getBalance = async (currency: WalletCurrency) => {
     switch (currency.symbol) {
       case 'ETH':
         return await EthereumClient.instance?.getEtherBalance(
-          currentUser?.wallet.address
+          currentUser.wallet.address
         );
       case 'DAI':
         return await EthereumClient.instance?.getERC20Balance(
           process.env.ETH_CONTRACT_DAI_ADDRESS,
-          currentUser?.wallet.address
+          currentUser.wallet.address
         );
       case 'FAN':
         return await EthereumClient.instance?.getERC20Balance(
           contracts.Contracts.FAN.get().options.address,
-          currentUser?.wallet.address
+          currentUser.wallet.address
         );
     }
-  };
-
-  const selectCurrency = async (currency: Currency) => {
-    const balance = await getBalance(currency);
-    currency.balance = balance;
-    setCurrencySelected(currency);
   };
 
   const sendFunds = () => {
@@ -194,11 +94,7 @@ export const WalletPage = () => {
     }).show();
   };
 
-  useEffect(() => {
-    if (currentUser) selectCurrency(currencies[0]);
-  }, [currentUser]);
-
-  return (
+  return currentUser ? (
     <div className="boxed">
       <Head>
         <title>Wallet</title>
@@ -208,62 +104,33 @@ export const WalletPage = () => {
         See your balances and most recent transactions.
       </p>
       <WalletInfo>
-        {/* <p style={{ textTransform: 'capitalize' }}>
-          {currentUser?.wallet.type.toLowerCase()}
-        </p> */}
         <p
           style={{
-            // marginTop: 10,
             wordBreak: 'break-all',
             fontWeight: 'bold'
           }}
         >
-          {currentUser?.wallet.address}
+          {currentUser.wallet.address}
         </p>
       </WalletInfo>
-      <WalletContainer>
-        <BalanceContainer>
-          <CurrencySelection>
-            {currencies?.map((currency: Currency, index: number) => (
-              <CurrencyTab
-                key={index}
-                selected={currency.symbol == currencySelected?.symbol}
-                onClick={() => selectCurrency(currency)}
-              >
-                <p>
-                  {currency.name} - {currency.symbol}
-                </p>
-              </CurrencyTab>
-            ))}
-          </CurrencySelection>
-          <Balance>
-            <p>Your balance</p>
-            <h1>
-              {Number(currencySelected?.balance || 0).toFixed(
-                currencySelected?.precision || 3
-              )}
-            </h1>
-            <p>{currencySelected?.symbol}</p>
-            <BalanceActions>
-              <Button
-                size="small"
-                color="secondary"
-                onClick={() => sendFunds()}
-              >
-                Send
-              </Button>
-              <Button size="small" color="primary" onClick={() => addFunds()}>
-                Add
-              </Button>
-            </BalanceActions>
-          </Balance>
-        </BalanceContainer>
-      </WalletContainer>
-      {/* <TransactionContainer>
-        <h2>Recent transactions</h2>
-      </TransactionContainer> */}
+      <Wallet
+        currencies={currencies}
+        onCurrencySelected={async (currency: WalletCurrency, callback) => {
+          const balance = await getBalance(currency);
+          callback(balance);
+        }}
+      >
+        <React.Fragment>
+          <Button size="small" color="secondary" onClick={() => sendFunds()}>
+            Send
+          </Button>
+          <Button size="small" color="primary" onClick={() => addFunds()}>
+            Add
+          </Button>
+        </React.Fragment>
+      </Wallet>
     </div>
-  );
+  ) : null;
 };
 
 export default WalletPage;

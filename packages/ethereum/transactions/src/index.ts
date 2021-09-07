@@ -8,3 +8,5 @@ export * from './ListTokenForSale';
 export * from './MintToken';
 export * from './SignOffer';
 export * from './TransferToken';
+export * from './WithdrawMarketEarnings';
+export * from './WithdrawMarketEarnings';

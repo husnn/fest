@@ -17,17 +17,19 @@ type YouTubeVideoRowProps = {
 const YouTubeVideoRowContainer = styled.div<{
   selected?: boolean;
 }>`
-  padding: 10px 20px;
-  margin: 10px 0px;
+  padding: 15px 20px;
   background-color: ${(props) => (props.selected ? '#f5f5f5' : '#fff')};
   display: grid;
   grid-template-columns: 2fr 4fr;
   align-items: center;
-  gap: 20px;
   border-bottom: 1px solid #eee;
   border-radius: 20px;
   cursor: pointer;
   box-sizing: padding-box;
+
+  > * + * {
+    margin-left: 20px;
+  }
 
   &:hover {
     background-color: #f5f5f5;
@@ -51,7 +53,7 @@ const YouTubeVideoRowDetails = styled.div`
   }
 
   .yt-video-row__title {
-    margin: 0;
+    margin: 0 0 10px;
     font-weight: bold;
   }
 

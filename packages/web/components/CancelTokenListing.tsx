@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { TokenListingDTO, WalletType } from '@fanbase/shared';
 
 import { ApiClient } from '../modules/api';
 import useAuthentication from '../modules/auth/useAuthentication';
 import EthereumClient from '../modules/ethereum/EthereumClient';
-import Modal from '../ui/Modal';
 import TransactionModal from './TransactionModal';
 
 type CancelTokenListingProps = {

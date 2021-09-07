@@ -9,7 +9,7 @@ type TransactionModalProps = {
   children?: React.ReactElement;
   txHash?: string;
   executeTransaction: () => Promise<string>;
-  onTransactionSent?: (txHash: string, end: () => void) => Promise<void>;
+  onTransactionSent?: (txHash: string, last: () => void) => Promise<void>;
   onFinished?: () => void;
 };
 
@@ -59,10 +59,12 @@ export const TransactionModal = ({
 
         try {
           const hash = await executeTransaction();
-          await onTransactionSent(hash, () => {
-            console.log(hash);
-            setTxHash(hash);
-          });
+
+          onTransactionSent
+            ? await onTransactionSent(hash, () => {
+                setTxHash(hash);
+              })
+            : null;
         } catch (err) {
           console.log(err);
         }

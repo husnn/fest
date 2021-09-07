@@ -4,7 +4,7 @@ import Web3 from 'web3';
 import Contracts from '@fanbase/eth-contracts';
 import {
     ApproveSpender, ApproveTokenMarket, BuyToken, CancelTokenListing, ListTokenForSale, MintToken,
-    SignOffer, TransferToken
+    SignOffer, TransferToken, WithdrawMarketEarnings
 } from '@fanbase/eth-transactions';
 import { TokenDTO } from '@fanbase/shared';
 
@@ -47,7 +47,7 @@ export default class EthereumClient {
   async getERC20Balance(
     contractAddr: string,
     account: string
-  ): Promise<string> {
+  ): Promise<number> {
     if (!contractAddr || !account) return;
 
     const abi = [
@@ -66,12 +66,12 @@ export default class EthereumClient {
 
     const balance = await contract.methods.balanceOf(account).call();
 
-    return Web3.utils.fromWei(balance, 'ether');
+    return parseFloat(Web3.utils.fromWei(balance, 'ether'));
   }
 
-  async getEtherBalance(account: string): Promise<string> {
+  async getEtherBalance(account: string): Promise<number> {
     const balance = await this.web3.eth.getBalance(account);
-    return Web3.utils.fromWei(balance, 'ether');
+    return parseFloat(Web3.utils.fromWei(balance, 'ether'));
   }
 
   async getAccount(): Promise<string> {
@@ -121,6 +121,48 @@ export default class EthereumClient {
     }).build(buyer, networkId, chainId, nonce);
 
     this.web3.eth.call(tx.txData);
+  }
+
+  async getMarketEarnings(contract: string, wallet?: string): Promise<string> {
+    const marketContract = Contracts.Contracts.Market.get();
+
+    try {
+      const balance = await marketContract.methods
+        .getBalance(contract, wallet)
+        .call();
+
+      return balance;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async withdrawEarnings(
+    currencyContract: string,
+    amountInWei: string,
+    marketContract?: string
+  ): Promise<string> {
+    const account = await this.getAccount();
+
+    const networkId = await this.web3.eth.net.getId();
+    const chainId = await this.web3.eth.getChainId();
+
+    const nonce = await this.web3.eth.getTransactionCount(account, 'pending');
+
+    const txData = {
+      currencyContract,
+      amount: amountInWei
+    };
+
+    const tx = new WithdrawMarketEarnings(txData, marketContract).build(
+      account,
+      networkId,
+      chainId,
+      nonce,
+      385000
+    );
+
+    return this.sendTransaction(tx);
   }
 
   async buyTokenListing(
