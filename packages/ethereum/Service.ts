@@ -12,7 +12,7 @@ import Contracts from '@fanbase/eth-contracts';
 import {
     ApproveSpender, ApproveTokenMarket, BuyToken, CancelTokenListing, ListTokenForSale, MintToken
 } from '@fanbase/eth-transactions';
-import { decryptText, Protocol, WalletType } from '@fanbase/shared';
+import { decryptText, Price, Protocol, WalletType } from '@fanbase/shared';
 
 export class EthereumService implements IEthereumService {
   static instance: EthereumService;
@@ -171,8 +171,7 @@ export class EthereumService implements IEthereumService {
     tokenContract: string,
     tokenId: string,
     quantity: number,
-    currency: string,
-    price: number,
+    price: Price,
     expiry: number,
     salt: string,
     signature: string
@@ -190,8 +189,8 @@ export class EthereumService implements IEthereumService {
       tokenContract,
       tokenId,
       quantity,
-      currencyContract: currency,
-      price,
+      currency: price.currency.contract,
+      price: price.amount,
       expiry,
       salt,
       signature
@@ -246,8 +245,7 @@ export class EthereumService implements IEthereumService {
     token: string,
     tokenId: string,
     quantity: number,
-    currency: string,
-    price: number,
+    price: Price,
     expiry: number,
     salt: string
   ): Promise<Result<{ signature: string }>> {
@@ -259,8 +257,8 @@ export class EthereumService implements IEthereumService {
         token,
         tokenId,
         quantity,
-        currency,
-        Web3.utils.toWei(price.toString()),
+        price.currency.contract,
+        price.amount,
         expiry,
         salt
       )

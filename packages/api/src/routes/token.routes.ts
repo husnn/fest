@@ -1,52 +1,18 @@
 import { NextFunction, Request, Response, Router } from 'express';
 
-import { EthereumService } from '@fanbase/ethereum';
-import {
-    OAuthRepository, TokenOwnershipRepository, TokenRepository, UserRepository, WalletRepository
-} from '@fanbase/postgres';
 import { GetTokenImageUploadUrlResponse } from '@fanbase/shared';
 
-import { googleConfig, youTubeConfig } from '../config';
 import TokenController from '../controllers/TokenController';
 import { HttpError, HttpResponse } from '../http';
 import authMiddleware from '../middleware/authMiddleware';
 import pagination from '../middleware/pagination';
-import GoogleService from '../services/GoogleService';
-import { MetadataStore } from '../services/MetadataStore';
 import TokenMediaStore from '../services/TokenMediaStore';
-import YouTubeService from '../services/YouTubeService';
 
-export default function init(router: Router): Router {
-  const userRepository = new UserRepository();
-
-  const tokenRepository = new TokenRepository();
-  const metadataStore = new MetadataStore(
-    process.env.PINATA_API_KEY,
-    process.env.PINATA_API_SECRET
-  );
+export default function init(
+  router: Router,
+  tokenController: TokenController
+): Router {
   const mediaStore = new TokenMediaStore();
-
-  const walletRepository = new WalletRepository();
-  const tokenOwnershipRepository = new TokenOwnershipRepository();
-
-  const oAuthRepository = new OAuthRepository();
-
-  const googleService = new GoogleService(googleConfig);
-  const youTubeService = new YouTubeService(youTubeConfig);
-
-  const ethereumService = EthereumService.instance;
-
-  const tokenController = new TokenController(
-    tokenRepository,
-    metadataStore,
-    userRepository,
-    walletRepository,
-    ethereumService,
-    tokenOwnershipRepository,
-    oAuthRepository,
-    googleService,
-    youTubeService
-  );
 
   router.get(
     '/image-upload-url',

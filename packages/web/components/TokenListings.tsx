@@ -50,7 +50,7 @@ const TokenListing = ({ listing }: { listing: TokenListingDTO }) => {
   const router = useRouter();
 
   const isActive = listing.status == TokenListingStatus.Active;
-  const price = getPrice(listing.currency, listing.price);
+  const price = getPrice(listing.price);
 
   const [buying, setBuying] = useState(false);
 

@@ -1,4 +1,4 @@
-import { WalletType } from '@fanbase/shared';
+import { Price, WalletType } from '@fanbase/shared';
 
 import UseCase from '../../base/UseCase';
 import { TokenOwnershipRepository, TokenRepository, WalletRepository } from '../../repositories';
@@ -10,8 +10,7 @@ type ListTokenForSaleInput = {
   user: string;
   token: string;
   quantity: number;
-  currency: string;
-  price: number;
+  price: Price;
 };
 
 type ListTokenForSaleOutput = {
@@ -44,7 +43,7 @@ export class ListTokenForSale extends UseCase<
   async exec(
     data: ListTokenForSaleInput
   ): Promise<Result<ListTokenForSaleOutput>> {
-    const { quantity, currency, price } = data;
+    const { quantity, price } = data;
 
     const token = await this.tokenRepository.get(data.token);
     if (!token) return Result.fail();
@@ -92,7 +91,6 @@ export class ListTokenForSale extends UseCase<
       user: data.user,
       token: token.id,
       quantity,
-      currency,
       price
     });
 
@@ -105,7 +103,6 @@ export class ListTokenForSale extends UseCase<
       token.chain.contract,
       token.chain.id,
       quantity,
-      currency,
       price,
       expiry,
       salt,

@@ -1,7 +1,6 @@
 import { CurrentUserDTO } from '@fanbase/shared';
 
 import UseCase from '../../base/UseCase';
-import { mapUserToCurrentDTO } from '../../mappers';
 import { UserRepository, WalletRepository } from '../../repositories';
 import { Result } from '../../Result';
 
@@ -49,7 +48,7 @@ export class EditUser extends UseCase<EditUserInput, EditUserOutput> {
     user.wallet = await this.walletRepository.get(user.walletId);
 
     return Result.ok({
-      user: mapUserToCurrentDTO(user)
+      user: new CurrentUserDTO(user)
     });
   }
 }

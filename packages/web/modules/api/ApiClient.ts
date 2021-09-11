@@ -11,8 +11,8 @@ import {
     IdentifyWithEmailResponse, IdentifyWithWalletRequest, IdentifyWithWalletResponse, isUsername,
     ListTokenForSaleRequest, ListTokenForSaleResponse, LoginResponse, LoginWithEmailRequest,
     LoginWithWalletRequest, MintTokenRequest, MintTokenResponse, OAuthCheckLinkRequest,
-    OAuthCheckLinkResponse, OAuthLinkRequest, Protocol, TokenData, TokenDTO, TokenOwnershipDTO,
-    UnlinkOAuthRequest, UnlinkOAuthResponse, UserInfo, YouTubeVideo
+    OAuthCheckLinkResponse, OAuthLinkRequest, Price, Protocol, TokenData, TokenDTO,
+    TokenOwnershipDTO, UnlinkOAuthRequest, UnlinkOAuthResponse, UserInfo, YouTubeVideo
 } from '@fanbase/shared';
 
 import HttpClient from './HttpClient';
@@ -94,8 +94,7 @@ export class ApiClient {
   async listForSale(
     token: string,
     quantity: number,
-    currency: string,
-    price: number
+    price: Price
   ): Promise<string> {
     const response = await this.client.request<
       ListTokenForSaleResponse,
@@ -106,7 +105,6 @@ export class ApiClient {
       endpoint: `/tokens/${token}/list-for-sale`,
       body: {
         quantity,
-        currency,
         price
       }
     });
@@ -117,8 +115,7 @@ export class ApiClient {
   async approveSale(
     token: string,
     quantity: number,
-    currency: string,
-    price: number
+    price: Price
   ): Promise<ApproveTokenSaleResponse> {
     return this.client.request<
       ApproveTokenSaleResponse,
@@ -129,7 +126,6 @@ export class ApiClient {
       endpoint: `/tokens/${token}/approve-sale`,
       body: {
         quantity,
-        currency,
         price
       }
     });

@@ -36,12 +36,8 @@ const TokenListingSchema = new EntitySchema<TokenListing>({
       type: 'integer',
       default: 0
     },
-    currency: {
-      type: 'text'
-    },
     price: {
-      type: 'text',
-      default: 0
+      type: 'jsonb'
     },
     chain: {
       type: 'jsonb'

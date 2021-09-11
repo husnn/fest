@@ -1,4 +1,3 @@
-export * from './Currency';
 export * from './OAuthProvider';
 export * from './OfferStatus';
 export * from './OrderType';

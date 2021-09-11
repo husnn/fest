@@ -19,3 +19,5 @@ export class MetadataStore implements IPFSService {
     return Result.fail();
   }
 }
+
+export default MetadataStore;

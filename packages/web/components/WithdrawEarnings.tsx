@@ -19,7 +19,7 @@ export const WithdrawEarnings = ({
   onClose,
   onDone
 }: WithdrawEarningsProps) => {
-  const balance = getPrice(currency, amount);
+  const balance = getPrice(amount);
 
   return (
     <TransactionModal

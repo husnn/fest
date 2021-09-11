@@ -2,7 +2,6 @@ import { UserDTO as UserDTO } from '@fanbase/shared';
 
 import UseCase from '../../base/UseCase';
 import { User } from '../../entities';
-import { mapUserToDTO } from '../../mappers';
 import { UserRepository, WalletRepository } from '../../repositories';
 import { Result } from '../../Result';
 
@@ -39,6 +38,6 @@ export class GetUser extends UseCase<GetUserInput, GetUserOutput> {
 
     user.wallet = await this.walletRepository.get(user.walletId);
 
-    return Result.ok(mapUserToDTO(user));
+    return Result.ok(new UserDTO(user));
   }
 }

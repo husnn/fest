@@ -76,7 +76,7 @@ const TokenListingRow = ({
   onCancel: (id: string) => void;
 }) => {
   const sold = data.quantity - data.available;
-  const price = getPrice(data.currency, data.price);
+  const price = getPrice(data.price);
 
   return (
     <ListingRow>
@@ -155,7 +155,10 @@ export default function MarketPage() {
   const [earnings, setEarnings] = useState<{
     currency: string;
     amount: string;
-  }>(undefined);
+  }>({
+    currency: 'DAI',
+    amount: '0'
+  });
 
   return currentUser ? (
     <div className="container boxed" style={{ maxWidth: 600 }}>
@@ -175,14 +178,14 @@ export default function MarketPage() {
           onCurrencySelected={async (currency: WalletCurrency, callback) => {
             getEarnings(currency)
               .then((balance: string) => {
-                setEarnings({
-                  currency: currency.symbol,
-                  amount: balance
-                });
+                balance
+                  ? setEarnings({
+                      currency: currency.symbol,
+                      amount: balance
+                    })
+                  : null;
 
-                console.log(earnings);
-
-                const b = getPrice('', balance);
+                const b = getPrice(balance);
 
                 callback(b.amount);
               })

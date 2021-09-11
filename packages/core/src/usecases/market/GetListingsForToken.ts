@@ -1,7 +1,6 @@
 import { TokenListingDTO } from '@fanbase/shared';
 
 import UseCase from '../../base/UseCase';
-import { mapTokenListingToDTO } from '../../mappers';
 import { TokenListingRepository } from '../../repositories';
 import Result from '../../Result';
 
@@ -39,8 +38,8 @@ export class GetListingsForToken extends UseCase<
       data.count,
       data.page
     );
-    const listings = result.listings.map((listing) =>
-      mapTokenListingToDTO(listing)
+    const listings = result.listings.map(
+      (listing) => new TokenListingDTO(listing)
     );
 
     return Result.ok({ listings, total: result.total });

@@ -1,4 +1,4 @@
-import { Currency, OfferStatus } from '@fanbase/shared';
+import { OfferStatus, Price } from '@fanbase/shared';
 
 import TokenOwnership from './TokenOwnership';
 import User from './User';
@@ -21,8 +21,7 @@ export class TokenOffer {
 
   quantity = 1;
 
-  currency: Currency;
-  price: string;
+  price: Price;
 
   expiry: Date;
 

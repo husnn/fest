@@ -89,13 +89,12 @@ class TokenController {
     try {
       const { id } = req.params;
 
-      const { quantity, currency, price } = req.body;
+      const { quantity, price } = req.body;
 
       const result = await this.listTokenForSaleUseCase.exec({
         user: req.user,
         token: id,
         quantity,
-        currency,
         price
       });
 
@@ -113,13 +112,12 @@ class TokenController {
   async approveSale(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      const { quantity, currency, price } = req.body;
+      const { quantity, price } = req.body;
 
       const result = await this.approveTokenSaleUseCase.exec({
         user: req.user,
         token: id,
         quantity,
-        currency,
         price
       });
 

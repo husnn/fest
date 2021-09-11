@@ -1,27 +1,8 @@
 import { NextFunction, Request, Response, Router } from 'express';
 
-import { EthereumService } from '@fanbase/ethereum';
-import { TokenRepository, UserRepository, WalletRepository } from '@fanbase/postgres';
-
 import AuthController from '../controllers/AuthController';
-import MailService from '../services/MailService';
 
-export default function init(router: Router) {
-  const userRepository = new UserRepository();
-  const walletRepository = new WalletRepository();
-  const tokenRepository = new TokenRepository();
-  const ethereumService = EthereumService.instance;
-
-  const mailService = new MailService();
-
-  const authController = new AuthController(
-    userRepository,
-    walletRepository,
-    tokenRepository,
-    ethereumService,
-    mailService
-  );
-
+export default function init(router: Router, authController: AuthController) {
   router.post(
     '/identify/email',
     (req: Request, res: Response, next: NextFunction) =>

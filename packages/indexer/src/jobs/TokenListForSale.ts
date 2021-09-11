@@ -1,7 +1,7 @@
 import {
     TokenListing, TokenListingRepository, TokenRepository, WalletRepository
 } from '@fanbase/core';
-import { Protocol, TokenListingStatus } from '@fanbase/shared';
+import { Price, Protocol, TokenListingStatus } from '@fanbase/shared';
 
 import Job from './Job';
 
@@ -14,8 +14,7 @@ export type TokenListForSaleJob = {
   token: string;
   tokenId: string;
   quantity: number;
-  currency: string;
-  price: string;
+  price: Price;
 };
 
 export default class TokenListForSale extends Job<TokenListForSaleJob> {
@@ -46,7 +45,6 @@ export default class TokenListForSale extends Job<TokenListForSaleJob> {
         tokenId: token.id,
         quantity: this.props.quantity,
         available: this.props.quantity,
-        currency: this.props.currency,
         price: this.props.price,
         chain: {
           contract: this.props.contract,

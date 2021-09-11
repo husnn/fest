@@ -1,5 +1,6 @@
 import { Field, Form, Formik, FormikProps } from 'formik';
 import React, { useEffect, useState } from 'react';
+import Web3 from 'web3';
 
 import styled from '@emotion/styled';
 import { Contracts } from '@fanbase/eth-contracts';
@@ -57,26 +58,36 @@ export const CreateTokenListing = ({
 
     let txHash;
 
+    price = Web3.utils.toWei(price.toString());
+
     if (currentUser.wallet.type == WalletType.INTERNAL) {
-      txHash = await ApiClient.instance?.listForSale(
-        token.id,
-        quantity,
-        currency,
-        price
-      );
+      txHash = await ApiClient.instance?.listForSale(token.id, quantity, {
+        currency: {
+          contract: currency
+        },
+        amount: price.toString()
+      });
     } else {
       const approval = await ApiClient.instance?.approveSale(
         token.id,
         quantity,
-        currency,
-        price
+        {
+          currency: {
+            contract: currency
+          },
+          amount: price.toString()
+        }
       );
 
       txHash = await eth.listForSale(
         token,
         quantity,
-        currency,
-        price,
+        {
+          currency: {
+            contract: currency
+          },
+          amount: price.toString()
+        },
         approval.expiry,
         approval.salt,
         approval.signature

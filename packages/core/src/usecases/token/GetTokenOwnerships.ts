@@ -2,7 +2,6 @@ import { TokenOwnershipDTO as TokenOwnershipDTO } from '@fanbase/shared';
 
 import UseCase from '../../base/UseCase';
 import { TokenOwnership } from '../../entities';
-import { mapTokenOwnershipToDTO } from '../../mappers/tokenOwnership.mapper';
 import { TokenOwnershipRepository } from '../../repositories';
 import Result from '../../Result';
 
@@ -39,7 +38,7 @@ export class GetTokenOwnerships extends UseCase<
     );
 
     const ownerships: TokenOwnershipDTO[] = result.ownerships.map(
-      (ownership: TokenOwnership) => mapTokenOwnershipToDTO(ownership)
+      (ownership: TokenOwnership) => new TokenOwnershipDTO(ownership)
     );
 
     return Result.ok({ ownerships, total: result.total });

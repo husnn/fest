@@ -49,14 +49,11 @@ const BuyTokenListing = ({
   const [approvedAllowance, setApprovedAllowance] = useState(0);
   const [isMarketApprovedSpender, setMarketApprovedSpender] = useState(false);
 
-  const { currency: currencySymbol } = getPrice(
-    listing.chain.contract,
-    listing.price
-  );
+  const { currency: currencySymbol } = getPrice(listing.price);
 
   const [quantity, setQuantity] = useState(1);
 
-  const pricePerToken = getPrice(listing.chain.contract, listing.price).amount;
+  const pricePerToken = getPrice(listing.price).amount;
 
   const subtotal = pricePerToken * quantity;
 
@@ -68,16 +65,22 @@ const BuyTokenListing = ({
   useEffect(() => {
     if (!isCustodialWallet) {
       EthereumClient.instance
-        .getApprovedAllowance(listing.currency, listing.chain.contract)
+        .getApprovedAllowance(
+          listing.price.currency.contract,
+          listing.chain.contract
+        )
         .then((allowance: string) => {
           setApprovedAllowance(parseFloat(Web3.utils.fromWei(allowance)));
         });
     }
 
     EthereumClient.instance
-      .getERC20Balance(listing.currency, currentUser.wallet.address)
-      .then((balance: string) => {
-        setBalance(parseFloat(balance));
+      .getERC20Balance(
+        listing.price.currency.contract,
+        currentUser.wallet.address
+      )
+      .then((balance: number) => {
+        setBalance(balance);
       });
   }, []);
 
@@ -191,7 +194,7 @@ const BuyTokenListing = ({
         if (!isCustodialWallet) {
           if (!isMarketApprovedSpender) {
             return EthereumClient.instance.approveSpender(
-              listing.currency,
+              listing.price.currency.contract,
               listing.chain.contract,
               Web3.utils.toWei(total.toString())
             );

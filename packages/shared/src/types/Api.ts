@@ -3,6 +3,7 @@ import {
     TokenTradeDTO, UserDTO
 } from '../dto';
 import { Protocol } from '../enums';
+import { Price } from './Price';
 import TokenFee from './TokenFee';
 import TokenMetadata from './TokenMetadata';
 
@@ -93,8 +94,7 @@ export interface ListTokenForSaleRequest extends Request {
   authentication: 'required';
   body: {
     quantity: number;
-    currency: string;
-    price: number;
+    price: Price;
   };
 }
 
@@ -108,8 +108,7 @@ export interface ApproveTokenSaleRequest extends Request {
   authentication: 'required';
   body: {
     quantity: number;
-    currency: string;
-    price: number;
+    price: Price;
   };
 }
 

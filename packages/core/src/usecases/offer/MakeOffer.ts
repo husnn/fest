@@ -1,4 +1,4 @@
-import { Currency } from '@fanbase/shared';
+import { Price } from '@fanbase/shared';
 
 import UseCase from '../../base/UseCase';
 import OfferReceivedEmail from '../../emails/OfferReceivedEmail';
@@ -12,8 +12,7 @@ type MakeOfferInput = {
   buyer: string;
   ownership: string;
   quantity: number;
-  currency: Currency;
-  price: string;
+  price: Price;
   signature: string;
 };
 
@@ -60,7 +59,6 @@ export class MakeOffer extends UseCase<MakeOfferInput, MakeOfferOutput> {
       senderId: data.buyer,
       ownershipId: data.ownership,
       quantity: data.quantity,
-      currency: data.currency,
       price: data.price,
       expiry,
       signature: data.signature

@@ -2,7 +2,6 @@ import { TokenDTO } from '@fanbase/shared';
 
 import UseCase from '../../base/UseCase';
 import { Token } from '../../entities';
-import { mapTokenToDTO } from '../../mappers';
 import { TokenRepository } from '../../repositories';
 import { Result } from '../../Result';
 
@@ -38,8 +37,8 @@ export class GetTokensCreated extends UseCase<
       data.page
     );
 
-    const tokensCreated = result.tokens.map((token: Token) =>
-      mapTokenToDTO(token)
+    const tokensCreated = result.tokens.map(
+      (token: Token) => new TokenDTO(token)
     );
 
     return Result.ok({

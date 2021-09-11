@@ -1,4 +1,4 @@
-import { Protocol, TokenListingStatus } from '@fanbase/shared';
+import { Price, Protocol, TokenListingStatus } from '@fanbase/shared';
 
 import Token from './Token';
 import User from './User';
@@ -19,8 +19,7 @@ export class TokenListing {
   quantity: number;
   available: number;
 
-  currency: string;
-  price: string;
+  price: Price;
 
   chain: {
     contract: string;

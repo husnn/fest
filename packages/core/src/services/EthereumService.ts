@@ -1,4 +1,5 @@
 import { Wallet } from '@fanbase/core';
+import { Price } from '@fanbase/shared';
 
 import { Token, TokenListing } from '../entities';
 import { Result } from '../Result';
@@ -23,8 +24,7 @@ export interface EthereumService {
     tokenContract: string,
     tokenId: string,
     quantity: number,
-    currency: string,
-    price: number,
+    price: Price,
     expiry: number,
     salt: string,
     signature: string
@@ -35,8 +35,7 @@ export interface EthereumService {
     token: string,
     tokenId: string,
     quantity: number,
-    currency: string,
-    price: number,
+    price: Price,
     expiry: number,
     salt: string
   ): Promise<Result<{ signature: string }>>;

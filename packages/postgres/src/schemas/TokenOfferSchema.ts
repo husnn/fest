@@ -36,12 +36,8 @@ const TokenOfferSchema = new EntitySchema<TokenOffer>({
       type: 'integer',
       default: 1
     },
-    currency: {
-      type: 'enum',
-      enum: Currency
-    },
     price: {
-      type: 'text'
+      type: 'jsonb'
     },
     expiry: {
       type: 'timestamp',

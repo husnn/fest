@@ -1,4 +1,5 @@
 import { TokenListingStatus } from '../enums';
+import { Price } from '../types';
 import TokenDTO from './TokenDTO';
 import UserDTO from './UserDTO';
 
@@ -16,8 +17,7 @@ export class TokenListingDTO {
   quantity: number;
   available: number;
 
-  currency: string;
-  price: string;
+  price: Price;
 
   chain: {
     id: string;
@@ -44,7 +44,7 @@ export class TokenListingDTO {
 
     this.quantity = data.quantity;
     this.available = data.available;
-    this.currency = data.currency;
+
     this.price = data.price;
 
     this.chain = data.chain;

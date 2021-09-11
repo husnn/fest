@@ -1,17 +1,12 @@
 import { NextFunction, Request, Response, Router } from 'express';
 
-import { OAuthRepository } from '@fanbase/postgres';
-
-import { googleConfig } from '../config';
 import GoogleController from '../controllers/GoogleController';
 import authMiddleware from '../middleware/authMiddleware';
-import GoogleService from '../services/GoogleService';
 
-export default function init(router: Router) {
-  const googleService = new GoogleService(googleConfig);
-  const oAuthRepository = new OAuthRepository();
-  const googleController = new GoogleController(oAuthRepository, googleService);
-
+export default function init(
+  router: Router,
+  googleController: GoogleController
+) {
   router.post(
     '/unlink',
     authMiddleware,

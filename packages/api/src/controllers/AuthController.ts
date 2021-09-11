@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 
 import {
     EthereumService, IdentifyWithEmail, IdentifyWithWallet, LoginError, LoginWithEmail,
-    LoginWithWallet, MailService, TokenRepository, UserRepository, WalletRepository
+    LoginWithWallet, MailService, UserRepository, WalletRepository
 } from '@fanbase/core';
 import {
     IdentifyWithEmailResponse, IdentifyWithWalletResponse, LoginResponse
@@ -20,7 +20,6 @@ class AuthController {
   constructor(
     userRepository: UserRepository,
     walletRepository: WalletRepository,
-    tokenRepository: TokenRepository,
     ethereumService: EthereumService,
     mailService: MailService
   ) {

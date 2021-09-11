@@ -1,31 +1,13 @@
 import { NextFunction, Request, Response, Router } from 'express';
 
-import { EthereumService } from '@fanbase/ethereum';
-import {
-    TokenListingRepository, TokenOfferRepository, TokenRepository, TokenTradeRepository,
-    WalletRepository
-} from '@fanbase/postgres';
-
 import MarketController from '../controllers/MarketController';
 import authMiddleware from '../middleware/authMiddleware';
 import pagination from '../middleware/pagination';
 
-export default function init(router: Router): Router {
-  const tokenRepository = new TokenRepository();
-  const tokenOfferRepository = new TokenOfferRepository();
-  const tokenListingRepository = new TokenListingRepository();
-  const tokenTradeRepository = new TokenTradeRepository();
-  const walletRepository = new WalletRepository();
-
-  const marketController = new MarketController(
-    tokenRepository,
-    tokenOfferRepository,
-    tokenListingRepository,
-    tokenTradeRepository,
-    walletRepository,
-    EthereumService.instance
-  );
-
+export default function init(
+  router: Router,
+  marketController: MarketController
+): Router {
   router.get(
     '/summary',
     authMiddleware,

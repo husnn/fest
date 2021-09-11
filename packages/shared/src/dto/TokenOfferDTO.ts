@@ -1,3 +1,4 @@
+import { Price } from '../types';
 import TokenDTO from './TokenDTO';
 import UserDTO from './UserDTO';
 
@@ -9,8 +10,7 @@ export class TokenOfferDTO {
 
   token: TokenDTO;
 
-  currency: string;
-  price: string;
+  price: Price;
 
   quantity: number;
 
@@ -22,7 +22,6 @@ export class TokenOfferDTO {
 
     this.token = new TokenDTO(props.token);
 
-    this.currency = props.currency;
     this.price = props.price;
 
     this.quantity = props.quantity;

@@ -52,11 +52,11 @@ export class BuyTokenListing extends UseCase<
 
     // Check balance
     const subtotal =
-      this.ethereumService.fromWei(listing.price) * data.quantity;
+      this.ethereumService.fromWei(listing.price.amount) * data.quantity;
     const total = subtotal * 1.05; // Market buy fee pct
 
     const balance = await this.ethereumService.getERC20Balance(
-      listing.currency,
+      listing.price.currency.contract,
       wallet.address
     );
 
@@ -65,14 +65,14 @@ export class BuyTokenListing extends UseCase<
     // Check market is approved to use funds, approve if not
     const approvedAmount =
       await this.ethereumService.getMarketApprovedERC20Amount(
-        listing.currency,
+        listing.price.currency.contract,
         wallet.address,
         listing.chain.contract
       );
 
     if (this.ethereumService.fromWei(approvedAmount) < total) {
       const result = await this.ethereumService.approveMarketToSpendERC20(
-        listing.currency,
+        listing.price.currency.contract,
         wallet,
         listing.chain.contract,
         this.ethereumService.toWei(total)

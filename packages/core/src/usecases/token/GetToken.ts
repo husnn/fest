@@ -1,7 +1,6 @@
 import { TokenDTO } from '@fanbase/shared';
 
 import UseCase from '../../base/UseCase';
-import { mapTokenToDTO } from '../../mappers';
 import { TokenRepository } from '../../repositories';
 import { Result } from '../../Result';
 
@@ -28,6 +27,6 @@ export class GetToken extends UseCase<GetTokenInput, GetTokenOutput> {
       'creator.wallet'
     ]);
 
-    return token ? Result.ok({ token: mapTokenToDTO(token) }) : Result.fail();
+    return token ? Result.ok({ token: new TokenDTO(token) }) : Result.fail();
   }
 }

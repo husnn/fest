@@ -1,4 +1,4 @@
-import { randomNumericString } from '@fanbase/shared';
+import { Price, randomNumericString } from '@fanbase/shared';
 
 import UseCase from '../../base/UseCase';
 import { TokenOwnershipRepository, TokenRepository, WalletRepository } from '../../repositories';
@@ -9,8 +9,7 @@ export interface ApproveTokenSaleInput {
   user: string;
   token: string;
   quantity: number;
-  currency: string;
-  price: number;
+  price: Price;
 }
 
 export interface ApproveTokenSaleOutput {
@@ -71,7 +70,6 @@ export class ApproveTokenSale extends UseCase<
       token.chain.contract,
       token.chain.id,
       data.quantity,
-      data.currency,
       data.price,
       expiry,
       salt

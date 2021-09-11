@@ -1,9 +1,6 @@
 import { TokenListingDTO, TokenOfferDTO, TokenTradeDTO } from '@fanbase/shared';
 
 import UseCase from '../../base/UseCase';
-import { mapTokenListingToDTO } from '../../mappers';
-import { mapTokenOfferToDTO } from '../../mappers/tokenOffer.mapper';
-import { mapTokenTradeToDTO } from '../../mappers/tokenTrade.mapper';
 import {
     TokenListingRepository, TokenOfferRepository, TokenTradeRepository
 } from '../../repositories';
@@ -44,15 +41,15 @@ export class GetTokenMarketSummary extends UseCase<
   ): Promise<Result<GetTokenMarketSummaryOutput>> {
     const offers = (
       await this.offerRepository.findByReceiver(data.user)
-    ).offers.map((offer) => mapTokenOfferToDTO(offer));
+    ).offers.map((offer) => new TokenOfferDTO(offer));
 
     const listings = (
       await this.listingRepository.findBySeller(data.user, { onlyActive: true })
-    ).listings.map((listing) => mapTokenListingToDTO(listing));
+    ).listings.map((listing) => new TokenListingDTO(listing));
 
     const trades = (
       await this.orderRepository.findByBuyer(data.user)
-    ).orders.map((order) => mapTokenTradeToDTO(order));
+    ).orders.map((order) => new TokenTradeDTO(order));
 
     return Result.ok({ offers, listings, trades });
   }

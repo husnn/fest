@@ -1,5 +1,3 @@
-import Web3 from 'web3';
-
 import { Contracts } from '@fanbase/eth-contracts';
 
 import Transaction from './Transaction';
@@ -11,8 +9,8 @@ export class ListTokenForSale extends Transaction {
       tokenContract: string;
       tokenId: string;
       quantity: number;
-      currencyContract: string;
-      price: number;
+      currency: string;
+      price: string;
       expiry: number;
       salt: string;
       signature: string;
@@ -27,8 +25,8 @@ export class ListTokenForSale extends Transaction {
         data.tokenContract,
         data.tokenId,
         data.quantity,
-        data.currencyContract,
-        Web3.utils.toWei(data.price.toString()),
+        data.currency,
+        data.price,
         data.expiry,
         data.salt,
         data.signature
