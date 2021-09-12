@@ -58,24 +58,20 @@ export const CreateTokenListing = ({
 
     let txHash;
 
-    price = Web3.utils.toWei(price.toString());
+    const actualPrice = Web3.utils.toWei(price.toString());
 
     if (currentUser.wallet.type == WalletType.INTERNAL) {
       txHash = await ApiClient.instance?.listForSale(token.id, quantity, {
-        currency: {
-          contract: currency
-        },
-        amount: price.toString()
+        currency,
+        amount: actualPrice
       });
     } else {
       const approval = await ApiClient.instance?.approveSale(
         token.id,
         quantity,
         {
-          currency: {
-            contract: currency
-          },
-          amount: price.toString()
+          currency,
+          amount: actualPrice
         }
       );
 
@@ -83,10 +79,8 @@ export const CreateTokenListing = ({
         token,
         quantity,
         {
-          currency: {
-            contract: currency
-          },
-          amount: price.toString()
+          currency,
+          amount: actualPrice
         },
         approval.expiry,
         approval.salt,

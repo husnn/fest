@@ -1,87 +1,97 @@
 import { Wallet } from '@fanbase/core';
 import { Price } from '@fanbase/shared';
 
-import { Token, TokenListing } from '../entities';
+import { EthereumTx, Token } from '../entities';
 import { Result } from '../Result';
 
+export type ERC20Info = {
+  name: string;
+  symbol: string;
+  decimals: number;
+};
+
+export type TxResult = Result<string>;
+
 export interface EthereumService {
-  generateWallet(): Promise<Wallet>;
+  getOfferHash();
+  verifyOffer();
 
-  recoverAddress(
-    message: string,
-    sig: string
-  ): Result<{
-    address: string;
-  }>;
+  getERC20Balance(address: string, walletAddress: string): Promise<string>;
 
-  checkBalance();
+  priceFromERC20Amount(address: string, amount: string): Promise<Price>;
 
-  fromWei(amount: string): number;
-  toWei(amount: number): string;
+  getERC20Info(address: string): Promise<ERC20Info>;
 
-  listTokenForSale(
-    wallet: Wallet,
-    tokenContract: string,
-    tokenId: string,
-    quantity: number,
-    price: Price,
-    expiry: number,
-    salt: string,
-    signature: string
-  ): Promise<Result<string>>;
-
-  signTokenSale(
-    seller: string,
-    token: string,
-    tokenId: string,
-    quantity: number,
-    price: Price,
-    expiry: number,
-    salt: string
-  ): Promise<Result<{ signature: string }>>;
-
-  buyTokenListing(
-    wallet: Pick<Wallet, 'address' | 'privateKey'>,
+  buildBuyTokenListingTx(
+    walletAddress: string,
     listingContract: string,
     listingId: string,
     quantity: number
-  ): Promise<Result<string>>;
+  ): Promise<EthereumTx>;
 
-  getERC20Balance(erc20Address: string, walletAddress: string): Promise<number>;
+  buildApproveERC20SpenderTX(
+    erc20Address: string,
+    walletAddress: string,
+    spenderAddress: string,
+    amount: string
+  ): Promise<EthereumTx>;
 
-  getMarketApprovedERC20Amount(
+  getApprovedSpenderERC20Amount(
     erc20Address: string,
     walletAddress: string,
     spenderAddress: string
   ): Promise<string>;
 
-  approveMarketToSpendERC20(
-    erc20Address: string,
-    wallet: Pick<Wallet, 'address' | 'privateKey'>,
-    spenderAddress: string,
-    amount: string
-  ): Promise<Result<string>>;
+  buildCancelTokenListingTx(
+    walletAddress: string,
+    tradeId: string
+  ): Promise<EthereumTx>;
 
-  cancelTokenListing(
-    wallet: Wallet,
-    listing: TokenListing
-  ): Promise<Result<string>>;
+  buildListTokenForSaleTx(
+    walletAddress: string,
+    tokenContract: string,
+    tokenId: string,
+    quantity: number,
+    price: {
+      currency: string;
+      amount: string;
+    },
+    expiry: number,
+    salt: string,
+    signature: string
+  ): Promise<EthereumTx>;
 
-  approveMarket(tokenContract: string, wallet: Wallet): Promise<Result<string>>;
+  buildApproveMarketTx(
+    tokenContract: string,
+    walletAddress: string
+  ): Promise<EthereumTx>;
 
   checkMarketApproved(
     tokenContract: string,
     walletAddress: string
   ): Promise<boolean>;
 
-  mintToken(
+  signTokenSale(
+    seller: string,
+    token: string,
+    tokenId: string,
+    quantity: number,
+    price: {
+      currency: string;
+      amount: string;
+    },
+    expiry: number,
+    salt: string
+  ): Promise<Result<{ signature: string }>>;
+
+  buildMintTokenTx(
     token: Token,
     wallet: Wallet,
     data: string,
     expiry: number,
     salt: string,
     signature: string
-  ): Promise<Result<string>>;
+  ): Promise<EthereumTx>;
 
   signMint(
     creatorAddress: string,
@@ -94,6 +104,16 @@ export interface EthereumService {
     }>
   >;
 
-  getOfferHash();
-  verifyOffer();
+  signAndSendTx(tx: EthereumTx, pk: string): Promise<TxResult>;
+
+  sendTx(tx: string): Promise<TxResult>;
+
+  recoverAddress(
+    message: string,
+    sig: string
+  ): Result<{
+    address: string;
+  }>;
+
+  generateWallet(): Promise<Wallet>;
 }

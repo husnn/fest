@@ -51,9 +51,14 @@ export class CancelTokenListing extends UseCase<
     if (!wallet) return Result.fail();
     if (wallet.type != WalletType.INTERNAL) return Result.fail();
 
-    const txResult = await this.ethereumService.cancelTokenListing(
-      wallet,
-      listing
+    const tx = await this.ethereumService.buildCancelTokenListingTx(
+      wallet.address,
+      listing.chain.id
+    );
+
+    const txResult = await this.ethereumService.signAndSendTx(
+      tx,
+      wallet.privateKey
     );
 
     return txResult.success

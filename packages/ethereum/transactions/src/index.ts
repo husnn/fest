@@ -10,3 +10,4 @@ export * from './SignOffer';
 export * from './TransferToken';
 export * from './WithdrawMarketEarnings';
 export * from './WithdrawMarketEarnings';
+export * from './Transaction';

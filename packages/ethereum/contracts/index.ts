@@ -32,19 +32,24 @@ export const init = async (web3: Web3) => {
   network = (await web3.eth.net.getId()).toString();
 };
 
-const contractInstances: { [key: string]: any } = {};
+export const contractInstances: { [key: string]: any } = {};
 
 const getContract = (name: keyof typeof interfaces, address?: string) => {
   const instanceKey = `${name}:${network}`;
+
   let instance = contractInstances[instanceKey];
 
   if (!instance) {
+    address = address || getAddress(name as string, network);
+
     instance = new web3Instance.eth.Contract(
       interfaces[name].abi as any,
-      address || getAddress(name as string, network)
+      address
     );
 
     contractInstances[instanceKey] = instance;
+
+    console.log(`Instance of '${name}' at ${address}`);
   }
 
   return instance;
@@ -65,4 +70,4 @@ export const Contracts = {
   }
 };
 
-export default { init, Contracts };
+export default { init, Contracts, contractInstances };

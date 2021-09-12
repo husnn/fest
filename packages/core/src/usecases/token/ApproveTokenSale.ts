@@ -9,7 +9,10 @@ export interface ApproveTokenSaleInput {
   user: string;
   token: string;
   quantity: number;
-  price: Price;
+  price: {
+    currency: string;
+    amount: string;
+  };
 }
 
 export interface ApproveTokenSaleOutput {

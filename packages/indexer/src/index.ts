@@ -4,6 +4,7 @@ import Queue from 'bee-queue';
 import redis from 'redis';
 import Web3 from 'web3';
 
+import { EthereumService } from '@fanbase/ethereum';
 import Postgres, {
     TokenListingRepository, TokenOwnershipRepository, TokenRepository, WalletRepository
 } from '@fanbase/postgres';
@@ -55,8 +56,13 @@ ethereumListener.on('market-cancel', (event: TokenCancelListingJob) => {
   tokenTradeQueue.createJob(event).save();
 });
 
-Postgres.init(postgresConfig).then(() => {
+(async () => {
+  await EthereumService.init(web3);
+
+  await Postgres.init(postgresConfig);
   console.log('Connected to database.');
+
+  const ethereumService = EthereumService.instance;
 
   const tokenRepository = new TokenRepository();
   const tokenListingRepository = new TokenListingRepository();
@@ -89,7 +95,8 @@ Postgres.init(postgresConfig).then(() => {
         return new TokenListForSale(job.data as TokenListForSaleJob).execute(
           tokenRepository,
           walletRepository,
-          tokenListingRepository
+          tokenListingRepository,
+          ethereumService
         );
       } else if ((job.data as TokenBuyJob).buyer !== undefined) {
         // Buy event
@@ -106,4 +113,4 @@ Postgres.init(postgresConfig).then(() => {
       done();
     }
   );
-});
+})();

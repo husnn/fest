@@ -1,18 +1,22 @@
 /* eslint-disable */
 
 import * as BIP39 from 'bip39';
+import Decimal from 'decimal.js';
 import * as sigUtil from 'eth-sig-util';
 import { hdkey } from 'ethereumjs-wallet';
 import Web3 from 'web3';
 
 import {
-    EthereumService as IEthereumService, generateWalletId, Result, Token, TokenListing, Wallet
+    ERC20Info, EthereumService as IEthereumService, EthereumTx, generateWalletId, Result, Token,
+    TokenListing, TxResult, Wallet
 } from '@fanbase/core';
 import Contracts from '@fanbase/eth-contracts';
 import {
     ApproveSpender, ApproveTokenMarket, BuyToken, CancelTokenListing, ListTokenForSale, MintToken
 } from '@fanbase/eth-transactions';
-import { decryptText, Price, Protocol, WalletType } from '@fanbase/shared';
+import { Price, Protocol, WalletType } from '@fanbase/shared';
+
+import ERC20Abi from './abi/ERC20.json';
 
 export class EthereumService implements IEthereumService {
   static instance: EthereumService;
@@ -36,29 +40,82 @@ export class EthereumService implements IEthereumService {
     throw new Error('Method not implemented.');
   }
 
-  fromWei(amount: string): number {
-    return parseInt(Web3.utils.fromWei(amount));
+  async getERC20Balance(
+    erc20Address: string,
+    walletAddress: string
+  ): Promise<string> {
+    const contract = new this.web3.eth.Contract(ERC20Abi as any, erc20Address);
+
+    const balance = await contract.methods.balanceOf(walletAddress).call();
+
+    return balance;
   }
 
-  toWei(amount: number): string {
-    return Web3.utils.toWei(amount.toString());
+  async toERC20Amount(
+    address: string,
+    amount: string | number
+  ): Promise<string> {
+    const erc20Info = await this.getERC20Info(address);
+
+    const { decimals } = erc20Info;
+
+    return new Decimal(amount)
+      .mul(new Decimal(10).pow(decimals))
+      .round()
+      .toString();
   }
 
-  async getPrice(contract: string, wei: string) {
-    return {
-      currency: 'DAI',
-      amount: parseInt(Web3.utils.fromWei(wei))
+  async priceFromERC20Amount(address: string, amount: string): Promise<Price> {
+    const erc20Info = await this.getERC20Info(address);
+
+    const { name, symbol, decimals } = erc20Info;
+
+    const displayAmount = new Decimal(amount)
+      .div(new Decimal(10).pow(decimals))
+      .toDecimalPlaces(3);
+
+    const price: Price = {
+      currency: {
+        contract: address,
+        name,
+        symbol,
+        decimals
+      },
+      amount,
+      displayAmount: parseFloat(displayAmount.toString())
     };
+
+    return price;
   }
 
-  async buyTokenListing(
-    wallet: Pick<Wallet, 'address' | 'privateKey'>,
+  erc20Info: { [address: string]: ERC20Info } = {};
+
+  async getERC20Info(address: string): Promise<ERC20Info> {
+    let info = this.erc20Info[address];
+
+    if (info) return info;
+
+    const contract = new this.web3.eth.Contract(ERC20Abi as any, address);
+
+    const name = await contract.methods.name().call();
+    const symbol = await contract.methods.symbol().call();
+    const decimals = await contract.methods.decimals().call();
+
+    info = { name, symbol, decimals: parseFloat(decimals) };
+
+    this.erc20Info[address] = info;
+
+    return info;
+  }
+
+  async buildBuyTokenListingTx(
+    walletAddress: string,
     listingContract: string,
     listingId: string,
     quantity: number
-  ) {
+  ): Promise<EthereumTx> {
     const nonce = await this.web3.eth.getTransactionCount(
-      wallet.address,
+      walletAddress,
       'pending'
     );
 
@@ -70,45 +127,43 @@ export class EthereumService implements IEthereumService {
       quantity
     };
 
-    const tx = new BuyToken(txData, listingContract)
-      .build(wallet.address, networkId, chainId, nonce, 385000)
-      .signAndSerialize(decryptText(wallet.privateKey));
-
-    return this.sendTransaction(tx);
+    return new BuyToken(txData, listingContract).build(
+      walletAddress,
+      networkId,
+      chainId,
+      nonce,
+      385000
+    );
   }
 
-  async getMarketApprovedERC20Amount(
+  async buildApproveERC20SpenderTX(
+    erc20Address: string,
+    walletAddress: string,
+    spenderAddress: string,
+    amount: string
+  ): Promise<EthereumTx> {
+    const nonce = await this.web3.eth.getTransactionCount(
+      walletAddress,
+      'pending'
+    );
+
+    const networkId = await this.web3.eth.net.getId();
+    const chainId = await this.web3.eth.getChainId();
+
+    return new ApproveSpender(
+      this.web3,
+      erc20Address,
+      spenderAddress,
+      amount
+    ).build(walletAddress, networkId, chainId, nonce, 385000);
+  }
+
+  async getApprovedSpenderERC20Amount(
     erc20Address: string,
     walletAddress: string,
     spenderAddress: string
   ): Promise<string> {
-    const abi = [
-      {
-        constant: true,
-        inputs: [
-          {
-            name: '_owner',
-            type: 'address'
-          },
-          {
-            name: '_spender',
-            type: 'address'
-          }
-        ],
-        name: 'allowance',
-        outputs: [
-          {
-            name: '',
-            type: 'uint256'
-          }
-        ],
-        payable: false,
-        stateMutability: 'view',
-        type: 'function'
-      }
-    ];
-
-    const contract = new this.web3.eth.Contract(abi as any, erc20Address);
+    const contract = new this.web3.eth.Contract(ERC20Abi as any, erc20Address);
 
     const amount = await contract.methods
       .allowance(walletAddress, spenderAddress)
@@ -117,67 +172,44 @@ export class EthereumService implements IEthereumService {
     return amount;
   }
 
-  async approveMarketToSpendERC20(
-    erc20Address: string,
-    wallet: Pick<Wallet, 'address' | 'privateKey'>,
-    spenderAddress: string,
-    amount: string
-  ): Promise<Result<string>> {
+  async buildCancelTokenListingTx(
+    walletAddress: string,
+    tradeId: string
+  ): Promise<EthereumTx> {
     const nonce = await this.web3.eth.getTransactionCount(
-      wallet.address,
+      walletAddress,
       'pending'
     );
 
     const networkId = await this.web3.eth.net.getId();
     const chainId = await this.web3.eth.getChainId();
 
-    const tx = new ApproveSpender(
-      this.web3,
-      erc20Address,
-      spenderAddress,
-      amount
-    )
-      .build(wallet.address, networkId, chainId, nonce, 385000)
-      .signAndSerialize(decryptText(wallet.privateKey));
+    const txData = { tradeId };
 
-    return this.sendTransaction(tx);
+    return new CancelTokenListing(txData).build(
+      walletAddress,
+      networkId,
+      chainId,
+      nonce,
+      385000
+    );
   }
 
-  async getERC20Balance(
-    erc20Address: string,
-    walletAddress: string
-  ): Promise<number> {
-    const abi = [
-      {
-        constant: true,
-        inputs: [{ name: '_owner', type: 'address' }],
-        name: 'balanceOf',
-        outputs: [{ name: 'balance', type: 'uint256' }],
-        payable: false,
-        stateMutability: 'view',
-        type: 'function'
-      }
-    ];
-
-    const contract = new this.web3.eth.Contract(abi as any, erc20Address);
-
-    const balance = await contract.methods.balanceOf(walletAddress).call();
-
-    return parseInt(Web3.utils.fromWei(balance, 'ether'));
-  }
-
-  async listTokenForSale(
-    wallet: Wallet,
+  async buildListTokenForSaleTx(
+    walletAddress: string,
     tokenContract: string,
     tokenId: string,
     quantity: number,
-    price: Price,
+    price: {
+      currency: string;
+      amount: string;
+    },
     expiry: number,
     salt: string,
     signature: string
-  ): Promise<Result<string>> {
+  ): Promise<EthereumTx> {
     const nonce = await this.web3.eth.getTransactionCount(
-      wallet.address,
+      walletAddress,
       'pending'
     );
 
@@ -185,59 +217,60 @@ export class EthereumService implements IEthereumService {
     const chainId = await this.web3.eth.getChainId();
 
     const txData = {
-      seller: wallet.address,
+      seller: walletAddress,
       tokenContract,
       tokenId,
       quantity,
-      currency: price.currency.contract,
+      currency: price.currency,
       price: price.amount,
       expiry,
       salt,
       signature
     };
 
-    const tx = new ListTokenForSale(txData)
-      .build(wallet.address, networkId, chainId, nonce, 385000)
-      .signAndSerialize(decryptText(wallet.privateKey));
-
-    return this.sendTransaction(tx);
+    return new ListTokenForSale(txData).build(
+      walletAddress,
+      networkId,
+      chainId,
+      nonce,
+      385000
+    );
   }
 
-  async cancelTokenListing(
-    wallet: Wallet,
-    listing: TokenListing
-  ): Promise<Result<string>> {
+  async buildApproveMarketTx(
+    tokenContract: string,
+    walletAddress: string
+  ): Promise<EthereumTx> {
     const nonce = await this.web3.eth.getTransactionCount(
-      wallet.address,
+      walletAddress,
       'pending'
     );
 
     const networkId = await this.web3.eth.net.getId();
     const chainId = await this.web3.eth.getChainId();
 
-    const txData = {
-      tradeId: listing.chain.id
-    };
-
-    const tx = new CancelTokenListing(txData)
-      .build(wallet.address, networkId, chainId, nonce, 385000)
-      .signAndSerialize(decryptText(wallet.privateKey));
-
-    return this.sendTransaction(tx);
+    return new ApproveTokenMarket(tokenContract).build(
+      walletAddress,
+      networkId,
+      chainId,
+      nonce
+    );
   }
 
-  async sendTransaction(tx: any): Promise<Result<string>> {
-    return new Promise<Result<string>>((resolve) => {
-      this.web3.eth
-        .sendSignedTransaction(tx)
-        .once('transactionHash', (hash: string) => {
-          resolve(Result.ok(hash));
-        })
-        .catch((err) => {
-          console.log(err);
-          resolve(Result.fail());
-        });
-    });
+  async checkMarketApproved(
+    tokenContract: string,
+    walletAddress: string
+  ): Promise<boolean> {
+    const marketWalletContract = Contracts.Contracts.MarketWallet.get();
+
+    const txResult = await Contracts.Contracts.Token.get(tokenContract)
+      .methods.isApprovedForAll(
+        walletAddress,
+        marketWalletContract.options.address
+      )
+      .call();
+
+    return txResult;
   }
 
   async signTokenSale(
@@ -245,7 +278,10 @@ export class EthereumService implements IEthereumService {
     token: string,
     tokenId: string,
     quantity: number,
-    price: Price,
+    price: {
+      currency: string;
+      amount: string;
+    },
     expiry: number,
     salt: string
   ): Promise<Result<{ signature: string }>> {
@@ -257,7 +293,7 @@ export class EthereumService implements IEthereumService {
         token,
         tokenId,
         quantity,
-        price.currency.contract,
+        price.currency,
         price.amount,
         expiry,
         salt
@@ -269,57 +305,14 @@ export class EthereumService implements IEthereumService {
     return Result.ok({ signature });
   }
 
-  async approveMarket(
-    tokenContract: string,
-    wallet: Wallet
-  ): Promise<Result<string>> {
-    const nonce = await this.web3.eth.getTransactionCount(
-      wallet.address,
-      'pending'
-    );
-
-    const networkId = await this.web3.eth.net.getId();
-    const chainId = await this.web3.eth.getChainId();
-
-    const tx = new ApproveTokenMarket(tokenContract)
-      .build(wallet.address, networkId, chainId, nonce)
-      .signAndSerialize(decryptText(wallet.privateKey));
-
-    return new Promise<Result<string>>((resolve) => {
-      this.web3.eth
-        .sendSignedTransaction(tx)
-        .once('transactionHash', (hash: string) => {
-          resolve(Result.ok(hash));
-        })
-        .catch((err) => {
-          console.log(err);
-          resolve(Result.fail());
-        });
-    });
-  }
-
-  async checkMarketApproved(
-    tokenContract: string,
-    walletAddress: string
-  ): Promise<boolean> {
-    const marketWalletContract = Contracts.Contracts.MarketWallet.get();
-
-    return await Contracts.Contracts.Token.get(tokenContract)
-      .methods.isApprovedForAll(
-        walletAddress,
-        marketWalletContract.options.address
-      )
-      .call();
-  }
-
-  async mintToken(
+  async buildMintTokenTx(
     token: Token,
     wallet: Wallet,
     data: string,
     expiry: number,
     salt: string,
     signature: string
-  ): Promise<Result<string>> {
+  ): Promise<EthereumTx> {
     const nonce = await this.web3.eth.getTransactionCount(
       wallet.address,
       'pending'
@@ -338,21 +331,12 @@ export class EthereumService implements IEthereumService {
     const networkId = await this.web3.eth.net.getId();
     const chainId = await this.web3.eth.getChainId();
 
-    const tx = new MintToken(txData)
-      .build(wallet.address, networkId, chainId, nonce)
-      .signAndSerialize(decryptText(wallet.privateKey));
-
-    return new Promise<Result<string>>((resolve) => {
-      this.web3.eth
-        .sendSignedTransaction(tx)
-        .once('transactionHash', (hash: string) => {
-          resolve(Result.ok(hash));
-        })
-        .catch((err) => {
-          console.log(err);
-          resolve(Result.fail());
-        });
-    });
+    return new MintToken(txData).build(
+      wallet.address,
+      networkId,
+      chainId,
+      nonce
+    );
   }
 
   async signMint(
@@ -374,8 +358,22 @@ export class EthereumService implements IEthereumService {
     return Result.ok({ signature });
   }
 
-  async checkBalance() {
-    console.log('Balance');
+  async signAndSendTx(tx: EthereumTx, pk: string): Promise<TxResult> {
+    return this.sendTx(tx.signAndSerialize(pk));
+  }
+
+  async sendTx(tx: string): Promise<TxResult> {
+    return new Promise<TxResult>((resolve) => {
+      this.web3.eth
+        .sendSignedTransaction(tx)
+        .once('transactionHash', (hash: string) => {
+          resolve(Result.ok(hash));
+        })
+        .catch((err) => {
+          console.log(err);
+          resolve(Result.fail());
+        });
+    });
   }
 
   recoverAddress(message: string, sig: string): Result<{ address: string }> {

@@ -10,7 +10,10 @@ type ListTokenForSaleInput = {
   user: string;
   token: string;
   quantity: number;
-  price: Price;
+  price: {
+    currency: string;
+    amount: string;
+  };
 };
 
 type ListTokenForSaleOutput = {
@@ -72,12 +75,17 @@ export class ListTokenForSale extends UseCase<
     );
 
     if (!isMarketApproved) {
-      const marketApproval = await this.ethereumService.approveMarket(
+      const approvalTx = await this.ethereumService.buildApproveMarketTx(
         token.chain.contract,
-        wallet
+        wallet.address
       );
 
-      if (!marketApproval.success) return Result.fail();
+      const approvalTxResult = await this.ethereumService.signAndSendTx(
+        approvalTx,
+        wallet.privateKey
+      );
+
+      if (!approvalTxResult.success) return Result.fail();
     }
 
     const approveTokenSaleUseCase = new ApproveTokenSale(
@@ -98,8 +106,8 @@ export class ListTokenForSale extends UseCase<
 
     const { expiry, salt, signature } = approval.data;
 
-    const txResult = await this.ethereumService.listTokenForSale(
-      wallet,
+    const tx = await this.ethereumService.buildListTokenForSaleTx(
+      wallet.address,
       token.chain.contract,
       token.chain.id,
       quantity,
@@ -107,6 +115,11 @@ export class ListTokenForSale extends UseCase<
       expiry,
       salt,
       signature
+    );
+
+    const txResult = await this.ethereumService.signAndSendTx(
+      tx,
+      wallet.privateKey
     );
 
     return txResult.success

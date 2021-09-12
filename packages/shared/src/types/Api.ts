@@ -94,7 +94,10 @@ export interface ListTokenForSaleRequest extends Request {
   authentication: 'required';
   body: {
     quantity: number;
-    price: Price;
+    price: {
+      currency: string;
+      amount: string;
+    };
   };
 }
 
@@ -108,7 +111,10 @@ export interface ApproveTokenSaleRequest extends Request {
   authentication: 'required';
   body: {
     quantity: number;
-    price: Price;
+    price: {
+      currency: string;
+      amount: string;
+    };
   };
 }
 

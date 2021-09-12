@@ -94,7 +94,10 @@ export class ApiClient {
   async listForSale(
     token: string,
     quantity: number,
-    price: Price
+    price: {
+      currency: string;
+      amount: string;
+    }
   ): Promise<string> {
     const response = await this.client.request<
       ListTokenForSaleResponse,
@@ -115,7 +118,10 @@ export class ApiClient {
   async approveSale(
     token: string,
     quantity: number,
-    price: Price
+    price: {
+      currency: string;
+      amount: string;
+    }
   ): Promise<ApproveTokenSaleResponse> {
     return this.client.request<
       ApproveTokenSaleResponse,

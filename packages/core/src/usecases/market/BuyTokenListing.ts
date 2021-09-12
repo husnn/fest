@@ -1,3 +1,5 @@
+import Decimal from 'decimal.js';
+
 import { WalletType } from '@fanbase/shared';
 
 import UseCase from '../../base/UseCase';
@@ -51,45 +53,55 @@ export class BuyTokenListing extends UseCase<
     if (wallet.type != WalletType.INTERNAL) return Result.fail();
 
     // Check balance
-    const subtotal =
-      this.ethereumService.fromWei(listing.price.amount) * data.quantity;
-    const total = subtotal * 1.05; // Market buy fee pct
+    const subtotal = new Decimal(listing.price.amount).mul(data.quantity);
+
+    const total = subtotal.mul(1.05); // Market buy fee pct
 
     const balance = await this.ethereumService.getERC20Balance(
       listing.price.currency.contract,
       wallet.address
     );
 
-    if (balance < total) return Result.fail();
+    if (new Decimal(balance).lessThan(total)) return Result.fail();
 
     // Check market is approved to use funds, approve if not
     const approvedAmount =
-      await this.ethereumService.getMarketApprovedERC20Amount(
+      await this.ethereumService.getApprovedSpenderERC20Amount(
         listing.price.currency.contract,
         wallet.address,
         listing.chain.contract
       );
 
-    if (this.ethereumService.fromWei(approvedAmount) < total) {
-      const result = await this.ethereumService.approveMarketToSpendERC20(
+    if (new Decimal(approvedAmount) < total) {
+      const approveTx = await this.ethereumService.buildApproveERC20SpenderTX(
         listing.price.currency.contract,
-        wallet,
+        wallet.address,
         listing.chain.contract,
-        this.ethereumService.toWei(total)
+        total.toString()
       );
 
-      if (!result.success) return Result.fail();
+      const approveTxResult = await this.ethereumService.signAndSendTx(
+        approveTx,
+        wallet.privateKey
+      );
+
+      if (!approveTxResult.success) return Result.fail();
     }
 
-    const txResult = await this.ethereumService.buyTokenListing(
-      wallet,
+    const buyTx = await this.ethereumService.buildBuyTokenListingTx(
+      wallet.address,
       listing.chain.contract,
       listing.chain.id,
       data.quantity
     );
 
-    return txResult.success
-      ? Result.ok({ txHash: txResult.data })
+    const buyTxResult = await this.ethereumService.signAndSendTx(
+      buyTx,
+      wallet.privateKey
+    );
+
+    return buyTxResult.success
+      ? Result.ok({ txHash: buyTxResult.data })
       : Result.fail();
   }
 }

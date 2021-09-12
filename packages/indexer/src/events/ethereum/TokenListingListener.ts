@@ -28,12 +28,8 @@ export class TokenListingListener extends EventListener<TokenListForSaleJob> {
       token: tokenContract,
       tokenId,
       quantity,
-      price: {
-        currency: {
-          contract: currency
-        },
-        amount: price
-      }
+      currency,
+      priceAmount: price
     };
 
     return job;

@@ -2,8 +2,9 @@ import { Transaction as EthereumTx } from 'ethereumjs-tx';
 import Web3 from 'web3';
 
 import Common from '@ethereumjs/common';
+import { EthereumTx as IEthereumTx } from '@fanbase/core';
 
-export class Transaction {
+export class Transaction implements IEthereumTx {
   address: string;
   data: any;
 

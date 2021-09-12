@@ -6,7 +6,7 @@ import {
     ApproveSpender, ApproveTokenMarket, BuyToken, CancelTokenListing, ListTokenForSale, MintToken,
     SignOffer, TransferToken, WithdrawMarketEarnings
 } from '@fanbase/eth-transactions';
-import { Price, TokenDTO } from '@fanbase/shared';
+import { TokenDTO } from '@fanbase/shared';
 
 export default class EthereumClient {
   private isInitialized = false;
@@ -195,7 +195,10 @@ export default class EthereumClient {
   async listForSale(
     token: TokenDTO,
     quantity: number,
-    price: Price,
+    price: {
+      currency: string;
+      amount: string;
+    },
     expiry: number,
     salt: string,
     signature: string
@@ -211,7 +214,7 @@ export default class EthereumClient {
       tokenContract: token.chain.contract,
       tokenId: token.chain.id,
       quantity,
-      currency: price.currency.contract,
+      currency: price.currency,
       price: price.amount,
       expiry,
       salt,

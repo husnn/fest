@@ -1,7 +1,7 @@
 import {
-    TokenListing, TokenListingRepository, TokenRepository, WalletRepository
+    EthereumService, TokenListing, TokenListingRepository, TokenRepository, WalletRepository
 } from '@fanbase/core';
-import { Price, Protocol, TokenListingStatus } from '@fanbase/shared';
+import { Protocol, TokenListingStatus } from '@fanbase/shared';
 
 import Job from './Job';
 
@@ -14,7 +14,8 @@ export type TokenListForSaleJob = {
   token: string;
   tokenId: string;
   quantity: number;
-  price: Price;
+  currency: string;
+  priceAmount: string;
 };
 
 export default class TokenListForSale extends Job<TokenListForSaleJob> {
@@ -25,7 +26,8 @@ export default class TokenListForSale extends Job<TokenListForSaleJob> {
   async execute(
     tokenRepository: TokenRepository,
     walletRepository: WalletRepository,
-    tokenTradeRepository: TokenListingRepository
+    tokenTradeRepository: TokenListingRepository,
+    ethereumService: EthereumService
   ): Promise<void> {
     try {
       const token = await tokenRepository.findByChainData({
@@ -39,13 +41,18 @@ export default class TokenListForSale extends Job<TokenListForSaleJob> {
         this.props.seller
       );
 
+      const price = await ethereumService.priceFromERC20Amount(
+        this.props.currency,
+        this.props.priceAmount
+      );
+
       const trade = new TokenListing({
         protocol: this.props.protocol,
         sellerId: wallet.ownerId,
         tokenId: token.id,
         quantity: this.props.quantity,
         available: this.props.quantity,
-        price: this.props.price,
+        price,
         chain: {
           contract: this.props.contract,
           id: this.props.id,

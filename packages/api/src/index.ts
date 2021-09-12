@@ -5,6 +5,7 @@ import Postgres from '@fanbase/postgres';
 
 import App from './App';
 import { appConfig, ethConfig, postgresConfig } from './config';
+import { setupLogger } from './logger';
 
 const web3 = new Web3(ethConfig.provider);
 
@@ -14,6 +15,8 @@ const web3 = new Web3(ethConfig.provider);
 
   await EthereumService.init(web3);
   console.log('Connected to Ethereum.');
+
+  setupLogger('api');
 
   new App(appConfig).start();
 })();
