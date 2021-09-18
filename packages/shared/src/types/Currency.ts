@@ -1,6 +1,6 @@
 export type Currency = {
-  contract: string;
   name: string;
   symbol: string;
+  contract: string;
   decimals: number;
 };

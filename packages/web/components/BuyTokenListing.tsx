@@ -1,16 +1,15 @@
-import { Field, Form, Formik, FormikProps } from 'formik';
+import { Field, Form, Formik, FormikErrors, FormikProps, useFormikContext } from 'formik';
 import React, { useEffect, useState } from 'react';
-import Web3 from 'web3';
 
 import styled from '@emotion/styled';
-import { TokenListingDTO, WalletType } from '@fanbase/shared';
+import { Balance, TokenListingDTO, WalletType } from '@fanbase/shared';
 
 import { ApiClient } from '../modules/api';
 import useAuthentication from '../modules/auth/useAuthentication';
-import EthereumClient from '../modules/ethereum/EthereumClient';
+import { useBalance } from '../modules/useBalance';
+import { useWeb3 } from '../modules/web3';
 import { Button, FormInput, TextInput } from '../ui';
 import Modal from '../ui/Modal';
-import { getPrice } from '../utils';
 import TransactionModal from './TransactionModal';
 
 const Container = styled.div`
@@ -41,52 +40,87 @@ const BuyTokenListing = ({
   onBought
 }: BuyTokenListingProps) => {
   const { currentUser } = useAuthentication();
+  const web3 = useWeb3();
 
   const [isSelecting, setSelecting] = useState(true);
 
   const isCustodialWallet = currentUser.wallet.type == WalletType.INTERNAL;
 
-  const [approvedAllowance, setApprovedAllowance] = useState(0);
   const [isMarketApprovedSpender, setMarketApprovedSpender] = useState(false);
 
-  const { currency: currencySymbol } = getPrice(listing.price);
+  const [balance, setBalance] = useBalance(0, listing.price.currency.decimals);
+  const [approvedAllowance, setApprovedAllowance] = useBalance(
+    0,
+    listing.price.currency.decimals
+  );
+
+  const tokenPrice = Balance(listing.price.amount, listing.price.currency);
 
   const [quantity, setQuantity] = useState(1);
 
-  const pricePerToken = getPrice(listing.price).amount;
+  const [subtotal, setSubtotal] = useBalance(
+    0,
+    listing.price.currency.decimals
+  );
+  const [total, setTotal] = useBalance(0, listing.price.currency.decimals);
 
-  const subtotal = pricePerToken * quantity;
+  const [hasSufficientBalance, setHasSufficientBalance] = useState(false);
 
-  const total = subtotal * 1.05;
-
-  const [balance, setBalance] = useState(0);
-  const hasSufficientBalance = balance >= total;
+  const BUY_FEE_FACTOR = 1.05;
 
   useEffect(() => {
+    if (!balance) return;
+
+    setHasSufficientBalance(balance.amount.greaterThanOrEqualTo(total.amount));
+  }, [balance, total]);
+
+  useEffect(() => {
+    const sub = tokenPrice.amount.mul(quantity);
+
+    setTotal(sub.mul(BUY_FEE_FACTOR));
+    setSubtotal(sub);
+  }, [quantity]);
+
+  useEffect(() => {
+    if (!web3.ethereum) return;
+
     if (!isCustodialWallet) {
-      EthereumClient.instance
-        .getApprovedAllowance(
+      web3.ethereum
+        .getApprovedSpenderERC20Amount(
           listing.price.currency.contract,
+          currentUser.wallet.address,
           listing.chain.contract
         )
         .then((allowance: string) => {
-          setApprovedAllowance(parseFloat(Web3.utils.fromWei(allowance)));
+          setApprovedAllowance(allowance);
         });
     }
 
-    EthereumClient.instance
+    web3.ethereum
       .getERC20Balance(
         listing.price.currency.contract,
         currentUser.wallet.address
       )
-      .then((balance: number) => {
-        setBalance(balance);
+      .then((newBalance: string) => {
+        setBalance(newBalance);
       });
-  }, []);
+  }, [web3.ethereum]);
 
   useEffect(() => {
-    setMarketApprovedSpender(approvedAllowance >= total);
+    setMarketApprovedSpender(
+      approvedAllowance.amount.greaterThanOrEqualTo(total.amount)
+    );
   }, [total, approvedAllowance]);
+
+  const FormValidator = () => {
+    const { validateForm } = useFormikContext();
+
+    useEffect(() => {
+      validateForm();
+    }, [hasSufficientBalance]);
+
+    return null;
+  };
 
   return isSelecting ? (
     <Modal show={true} requestClose={() => setBuying(false)}>
@@ -96,19 +130,19 @@ const BuyTokenListing = ({
             quantity
           }}
           validate={(values) => {
-            const errors: any = {};
+            const errors: FormikErrors<{
+              quantity: string;
+            }> = {};
 
             if (
               !values.quantity ||
               values.quantity < 1 ||
               values.quantity > listing.available
             ) {
-              errors.quantity = `Quantity needs to be between 0 and ${
-                listing.available + 1
-              }`;
+              errors.quantity = `Quantity needs to be 1-${listing.available}`;
             }
 
-            if (total > balance) {
+            if (!hasSufficientBalance) {
               errors.quantity = 'Insufficient balance';
             }
 
@@ -130,13 +164,15 @@ const BuyTokenListing = ({
             <Form>
               <FormInput label="Your balance">
                 <h3 style={{ opacity: 0.5 }}>
-                  {currencySymbol} {balance.toFixed(2)}
+                  {listing.price.currency.symbol}{' '}
+                  {balance.displayAmount.toString()}
                 </h3>
               </FormInput>
               <OrderInfo className="two-col">
                 <FormInput label="Price per token">
                   <h5 style={{ opacity: 0.5 }}>
-                    {currencySymbol} {pricePerToken.toFixed(2)}
+                    {listing.price.currency.symbol}{' '}
+                    {tokenPrice.displayAmount.toString()}
                   </h5>
                 </FormInput>
                 <FormInput label="Available">
@@ -146,10 +182,13 @@ const BuyTokenListing = ({
               <div className="two-col">
                 <FormInput label="Order amount">
                   <h4>
-                    {currencySymbol} {subtotal.toFixed(2)}
+                    {listing.price.currency.symbol}{' '}
+                    {subtotal.displayAmount.toString()}
                   </h4>
                   <p className="smaller" style={{ padding: '10px 0' }}>
-                    + {((subtotal / 100) * 5).toFixed(3)} fee
+                    +{' '}
+                    {subtotal.displayAmount.div(100).mul(5).toDP(2).toString()}{' '}
+                    fee
                   </p>
                 </FormInput>
                 <FormInput label="Quantity" error={errors.quantity as string}>
@@ -160,7 +199,7 @@ const BuyTokenListing = ({
                     value={values.quantity}
                     onChange={(e) => {
                       const val = e.target.value;
-                      setQuantity(val > 0 ? val : 0);
+                      setQuantity(val > 0 ? parseInt(val) : 0);
                       handleChange(e);
                     }}
                   />
@@ -173,6 +212,7 @@ const BuyTokenListing = ({
               >
                 Confirm
               </Button>
+              <FormValidator />
             </Form>
           )}
         </Formik>
@@ -190,20 +230,27 @@ const BuyTokenListing = ({
           : 'Insufficient balance'
       }
       okEnabled={hasSufficientBalance}
-      executeTransaction={() => {
+      executeTransaction={async () => {
         if (!isCustodialWallet) {
           if (!isMarketApprovedSpender) {
-            return EthereumClient.instance.approveSpender(
+            console.log(total.amount.toFixed());
+            const tx = await web3.ethereum.buildApproveERC20SpenderTX(
               listing.price.currency.contract,
+              currentUser.wallet.address,
               listing.chain.contract,
-              Web3.utils.toWei(total.toString())
+              total.amount.toFixed()
             );
+
+            return web3.ethereum.sendTx(tx);
           } else {
-            return EthereumClient.instance.buyTokenListing(
+            const tx = await web3.ethereum.buildBuyTokenListingTx(
+              currentUser.wallet.address,
               listing.chain.contract,
               listing.chain.id,
               quantity
             );
+
+            return web3.ethereum.sendTx(tx);
           }
         } else {
           return ApiClient.instance?.buyTokenListing(listing.id, quantity);
@@ -213,13 +260,13 @@ const BuyTokenListing = ({
         if (isCustodialWallet || isMarketApprovedSpender) {
           end();
         } else {
-          await EthereumClient.instance.checkTxConfirmation(hash);
+          await web3.awaitTxConfirmation(hash);
           setMarketApprovedSpender(true);
         }
       }}
       onFinished={() => onBought()}
     >
-      <p>Order total: {total.toFixed(2)}</p>
+      <p>Order total: {total.displayAmount.toString()}</p>
     </TransactionModal>
   );
 };

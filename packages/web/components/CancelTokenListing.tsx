@@ -4,7 +4,7 @@ import { TokenListingDTO, WalletType } from '@fanbase/shared';
 
 import { ApiClient } from '../modules/api';
 import useAuthentication from '../modules/auth/useAuthentication';
-import EthereumClient from '../modules/ethereum/EthereumClient';
+import { useWeb3 } from '../modules/web3';
 import TransactionModal from './TransactionModal';
 
 type CancelTokenListingProps = {
@@ -19,15 +19,23 @@ export const CancelTokenListing = ({
   onDone
 }: CancelTokenListingProps) => {
   const { currentUser } = useAuthentication(true);
+  const web3 = useWeb3();
+
   return (
     <TransactionModal
       show={true}
       requestClose={() => onClose()}
-      executeTransaction={() => {
+      executeTransaction={async () => {
         if (currentUser.wallet.type == WalletType.INTERNAL) {
           return ApiClient.instance?.cancelTokenListing(listing.id);
         } else {
-          return EthereumClient.instance?.cancelTokenListing(listing.chain.id);
+          const tx = await web3.ethereum.buildCancelTokenListingTx(
+            currentUser.wallet.address,
+            listing.chain.contract,
+            listing.chain.id
+          );
+
+          return web3.ethereum.sendTx(tx);
         }
       }}
       onTransactionSent={async (hash: string, end) => {

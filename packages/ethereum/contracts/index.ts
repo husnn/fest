@@ -48,8 +48,6 @@ const getContract = (name: keyof typeof interfaces, address?: string) => {
     );
 
     contractInstances[instanceKey] = instance;
-
-    console.log(`Instance of '${name}' at ${address}`);
   }
 
   return instance;

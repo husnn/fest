@@ -7,14 +7,15 @@ import { hdkey } from 'ethereumjs-wallet';
 import Web3 from 'web3';
 
 import {
-    ERC20Info, EthereumService as IEthereumService, EthereumTx, generateWalletId, Result, Token,
-    TokenListing, TxResult, Wallet
+    ERC20Info, EthereumService as IEthereumService, generateWalletId, Result, Token, TokenListing,
+    TxResult, Wallet
 } from '@fanbase/core';
 import Contracts from '@fanbase/eth-contracts';
 import {
-    ApproveSpender, ApproveTokenMarket, BuyToken, CancelTokenListing, ListTokenForSale, MintToken
+    ApproveSpender, ApproveTokenMarket, BuyToken, CancelTokenListing, ListTokenForSale, MintToken,
+    WithdrawMarketEarnings
 } from '@fanbase/eth-transactions';
-import { Price, Protocol, WalletType } from '@fanbase/shared';
+import { EthereumTx, Price, Protocol, WalletType } from '@fanbase/shared';
 
 import ERC20Abi from './abi/ERC20.json';
 
@@ -62,7 +63,7 @@ export class EthereumService implements IEthereumService {
     return new Decimal(amount)
       .mul(new Decimal(10).pow(decimals))
       .round()
-      .toString();
+      .toFixed();
   }
 
   async priceFromERC20Amount(address: string, amount: string): Promise<Price> {
@@ -106,6 +107,49 @@ export class EthereumService implements IEthereumService {
     this.erc20Info[address] = info;
 
     return info;
+  }
+
+  async getEtherBalance(walletAddress: string): Promise<string> {
+    return this.web3.eth.getBalance(walletAddress);
+  }
+
+  async buildWithdrawMarketEarningsTx(
+    walletAddress: string,
+    currencyContract: string,
+    amount: string,
+    marketContract?: string
+  ): Promise<EthereumTx> {
+    const networkId = await this.web3.eth.net.getId();
+    const chainId = await this.web3.eth.getChainId();
+
+    const nonce = await this.web3.eth.getTransactionCount(
+      walletAddress,
+      'pending'
+    );
+
+    const txData = { currencyContract, amount };
+
+    return new WithdrawMarketEarnings(txData, marketContract).build(
+      walletAddress,
+      networkId,
+      chainId,
+      nonce,
+      385000
+    );
+  }
+
+  async getMarketEarnings(
+    walletAddress: string,
+    currencyContract: string,
+    marketContract?: string
+  ): Promise<string> {
+    const contract = Contracts.Contracts.Market.get(marketContract);
+
+    const balance = await contract.methods
+      .getBalance(currencyContract, walletAddress)
+      .call();
+
+    return balance;
   }
 
   async buildBuyTokenListingTx(
@@ -174,6 +218,7 @@ export class EthereumService implements IEthereumService {
 
   async buildCancelTokenListingTx(
     walletAddress: string,
+    listingContract: string,
     tradeId: string
   ): Promise<EthereumTx> {
     const nonce = await this.web3.eth.getTransactionCount(
@@ -186,7 +231,7 @@ export class EthereumService implements IEthereumService {
 
     const txData = { tradeId };
 
-    return new CancelTokenListing(txData).build(
+    return new CancelTokenListing(txData, listingContract).build(
       walletAddress,
       networkId,
       chainId,
@@ -306,21 +351,21 @@ export class EthereumService implements IEthereumService {
   }
 
   async buildMintTokenTx(
-    token: Token,
-    wallet: Wallet,
+    walletAddress: string,
+    supply: number,
     data: string,
     expiry: number,
     salt: string,
     signature: string
   ): Promise<EthereumTx> {
     const nonce = await this.web3.eth.getTransactionCount(
-      wallet.address,
+      walletAddress,
       'pending'
     );
 
     const txData = {
-      creator: wallet.address,
-      supply: token.supply,
+      creator: walletAddress,
+      supply,
       fees: [],
       data,
       expiry,
@@ -332,7 +377,7 @@ export class EthereumService implements IEthereumService {
     const chainId = await this.web3.eth.getChainId();
 
     return new MintToken(txData).build(
-      wallet.address,
+      walletAddress,
       networkId,
       chainId,
       nonce
@@ -359,10 +404,10 @@ export class EthereumService implements IEthereumService {
   }
 
   async signAndSendTx(tx: EthereumTx, pk: string): Promise<TxResult> {
-    return this.sendTx(tx.signAndSerialize(pk));
+    return this.sendSignedTx(tx.signAndSerialize(pk));
   }
 
-  async sendTx(tx: string): Promise<TxResult> {
+  async sendSignedTx(tx: string): Promise<TxResult> {
     return new Promise<TxResult>((resolve) => {
       this.web3.eth
         .sendSignedTransaction(tx)
@@ -372,6 +417,19 @@ export class EthereumService implements IEthereumService {
         .catch((err) => {
           console.log(err);
           resolve(Result.fail());
+        });
+    });
+  }
+
+  async sendTx(tx: EthereumTx): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+      this.web3.eth
+        .sendTransaction(tx.txData)
+        .once('transactionHash', (hash: string) => {
+          resolve(hash);
+        })
+        .catch((err) => {
+          reject();
         });
     });
   }

@@ -1,7 +1,6 @@
 import { Wallet } from '@fanbase/core';
-import { Price } from '@fanbase/shared';
+import { EthereumTx, Price } from '@fanbase/shared';
 
-import { EthereumTx, Token } from '../entities';
 import { Result } from '../Result';
 
 export type ERC20Info = {
@@ -21,6 +20,20 @@ export interface EthereumService {
   priceFromERC20Amount(address: string, amount: string): Promise<Price>;
 
   getERC20Info(address: string): Promise<ERC20Info>;
+
+  getEtherBalance(walletAddress: string): Promise<string>;
+
+  buildWithdrawMarketEarningsTx(
+    walletAddress: string,
+    marketContract: string,
+    currencyContract: string,
+    amount: string
+  ): Promise<EthereumTx>;
+
+  getMarketEarnings(
+    walletAddress: string,
+    marketContract?: string
+  ): Promise<string>;
 
   buildBuyTokenListingTx(
     walletAddress: string,
@@ -44,6 +57,7 @@ export interface EthereumService {
 
   buildCancelTokenListingTx(
     walletAddress: string,
+    listingContract: string,
     tradeId: string
   ): Promise<EthereumTx>;
 
@@ -85,8 +99,8 @@ export interface EthereumService {
   ): Promise<Result<{ signature: string }>>;
 
   buildMintTokenTx(
-    token: Token,
-    wallet: Wallet,
+    walletAddress: string,
+    supply: number,
     data: string,
     expiry: number,
     salt: string,
@@ -106,7 +120,7 @@ export interface EthereumService {
 
   signAndSendTx(tx: EthereumTx, pk: string): Promise<TxResult>;
 
-  sendTx(tx: string): Promise<TxResult>;
+  sendSignedTx(tx: string): Promise<TxResult>;
 
   recoverAddress(
     message: string,

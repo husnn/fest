@@ -1,6 +1,7 @@
+import { NextRouter } from 'next/router';
 import Web3 from 'web3';
 
-import { Price, TokenDTO, TokenOwnershipDTO, UserDTO, WalletDTO } from '@fanbase/shared';
+import { Currency, Price, TokenDTO, TokenOwnershipDTO, UserDTO, WalletDTO } from '@fanbase/shared';
 
 export const getTokenUrl = (token?: TokenDTO, id?: string): string =>
   `/tokens/${token ? token.id : id}`;
@@ -44,18 +45,6 @@ export const getDisplayName = (user?: UserDTO, wallet?: WalletDTO): string =>
 export const waitFor = (ms: number): Promise<void> =>
   new Promise((res) => setTimeout(res, ms));
 
-export const getPrice = (
-  price: Price | string,
-  contract?: string
-): { currency: string; amount: number } => {
-  return {
-    currency: '$',
-    amount: parseFloat(
-      Web3.utils.fromWei(typeof price === 'object' ? price.amount : price)
-    )
-  };
-};
-
 export const getImageUrl = (
   sourceUrl: string,
   params?: {
@@ -97,4 +86,17 @@ export const getImageUrl = (
       : sourceUrl;
 
   return url;
+};
+
+export const getNativeCurrency = (): Currency => {
+  return {
+    name: process.env.NATIVE_TOKEN_NAME || 'Ether',
+    symbol: process.env.NATIVE_TOKEN_SYMBOL || 'ETH',
+    contract: '0',
+    decimals: parseInt(process.env.NATIVE_TOKEN_DECIMALS || '18')
+  };
+};
+
+export const reloadInTime = (router: NextRouter, seconds: number) => {
+  setTimeout(() => router.reload(), seconds * 1000);
 };

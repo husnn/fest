@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 
 import styled from '@emotion/styled';
 
-const WalletContainer = styled.div`
+import { CurrencyBalance } from '../types';
+
+const Container = styled.div`
   margin: 20px 0;
 `;
 
@@ -84,74 +86,60 @@ const BalanceActions = styled.div`
   }
 `;
 
-export type WalletCurrency = {
-  name: string;
-  symbol: string;
-  precision?: number;
-};
-
-type WalletProps = {
-  currencies: WalletCurrency[];
-  onCurrencySelected: (
-    currency: WalletCurrency,
-    callback: (balance: number) => void
-  ) => void;
+type BalanceViewProps = {
+  balances: CurrencyBalance[];
+  onSelect: (currency: CurrencyBalance) => void;
   children: React.ReactElement;
 };
 
-export const Wallet = ({
-  currencies,
-  onCurrencySelected,
+export const BalanceView = ({
+  balances,
+  onSelect,
   children
-}: WalletProps) => {
-  const [balance, setBalance] = useState<number>(0);
-
-  const [currencySelected, setCurrencySelected] = useState<WalletCurrency>(
-    currencies[0]
-  );
-
-  const refreshCurrency = (currency: WalletCurrency) => {
-    onCurrencySelected(currency, (balance: number) => {
-      setBalance(balance);
-      setCurrencySelected(currency);
-    });
-  };
+}: BalanceViewProps) => {
+  const [selected, setSelected] = useState<CurrencyBalance>();
 
   useEffect(() => {
-    refreshCurrency(currencies[0]);
-  }, []);
+    const s = balances.find((x) => x.selected) || balances[0];
+
+    if (s && !selected) onSelect(s);
+
+    setSelected(s);
+  }, [balances]);
 
   return (
-    <WalletContainer>
+    <Container>
       <BalanceContainer>
         <CurrencySelection>
-          {currencies?.map((currency: WalletCurrency, index: number) => (
+          {balances?.map((balance: CurrencyBalance, index: number) => (
             <CurrencyTab
               key={index}
-              selected={currency.symbol == currencySelected?.symbol}
-              onClick={() => refreshCurrency(currency)}
+              selected={balance.currency.symbol === selected?.currency.symbol}
+              onClick={() => onSelect(balance)}
             >
               <p>
-                {currency.name} - {currency.symbol}
+                {balance.currency.name} - {balance.currency.symbol}
               </p>
             </CurrencyTab>
           ))}
         </CurrencySelection>
         <Balance>
           <p>Your balance</p>
-          {currencySelected && (
+          {selected && (
             <React.Fragment>
               <h1>
-                {Number(balance || 0).toFixed(currencySelected?.precision || 3)}
+                {selected.balance.displayAmount.toFixed(
+                  selected.precision || 5
+                )}
               </h1>
-              <p>{currencySelected?.symbol}</p>
+              <p>{selected.currency.symbol}</p>
             </React.Fragment>
           )}
           <BalanceActions>{children}</BalanceActions>
         </Balance>
       </BalanceContainer>
-    </WalletContainer>
+    </Container>
   );
 };
 
-export default Wallet;
+export default BalanceView;

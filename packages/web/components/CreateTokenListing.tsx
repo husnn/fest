@@ -8,8 +8,7 @@ import { TokenDTO, TokenOwnershipDTO, WalletType } from '@fanbase/shared';
 
 import ApiClient from '../modules/api/ApiClient';
 import useAuthentication from '../modules/auth/useAuthentication';
-import EthereumClient from '../modules/ethereum/EthereumClient';
-import useEthereum from '../modules/ethereum/useEthereum';
+import { useWeb3 } from '../modules/web3';
 import { Button, FormInput, TextInput } from '../ui';
 
 type CreateTokenListingProps = {
@@ -41,17 +40,21 @@ export const CreateTokenListing = ({
   onSuccess
 }: CreateTokenListingProps) => {
   const { currentUser } = useAuthentication();
-  const eth = useEthereum();
+  const web3 = useWeb3();
 
   const [marketApproved, setMarketApproved] = useState(false);
 
   useEffect(() => {
+    if (!web3.ethereum) return;
+
     if (currentUser.wallet.type == WalletType.EXTERNAL) {
-      eth?.checkMarketApproval(currentUser.wallet.address).then((approved) => {
-        setMarketApproved(approved);
-      });
+      web3.ethereum
+        .checkMarketApproved(token.chain.contract, currentUser.wallet.address)
+        .then((approved) => {
+          setMarketApproved(approved);
+        });
     }
-  }, [eth]);
+  }, [web3]);
 
   const listForSale = async (quantity: number, price: number) => {
     const currency = Contracts.FAN.get().options.address;
@@ -75,8 +78,10 @@ export const CreateTokenListing = ({
         }
       );
 
-      txHash = await eth.listForSale(
-        token,
+      const tx = await web3.ethereum.buildListTokenForSaleTx(
+        currentUser.wallet.address,
+        token.chain.contract,
+        token.chain.id,
         quantity,
         {
           currency,
@@ -86,9 +91,11 @@ export const CreateTokenListing = ({
         approval.salt,
         approval.signature
       );
+
+      txHash = await web3.ethereum.sendTx(tx);
     }
 
-    await EthereumClient.instance.checkTxConfirmation(txHash);
+    await web3.awaitTxConfirmation(txHash);
 
     onSuccess();
   };
@@ -111,9 +118,7 @@ export const CreateTokenListing = ({
             values.quantity < 1 ||
             values.quantity > ownership.quantity
           ) {
-            errors.quantity = `Quantity needs to be between 0 and ${
-              ownership.quantity + 1
-            }`;
+            errors.quantity = `Quantity needs to be 1-${ownership.quantity}`;
           }
 
           if (!values.price || values.price < 1 || values.price > 99999999) {
@@ -127,7 +132,13 @@ export const CreateTokenListing = ({
             currentUser.wallet.type == WalletType.EXTERNAL &&
             !marketApproved
           ) {
-            await eth.approveMarket();
+            const tx = await web3.ethereum.buildApproveMarketTx(
+              token.chain.contract,
+              currentUser.wallet.address
+            );
+
+            await web3.ethereum.sendTx(tx);
+
             setMarketApproved(true);
           } else {
             await listForSale(values.quantity, values.price);

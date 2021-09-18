@@ -11,8 +11,7 @@ import TokenHolders from '../../components/TokenHolders';
 import TokenListings from '../../components/TokenListings';
 import ApiClient from '../../modules/api/ApiClient';
 import useAuthentication from '../../modules/auth/useAuthentication';
-import EthereumClient from '../../modules/ethereum/EthereumClient';
-import useEthereum from '../../modules/ethereum/useEthereum';
+import useWeb3 from '../../modules/web3/useWeb3';
 import SpinnerSvg from '../../public/images/spinner.svg';
 import { Button, Link } from '../../ui';
 import Modal from '../../ui/Modal';
@@ -111,7 +110,7 @@ export default function TokenPage() {
   const router = useRouter();
   const { currentUser } = useAuthentication();
 
-  useEthereum();
+  const web3 = useWeb3();
 
   const { id, o } = router.query;
 
@@ -167,18 +166,21 @@ export default function TokenPage() {
             Protocol.ETHEREUM
           );
 
-          hash = await EthereumClient.instance?.mintToken(
-            token,
+          const tx = await web3.ethereum.buildMintTokenTx(
+            currentUser.wallet.address,
+            token.supply,
             approval.data,
             approval.expiry,
             approval.salt,
             approval.signature
           );
+
+          hash = await web3.ethereum.sendTx(tx);
         }
 
         setExecuted(true);
 
-        await EthereumClient.instance.checkTxConfirmation(hash);
+        await web3.awaitTxConfirmation(hash);
 
         onExecuted();
       } catch (err) {

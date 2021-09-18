@@ -9,7 +9,7 @@ import { ApiClient } from '../modules/api';
 import usePagination from '../modules/api/usePagination';
 import useAuthentication from '../modules/auth/useAuthentication';
 import { Button, Link } from '../ui';
-import { getDisplayName, getPrice, getProfileUrl } from '../utils';
+import { getDisplayName, getProfileUrl } from '../utils';
 import BuyTokenListing from './BuyTokenListing';
 
 const Container = styled.div`
@@ -50,7 +50,6 @@ const TokenListing = ({ listing }: { listing: TokenListingDTO }) => {
   const router = useRouter();
 
   const isActive = listing.status == TokenListingStatus.Active;
-  const price = getPrice(listing.price);
 
   const [buying, setBuying] = useState(false);
 
@@ -72,7 +71,8 @@ const TokenListing = ({ listing }: { listing: TokenListingDTO }) => {
       <TokenListingColumn>
         <label>Price/token</label>
         <p>
-          {price.currency} {price.amount}
+          {listing.price.currency.symbol}{' '}
+          {listing.price.displayAmount.toPrecision()}
         </p>
       </TokenListingColumn>
       <TokenListingColumn>

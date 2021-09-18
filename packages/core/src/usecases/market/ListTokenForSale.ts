@@ -1,4 +1,4 @@
-import { Price, WalletType } from '@fanbase/shared';
+import { decryptText, Price, WalletType } from '@fanbase/shared';
 
 import UseCase from '../../base/UseCase';
 import { TokenOwnershipRepository, TokenRepository, WalletRepository } from '../../repositories';
@@ -82,7 +82,7 @@ export class ListTokenForSale extends UseCase<
 
       const approvalTxResult = await this.ethereumService.signAndSendTx(
         approvalTx,
-        wallet.privateKey
+        decryptText(wallet.privateKey)
       );
 
       if (!approvalTxResult.success) return Result.fail();
@@ -119,7 +119,7 @@ export class ListTokenForSale extends UseCase<
 
     const txResult = await this.ethereumService.signAndSendTx(
       tx,
-      wallet.privateKey
+      decryptText(wallet.privateKey)
     );
 
     return txResult.success

@@ -4,17 +4,18 @@ import React, { useEffect, useState } from 'react';
 
 import styled from '@emotion/styled';
 import Contracts from '@fanbase/eth-contracts';
-import { TokenListingDTO, TokenOfferDTO, TokenTradeDTO } from '@fanbase/shared';
+import { Balance, TokenListingDTO, TokenOfferDTO, TokenTradeDTO } from '@fanbase/shared';
 
+import BalanceView from '../components/BalanceView';
 import CancelTokenListing from '../components/CancelTokenListing';
-import Wallet, { WalletCurrency } from '../components/Wallet';
 import WithdrawEarnings from '../components/WithdrawEarnings';
 import { ApiClient } from '../modules/api';
 import useAuthentication from '../modules/auth/useAuthentication';
-import EthereumClient from '../modules/ethereum/EthereumClient';
 import { useHeader } from '../modules/navigation';
+import { useWeb3 } from '../modules/web3';
+import { CurrencyBalance } from '../types';
 import { Button, Link } from '../ui';
-import { getPrice, getTokenUrl } from '../utils';
+import { getTokenUrl, reloadInTime } from '../utils';
 
 const MarketSection = styled.div`
   padding: 20px 10px;
@@ -76,7 +77,6 @@ const TokenListingRow = ({
   onCancel: (id: string) => void;
 }) => {
   const sold = data.quantity - data.available;
-  const price = getPrice(data.price);
 
   return (
     <ListingRow>
@@ -90,8 +90,8 @@ const TokenListingRow = ({
           </Link>
         </div>
         <ListingPrice>
-          <span style={{ opacity: 0.5 }}>{price.currency}</span>
-          <span>{price.amount}</span>
+          <span style={{ opacity: 0.5 }}>{data.price.currency.symbol}</span>
+          <span>{data.price.displayAmount.toPrecision()}</span>
         </ListingPrice>
       </div>
       <div className="token-listing__right">
@@ -134,72 +134,65 @@ export default function MarketPage() {
       });
   }, []);
 
-  const getEarnings = async (currency: WalletCurrency): Promise<string> => {
-    let currencyContract;
+  const web3 = useWeb3();
 
-    switch (currency.symbol) {
-      case 'DAI':
-        currencyContract = process.env.ETH_CONTRACT_DAI_ADDRESS;
-        break;
-      case 'FAN':
-        currencyContract = Contracts.Contracts.FAN.get().options.address;
-        break;
-    }
+  const [marketBalances, setMarketBalances] = useState<CurrencyBalance[]>([]);
 
-    return EthereumClient.instance.getMarketEarnings(
-      currencyContract,
-      currentUser.wallet.address
+  useEffect(() => {
+    if (!web3.ethereum) return;
+
+    setMarketBalances([
+      {
+        currency: {
+          name: 'Fan Coin',
+          symbol: 'FAN',
+          contract: Contracts.Contracts.FAN.get().options.address,
+          decimals: 18
+        },
+        balance: Balance(0),
+        precision: 3,
+        selected: true
+      }
+    ]);
+  }, [web3.ethereum]);
+
+  const updateEarnings = async (balance: CurrencyBalance) => {
+    const bal = await web3.ethereum.getMarketEarnings(
+      currentUser.wallet.address,
+      balance.currency.contract
     );
+
+    marketBalances.map((element) => {
+      element.selected = false;
+
+      if (element.currency.symbol === balance.currency.symbol) {
+        element.balance.set(bal);
+        element.selected = true;
+      }
+
+      return element;
+    });
+
+    setMarketBalances([...marketBalances]);
   };
 
-  const [earnings, setEarnings] = useState<{
-    currency: string;
-    amount: string;
-  }>({
-    currency: 'DAI',
-    amount: '0'
-  });
+  const getSelectedBalance = (): CurrencyBalance =>
+    marketBalances.find((x: CurrencyBalance) => x.selected === true);
 
   return currentUser ? (
     <div className="container boxed" style={{ maxWidth: 600 }}>
       <MarketSection>
         <h2>Earnings</h2>
-        <Wallet
-          currencies={[
-            {
-              name: 'Fan Coin',
-              symbol: 'FAN'
-            },
-            {
-              name: 'Dai',
-              symbol: 'DAI'
-            }
-          ]}
-          onCurrencySelected={async (currency: WalletCurrency, callback) => {
-            getEarnings(currency)
-              .then((balance: string) => {
-                balance
-                  ? setEarnings({
-                      currency: currency.symbol,
-                      amount: balance
-                    })
-                  : null;
-
-                const b = getPrice(balance);
-
-                callback(b.amount);
-              })
-              .catch((err) => {
-                console.log(err);
-              });
-          }}
+        <BalanceView
+          balances={marketBalances}
+          onSelect={(balance: CurrencyBalance) => updateEarnings(balance)}
         >
-          {earnings && (
+          {marketBalances && (
             <Button size="small" onClick={() => setWithdrawing(true)}>
               Withdraw
             </Button>
           )}
-        </Wallet>
+        </BalanceView>
       </MarketSection>
       {tokenMarketSummary?.offers?.length > 0 && (
         <MarketSection>
@@ -232,23 +225,14 @@ export default function MarketPage() {
         <CancelTokenListing
           listing={listingToCancel}
           onClose={() => setListingToCancel(null)}
-          onDone={() => {
-            setTimeout(() => {
-              router.reload();
-            }, 2000);
-          }}
+          onDone={() => reloadInTime(router, 2)}
         />
       )}
       {isWithdrawing && (
         <WithdrawEarnings
-          currency={earnings.currency}
-          amount={earnings.amount}
+          balance={getSelectedBalance()}
           onClose={() => setWithdrawing(false)}
-          onDone={() => {
-            setTimeout(() => {
-              router.reload();
-            }, 2000);
-          }}
+          onDone={() => reloadInTime(router, 2)}
         />
       )}
     </div>

@@ -9,9 +9,8 @@ import LoginWithEmail from '../components/LoginWithEmail';
 import ApiClient from '../modules/api/ApiClient';
 import { saveAuthToken, saveCurrentUser } from '../modules/auth/authStorage';
 import useAuthentication from '../modules/auth/useAuthentication';
-import EthereumClient from '../modules/ethereum/EthereumClient';
-import useEthereum from '../modules/ethereum/useEthereum';
 import { useHeader } from '../modules/navigation';
+import useWeb3 from '../modules/web3/useWeb3';
 import styles from '../styles/Login.module.scss';
 import Button from '../ui/Button';
 import { getProfileUrl } from '../utils';
@@ -20,7 +19,7 @@ export default function Login() {
   useHeader([]);
 
   const router = useRouter();
-  const eth = useEthereum();
+  const { wallet, requestSignature } = useWeb3();
 
   const { isAuthenticated, setAuthenticated, currentUser, setCurrentUser } =
     useAuthentication();
@@ -44,18 +43,16 @@ export default function Login() {
   };
 
   const loginWithWallet = async () => {
-    const account = await eth?.getAccount();
-
-    if (!account) return;
+    if (!wallet) return;
 
     try {
       const identificationData = await ApiClient.instance?.identifyWithWallet(
-        account
+        wallet.address
       );
 
-      const signature = await EthereumClient.instance?.signMessage(
+      const signature = await requestSignature(
         identificationData.message,
-        account
+        wallet.address
       );
 
       const { token, user } = await ApiClient.instance?.loginWithWallet(

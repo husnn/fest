@@ -3,13 +3,15 @@ import React, { useEffect, useState } from 'react';
 
 import styled from '@emotion/styled';
 import contracts from '@fanbase/eth-contracts';
+import { Balance } from '@fanbase/shared';
 import { RampInstantSDK } from '@ramp-network/ramp-instant-sdk';
 
-import Wallet, { WalletCurrency } from '../components/Wallet';
+import BalanceView, { CurrencyBalance } from '../components/BalanceView';
 // import TransakSDK from '@transak/transak-sdk';
 import useAuthentication from '../modules/auth/useAuthentication';
-import EthereumClient from '../modules/ethereum/EthereumClient';
+import { useWeb3 } from '../modules/web3';
 import { Button } from '../ui';
+import { getNativeCurrency } from '../utils';
 
 const WalletInfo = styled.div`
   margin: 20px 0;
@@ -22,40 +24,7 @@ const WalletInfo = styled.div`
 export const WalletPage = () => {
   const { currentUser } = useAuthentication(true);
 
-  const [currencies] = useState<WalletCurrency[]>([
-    {
-      name: 'Ether',
-      symbol: 'ETH',
-      precision: 5
-    },
-    {
-      name: 'Dai',
-      symbol: 'DAI'
-    },
-    {
-      name: 'Fan Coin',
-      symbol: 'FAN'
-    }
-  ]);
-
-  const getBalance = async (currency: WalletCurrency) => {
-    switch (currency.symbol) {
-      case 'ETH':
-        return await EthereumClient.instance?.getEtherBalance(
-          currentUser.wallet.address
-        );
-      case 'DAI':
-        return await EthereumClient.instance?.getERC20Balance(
-          process.env.ETH_CONTRACT_DAI_ADDRESS,
-          currentUser.wallet.address
-        );
-      case 'FAN':
-        return await EthereumClient.instance?.getERC20Balance(
-          contracts.Contracts.FAN.get().options.address,
-          currentUser.wallet.address
-        );
-    }
-  };
+  const web3 = useWeb3();
 
   const sendFunds = () => {
     return;
@@ -94,6 +63,61 @@ export const WalletPage = () => {
     }).show();
   };
 
+  const [currencyBalances, setCurrencyBalances] = useState<CurrencyBalance[]>(
+    []
+  );
+
+  useEffect(() => {
+    if (!web3.ethereum) return;
+
+    const balances: CurrencyBalance[] = [
+      {
+        currency: getNativeCurrency(),
+        balance: Balance(0),
+        precision: 5
+      },
+      {
+        currency: {
+          name: 'Fan Coin',
+          symbol: 'FAN',
+          contract: contracts.Contracts.FAN.get().options.address,
+          decimals: 18
+        },
+        balance: Balance(0),
+        precision: 3,
+        selected: true
+      }
+    ];
+
+    setCurrencyBalances(balances);
+  }, [web3.ethereum]);
+
+  const updateBalance = async (balance: CurrencyBalance) => {
+    let bal: string;
+
+    if (balance.currency.symbol === getNativeCurrency().symbol) {
+      bal = await web3.ethereum.getEtherBalance(currentUser.wallet.address);
+    } else {
+      bal = await web3.ethereum.getERC20Balance(
+        balance.currency.contract,
+        currentUser.wallet.address
+      );
+    }
+
+    currencyBalances.map((element) => {
+      element.selected = false;
+
+      if (element.currency.symbol === balance.currency.symbol) {
+        element.balance.set(bal);
+        element.selected = true;
+      }
+
+      return element;
+    });
+
+    setCurrencyBalances([...currencyBalances]);
+  };
+
   return currentUser ? (
     <div className="boxed">
       <Head>
@@ -113,12 +137,9 @@ export const WalletPage = () => {
           {currentUser.wallet.address}
         </p>
       </WalletInfo>
-      <Wallet
-        currencies={currencies}
-        onCurrencySelected={async (currency: WalletCurrency, callback) => {
-          const balance = await getBalance(currency);
-          callback(balance);
-        }}
+      <BalanceView
+        balances={currencyBalances}
+        onSelect={(currency: CurrencyBalance) => updateBalance(currency)}
       >
         <React.Fragment>
           <Button size="small" color="secondary" onClick={() => sendFunds()}>
@@ -128,7 +149,7 @@ export const WalletPage = () => {
             Add
           </Button>
         </React.Fragment>
-      </Wallet>
+      </BalanceView>
     </div>
   ) : null;
 };

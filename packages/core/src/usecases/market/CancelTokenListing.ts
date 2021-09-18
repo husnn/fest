@@ -1,4 +1,4 @@
-import { WalletType } from '@fanbase/shared';
+import { decryptText, WalletType } from '@fanbase/shared';
 
 import UseCase from '../../base/UseCase';
 import { TokenListingRepository, WalletRepository } from '../../repositories';
@@ -53,12 +53,13 @@ export class CancelTokenListing extends UseCase<
 
     const tx = await this.ethereumService.buildCancelTokenListingTx(
       wallet.address,
+      listing.chain.contract,
       listing.chain.id
     );
 
     const txResult = await this.ethereumService.signAndSendTx(
       tx,
-      wallet.privateKey
+      decryptText(wallet.privateKey)
     );
 
     return txResult.success

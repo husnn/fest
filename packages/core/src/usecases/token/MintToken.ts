@@ -63,8 +63,8 @@ export class MintToken extends UseCase<MintTokenInput, MintTokenOutput> {
     const { signature } = result.data;
 
     const tx = await this.ethereumService.buildMintTokenTx(
-      token,
-      wallet,
+      wallet.address,
+      token.supply,
       encryptText(token.id),
       expiry,
       salt,

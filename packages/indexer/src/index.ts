@@ -60,7 +60,9 @@ ethereumListener.on('market-cancel', (event: TokenCancelListingJob) => {
   await EthereumService.init(web3);
 
   await Postgres.init(postgresConfig);
-  console.log('Connected to database.');
+  console.log('Connected to database.\n');
+
+  console.log('Listening to all new events.');
 
   const ethereumService = EthereumService.instance;
 

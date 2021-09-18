@@ -2,7 +2,7 @@ import { Transaction as EthereumTx } from 'ethereumjs-tx';
 import Web3 from 'web3';
 
 import Common from '@ethereumjs/common';
-import { EthereumTx as IEthereumTx } from '@fanbase/core';
+import { EthereumTx as IEthereumTx } from '@fanbase/shared';
 
 export class Transaction implements IEthereumTx {
   address: string;
@@ -54,6 +54,7 @@ export class Transaction implements IEthereumTx {
 
   signAndSerialize(privateKey: string): string {
     const privateKeyBuffer = Buffer.from(privateKey, 'hex');
+
     this.tx.sign(privateKeyBuffer);
 
     return '0x' + this.tx.serialize().toString('hex');

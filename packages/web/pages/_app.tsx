@@ -8,23 +8,24 @@ import Header from '../components/Header';
 import ApiClient from '../modules/api/ApiClient';
 import AxiosClient from '../modules/api/AxiosClient';
 import AuthProvider from '../modules/auth/AuthProvider';
-import EthereumClient from '../modules/ethereum/EthereumClient';
 import HeaderProvider from '../modules/navigation/HeaderProvider';
+import Web3Provider from '../modules/web3/Web3Provider';
 import DefaultTheme from '../styles/themes/DefaultTheme';
 
 import type { AppProps } from 'next/app';
 const axiosClient = new AxiosClient();
 new ApiClient(axiosClient);
-new EthereumClient().initWeb3();
 
 function FanbaseApp({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider theme={DefaultTheme}>
       <AuthProvider>
-        <HeaderProvider>
-          <Header />
-          <Component {...pageProps} />
-        </HeaderProvider>
+        <Web3Provider>
+          <HeaderProvider>
+            <Header />
+            <Component {...pageProps} />
+          </HeaderProvider>
+        </Web3Provider>
       </AuthProvider>
     </ThemeProvider>
   );

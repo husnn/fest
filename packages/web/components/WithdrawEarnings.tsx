@@ -1,54 +1,48 @@
 import React from 'react';
 
-import { Contracts } from '@fanbase/eth-contracts';
-
-import EthereumClient from '../modules/ethereum/EthereumClient';
-import { getPrice } from '../utils';
+import useAuthentication from '../modules/auth/useAuthentication';
+import { useWeb3 } from '../modules/web3';
+import { CurrencyBalance } from '../types';
 import TransactionModal from './TransactionModal';
 
 type WithdrawEarningsProps = {
-  currency: string;
-  amount: string;
+  balance: CurrencyBalance;
   onClose: () => void;
   onDone: () => void;
 };
 
 export const WithdrawEarnings = ({
-  currency,
-  amount,
+  balance,
   onClose,
   onDone
 }: WithdrawEarningsProps) => {
-  const balance = getPrice(amount);
+  const { currentUser } = useAuthentication();
+  const web3 = useWeb3();
 
   return (
     <TransactionModal
       show={true}
       title="Withdraw all earnings to wallet?"
       requestClose={() => onClose()}
-      executeTransaction={() => {
-        let contract;
+      executeTransaction={async () => {
+        const tx = await web3.ethereum.buildWithdrawMarketEarningsTx(
+          currentUser.wallet.address,
+          balance.currency.contract,
+          balance.balance.amount.toFixed()
+        );
 
-        switch (currency) {
-          case 'DAI':
-            contract = process.env.ETH_CONTRACT_DAI_ADDRESS;
-            break;
-          case 'FAN':
-            contract = Contracts.FAN.get().options.address;
-            break;
-        }
-
-        return EthereumClient.instance.withdrawEarnings(contract, amount);
+        return web3.ethereum.sendTx(tx);
       }}
-      onTransactionSent={async (txHash: string, last) => {
-        last();
+      onTransactionSent={async (txHash: string, end) => {
+        end();
       }}
       onFinished={() => {
         onDone();
       }}
     >
       <p>
-        Withdraw amount: {balance.currency} {balance.amount}
+        Withdraw amount: {balance.currency.symbol}{' '}
+        {balance.balance.displayAmount.toFixed(balance.precision || 5)}
       </p>
     </TransactionModal>
   );

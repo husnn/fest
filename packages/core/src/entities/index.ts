@@ -1,4 +1,3 @@
-export * from './EthereumTx';
 export * from './OAuth';
 export * from './Token';
 export * from './TokenListing';

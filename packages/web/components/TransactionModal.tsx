@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import EthereumClient from '../modules/ethereum/EthereumClient';
+import { useWeb3 } from '../modules/web3';
 import SpinnerSvg from '../public/images/spinner.svg';
 import Modal, { ModalProps } from '../ui/Modal';
 
@@ -9,7 +9,7 @@ type TransactionModalProps = {
   children?: React.ReactElement;
   txHash?: string;
   executeTransaction: () => Promise<string>;
-  onTransactionSent?: (txHash: string, last: () => void) => Promise<void>;
+  onTransactionSent?: (txHash: string, end: () => void) => Promise<void>;
   onFinished?: () => void;
 };
 
@@ -21,16 +21,15 @@ export const TransactionModal = ({
   okEnabled,
   ...props
 }: TransactionModalProps & ModalProps) => {
-  const [executing, setExecuting] = useState(false);
+  const web3 = useWeb3();
 
+  const [executing, setExecuting] = useState(false);
   const [txHash, setTxHash] = useState(undefined);
 
   useEffect(() => {
     if (!txHash) return;
 
-    EthereumClient.instance
-      .checkTxConfirmation(txHash)
-      .then(() => onFinished());
+    web3.awaitTxConfirmation(txHash).then(() => onFinished());
   }, [txHash]);
 
   return txHash ? (

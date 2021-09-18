@@ -26,6 +26,6 @@ export default function initRoutes(
   router.use('/users', initUserRoutes(router, userController));
   router.use('/google', initGoogleRoutes(router, googleController));
   router.use('/youtube', initYouTubeRoutes(router, youTubeController));
-  router.use('/tokens', initTokenRoutes(router, tokenController));
   router.use('/market', initMarketRoutes(router, marketController));
+  router.use('/tokens', initTokenRoutes(router, tokenController));
 }

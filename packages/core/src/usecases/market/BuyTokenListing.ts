@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js';
 
-import { WalletType } from '@fanbase/shared';
+import { decryptText, WalletType } from '@fanbase/shared';
 
 import UseCase from '../../base/UseCase';
 import { TokenListingRepository, WalletRepository } from '../../repositories';
@@ -77,12 +77,12 @@ export class BuyTokenListing extends UseCase<
         listing.price.currency.contract,
         wallet.address,
         listing.chain.contract,
-        total.toString()
+        total.toFixed()
       );
 
       const approveTxResult = await this.ethereumService.signAndSendTx(
         approveTx,
-        wallet.privateKey
+        decryptText(wallet.privateKey)
       );
 
       if (!approveTxResult.success) return Result.fail();
@@ -97,7 +97,7 @@ export class BuyTokenListing extends UseCase<
 
     const buyTxResult = await this.ethereumService.signAndSendTx(
       buyTx,
-      wallet.privateKey
+      decryptText(wallet.privateKey)
     );
 
     return buyTxResult.success
