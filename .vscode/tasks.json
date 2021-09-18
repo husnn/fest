@@ -1,0 +1,113 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start Ganache",
+      "type": "shell",
+      "command": "${workspaceFolder}/scripts/deploy_ganache.sh",
+      "isBackground": true,
+      "presentation": {
+        "panel": "dedicated",
+        "clear": true
+			},
+      "problemMatcher": {
+        "pattern": {
+          "regexp": ".",
+          "file": 1,
+          "location": 2,
+          "message": 3
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".",
+          "endsPattern": "Listening on 127.0.0.1:8545"
+        }
+      }
+    },
+    {
+      "label": "Watch + Build",
+      "command": "yarn",
+      "type": "shell",
+      "args": ["watch"],
+      "isBackground": true,
+      "presentation": {
+        "group": "default",
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": ["$tsc-watch"]
+    },
+    {
+      "label": "Start Indexer",
+      "type": "shell",
+      "command": "yarn",
+      "args": ["indexer", "serve"],
+      "isBackground": true,
+      "dependsOn": ["Start Ganache"],
+      "presentation": {
+        "group": "default",
+        "panel": "shared"
+      },
+      "problemMatcher": {
+        "pattern": {
+          "regexp": ".",
+          "file": 1,
+          "location": 2,
+          "message": 3
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".",
+          "endsPattern": "Listening to all new events"
+        }
+      }
+    },
+    {
+      "label": "Start API",
+      "type": "shell",
+      "command": "yarn",
+      "args": ["api", "dev"],
+      "isBackground": true,
+      "dependsOn": ["Start Indexer"],
+      "presentation": {
+        "group": "default",
+        "panel": "shared"
+      },
+      "problemMatcher": {
+        "pattern": {
+          "regexp": ".",
+          "file": 1,
+          "location": 2,
+          "message": 3
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".",
+          "endsPattern": "App running"
+        }
+      }
+    },
+    {
+      "label": "Start Web",
+      "type": "shell",
+      "command": "yarn",
+      "args": ["web", "dev"],
+      "isBackground": true,
+      "dependsOn": ["Start API"],
+      "presentation": {
+        "group": "default",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Spin it up",
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "dependsOn": [
+        "Watch + Build",
+        "Start Web"
+      ]
+    }
+  ]
+}
