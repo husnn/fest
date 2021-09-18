@@ -1,6 +1,3 @@
-export interface TokenFee {
-  walletId: string;
-  percentage: number;
-}
+export type TokenFee = [string, number];
 
 export default TokenFee;

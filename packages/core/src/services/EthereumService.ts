@@ -1,5 +1,5 @@
 import { Wallet } from '@fanbase/core';
-import { EthereumTx, Price } from '@fanbase/shared';
+import { EthereumTx, Price, TokenFee } from '@fanbase/shared';
 
 import { Result } from '../Result';
 
@@ -101,6 +101,7 @@ export interface EthereumService {
   buildMintTokenTx(
     walletAddress: string,
     supply: number,
+    fees: TokenFee[],
     data: string,
     expiry: number,
     salt: string,

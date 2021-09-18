@@ -1,3 +1,4 @@
+import { TokenFee } from '../types';
 import ChainData from '../types/TokenChainData';
 import { UserDTO } from './UserDTO';
 
@@ -12,6 +13,8 @@ export class TokenDTO {
   name: string;
   description?: string;
   supply?: number;
+
+  fees?: TokenFee[];
 
   image?: string;
 
@@ -31,6 +34,8 @@ export class TokenDTO {
     this.name = props.name;
     this.description = props.description;
     this.supply = props.supply;
+
+    this.fees = props.fees;
 
     this.image = props.image;
 

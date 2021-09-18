@@ -169,6 +169,7 @@ export default function TokenPage() {
           const tx = await web3.ethereum.buildMintTokenTx(
             currentUser.wallet.address,
             token.supply,
+            token.fees,
             approval.data,
             approval.expiry,
             approval.salt,

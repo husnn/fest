@@ -1,11 +1,9 @@
-import axios from 'axios';
 import { Field, Form, Formik, FormikProps } from 'formik';
-import { statSync } from 'fs';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
-import { CreateTokenSchema, TokenMetadata, TokenType, YouTubeVideo } from '@fanbase/shared';
+import { CreateTokenSchema, Percentage, TokenFee, TokenType, YouTubeVideo } from '@fanbase/shared';
 
 import MediaUploader from '../components/MediaUploader';
 import YouTubeVideoList, { YouTubeVideoRow } from '../components/YouTubeVideoList';
@@ -68,6 +66,13 @@ export default function CreateTokenPage() {
         }}
         validationSchema={CreateTokenSchema}
         onSubmit={async (values) => {
+          const fees: TokenFee[] = [];
+          const feePct = Percentage(values.royaltyPercentage);
+
+          if (feePct > 0) {
+            fees.push([currentUser.wallet.address, feePct]);
+          }
+
           const token = await ApiClient.instance?.createToken({
             type: values.type,
             resource: values.resource,
@@ -75,12 +80,7 @@ export default function CreateTokenPage() {
             description: values.description,
             image: values.image,
             supply: values.supply,
-            fees: [
-              {
-                walletId: currentUser.wallet.id,
-                percentage: values.royaltyPercentage
-              }
-            ],
+            fees,
             attributes: values.attributes
           });
 

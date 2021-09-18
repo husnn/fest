@@ -7,10 +7,7 @@ export class MintToken extends Transaction {
     data: {
       creator: string;
       supply: number;
-      fees: Array<{
-        recipient: string;
-        pct: string;
-      }>;
+      fees: Array<[string, number]>;
       data: string;
       expiry: number;
       salt: string;
@@ -20,11 +17,16 @@ export class MintToken extends Transaction {
   ) {
     const contract = Contracts.Token.get(contractAddress);
 
+    const fees = data.fees.map((x) => {
+      const [recipient, pct] = x;
+      return { recipient, pct };
+    });
+
     const txData = contract.methods
       .mint(
         data.creator,
         data.supply,
-        data.fees,
+        fees,
         data.data,
         data.expiry,
         data.salt,

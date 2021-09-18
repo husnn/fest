@@ -65,6 +65,7 @@ export class MintToken extends UseCase<MintTokenInput, MintTokenOutput> {
     const tx = await this.ethereumService.buildMintTokenTx(
       wallet.address,
       token.supply,
+      token.fees,
       encryptText(token.id),
       expiry,
       salt,

@@ -233,7 +233,6 @@ const BuyTokenListing = ({
       executeTransaction={async () => {
         if (!isCustodialWallet) {
           if (!isMarketApprovedSpender) {
-            console.log(total.amount.toFixed());
             const tx = await web3.ethereum.buildApproveERC20SpenderTX(
               listing.price.currency.contract,
               currentUser.wallet.address,
@@ -260,7 +259,6 @@ const BuyTokenListing = ({
         if (isCustodialWallet || isMarketApprovedSpender) {
           end();
         } else {
-          await web3.awaitTxConfirmation(hash);
           setMarketApprovedSpender(true);
         }
       }}

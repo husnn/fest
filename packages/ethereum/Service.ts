@@ -15,7 +15,7 @@ import {
     ApproveSpender, ApproveTokenMarket, BuyToken, CancelTokenListing, ListTokenForSale, MintToken,
     WithdrawMarketEarnings
 } from '@fanbase/eth-transactions';
-import { EthereumTx, Price, Protocol, WalletType } from '@fanbase/shared';
+import { EthereumTx, Price, Protocol, TokenFee, WalletType } from '@fanbase/shared';
 
 import ERC20Abi from './abi/ERC20.json';
 
@@ -353,6 +353,7 @@ export class EthereumService implements IEthereumService {
   async buildMintTokenTx(
     walletAddress: string,
     supply: number,
+    fees: TokenFee[],
     data: string,
     expiry: number,
     salt: string,
@@ -366,7 +367,7 @@ export class EthereumService implements IEthereumService {
     const txData = {
       creator: walletAddress,
       supply,
-      fees: [],
+      fees,
       data,
       expiry,
       salt,
@@ -380,7 +381,8 @@ export class EthereumService implements IEthereumService {
       walletAddress,
       networkId,
       chainId,
-      nonce
+      nonce,
+      365000
     );
   }
 
