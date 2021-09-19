@@ -5,7 +5,7 @@ import { Token } from '../../entities';
 import { TokenRepository } from '../../repositories';
 import UserRepository from '../../repositories/UserRepository';
 import { Result } from '../../Result';
-import { IPFSService, YouTubeService } from '../../services';
+import { IPFSService, MediaService, YouTubeService } from '../../services';
 import { generateTokenId } from '../../utils';
 import { GetYouTubeChannel } from '../google/GetYouTubeChannel';
 
@@ -25,6 +25,7 @@ export type CreateTokenOutput = string;
 export class CreateToken extends UseCase<CreateTokenInput, CreateTokenOutput> {
   private userRepository: UserRepository;
   private tokenRepository: TokenRepository;
+  private mediaService: MediaService;
   private metadataStore: IPFSService;
   private youtubeService: YouTubeService;
   private getYouTubeChannelUseCase: GetYouTubeChannel;
@@ -32,6 +33,7 @@ export class CreateToken extends UseCase<CreateTokenInput, CreateTokenOutput> {
   constructor(
     tokenRepository: TokenRepository,
     userRepository: UserRepository,
+    mediaService: MediaService,
     metadataStore: IPFSService,
     youtubeService: YouTubeService,
     getYouTubeChannelUseCase: GetYouTubeChannel
@@ -40,6 +42,7 @@ export class CreateToken extends UseCase<CreateTokenInput, CreateTokenOutput> {
 
     this.tokenRepository = tokenRepository;
     this.userRepository = userRepository;
+    this.mediaService = mediaService;
     this.metadataStore = metadataStore;
     this.youtubeService = youtubeService;
     this.getYouTubeChannelUseCase = getYouTubeChannelUseCase;
@@ -71,7 +74,12 @@ export class CreateToken extends UseCase<CreateTokenInput, CreateTokenOutput> {
 
       if (ytChannel.data.id != ytVideo.data.channelId) return Result.fail();
 
-      image = ytVideo.data.thumbnail;
+      const imageResult = await this.mediaService.pipeFrom(
+        ytVideo.data.thumbnail
+      );
+      if (!imageResult.success) return Result.fail('Could not get thumbnail.');
+
+      image = imageResult.data;
       externalUrl = ytVideo.data.url;
     }
 

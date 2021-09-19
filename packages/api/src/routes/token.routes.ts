@@ -1,40 +1,17 @@
 import { NextFunction, Request, Response, Router } from 'express';
 
-import { GetTokenImageUploadUrlResponse } from '@fanbase/shared';
-
 import TokenController from '../controllers/TokenController';
-import { HttpError, HttpResponse } from '../http';
 import authMiddleware from '../middleware/authMiddleware';
 import pagination from '../middleware/pagination';
-import TokenMediaStore from '../services/TokenMediaStore';
 
 export default function init(
   router: Router,
   tokenController: TokenController
 ): Router {
-  const mediaStore = new TokenMediaStore();
-
   router.get(
     '/image-upload-url',
-    async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const result = await mediaStore.getImageUploadUrl(
-          req.query.filename as string,
-          req.query.filetype as string
-        );
-
-        if (!result.success)
-          throw new HttpError('Could not create upload URL.');
-
-        const { signedUrl, url } = result.data;
-
-        return new HttpResponse<GetTokenImageUploadUrlResponse>(res, {
-          signedUrl,
-          url
-        });
-      } catch (err) {
-        next(err);
-      }
+    (req: Request, res: Response, next: NextFunction) => {
+      tokenController.getSignedTokenMediaUploadUrl(req, res, next);
     }
   );
 

@@ -3911,6 +3911,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/cors", "npm:2.8.12"],
             ["@types/express", "npm:4.17.13"],
             ["@types/jsonwebtoken", "npm:8.5.5"],
+            ["@types/mime-types", "npm:2.1.1"],
             ["@types/node", "npm:15.14.9"],
             ["@types/web3", "npm:1.2.2"],
             ["app-root-path", "npm:3.0.0"],
@@ -3919,6 +3920,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["dotenv", "npm:9.0.2"],
             ["express", "npm:4.17.1"],
             ["jsonwebtoken", "npm:8.5.1"],
+            ["mime-types", "npm:2.1.32"],
             ["nanoid", "npm:3.1.25"],
             ["nodemon", "npm:2.0.12"],
             ["pg", "virtual:228db20f0515b29914b19b7286c4b2f5177454760cf6ed55fe88002c64894efcbae3560b05c1f112c45cb6dffd44f53bba028fe4edf510f18419c24ca023c4cf#npm:8.7.1"],
@@ -4816,6 +4818,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-mime-npm-1.3.2-ea71878ab3-0493368244.zip/node_modules/@types/mime/",
           "packageDependencies": [
             ["@types/mime", "npm:1.3.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/mime-types", [
+        ["npm:2.1.1", {
+          "packageLocation": "./.yarn/cache/@types-mime-types-npm-2.1.1-2f761de0b8-106b5d556a.zip/node_modules/@types/mime-types/",
+          "packageDependencies": [
+            ["@types/mime-types", "npm:2.1.1"]
           ],
           "linkType": "HARD",
         }]

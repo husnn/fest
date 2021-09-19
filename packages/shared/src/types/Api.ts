@@ -192,7 +192,7 @@ export interface CreateTokenRequest extends Request {
   body: TokenData;
 }
 
-export interface GetTokenImageUploadUrlResponse extends Response {
+export interface GetSignedTokenImageUploadUrlResponse extends Response {
   signedUrl: string;
   url: string;
 }
@@ -204,6 +204,7 @@ export interface GetTokenImageUploadUrlRequest extends Request {
   params: {
     filename: string;
     filetype: string;
+    filesize: number;
   };
 }
 

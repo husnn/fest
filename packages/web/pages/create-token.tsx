@@ -3,12 +3,11 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
-import { CreateTokenSchema, Percentage, TokenFee, TokenType, YouTubeVideo } from '@fanbase/shared';
+import { CreateTokenSchema, TokenType, YouTubeVideo } from '@fanbase/shared';
 
 import MediaUploader from '../components/MediaUploader';
 import YouTubeVideoList, { YouTubeVideoRow } from '../components/YouTubeVideoList';
 import ApiClient from '../modules/api/ApiClient';
-import useAuthentication from '../modules/auth/useAuthentication';
 import { useHeader } from '../modules/navigation';
 import styles from '../styles/CreateToken.module.scss';
 import {
@@ -22,7 +21,6 @@ export default function CreateTokenPage() {
   useHeader(['home', 'profile']);
 
   const router = useRouter();
-  const { currentUser } = useAuthentication(true);
 
   const tokenTypesOptions: {
     [key: string]: RadioOption;
@@ -86,6 +84,7 @@ export default function CreateTokenPage() {
           values,
           handleChange,
           setFieldValue,
+          setFieldTouched,
           isValid,
           dirty,
           errors,
@@ -146,8 +145,11 @@ export default function CreateTokenPage() {
                   onSelected={(video: YouTubeVideo) => {
                     setYouTubeVideo(video);
 
-                    setFieldValue('name', video.title);
+                    setFieldValue('name', video.title, true);
+                    setFieldValue('description', video.description);
                     setFieldValue('resource', video.id);
+
+                    setTimeout(() => setFieldTouched('name', true));
 
                     setYouTubeVideosClosing(true);
 
@@ -167,7 +169,8 @@ export default function CreateTokenPage() {
                         const response =
                           await ApiClient.instance.getTokenImageUploadUrl(
                             file.name,
-                            file.type
+                            file.type,
+                            file.size
                           );
 
                         setFieldValue('image', response.url);

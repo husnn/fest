@@ -2,14 +2,14 @@ import { NextFunction, Request, Response } from 'express';
 
 import {
     ApproveMint, ApproveTokenSale, CreateToken, EthereumService, GetToken, GetTokenOwnership,
-    GetTokenOwnerships, GetYouTubeChannel, GoogleService, IPFSService, ListTokenForSale, MintToken,
-    OAuthRepository, TokenOwnershipRepository, TokenRepository, UserRepository, WalletRepository,
-    YouTubeService
+    GetTokenOwnerships, GetYouTubeChannel, GoogleService, IPFSService, ListTokenForSale,
+    MediaService, MintToken, OAuthRepository, TokenOwnershipRepository, TokenRepository,
+    UserRepository, WalletRepository, YouTubeService
 } from '@fanbase/core';
 import {
-    ApproveMintResponse, ApproveTokenSaleResponse, CreateTokenResponse, GetTokenOwnershipResponse,
-    GetTokenOwnershipsResponse, GetTokenResponse, ListTokenForSaleResponse, MintTokenResponse,
-    TokenData
+    ApproveMintResponse, ApproveTokenSaleResponse, CreateTokenResponse,
+    GetSignedTokenImageUploadUrlResponse, GetTokenOwnershipResponse, GetTokenOwnershipsResponse,
+    GetTokenResponse, ListTokenForSaleResponse, MintTokenResponse, TokenData
 } from '@fanbase/shared';
 
 import { HttpError, NotFoundError } from '../http';
@@ -26,8 +26,11 @@ class TokenController {
   private approveTokenSaleUseCase: ApproveTokenSale;
   private listTokenForSaleUseCase: ListTokenForSale;
 
+  private mediaService: MediaService;
+
   constructor(
     tokenRepository: TokenRepository,
+    mediaService: MediaService,
     metadataStore: IPFSService,
     userRepository: UserRepository,
     walletRepository: WalletRepository,
@@ -37,6 +40,8 @@ class TokenController {
     googleService: GoogleService,
     youtubeService: YouTubeService
   ) {
+    this.mediaService = mediaService;
+
     const getYouTubeChannelUseCase = new GetYouTubeChannel(
       oAuthRepository,
       googleService,
@@ -46,6 +51,7 @@ class TokenController {
     this.createTokenUseCase = new CreateToken(
       tokenRepository,
       userRepository,
+      mediaService,
       metadataStore,
       youtubeService,
       getYouTubeChannelUseCase
@@ -269,6 +275,31 @@ class TokenController {
         body: {
           token: result.data
         }
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async getSignedTokenMediaUploadUrl(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const result = await this.mediaService.getSignedImageUploadUrl(
+        req.query.filename as string,
+        req.query.filetype as string,
+        Number(req.query.filesize)
+      );
+
+      if (!result.success) throw new HttpError('Could not create upload URL.');
+
+      const { signedUrl, url } = result.data;
+
+      return new HttpResponse<GetSignedTokenImageUploadUrlResponse>(res, {
+        signedUrl,
+        url
       });
     } catch (err) {
       next(err);

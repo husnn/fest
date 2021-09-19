@@ -20,6 +20,7 @@ import initRoutes from './routes';
 import GoogleService from './services/GoogleService';
 import MailService from './services/MailService';
 import MetadataStore from './services/MetadataStore';
+import TokenMediaStore from './services/TokenMediaStore';
 import YouTubeService from './services/YouTubeService';
 import { AppConfig } from './types/AppConfig';
 
@@ -83,8 +84,11 @@ class App {
       youTubeService
     );
 
+    const mediaStore = new TokenMediaStore();
+
     const tokenController = new TokenController(
       tokenRepository,
+      mediaStore,
       metadataStore,
       userRepository,
       walletRepository,

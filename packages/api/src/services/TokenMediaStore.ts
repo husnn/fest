@@ -1,13 +1,18 @@
 // import './allow_s3_cors';
 
+import axios from 'axios';
+import mime from 'mime-types';
 import { nanoid } from 'nanoid';
 import path from 'path';
+import { PassThrough } from 'stream';
 
 import { PutObjectCommand, S3 as S3Client } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { Result } from '@fanbase/core';
+import { MediaService, Result } from '@fanbase/core';
 
-export class TokenMediaStore {
+const MEDIA_BASE_PATH = `${process.env.S3_TOKEN_MEDIA_URL}/${process.env.S3_TOKEN_MEDIA_NAME}`;
+
+export class TokenMediaStore implements MediaService {
   private s3: S3Client;
 
   constructor() {
@@ -21,25 +26,70 @@ export class TokenMediaStore {
     });
   }
 
-  async getImageUploadUrl(
+  getFilePath(filename: string, ext: string) {
+    return `media/full/${filename}.${ext}`;
+  }
+
+  async pipeFrom(
+    url: string,
+    filename?: string,
+    ext?: string
+  ): Promise<Result<string>> {
+    const stream = await axios.get(url, {
+      responseType: 'stream'
+    });
+
+    const passThrough = new PassThrough();
+
+    const contentType = stream.headers['content-type'];
+    const extension = ext ? ext : mime.extension(contentType);
+
+    if (!extension) return Result.fail('Could not get file extension.');
+
+    const filePath = this.getFilePath(filename || nanoid(), extension);
+
+    const command = new PutObjectCommand({
+      Bucket: process.env.S3_TOKEN_MEDIA_NAME,
+      Key: filePath,
+      ContentType: contentType,
+      ContentLength: stream.headers['content-length'],
+      Body: passThrough,
+      ACL: 'public-read'
+    });
+
+    stream.data.pipe(passThrough);
+
+    try {
+      await this.s3.send(command);
+      passThrough.end();
+
+      return Result.ok(`${MEDIA_BASE_PATH}/${filePath}`);
+    } catch (err) {
+      Result.fail();
+    }
+  }
+
+  async getSignedImageUploadUrl(
     filename: string,
-    filetype: string
+    filetype: string,
+    filesize: number
   ): Promise<
     Result<{
       signedUrl: string;
       url: string;
     }>
   > {
-    let signedUrl;
+    let signedUrl: string;
 
     const ext = path.extname(filename);
-    const filePath = `media/full/${nanoid()}${ext}`;
+    const filePath = this.getFilePath(nanoid(), ext);
 
     try {
       const command = new PutObjectCommand({
         Bucket: process.env.S3_TOKEN_MEDIA_NAME,
         Key: filePath,
         ContentType: filetype,
+        ContentLength: filesize,
         ACL: 'public-read'
       });
 
@@ -53,7 +103,7 @@ export class TokenMediaStore {
     return signedUrl
       ? Result.ok({
           signedUrl,
-          url: `${process.env.S3_TOKEN_MEDIA_URL}/${process.env.S3_TOKEN_MEDIA_NAME}/${filePath}`
+          url: `${MEDIA_BASE_PATH}/${filePath}`
         })
       : Result.fail();
   }

@@ -4,15 +4,16 @@ import {
     CancelTokenListingResponse, CreateTokenRequest, CreateTokenResponse, EditUserRequest,
     EditUserResponse, GetListingsForTokenRequest, GetListingsForTokenResponse, GetOAuthLinkRequest,
     GetOAuthLinkResponse, GetOwnUploadsRequest, GetOwnUploadsResponse,
-    GetTokenImageUploadUrlRequest, GetTokenImageUploadUrlResponse, GetTokenMarketSummaryRequest,
-    GetTokenMarketSummaryResponse, GetTokenOwnershipResponse, GetTokenOwnershipsResponse,
-    GetTokenRequest, GetTokenResponse, GetTokensCreatedResponse, GetTokensOwnedResponse,
-    GetUserByIdRequest, GetUserByUsernameRequest, GetUserResponse, IdentifyWithEmailRequest,
-    IdentifyWithEmailResponse, IdentifyWithWalletRequest, IdentifyWithWalletResponse, InitConfig,
-    InitResponse, isUsername, ListTokenForSaleRequest, ListTokenForSaleResponse, LoginResponse,
-    LoginWithEmailRequest, LoginWithWalletRequest, MintTokenRequest, MintTokenResponse,
-    OAuthCheckLinkRequest, OAuthCheckLinkResponse, OAuthLinkRequest, Price, Protocol, TokenData,
-    TokenDTO, TokenOwnershipDTO, UnlinkOAuthRequest, UnlinkOAuthResponse, UserInfo, YouTubeVideo
+    GetSignedTokenImageUploadUrlResponse, GetTokenImageUploadUrlRequest,
+    GetTokenMarketSummaryRequest, GetTokenMarketSummaryResponse, GetTokenOwnershipResponse,
+    GetTokenOwnershipsResponse, GetTokenRequest, GetTokenResponse, GetTokensCreatedResponse,
+    GetTokensOwnedResponse, GetUserByIdRequest, GetUserByUsernameRequest, GetUserResponse,
+    IdentifyWithEmailRequest, IdentifyWithEmailResponse, IdentifyWithWalletRequest,
+    IdentifyWithWalletResponse, InitConfig, InitResponse, isUsername, ListTokenForSaleRequest,
+    ListTokenForSaleResponse, LoginResponse, LoginWithEmailRequest, LoginWithWalletRequest,
+    MintTokenRequest, MintTokenResponse, OAuthCheckLinkRequest, OAuthCheckLinkResponse,
+    OAuthLinkRequest, Price, Protocol, TokenData, TokenDTO, TokenOwnershipDTO, UnlinkOAuthRequest,
+    UnlinkOAuthResponse, UserInfo, YouTubeVideo
 } from '@fanbase/shared';
 
 import HttpClient from './HttpClient';
@@ -312,10 +313,11 @@ export class ApiClient {
 
   async getTokenImageUploadUrl(
     filename: string,
-    filetype: string
-  ): Promise<GetTokenImageUploadUrlResponse> {
+    filetype: string,
+    filesize: number
+  ): Promise<GetSignedTokenImageUploadUrlResponse> {
     return this.client.request<
-      GetTokenImageUploadUrlResponse,
+      GetSignedTokenImageUploadUrlResponse,
       GetTokenImageUploadUrlRequest
     >({
       method: 'GET',
@@ -323,7 +325,8 @@ export class ApiClient {
       authentication: 'required',
       params: {
         filename,
-        filetype
+        filetype,
+        filesize
       }
     });
   }
