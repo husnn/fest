@@ -1,4 +1,4 @@
-import { Contracts } from '@fanbase/eth-contracts';
+import Contracts from '@fanbase/eth-contracts';
 
 import Transaction from './Transaction';
 
@@ -15,7 +15,7 @@ export class MintToken extends Transaction {
     },
     contractAddress?: string
   ) {
-    const contract = Contracts.Token.get(contractAddress);
+    const contract = Contracts.get('Token', contractAddress);
 
     const fees = data.fees.map((x) => {
       const [recipient, pct] = x;

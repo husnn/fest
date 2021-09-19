@@ -249,7 +249,7 @@ class TokenController {
         description,
         image,
         supply,
-        fees,
+        royaltyPct,
         attributes
       }: TokenData = req.body;
 
@@ -261,7 +261,7 @@ class TokenController {
         supply,
         image,
         resource,
-        fees,
+        royaltyPct,
         attributes
       });
 

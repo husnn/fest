@@ -4,8 +4,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import Web3 from 'web3';
 
 import Contracts from '@fanbase/eth-contracts';
-import { WalletType } from '@fanbase/shared';
+import { ProtocolConfig, WalletType } from '@fanbase/shared';
 
+import { fetchInitConfig } from '../../config';
 import { getCurrentUser } from '../auth/authStorage';
 import useAuthentication from '../auth/useAuthentication';
 
@@ -16,6 +17,7 @@ type Wallet = {
 
 export type Web3ContextProps = {
   web3: Web3;
+  config: ProtocolConfig;
   wallet: Wallet;
   chainId: number;
   requestSignature: (msg: string, address: string) => Promise<string>;
@@ -39,6 +41,8 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
   const rpcUrl =
     process.env.NEXT_PUBLIC_ETH_PROVIDER || 'http://localhost:8545';
 
+  const [config, setConfig] = useState<ProtocolConfig>();
+
   const [chainId, setChainId] = useState<number>();
 
   const [networkId, setNetworkId] = useState<number>();
@@ -51,18 +55,14 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
     initialMount.current = false;
   });
 
-  const requiredChainId = process.env.NEXT_PUBLIC_ETH_CHAIN;
-  const requiredNetworkId = process.env.NEXT_PUBLIC_ETH_NETWORK;
-
   useEffect(() => {
-    if (!chainId || !networkId || !requiredChainId || !requiredNetworkId)
-      return;
+    if (!chainId || !networkId || !config.chainId || !config.networkId) return;
 
-    if (chainId !== parseInt(requiredChainId)) {
+    if (chainId !== config.chainId) {
       console.log(`You're on the wrong chain.`);
     }
 
-    if (networkId !== parseInt(requiredNetworkId)) {
+    if (networkId !== config.networkId) {
       console.log(`You're on the wrong network.`);
     }
   }, [chainId, networkId]);
@@ -82,6 +82,16 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
 
   const initWeb3 = async () => {
     let provider;
+
+    setConfig(
+      await fetchInitConfig()
+        .then((config) => {
+          return config.protocols['ETHEREUM'];
+        })
+        .catch(() => {
+          throw new Error('Could not get config.');
+        })
+    );
 
     const currentUser = getCurrentUser();
 
@@ -176,6 +186,7 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
     <Web3Context.Provider
       value={{
         web3,
+        config,
         wallet,
         chainId,
         requestSignature,

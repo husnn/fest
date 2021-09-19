@@ -1,4 +1,4 @@
-import { Contracts } from '@fanbase/eth-contracts';
+import Contracts from '@fanbase/eth-contracts';
 
 import Transaction from './Transaction';
 
@@ -9,8 +9,8 @@ export class CheckTokenMarketApproval extends Transaction {
     },
     contractAddress?: string
   ) {
-    const tokenContract = Contracts.Token.get(contractAddress);
-    const walletContract = Contracts.MarketWallet.get(contractAddress);
+    const tokenContract = Contracts.get('Token', contractAddress);
+    const walletContract = Contracts.get('MarketWallet', contractAddress);
 
     const txData = tokenContract.methods
       .isApprovedForAll(data.owner, walletContract.options.address)

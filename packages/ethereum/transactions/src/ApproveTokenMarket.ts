@@ -1,14 +1,14 @@
-import { Contracts } from '@fanbase/eth-contracts';
+import Contracts from '@fanbase/eth-contracts';
 
 import Transaction from './Transaction';
 
 export class ApproveTokenMarket extends Transaction {
   constructor(contractAddress?: string) {
-    const tokenContract = Contracts.Token.get(contractAddress);
-    const marketContract = Contracts.MarketWallet.get(contractAddress);
+    const tokenContract = Contracts.get('Token', contractAddress);
+    const marketContract = Contracts.get('MarketWallet', contractAddress);
 
     const txData = tokenContract.methods
-      .setApprovalForAll(marketContract.options.address, true)
+      .setApprovalForAll(marketContract.options.address, true) // TODO
       .encodeABI();
 
     super(tokenContract.options.address, txData);

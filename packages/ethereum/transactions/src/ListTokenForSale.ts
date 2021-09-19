@@ -1,4 +1,4 @@
-import { Contracts } from '@fanbase/eth-contracts';
+import Contracts from '@fanbase/eth-contracts';
 
 import Transaction from './Transaction';
 
@@ -17,7 +17,7 @@ export class ListTokenForSale extends Transaction {
     },
     contractAddress?: string
   ) {
-    const contract = Contracts.Market.get(contractAddress);
+    const contract = Contracts.get('Market', contractAddress);
 
     const txData = contract.methods
       .listForSale(

@@ -5,6 +5,7 @@ export * from './Currency';
 export * from './EthereumTx';
 export * from './Percentage';
 export * from './Price';
+export * from './ProtocolConfig';
 export * from './TokenAttributes';
 export * from './TokenChainData';
 export * from './TokenFee';

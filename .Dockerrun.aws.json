@@ -1,0 +1,114 @@
+{
+	"AWSEBDockerrunVersion": 2,
+	"containerDefinitions": [
+    {
+			"environment": [
+        {
+					"name": "POSTGRES_USER",
+					"value": "postgres"
+				},
+				{
+					"name": "POSTGRES_PASSWORD",
+					"value": "postgres"
+				}
+			],
+			"essential": true,
+			"image": "postgres:alpine",
+			"memory": 100,
+			"mountPoints": [{
+				"containerPath": "/var/lib/postgresql/data/",
+				"sourceVolume": "postgres_data"
+			}],
+			"name": "postgres",
+			"portMappings": [{
+				"containerPort": 5432,
+				"hostPort": 5432
+			}]
+		},
+		{
+			"essential": true,
+			"image": "redis:alpine",
+			"memory": 100,
+			"name": "redis",
+			"portMappings": [{
+				"containerPort": 6379,
+				"hostPort": 6379
+			}]
+		},
+		{
+      "environment": [
+        {
+          "name": "PG_HOST",
+          "value": "postgres"
+        },
+        {
+          "name": "REDIS_URL",
+          "value": "redis://redis:6379"
+        },
+        {
+          "name": "ETH_PROVIDER",
+          "value": "https://ropsten.infura.io/v3/ec05c03872e548a4b5e86fd7e020712b"
+        }
+      ],
+			"essential": true,
+			"links": [
+				"postgres",
+				"redis"
+			],
+			"name": "indexer",
+			"image": "fanbase/indexer",
+			"memory": 256
+		},
+		{
+			"essential": true,
+			"name": "nginx",
+			"image": "nginx:latest",
+			"memory": 100,
+			"portMappings": [{
+				"containerPort": 8080,
+				"hostPort": 80
+			}],
+			"links": [
+        "api"
+      ],
+      "mountPoints": [
+        {
+          "sourceVolume": "./nginx/default.conf",
+          "containerPath": "/etc/nginx/conf.d/default.conf",
+          "readOnly": true
+        }
+			]
+		},
+		{
+      "environment": [
+        {
+          "name": "PORT",
+          "value": "5000"
+        },
+        {
+          "name": "PG_HOST",
+          "value": "postgres"
+        },
+        {
+          "name": "ETH_PROVIDER",
+          "value": "https://ropsten.infura.io/v3/ec05c03872e548a4b5e86fd7e020712b"
+        }
+      ],
+			"essential": true,
+			"links": [
+				"postgres",
+				"indexer"
+			],
+			"name": "api",
+			"image": "fanbase/api",
+			"memory": 512
+		}
+	],
+	"volumes": [{
+			"host": {
+				"sourcePath": "postgres_data"
+			},
+			"name": "postgres_data"
+		}
+	]
+}

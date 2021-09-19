@@ -41,6 +41,8 @@ _LOGS_DIR="$_GANACHE_PATH/logs"
 _IS_FIRST_RUN=true
 _GANACHE_PORT=8545
 
+_CONTRACTS_PATH="./packages/ethereum/contracts/solidity"
+
 if [ $_DO_RESET == false ];
   then
     if [ -d $_GANACHE_PATH/data ];
@@ -61,7 +63,7 @@ fi
 
 deploy_contracts() {
   echo "Deploying contracts..."
-  yarn eth-contracts truffle:dev
+  npm run truffle:dev --prefix $_CONTRACTS_PATH
 }
 
 deploy_contracts_if_needed() {
@@ -88,5 +90,4 @@ start_ganache() {
 {
   start_ganache &
   deploy_contracts_if_needed;
-}
-# 2>&1 > "$_LOGS_DIR/ganache-$(date +%Y-%m-%d-%H:%M:%S).log"
+} | tee "$_LOGS_DIR/ganache-$(date +%Y-%m-%d-%H:%M:%S).log"

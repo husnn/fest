@@ -142,17 +142,16 @@ export default function MarketPage() {
     if (!web3.ethereum) return;
 
     setMarketBalances([
-      {
-        currency: {
-          name: 'Fan Coin',
-          symbol: 'FAN',
-          contract: Contracts.Contracts.FAN.get().options.address,
-          decimals: 18
-        },
-        balance: Balance(0),
-        precision: 3,
-        selected: true
-      }
+      ...web3.config.market.currenciesSupported.map(
+        (currency, index: number) => {
+          return {
+            currency,
+            balance: Balance(0),
+            precision: 3,
+            selected: index == 0
+          };
+        }
+      )
     ]);
   }, [web3.ethereum]);
 

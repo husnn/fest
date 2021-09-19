@@ -1,4 +1,4 @@
-import { TokenAttributes, TokenFee, TokenMetadata, TokenType } from '@fanbase/shared';
+import { Percentage, TokenAttributes, TokenFee, TokenMetadata, TokenType } from '@fanbase/shared';
 
 import UseCase from '../../base/UseCase';
 import { Token } from '../../entities';
@@ -17,7 +17,7 @@ export interface CreateTokenInput {
   description?: string;
   image?: string;
   supply: number;
-  fees?: TokenFee[];
+  royaltyPct?: number;
   attributes?: TokenAttributes;
 }
 export type CreateTokenOutput = string;
@@ -46,9 +46,12 @@ export class CreateToken extends UseCase<CreateTokenInput, CreateTokenOutput> {
   }
 
   async exec(data: CreateTokenInput): Promise<Result<CreateTokenOutput>> {
+    const user = await this.userRepository.get(data.user);
+
     const type = data.type || TokenType.BASIC;
 
-    const { resource, name, description, supply, fees, attributes } = data;
+    const { resource, name, description, supply, royaltyPct, attributes } =
+      data;
 
     let { image } = data;
 
@@ -83,6 +86,12 @@ export class CreateToken extends UseCase<CreateTokenInput, CreateTokenOutput> {
 
     const pinResult = await this.metadataStore.saveJson(metadata);
     if (!pinResult.success) return Result.fail();
+
+    const fees: TokenFee[] = [];
+
+    if (royaltyPct && royaltyPct > 0 && royaltyPct <= 100) {
+      fees.push([user.wallet.address, Percentage(royaltyPct)]);
+    }
 
     let token = new Token({
       id: generateTokenId(),

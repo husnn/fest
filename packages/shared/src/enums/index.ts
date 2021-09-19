@@ -3,6 +3,7 @@ export * from './OfferStatus';
 export * from './OrderType';
 export * from './Protocol';
 export * from './TokenListingStatus';
+export * from './TokenStandard';
 export * from './TokenType';
 export * from './TransactionType';
 export * from './WalletType';

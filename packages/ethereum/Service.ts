@@ -24,13 +24,35 @@ export class EthereumService implements IEthereumService {
 
   private web3: Web3;
 
+  networkId: number;
+  chainId: number;
+
+  contracts;
+
+  private initialized = false;
+
   constructor(web3: Web3) {
     this.web3 = web3;
   }
 
-  static async init(web3: Web3) {
-    EthereumService.instance = new EthereumService(web3);
-    await Contracts.init(web3);
+  async init(web3: Web3) {
+    this.networkId = await web3.eth.net.getId();
+    this.chainId = await web3.eth.getChainId();
+
+    this.contracts = await Contracts.init(web3);
+
+    this.initialized = true;
+  }
+
+  static async getInstance(web3?: Web3) {
+    if (!this.instance) {
+      if (!web3) throw new Error('Ethereum service not yet initialized.');
+      this.instance = new EthereumService(web3);
+    }
+
+    if (!this.instance.initialized) await this.instance.init(web3);
+
+    return this.instance;
   }
 
   verifyOffer() {
@@ -143,7 +165,7 @@ export class EthereumService implements IEthereumService {
     currencyContract: string,
     marketContract?: string
   ): Promise<string> {
-    const contract = Contracts.Contracts.Market.get(marketContract);
+    const contract = Contracts.get('Market', marketContract);
 
     const balance = await contract.methods
       .getBalance(currencyContract, walletAddress)
@@ -306,9 +328,9 @@ export class EthereumService implements IEthereumService {
     tokenContract: string,
     walletAddress: string
   ): Promise<boolean> {
-    const marketWalletContract = Contracts.Contracts.MarketWallet.get();
+    const marketWalletContract = Contracts.get('MarketWallet');
 
-    const txResult = await Contracts.Contracts.Token.get(tokenContract)
+    const txResult = await Contracts.get('Token', tokenContract)
       .methods.isApprovedForAll(
         walletAddress,
         marketWalletContract.options.address
@@ -332,7 +354,7 @@ export class EthereumService implements IEthereumService {
   ): Promise<Result<{ signature: string }>> {
     const privateKey = Buffer.from(process.env.PRIVATE_KEY, 'hex');
 
-    const hash = await Contracts.Contracts.Market.get()
+    const hash = await Contracts.get('Market')
       .methods.getSaleAuthorizationHash(
         seller,
         token,
@@ -394,7 +416,7 @@ export class EthereumService implements IEthereumService {
   ): Promise<Result<{ signature: string }>> {
     const privateKey = Buffer.from(process.env.PRIVATE_KEY, 'hex');
 
-    const contract = Contracts.Contracts.Token.get();
+    const contract = Contracts.get('Token');
 
     const hash = await contract.methods
       .getMintHash(creatorAddress, supply, expiry, salt)

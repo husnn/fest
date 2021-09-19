@@ -17,11 +17,8 @@ export default class EthereumListener extends EventEmitter {
     Contracts.init(web3).then(async () => {
       console.log('Listening to events on the Ethereum network...');
 
-      const tokenContract = Contracts.Contracts.Token.get();
-      const marketContract = Contracts.Contracts.Market.get();
-
-      console.log(`\nToken contract: ${tokenContract.options.address}`);
-      console.log(`Market contract: ${marketContract.options.address}\n`);
+      const tokenContract = Contracts.get('Token');
+      const marketContract = Contracts.get('Market');
 
       new TokenMintListener(web3, redis, tokenContract).listen((job) => {
         this.emit('token-mint', job);

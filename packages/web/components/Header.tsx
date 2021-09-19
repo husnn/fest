@@ -65,6 +65,7 @@ const HeaderMenu = styled.div`
     padding: 10px;
     border-radius: 10px;
     opacity: 0.5;
+    white-space: nowrap;
   }
 
   a:hover {

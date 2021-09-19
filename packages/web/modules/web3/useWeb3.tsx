@@ -12,7 +12,9 @@ export const useWeb3 = () => {
 
   useEffect(() => {
     if (!context.web3) return;
-    setEthereum(new EthereumService(context.web3));
+    EthereumService.getInstance(context.web3).then((instance) =>
+      setEthereum(instance)
+    );
   }, [context.web3]);
 
   const sendTxAndAwaitConfirmation = async (tx: EthereumTx) => {

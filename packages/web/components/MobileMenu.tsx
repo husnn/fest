@@ -12,14 +12,14 @@ const MenuContainer = styled.div`
   top: 80px;
   right: 0;
   left: 0;
-  display: block;
+  display: none;
   background: #fff;
   border-radius: 0 0 20px 20px;
   box-shadow: 4px 8px 20px 4px rgba(0, 0, 0, 0.05);
   user-select: none;
 
-  @media screen and (min-width: 500px) {
-    display: none;
+  @media screen and (max-width: 500px) {
+    display: block;
   }
 `;
 

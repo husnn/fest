@@ -18,6 +18,11 @@ const getApiUrl = () =>
   process.env.API_URL ||
   `http://localhost:${[appConfig.port]}/${appConfig.apiVersion}`;
 
+const indexerConfig = {
+  host: process.env.INDEXER_HOST || '0.0.0.0',
+  port: parseInt(process.env.INDEXER_HOST) || 7070
+};
+
 const ethConfig = {
   provider: process.env.ETH_PROVIDER || 'http://localhost:8545'
 };
@@ -55,6 +60,7 @@ export {
   appConfig,
   getApiUrl,
   postgresConfig,
+  indexerConfig,
   ethConfig,
   mailConfig,
   googleConfig,

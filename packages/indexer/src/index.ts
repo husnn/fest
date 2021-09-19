@@ -16,6 +16,7 @@ import TokenCancelListing, { TokenCancelListingJob } from './jobs/TokenCancelLis
 import TokenListForSale, { TokenListForSaleJob } from './jobs/TokenListForSale';
 import TokenMint, { TokenMintJob } from './jobs/TokenMint';
 import TokenTransfer, { TokenTransferJob } from './jobs/TokenTransfer';
+import { createServer } from './server';
 
 const redisClient = redis.createClient(redisConfig.url);
 
@@ -57,14 +58,11 @@ ethereumListener.on('market-cancel', (event: TokenCancelListingJob) => {
 });
 
 (async () => {
-  await EthereumService.init(web3);
-
   await Postgres.init(postgresConfig);
-  console.log('Connected to database.\n');
+  console.log('Connected to database.');
 
-  console.log('Listening to all new events.');
-
-  const ethereumService = EthereumService.instance;
+  const ethereumService = await EthereumService.getInstance(web3);
+  console.log('\nListening to all new events.');
 
   const tokenRepository = new TokenRepository();
   const tokenListingRepository = new TokenListingRepository();
@@ -115,4 +113,6 @@ ethereumListener.on('market-cancel', (event: TokenCancelListingJob) => {
       done();
     }
   );
+
+  createServer();
 })();

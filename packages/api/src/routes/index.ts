@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
 import AuthController from '../controllers/AuthController';
+import ConfigController from '../controllers/ConfigController';
 import GoogleController from '../controllers/GoogleController';
 import MarketController from '../controllers/MarketController';
 import TokenController from '../controllers/TokenController';
@@ -15,6 +16,7 @@ import initYouTubeRoutes from './youtube.routes';
 
 export default function initRoutes(
   router: Router,
+  configController: ConfigController,
   authController: AuthController,
   userController: UserController,
   googleController: GoogleController,
@@ -22,6 +24,8 @@ export default function initRoutes(
   tokenController: TokenController,
   marketController: MarketController
 ) {
+  router.get('/init', (req, res) => configController.init(req, res));
+
   router.use('/auth', initAuthRoutes(router, authController));
   router.use('/users', initUserRoutes(router, userController));
   router.use('/google', initGoogleRoutes(router, googleController));

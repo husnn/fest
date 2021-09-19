@@ -9,6 +9,7 @@ import {
 
 import { googleConfig, youTubeConfig } from './config';
 import AuthController from './controllers/AuthController';
+import ConfigController from './controllers/ConfigController';
 import GoogleController from './controllers/GoogleController';
 import MarketController from './controllers/MarketController';
 import TokenController from './controllers/TokenController';
@@ -103,10 +104,13 @@ class App {
       ethereumService
     );
 
+    const configController = new ConfigController(ethereumService);
+
     const router = Router();
 
     initRoutes(
       router,
+      configController,
       authController,
       userController,
       googleController,

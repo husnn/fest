@@ -8,11 +8,11 @@ import {
     GetTokenMarketSummaryResponse, GetTokenOwnershipResponse, GetTokenOwnershipsResponse,
     GetTokenRequest, GetTokenResponse, GetTokensCreatedResponse, GetTokensOwnedResponse,
     GetUserByIdRequest, GetUserByUsernameRequest, GetUserResponse, IdentifyWithEmailRequest,
-    IdentifyWithEmailResponse, IdentifyWithWalletRequest, IdentifyWithWalletResponse, isUsername,
-    ListTokenForSaleRequest, ListTokenForSaleResponse, LoginResponse, LoginWithEmailRequest,
-    LoginWithWalletRequest, MintTokenRequest, MintTokenResponse, OAuthCheckLinkRequest,
-    OAuthCheckLinkResponse, OAuthLinkRequest, Price, Protocol, TokenData, TokenDTO,
-    TokenOwnershipDTO, UnlinkOAuthRequest, UnlinkOAuthResponse, UserInfo, YouTubeVideo
+    IdentifyWithEmailResponse, IdentifyWithWalletRequest, IdentifyWithWalletResponse, InitConfig,
+    InitResponse, isUsername, ListTokenForSaleRequest, ListTokenForSaleResponse, LoginResponse,
+    LoginWithEmailRequest, LoginWithWalletRequest, MintTokenRequest, MintTokenResponse,
+    OAuthCheckLinkRequest, OAuthCheckLinkResponse, OAuthLinkRequest, Price, Protocol, TokenData,
+    TokenDTO, TokenOwnershipDTO, UnlinkOAuthRequest, UnlinkOAuthResponse, UserInfo, YouTubeVideo
 } from '@fanbase/shared';
 
 import HttpClient from './HttpClient';
@@ -29,6 +29,15 @@ export class ApiClient {
   constructor(client: HttpClient) {
     this.client = client;
     ApiClient.instance = this;
+  }
+
+  // Init
+
+  async getInitConfig(): Promise<InitResponse> {
+    return this.client.request<InitResponse>({
+      method: 'GET',
+      endpoint: '/init'
+    });
   }
 
   // Token Market

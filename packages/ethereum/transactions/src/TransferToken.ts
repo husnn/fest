@@ -1,4 +1,4 @@
-import { Contracts } from '@fanbase/eth-contracts';
+import Contracts from '@fanbase/eth-contracts';
 
 import Transaction from './Transaction';
 
@@ -12,7 +12,7 @@ export class TransferToken extends Transaction {
     },
     contractAddress?: string
   ) {
-    const contract = Contracts.Token.get(contractAddress);
+    const contract = Contracts.get('Token', contractAddress);
 
     const txData = contract.methods
       .safeTransferFrom(data.from, data.to, data.id, data.quantity, [])

@@ -2,14 +2,15 @@ import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 
 import styled from '@emotion/styled';
-import contracts from '@fanbase/eth-contracts';
+import Contracts from '@fanbase/eth-contracts';
 import { Balance } from '@fanbase/shared';
 import { RampInstantSDK } from '@ramp-network/ramp-instant-sdk';
 
-import BalanceView, { CurrencyBalance } from '../components/BalanceView';
+import BalanceView from '../components/BalanceView';
 // import TransakSDK from '@transak/transak-sdk';
 import useAuthentication from '../modules/auth/useAuthentication';
 import { useWeb3 } from '../modules/web3';
+import { CurrencyBalance } from '../types';
 import { Button } from '../ui';
 import { getNativeCurrency } from '../utils';
 
@@ -76,17 +77,14 @@ export const WalletPage = () => {
         balance: Balance(0),
         precision: 5
       },
-      {
-        currency: {
-          name: 'Fan Coin',
-          symbol: 'FAN',
-          contract: contracts.Contracts.FAN.get().options.address,
-          decimals: 18
-        },
-        balance: Balance(0),
-        precision: 3,
-        selected: true
-      }
+      ...web3.config.currencies.map((currency, index: number) => {
+        return {
+          currency,
+          balance: Balance(0),
+          precision: 3,
+          selected: index == 0
+        };
+      })
     ];
 
     setCurrencyBalances(balances);

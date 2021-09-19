@@ -1,9 +1,12 @@
+/* eslint-disable @typescript-eslint/no-empty-interface */
+
 import {
     CurrentUserDTO, TokenDTO, TokenListingDTO, TokenOfferDTO, TokenOwnedDTO, TokenOwnershipDTO,
     TokenTradeDTO, UserDTO
 } from '../dto';
 import { Protocol } from '../enums';
-import { Price } from './Price';
+import { ProtocolConfig } from './';
+import { Currency } from './Currency';
 import TokenFee from './TokenFee';
 import TokenMetadata from './TokenMetadata';
 
@@ -42,6 +45,19 @@ export interface PaginatedRequest extends Request {
     page?: number;
   };
 }
+
+/**
+ * Init
+ */
+
+export type InitConfig = {
+  expires: Date;
+  protocols?: {
+    [key in Protocol]?: ProtocolConfig;
+  };
+};
+
+export interface InitResponse extends Response<InitConfig> {}
 
 /**
  * Token Market
@@ -163,7 +179,7 @@ export interface GetTokenRequest extends Request {}
 export interface TokenData extends TokenMetadata {
   resource?: string;
   supply: number;
-  fees?: TokenFee[];
+  royaltyPct: number;
 }
 
 export interface CreateTokenResponse extends Response {

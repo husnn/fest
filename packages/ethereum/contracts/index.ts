@@ -5,42 +5,35 @@ import MarketWallet from './build/MarketWalletV1.json';
 import Market from './build/OfferMarketV1.json';
 import Token from './build/TokenV1.json';
 
-export const getAddress = (name: string, network?: string) =>
-  interfaces[name].networks[
-    network || Object.keys(interfaces[name].networks)[0]
-  ]?.address;
-
 type ContractBuild = {
   abi: any;
   networks: any;
   [key: string]: any;
 };
 
-export const interfaces: { [key: string]: ContractBuild } = {
-  FAN,
+const interfaces: { [key: string]: ContractBuild } = {
   Token,
   Market,
-  MarketWallet
+  MarketWallet,
+  FAN
 };
 
-let network;
+const contractInstances: { [key: string]: any } = {};
 
-let web3Instance = new Web3(process.env.ETH_PROVIDER);
+export const getAddress = (name: string, network?: number) =>
+  interfaces[name].networks[
+    network.toString() || Object.keys(interfaces[name].networks)[0]
+  ]?.address;
 
-export const init = async (web3: Web3) => {
-  web3Instance = web3;
-  network = (await web3.eth.net.getId()).toString();
-};
-
-export const contractInstances: { [key: string]: any } = {};
-
-const getContract = (name: keyof typeof interfaces, address?: string) => {
+const get = (name: keyof typeof interfaces, address?: string) => {
   const instanceKey = `${name}:${network}`;
 
   let instance = contractInstances[instanceKey];
 
   if (!instance) {
     address = address || getAddress(name as string, network);
+
+    console.log(`${name} contract at ${address}`);
 
     instance = new web3Instance.eth.Contract(
       interfaces[name].abi as any,
@@ -53,19 +46,15 @@ const getContract = (name: keyof typeof interfaces, address?: string) => {
   return instance;
 };
 
-export const Contracts = {
-  FAN: {
-    get: (address?: string) => getContract('FAN', address)
-  },
-  Token: {
-    get: (address?: string) => getContract('Token', address)
-  },
-  Market: {
-    get: (address?: string) => getContract('Market', address)
-  },
-  MarketWallet: {
-    get: (address?: string) => getContract('MarketWallet', address)
-  }
+let web3Instance: Web3, network: number;
+
+const init = async (web3: Web3) => {
+  web3Instance = web3 || new Web3(process.env.ETH_PROVIDER);
+  network = await web3Instance.eth.net.getId();
+
+  Object.keys(interfaces).forEach((x) => get(x));
+
+  return contractInstances;
 };
 
-export default { init, Contracts, contractInstances };
+export default { init, get };

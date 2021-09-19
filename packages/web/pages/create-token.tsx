@@ -66,13 +66,6 @@ export default function CreateTokenPage() {
         }}
         validationSchema={CreateTokenSchema}
         onSubmit={async (values) => {
-          const fees: TokenFee[] = [];
-          const feePct = Percentage(values.royaltyPercentage);
-
-          if (feePct > 0) {
-            fees.push([currentUser.wallet.address, feePct]);
-          }
-
           const token = await ApiClient.instance?.createToken({
             type: values.type,
             resource: values.resource,
@@ -80,7 +73,7 @@ export default function CreateTokenPage() {
             description: values.description,
             image: values.image,
             supply: values.supply,
-            fees,
+            royaltyPct: values.royaltyPercentage,
             attributes: values.attributes
           });
 

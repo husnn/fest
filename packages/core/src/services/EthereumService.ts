@@ -12,6 +12,9 @@ export type ERC20Info = {
 export type TxResult = Result<string>;
 
 export interface EthereumService {
+  networkId: number;
+  chainId: number;
+
   getOfferHash();
   verifyOffer();
 

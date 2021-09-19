@@ -1,5 +1,10 @@
 import { PostgresConfig } from '@fanbase/postgres';
 
+export const serverConfig = {
+  host: process.env.HOST || '0.0.0.0',
+  port: parseInt(process.env.PORT || '7070')
+};
+
 export const ethConfig = {
   provider:
     process.env.ETH_PROVIDER_WSS ||

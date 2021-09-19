@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import Web3 from 'web3';
 
 import styled from '@emotion/styled';
-import { Contracts } from '@fanbase/eth-contracts';
 import { TokenDTO, TokenOwnershipDTO, WalletType } from '@fanbase/shared';
 
 import ApiClient from '../modules/api/ApiClient';
@@ -51,13 +50,13 @@ export const CreateTokenListing = ({
       web3.ethereum
         .checkMarketApproved(token.chain.contract, currentUser.wallet.address)
         .then((approved) => {
-          setMarketApproved(approved);
+          setMarketApproved(approved); // TODO
         });
     }
-  }, [web3]);
+  }, [web3.ethereum]);
 
   const listForSale = async (quantity: number, price: number) => {
-    const currency = Contracts.FAN.get().options.address;
+    const currency = web3.config.market.defaultCurrency.contract;
 
     let txHash;
 
