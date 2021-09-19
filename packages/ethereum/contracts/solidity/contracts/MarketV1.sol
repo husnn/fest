@@ -356,7 +356,7 @@ contract MarketV1 is AccessControl, Pausable {
 
     _wallet.give(
       trade.token,
-      msg.sender,
+      trade.seller,
       trade.tokenId,
       trade.available
     );
