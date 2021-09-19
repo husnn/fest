@@ -54,7 +54,9 @@ const connectToIndexer = () => {
   await EthereumService.getInstance(web3);
   console.log('Connected to Ethereum.');
 
-  connectToIndexer();
+  if (process.env.BYPASS_INDEXER_CONNECTION !== 'true') {
+    connectToIndexer();
+  }
 
   setupLogger('api');
 
