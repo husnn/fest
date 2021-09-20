@@ -8,7 +8,7 @@ const appConfig: AppConfig = {
   isProduction: process.env.NODE_ENV === 'production',
   protocol: 'http',
   host: process.env.HOST || '0.0.0.0',
-  port: parseInt(process.env.PORT) || 5000,
+  port: parseInt(process.env.API_PORT || process.env.PORT) || 5000,
   jwtSecret: process.env.JWT_SECRET,
   apiVersion: 'v1',
   clientUrl: process.env.CLIENT_URL || `http://localhost:3000`
@@ -20,7 +20,7 @@ const getApiUrl = () =>
 
 const indexerConfig = {
   host: process.env.INDEXER_HOST || '0.0.0.0',
-  port: parseInt(process.env.INDEXER_HOST) || 7070
+  port: parseInt(process.env.INDEXER_PORT) || 7070
 };
 
 const ethConfig = {
@@ -37,7 +37,7 @@ const mailConfig = {
 };
 
 const postgresConfig: PostgresConfig = {
-  uri: process.env.DATABASE_URL,
+  uri: process.env.PG_URL || process.env.DATABASE_URL,
   host: process.env.PG_HOST || process.env.RDS_HOSTNAME || '127.0.0.1',
   port: parseInt(process.env.PG_PORT || process.env.RDS_PORT) || 5432,
   database: process.env.PG_DATABASE || process.env.RDS_DB_NAME || 'postgres',

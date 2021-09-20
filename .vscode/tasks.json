@@ -9,7 +9,7 @@
       "presentation": {
         "panel": "dedicated",
         "clear": true
-			},
+      },
       "problemMatcher": {
         "pattern": {
           "regexp": ".",
@@ -20,7 +20,7 @@
         "background": {
           "activeOnStart": true,
           "beginsPattern": ".",
-          "endsPattern": "Listening on 127.0.0.1:8545"
+          "endsPattern": "Listening on .*:8545"
         }
       }
     },
@@ -105,10 +105,7 @@
         "kind": "build",
         "isDefault": true
       },
-      "dependsOn": [
-        "Watch + Build",
-        "Start Web"
-      ]
+      "dependsOn": ["Watch + Build", "Start Web"]
     }
   ]
 }

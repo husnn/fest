@@ -2,7 +2,7 @@ import { PostgresConfig } from '@fanbase/postgres';
 
 export const serverConfig = {
   host: process.env.HOST || '0.0.0.0',
-  port: parseInt(process.env.PORT || '7070')
+  port: parseInt(process.env.INDEXER_PORT || process.env.PORT) || 7070
 };
 
 export const ethConfig = {
@@ -17,7 +17,7 @@ export const redisConfig = {
 };
 
 export const postgresConfig: PostgresConfig = {
-  uri: process.env.DATABASE_URL,
+  uri: process.env.PG_URL || process.env.DATABASE_URL,
   host: process.env.PG_HOST || process.env.RDS_HOSTNAME || '127.0.0.1',
   port: parseInt(process.env.PG_PORT || process.env.RDS_PORT) || 5432,
   database: process.env.PG_DATABASE || process.env.RDS_DB_NAME || 'postgres',

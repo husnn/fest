@@ -15,6 +15,7 @@ done
 # Check following packages are installed, or install them globally
 declare -a _PACKAGES_REQUIRED=(
   "ganache-cli"
+  "truffle"
 )
 
 for i in "${_PACKAGES_REQUIRED[@]}"
@@ -63,7 +64,9 @@ fi
 
 deploy_contracts() {
   echo "Deploying contracts..."
-  npm run truffle:dev --prefix $_CONTRACTS_PATH
+  cd $_CONTRACTS_PATH
+  npm install
+  npm run truffle:dev
 }
 
 deploy_contracts_if_needed() {
@@ -84,7 +87,8 @@ start_ganache() {
     --db "$_GANACHE_PATH/data" \
     --accounts 10 \
     -e 100 \
-    -m "$MNEMONIC"
+    -m "$MNEMONIC" \
+    -- deterministic
 }
 
 {
