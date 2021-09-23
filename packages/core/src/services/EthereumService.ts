@@ -28,9 +28,9 @@ export interface EthereumService {
 
   buildWithdrawMarketEarningsTx(
     walletAddress: string,
-    marketContract: string,
     currencyContract: string,
-    amount: string
+    amount: string,
+    marketContract?: string
   ): Promise<EthereumTx>;
 
   getMarketEarnings(

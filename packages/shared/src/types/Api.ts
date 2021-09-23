@@ -13,7 +13,6 @@ import {
 import { Protocol } from '../enums';
 import { ProtocolConfig } from './';
 import { Currency } from './Currency';
-import TokenFee from './TokenFee';
 import TokenMetadata from './TokenMetadata';
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT';
@@ -68,6 +67,21 @@ export interface InitResponse extends Response<InitConfig> {}
 /**
  * Token Market
  */
+
+export interface WithdrawMarketEarningsResponse extends Response {
+  txHash: string;
+}
+
+export interface WithdrawMarketEarningsRequest extends Request {
+  method: 'POST';
+  endpoint: '/market/withdraw';
+  authentication: 'required';
+  body: {
+    protocol: Protocol;
+    currency: string;
+    amount: string;
+  };
+}
 
 export interface GetTokenTradesForUserResponse
   extends PaginatedResponse<TokenTradeDTO> {}

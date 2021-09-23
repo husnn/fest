@@ -5,3 +5,4 @@ export * from './GetTokenListing';
 export * from './GetTokenMarketSummary';
 export * from './GetTokenTrades';
 export * from './ListTokenForSale';
+export * from './WithdrawMarketEarnings';

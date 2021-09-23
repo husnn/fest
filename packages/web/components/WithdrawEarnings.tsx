@@ -1,4 +1,6 @@
+import { WalletType } from '@fanbase/shared';
 import React from 'react';
+import { ApiClient } from '../modules/api';
 
 import useAuthentication from '../modules/auth/useAuthentication';
 import { useWeb3 } from '../modules/web3';
@@ -25,13 +27,20 @@ export const WithdrawEarnings = ({
       title="Withdraw all earnings to wallet?"
       requestClose={() => onClose()}
       executeTransaction={async () => {
-        const tx = await web3.ethereum.buildWithdrawMarketEarningsTx(
-          currentUser.wallet.address,
-          balance.currency.contract,
-          balance.balance.amount.toFixed()
-        );
+        if (currentUser.wallet.type == WalletType.INTERNAL) {
+          return ApiClient.getInstance().withdrawMarketEarnings(
+            balance.currency.contract,
+            balance.balance.amount.toPrecision()
+          );
+        } else {
+          const tx = await web3.ethereum.buildWithdrawMarketEarningsTx(
+            currentUser.wallet.address,
+            balance.currency.contract,
+            balance.balance.amount.toFixed()
+          );
 
-        return web3.ethereum.sendTx(tx);
+          return web3.ethereum.sendTx(tx);
+        }
       }}
       onTransactionSent={async (txHash: string, end) => {
         end();

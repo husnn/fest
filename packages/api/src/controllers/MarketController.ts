@@ -3,12 +3,13 @@ import { NextFunction, Request, Response } from 'express';
 import {
   BuyTokenListing,
   CancelTokenListing,
+  EthereumService,
   GetListingsForToken,
   GetTokenMarketSummary,
   GetTokenTrades,
-  TokenRepository
+  TokenRepository,
+  WithdrawMarketEarnings
 } from '@fanbase/core';
-import { EthereumService } from '@fanbase/ethereum';
 import {
   TokenListingRepository,
   TokenOfferRepository,
@@ -17,9 +18,11 @@ import {
 } from '@fanbase/postgres';
 import {
   CancelTokenListingResponse,
+  Currency,
   GetListingsForTokenResponse,
   GetTokenMarketSummaryResponse,
-  GetTokenTradesForUserResponse
+  GetTokenTradesForUserResponse,
+  WithdrawMarketEarningsResponse
 } from '@fanbase/shared';
 
 import { HttpError, HttpResponse, ValidationError } from '../http';
@@ -30,6 +33,7 @@ export class MarketController {
   private buyTokenListingUseCase: BuyTokenListing;
   private cancelTokenListingUseCase: CancelTokenListing;
   private getTokenTradesUseCase: GetTokenTrades;
+  private withdrawEarningsUseCase: WithdrawMarketEarnings;
 
   constructor(
     tokenRepository: TokenRepository,
@@ -58,6 +62,34 @@ export class MarketController {
       ethereumService
     );
     this.getTokenTradesUseCase = new GetTokenTrades(tokenTradeRepository);
+    this.withdrawEarningsUseCase = new WithdrawMarketEarnings(
+      walletRepository,
+      ethereumService
+    );
+  }
+
+  async withdrawEarnings(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { protocol, currency, amount } = req.body;
+
+      if (!protocol || !currency || !amount) throw new ValidationError();
+
+      const result = await this.withdrawEarningsUseCase.exec({
+        user: req.user,
+        protocol,
+        currency,
+        amount
+      });
+
+      if (!result.success)
+        throw new HttpError('Could not withdraw market earnings.');
+
+      return new HttpResponse<WithdrawMarketEarningsResponse>(res, {
+        txHash: result.data.txHash
+      });
+    } catch (err) {
+      next(err);
+    }
   }
 
   async cancelTokenListing(req: Request, res: Response, next: NextFunction) {

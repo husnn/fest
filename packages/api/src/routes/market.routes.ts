@@ -37,6 +37,13 @@ export default function init(
       marketController.getTokenTradesForUser(req, res, next)
   );
 
+  router.post(
+    '/withdraw',
+    authMiddleware,
+    (req: Request, res: Response, next: NextFunction) =>
+      marketController.withdrawEarnings(req, res, next)
+  );
+
   router.get(
     '/tokens/:tokenId/listings',
     pagination,

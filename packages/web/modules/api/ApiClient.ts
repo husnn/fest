@@ -55,6 +55,8 @@ import {
   UnlinkOAuthRequest,
   UnlinkOAuthResponse,
   UserInfo,
+  WithdrawMarketEarningsRequest,
+  WithdrawMarketEarningsResponse,
   YouTubeVideo
 } from '@fanbase/shared';
 
@@ -84,6 +86,27 @@ export class ApiClient {
   }
 
   // Token Market
+
+  async withdrawMarketEarnings(
+    currency: string,
+    amount: string,
+    protocol = Protocol.ETHEREUM
+  ): Promise<string> {
+    return this.client
+      .request<WithdrawMarketEarningsResponse, WithdrawMarketEarningsRequest>({
+        method: 'POST',
+        endpoint: '/market/withdraw',
+        authentication: 'required',
+        body: {
+          protocol,
+          currency,
+          amount
+        }
+      })
+      .then((res) => {
+        return res.txHash;
+      });
+  }
 
   async getTokenTradesForUser(
     count?: number,
