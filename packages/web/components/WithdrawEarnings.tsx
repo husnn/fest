@@ -42,9 +42,6 @@ export const WithdrawEarnings = ({
           return web3.ethereum.sendTx(tx);
         }
       }}
-      onTransactionSent={async (txHash: string, end) => {
-        end();
-      }}
       onFinished={() => {
         onDone();
       }}

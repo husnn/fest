@@ -63,7 +63,7 @@ export const TransactionModal = ({
             ? await onTransactionSent(hash, () => {
                 setTxHash(hash);
               })
-            : null;
+            : setTxHash(hash);
         } catch (err) {
           console.log(err);
         }
