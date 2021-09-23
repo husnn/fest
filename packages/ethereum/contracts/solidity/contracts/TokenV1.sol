@@ -15,6 +15,7 @@ struct Token {
   uint dateCreated;
   address creator;
   uint supply;
+  string uri;
 }
 
 contract TokenV1 is AccessControl, ERC1155, HasSecondarySaleFees {
@@ -25,6 +26,8 @@ contract TokenV1 is AccessControl, ERC1155, HasSecondarySaleFees {
   bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
   bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
+  string baseURI;
+
   uint private _tokenId = 0;
   mapping(uint => Token) _tokens;
 
@@ -32,7 +35,7 @@ contract TokenV1 is AccessControl, ERC1155, HasSecondarySaleFees {
 
   mapping(bytes32 => bool) _approvalsExhausted;
 
-  constructor(string memory uri) ERC1155(uri) {
+  constructor(string memory baseUri) ERC1155(baseUri) {
     _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
     
     _setupRole(ADMIN_ROLE, msg.sender);
@@ -40,6 +43,8 @@ contract TokenV1 is AccessControl, ERC1155, HasSecondarySaleFees {
 
     _setupRole(MINTER_ROLE, msg.sender);
     _setRoleAdmin(MINTER_ROLE, ADMIN_ROLE);
+
+    baseURI = baseUri;
   }
 
   modifier onlyAdminOrMinter() {
@@ -66,18 +71,30 @@ contract TokenV1 is AccessControl, ERC1155, HasSecondarySaleFees {
     return super.supportsInterface(interfaceId);
   }
 
-  function setMetadataUri(string calldata uri)
+  function setBaseURI(string memory uri_)
     public
     onlyRole(ADMIN_ROLE)
   {
-    super._setURI(uri);
+    baseURI = uri_;
+    super._setURI(uri_);
   }
 
-  function getMintHash(address creator, uint supply, uint expiry, uint salt) public view returns (bytes32) {
+  function uri(uint256 id) public view override returns (string memory) {
+    return string(abi.encodePacked(baseURI, _tokens[id].uri));
+  }
+
+  function getMintHash(
+    address creator,
+    uint supply,
+    string calldata uri_,
+    uint expiry,
+    uint salt
+  ) public view returns (bytes32) {
     return keccak256(abi.encodePacked(
       address(this),
       creator,
       supply,
+      uri_,
       expiry,
       salt
     ));
@@ -88,12 +105,18 @@ contract TokenV1 is AccessControl, ERC1155, HasSecondarySaleFees {
   }
 
   event Minted(uint256 indexed id, Token token, Fee[] fees, string data);
-  event RevokeMint(address operator, address creator, uint256 indexed supply);
+  event RevokeMint(
+    address operator,
+    address creator,
+    uint256 indexed supply,
+    string uri
+  );
 
   function mint(
     address creator,
     uint supply,
-    Fee[] calldata fees,
+    string calldata uri_,
+    Fee[] memory fees,
     string calldata data,
     uint expiry,
     uint salt,
@@ -102,7 +125,7 @@ contract TokenV1 is AccessControl, ERC1155, HasSecondarySaleFees {
     if (!hasRole(MINTER_ROLE, msg.sender)) {
       require(expiry > block.timestamp, "Approval expired.");
 
-      bytes32 mintHash = getMintHash(creator, supply, expiry, salt);
+      bytes32 mintHash = getMintHash(creator, supply, uri_, expiry, salt);
       require(!_approvalsExhausted[mintHash], "Approval exhausted.");
       
       address recoveredAddress =
@@ -124,7 +147,8 @@ contract TokenV1 is AccessControl, ERC1155, HasSecondarySaleFees {
     Token memory token = Token(
       block.timestamp,
       creator,
-      supply
+      supply,
+      uri_
     );
 
     _tokens[_tokenId] = token;
@@ -144,15 +168,16 @@ contract TokenV1 is AccessControl, ERC1155, HasSecondarySaleFees {
   function revokeMintApproval(
     address creator,
     uint supply,
+    string calldata uri_,
     uint expiry,
     uint salt
   ) public onlyAdminOrMinter {    
-    bytes32 mintHash = getMintHash(creator, supply, expiry, salt);
+    bytes32 mintHash = getMintHash(creator, supply, uri_, expiry, salt);
     require(!_approvalsExhausted[mintHash], "Approval already exhausted.");
 
     _approvalsExhausted[mintHash] = true;
 
-    emit RevokeMint(msg.sender, creator, supply);
+    emit RevokeMint(msg.sender, creator, supply, uri_);
   }
 
   function getFeeRecipients(uint256 id) override public view returns (address payable[] memory) {

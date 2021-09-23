@@ -52,6 +52,7 @@ export class ApproveMint extends UseCase<ApproveMintInput, ApproveMintOutput> {
     const result = await this.ethereumService.signMint(
       wallet.address,
       token.supply,
+      token.metadataUri,
       expiry,
       salt
     );

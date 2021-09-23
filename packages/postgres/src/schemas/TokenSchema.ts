@@ -56,6 +56,9 @@ const TokenSchema = new EntitySchema<Token>({
       type: 'simple-json',
       nullable: true
     },
+    metadataUri: {
+      type: 'text'
+    },
     chain: {
       type: 'jsonb',
       nullable: true

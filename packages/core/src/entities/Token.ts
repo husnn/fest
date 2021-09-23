@@ -1,4 +1,9 @@
-import { TokenAttributes, TokenChainData, TokenFee, TokenType } from '@fanbase/shared';
+import {
+  TokenAttributes,
+  TokenChainData,
+  TokenFee,
+  TokenType
+} from '@fanbase/shared';
 
 import User from './User';
 
@@ -11,6 +16,7 @@ export class Token {
   creator: User;
 
   type: TokenType;
+
   name: string;
   description: string;
   supply: number;
@@ -22,6 +28,8 @@ export class Token {
 
   attributes?: TokenAttributes;
   extra?: unknown;
+
+  metadataUri: string;
 
   chain?: TokenChainData;
 

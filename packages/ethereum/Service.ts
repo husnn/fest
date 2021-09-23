@@ -7,15 +7,32 @@ import { hdkey } from 'ethereumjs-wallet';
 import Web3 from 'web3';
 
 import {
-    ERC20Info, EthereumService as IEthereumService, generateWalletId, Result, Token, TokenListing,
-    TxResult, Wallet
+  ERC20Info,
+  EthereumService as IEthereumService,
+  generateWalletId,
+  Result,
+  Token,
+  TokenListing,
+  TxResult,
+  Wallet
 } from '@fanbase/core';
 import Contracts from '@fanbase/eth-contracts';
 import {
-    ApproveSpender, ApproveTokenMarket, BuyToken, CancelTokenListing, ListTokenForSale, MintToken,
-    WithdrawMarketEarnings
+  ApproveSpender,
+  ApproveTokenMarket,
+  BuyToken,
+  CancelTokenListing,
+  ListTokenForSale,
+  MintToken,
+  WithdrawMarketEarnings
 } from '@fanbase/eth-transactions';
-import { EthereumTx, Price, Protocol, TokenFee, WalletType } from '@fanbase/shared';
+import {
+  EthereumTx,
+  Price,
+  Protocol,
+  TokenFee,
+  WalletType
+} from '@fanbase/shared';
 
 import ERC20Abi from './abi/ERC20.json';
 
@@ -375,6 +392,7 @@ export class EthereumService implements IEthereumService {
   async buildMintTokenTx(
     walletAddress: string,
     supply: number,
+    uri: string,
     fees: TokenFee[],
     data: string,
     expiry: number,
@@ -389,6 +407,7 @@ export class EthereumService implements IEthereumService {
     const txData = {
       creator: walletAddress,
       supply,
+      uri,
       fees,
       data,
       expiry,
@@ -411,6 +430,7 @@ export class EthereumService implements IEthereumService {
   async signMint(
     creatorAddress: string,
     supply: number,
+    uri: string,
     expiry: number,
     salt: string
   ): Promise<Result<{ signature: string }>> {
@@ -419,7 +439,7 @@ export class EthereumService implements IEthereumService {
     const contract = Contracts.get('Token');
 
     const hash = await contract.methods
-      .getMintHash(creatorAddress, supply, expiry, salt)
+      .getMintHash(creatorAddress, supply, uri, expiry, salt)
       .call();
 
     const signature = sigUtil.personalSign(privateKey, { data: hash });

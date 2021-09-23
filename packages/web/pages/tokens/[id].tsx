@@ -4,7 +4,12 @@ import React, { useEffect, useState } from 'react';
 import { setTimeout } from 'timers';
 
 import styled from '@emotion/styled';
-import { Protocol, TokenDTO, TokenOwnershipDTO, WalletType } from '@fanbase/shared';
+import {
+  Protocol,
+  TokenDTO,
+  TokenOwnershipDTO,
+  WalletType
+} from '@fanbase/shared';
 
 import CreateTokenListing from '../../components/CreateTokenListing';
 import TokenHolders from '../../components/TokenHolders';
@@ -169,6 +174,7 @@ export default function TokenPage() {
           const tx = await web3.ethereum.buildMintTokenTx(
             currentUser.wallet.address,
             token.supply,
+            token.metadataUri,
             token.fees,
             approval.data,
             approval.expiry,

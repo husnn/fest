@@ -1,5 +1,9 @@
 import {
-    decryptText, encryptText, Protocol, randomNumericString, WalletType
+  decryptText,
+  encryptText,
+  Protocol,
+  randomNumericString,
+  WalletType
 } from '@fanbase/shared';
 
 import UseCase from '../../base/UseCase';
@@ -56,6 +60,7 @@ export class MintToken extends UseCase<MintTokenInput, MintTokenOutput> {
     const result = await this.ethereumService.signMint(
       wallet.address,
       token.supply,
+      token.metadataUri,
       expiry,
       salt
     );
@@ -65,6 +70,7 @@ export class MintToken extends UseCase<MintTokenInput, MintTokenOutput> {
     const tx = await this.ethereumService.buildMintTokenTx(
       wallet.address,
       token.supply,
+      token.metadataUri,
       token.fees,
       encryptText(token.id),
       expiry,

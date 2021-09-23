@@ -7,6 +7,7 @@ export class MintToken extends Transaction {
     data: {
       creator: string;
       supply: number;
+      uri: string;
       fees: Array<[string, number]>;
       data: string;
       expiry: number;
@@ -26,6 +27,7 @@ export class MintToken extends Transaction {
       .mint(
         data.creator,
         data.supply,
+        data.uri,
         fees,
         data.data,
         data.expiry,

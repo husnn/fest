@@ -18,6 +18,8 @@ export class TokenDTO {
 
   image?: string;
 
+  metadataUri: string;
+
   chain?: ChainData;
   minted = false;
 
@@ -38,6 +40,8 @@ export class TokenDTO {
     this.fees = props.fees;
 
     this.image = props.image;
+
+    this.metadataUri = props.metadataUri;
 
     this.chain = props.chain;
     this.minted = props.minted;

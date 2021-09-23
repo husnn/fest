@@ -1,4 +1,10 @@
-import { Percentage, TokenAttributes, TokenFee, TokenMetadata, TokenType } from '@fanbase/shared';
+import {
+  Percentage,
+  TokenAttributes,
+  TokenFee,
+  TokenMetadata,
+  TokenType
+} from '@fanbase/shared';
 
 import UseCase from '../../base/UseCase';
 import { Token } from '../../entities';
@@ -88,12 +94,14 @@ export class CreateToken extends UseCase<CreateTokenInput, CreateTokenOutput> {
       name,
       description,
       image,
-      externalUrl,
+      external_url: externalUrl,
       attributes
     };
 
     const pinResult = await this.metadataStore.saveJson(metadata);
     if (!pinResult.success) return Result.fail();
+
+    const metadataUri = pinResult.data;
 
     const fees: TokenFee[] = [];
 
@@ -110,6 +118,7 @@ export class CreateToken extends UseCase<CreateTokenInput, CreateTokenOutput> {
       supply,
       image,
       externalUrl,
+      metadataUri,
       fees
     });
 

@@ -6,7 +6,7 @@ export interface TokenMetadata {
   name: string;
   description?: string;
   image?: string;
-  externalUrl?: string;
+  external_url?: string;
   attributes?: TokenAttributes;
 }
 

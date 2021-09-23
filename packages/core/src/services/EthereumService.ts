@@ -104,6 +104,7 @@ export interface EthereumService {
   buildMintTokenTx(
     walletAddress: string,
     supply: number,
+    uri: string,
     fees: TokenFee[],
     data: string,
     expiry: number,
@@ -114,6 +115,7 @@ export interface EthereumService {
   signMint(
     creatorAddress: string,
     supply: number,
+    uri: string,
     expiry: number,
     salt: string
   ): Promise<
