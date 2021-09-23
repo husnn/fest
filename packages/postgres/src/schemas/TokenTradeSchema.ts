@@ -30,9 +30,6 @@ const TokenTradeSchema = new EntitySchema<TokenTrade>({
     quantity: {
       type: 'integer',
       default: 1
-    },
-    price: {
-      type: 'text'
     }
   },
   relations: {

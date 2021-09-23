@@ -3,22 +3,30 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
 import styled from '@emotion/styled';
-import Contracts from '@fanbase/eth-contracts';
-import { Balance, TokenListingDTO, TokenOfferDTO, TokenTradeDTO } from '@fanbase/shared';
+import {
+  Balance,
+  TokenListingDTO,
+  TokenOfferDTO,
+  TokenTradeDTO
+} from '@fanbase/shared';
 
-import BalanceView from '../components/BalanceView';
-import CancelTokenListing from '../components/CancelTokenListing';
-import WithdrawEarnings from '../components/WithdrawEarnings';
-import { ApiClient } from '../modules/api';
-import useAuthentication from '../modules/auth/useAuthentication';
-import { useHeader } from '../modules/navigation';
-import { useWeb3 } from '../modules/web3';
-import { CurrencyBalance } from '../types';
-import { Button, Link } from '../ui';
-import { getTokenUrl, reloadInTime } from '../utils';
+import BalanceView from '../../components/BalanceView';
+import CancelTokenListing from '../../components/CancelTokenListing';
+import WithdrawEarnings from '../../components/WithdrawEarnings';
+import { ApiClient } from '../../modules/api';
+import useAuthentication from '../../modules/auth/useAuthentication';
+import { useHeader } from '../../modules/navigation';
+import { useWeb3 } from '../../modules/web3';
+import { CurrencyBalance } from '../../types';
+import { Button, Link } from '../../ui';
+import { getTokenUrl, reloadInTime } from '../../utils';
+import TokenTradeRow from '../../ui/TokenTradeRow';
 
 const MarketSection = styled.div`
-  padding: 20px 10px;
+  margin: 30px 0;
+  padding: 30px;
+  background-color: #fafafa;
+  border-radius: 20px;
 
   > * + * {
     margin-top: 20px;
@@ -31,7 +39,9 @@ const ListingRow = styled.div`
   align-items: center;
   justify-content: space-between;
   border-radius: 10px;
-  box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, 0.05);
+  box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, 0.01);
+
+  background-color: white;
 
   :not(:first-of-type) {
     margin-top: 20px;
@@ -43,12 +53,11 @@ const ListingRow = styled.div`
   }
 
   .token-listing__date {
+    display: block;
     opacity: 0.7;
   }
 
   .token-listing__name {
-    font-weight: bold;
-    font-size: 11pt;
   }
 
   .token-listing__left {
@@ -81,14 +90,12 @@ const TokenListingRow = ({
   return (
     <ListingRow>
       <div className="token-listing__left">
-        <div>
-          <p className="token-listing__date small">
-            {moment(data.dateCreated).fromNow()}
-          </p>
-          <Link href={getTokenUrl(data.token)} className="token-listing__name">
-            {data.token.name}
-          </Link>
-        </div>
+        <p className="token-listing__date small">
+          {moment(data.dateCreated).fromNow()}
+        </p>
+        <Link href={getTokenUrl(data.token)} className="token-listing__name">
+          <h3>{data.token.name}</h3>
+        </Link>
         <ListingPrice>
           <span style={{ opacity: 0.5 }}>{data.price.currency.symbol}</span>
           <span>{data.price.displayAmount.toPrecision()}</span>
@@ -179,7 +186,7 @@ export default function MarketPage() {
     marketBalances.find((x: CurrencyBalance) => x.selected === true);
 
   return currentUser ? (
-    <div className="container boxed" style={{ maxWidth: 600 }}>
+    <div className="container boxed" style={{ maxWidth: 800 }}>
       <MarketSection>
         <h2>Earnings</h2>
         <BalanceView
@@ -218,6 +225,16 @@ export default function MarketPage() {
       {tokenMarketSummary?.trades?.length > 0 && (
         <MarketSection>
           <h2>Trades</h2>
+          {tokenMarketSummary?.trades?.map((trade: TokenTradeDTO) => (
+            <TokenTradeRow key={trade.id} trade={trade} />
+          ))}
+          <Button
+            color="secondary"
+            style={{ width: '100%' }}
+            onClick={() => router.push('/market/trades')}
+          >
+            View all
+          </Button>
         </MarketSection>
       )}
       {listingToCancel && (

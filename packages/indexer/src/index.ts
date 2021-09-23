@@ -6,13 +6,19 @@ import Web3 from 'web3';
 
 import { EthereumService } from '@fanbase/ethereum';
 import Postgres, {
-    TokenListingRepository, TokenOwnershipRepository, TokenRepository, WalletRepository
+  TokenListingRepository,
+  TokenOwnershipRepository,
+  TokenRepository,
+  TokenTradeRepository,
+  WalletRepository
 } from '@fanbase/postgres';
 
 import { ethConfig, postgresConfig, redisConfig } from './config';
 import EthereumListener from './events/ethereum/EthereumListener';
 import TokenBuy, { TokenBuyJob } from './jobs/TokenBuy';
-import TokenCancelListing, { TokenCancelListingJob } from './jobs/TokenCancelListing';
+import TokenCancelListing, {
+  TokenCancelListingJob
+} from './jobs/TokenCancelListing';
 import TokenListForSale, { TokenListForSaleJob } from './jobs/TokenListForSale';
 import TokenMint, { TokenMintJob } from './jobs/TokenMint';
 import TokenTransfer, { TokenTransferJob } from './jobs/TokenTransfer';
@@ -66,6 +72,7 @@ ethereumListener.on('market-cancel', (event: TokenCancelListingJob) => {
 
   const tokenRepository = new TokenRepository();
   const tokenListingRepository = new TokenListingRepository();
+  const tokenTradeRepository = new TokenTradeRepository();
   const walletRepository = new WalletRepository();
   const ownershipRepository = new TokenOwnershipRepository();
 
@@ -101,7 +108,9 @@ ethereumListener.on('market-cancel', (event: TokenCancelListingJob) => {
       } else if ((job.data as TokenBuyJob).buyer !== undefined) {
         // Buy event
         return new TokenBuy(job.data as TokenBuyJob).execute(
-          tokenListingRepository
+          tokenListingRepository,
+          walletRepository,
+          tokenTradeRepository
         );
       } else if ((job.data as TokenCancelListingJob).canceller !== undefined) {
         // Cancellation event

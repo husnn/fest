@@ -2,7 +2,9 @@ import { TokenListingDTO, TokenOfferDTO, TokenTradeDTO } from '@fanbase/shared';
 
 import UseCase from '../../base/UseCase';
 import {
-    TokenListingRepository, TokenOfferRepository, TokenTradeRepository
+  TokenListingRepository,
+  TokenOfferRepository,
+  TokenTradeRepository
 } from '../../repositories';
 import { Result } from '../../Result';
 
@@ -22,18 +24,18 @@ export class GetTokenMarketSummary extends UseCase<
 > {
   private offerRepository: TokenOfferRepository;
   private listingRepository: TokenListingRepository;
-  private orderRepository: TokenTradeRepository;
+  private tradeRepository: TokenTradeRepository;
 
   constructor(
     tokenOfferRepository: TokenOfferRepository,
     listingRepository: TokenListingRepository,
-    orderRepository: TokenTradeRepository
+    tradeRepository: TokenTradeRepository
   ) {
     super();
 
     this.offerRepository = tokenOfferRepository;
     this.listingRepository = listingRepository;
-    this.orderRepository = orderRepository;
+    this.tradeRepository = tradeRepository;
   }
 
   async exec(
@@ -48,8 +50,17 @@ export class GetTokenMarketSummary extends UseCase<
     ).listings.map((listing) => new TokenListingDTO(listing));
 
     const trades = (
-      await this.orderRepository.findByBuyer(data.user)
-    ).orders.map((order) => new TokenTradeDTO(order));
+      await this.tradeRepository.findByBuyerOrSeller(data.user, {
+        join: [
+          { property: 'token_trade.tokenListing', alias: 'tokenListing' },
+          { property: 'tokenListing.token', alias: 'token' }
+        ]
+      })
+    ).trades.map((item) => {
+      const trade = new TokenTradeDTO(item);
+      trade.isSeller = trade.sellerId === data.user;
+      return trade;
+    });
 
     return Result.ok({ offers, listings, trades });
   }

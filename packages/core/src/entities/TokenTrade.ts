@@ -16,7 +16,6 @@ export class TokenTrade {
   tokenListing: TokenListing;
 
   quantity: number;
-  price: string;
 
   constructor(data?: Partial<TokenTrade>) {
     Object.assign(this, data);

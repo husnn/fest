@@ -12,26 +12,22 @@ import { Button, Link } from '../ui';
 import { getDisplayName, getProfileUrl } from '../utils';
 import BuyTokenListing from './BuyTokenListing';
 
-const Container = styled.div`
-  padding: 10px 0;
-
-  > * + * {
-    margin-top: 20px;
-  }
-`;
+const Container = styled.div``;
 
 const TokenListingRow = styled.div<{ active: boolean }>`
+  margin: 20px -10px;
   padding: 10px 20px 20px;
+  background-color: #fafafa;
   display: grid;
   align-items: center;
-  grid-template-columns: 150px repeat(auto-fill, minmax(100px, 1fr));
+  grid-template-columns: 2fr 1fr;
   grid-auto-rows: 80px;
   border-radius: 10px;
 
   ${(props) =>
     props.active
       ? `
-        box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, 0.05);
+        box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, 0.02);
         `
       : 'opacitY: 0.5;'}
 
@@ -67,20 +63,17 @@ const TokenListing = ({ listing }: { listing: TokenListingDTO }) => {
             {getDisplayName(listing.seller)}
           </Link>
         </h4>
-      </TokenListingColumn>
-      <TokenListingColumn>
-        <label>Price/token</label>
         <p>
           {listing.price.currency.symbol}{' '}
           {listing.price.displayAmount.toPrecision()}
         </p>
       </TokenListingColumn>
-      <TokenListingColumn>
+      {/* <TokenListingColumn>
         <label>Available</label>
         <p>
           {listing.available} / {listing.quantity}
         </p>
-      </TokenListingColumn>
+      </TokenListingColumn> */}
       <TokenListingColumn>
         {isActive && currentUser && listing.seller?.id != currentUser.id && (
           <Button

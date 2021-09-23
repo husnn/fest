@@ -1,14 +1,25 @@
 import { NextFunction, Request, Response } from 'express';
 
 import {
-    BuyTokenListing, CancelTokenListing, GetListingsForToken, GetTokenMarketSummary, TokenRepository
+  BuyTokenListing,
+  CancelTokenListing,
+  GetListingsForToken,
+  GetTokenMarketSummary,
+  GetTokenTrades,
+  TokenRepository
 } from '@fanbase/core';
 import { EthereumService } from '@fanbase/ethereum';
 import {
-    TokenListingRepository, TokenOfferRepository, TokenTradeRepository, WalletRepository
+  TokenListingRepository,
+  TokenOfferRepository,
+  TokenTradeRepository,
+  WalletRepository
 } from '@fanbase/postgres';
 import {
-    CancelTokenListingResponse, GetListingsForTokenResponse, GetTokenMarketSummaryResponse
+  CancelTokenListingResponse,
+  GetListingsForTokenResponse,
+  GetTokenMarketSummaryResponse,
+  GetTokenTradesForUserResponse
 } from '@fanbase/shared';
 
 import { HttpError, HttpResponse, ValidationError } from '../http';
@@ -18,6 +29,7 @@ export class MarketController {
   private getListingsForTokenUseCase: GetListingsForToken;
   private buyTokenListingUseCase: BuyTokenListing;
   private cancelTokenListingUseCase: CancelTokenListing;
+  private getTokenTradesUseCase: GetTokenTrades;
 
   constructor(
     tokenRepository: TokenRepository,
@@ -45,6 +57,7 @@ export class MarketController {
       walletRepository,
       ethereumService
     );
+    this.getTokenTradesUseCase = new GetTokenTrades(tokenTradeRepository);
   }
 
   async cancelTokenListing(req: Request, res: Response, next: NextFunction) {
@@ -86,6 +99,29 @@ export class MarketController {
       return new HttpResponse<CancelTokenListingResponse>(res, {
         txHash: result.data.txHash
       });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async getTokenTradesForUser(req: Request, res: Response, next: NextFunction) {
+    const count = req.pagination.count;
+    const page = req.pagination.page;
+
+    try {
+      const result = await this.getTokenTradesUseCase.exec({
+        user: req.user,
+        count,
+        page
+      });
+      if (!result.success)
+        throw new HttpError('Could not get trades for user.');
+
+      return new HttpResponse<GetTokenTradesForUserResponse>(
+        res,
+        { body: result.data.trades },
+        { count, page, total: result.data.total }
+      );
     } catch (err) {
       next(err);
     }

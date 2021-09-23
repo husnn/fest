@@ -1,19 +1,61 @@
 import {
-    ApproveMintRequest, ApproveMintResponse, ApproveTokenSaleRequest, ApproveTokenSaleResponse,
-    BuyTokenListingRequest, BuyTokenListingResponse, CancelTokenListingRequest,
-    CancelTokenListingResponse, CreateTokenRequest, CreateTokenResponse, EditUserRequest,
-    EditUserResponse, GetListingsForTokenRequest, GetListingsForTokenResponse, GetOAuthLinkRequest,
-    GetOAuthLinkResponse, GetOwnUploadsRequest, GetOwnUploadsResponse,
-    GetSignedTokenImageUploadUrlResponse, GetTokenImageUploadUrlRequest,
-    GetTokenMarketSummaryRequest, GetTokenMarketSummaryResponse, GetTokenOwnershipResponse,
-    GetTokenOwnershipsResponse, GetTokenRequest, GetTokenResponse, GetTokensCreatedResponse,
-    GetTokensOwnedResponse, GetUserByIdRequest, GetUserByUsernameRequest, GetUserResponse,
-    IdentifyWithEmailRequest, IdentifyWithEmailResponse, IdentifyWithWalletRequest,
-    IdentifyWithWalletResponse, InitConfig, InitResponse, isUsername, ListTokenForSaleRequest,
-    ListTokenForSaleResponse, LoginResponse, LoginWithEmailRequest, LoginWithWalletRequest,
-    MintTokenRequest, MintTokenResponse, OAuthCheckLinkRequest, OAuthCheckLinkResponse,
-    OAuthLinkRequest, Price, Protocol, TokenData, TokenDTO, TokenOwnershipDTO, UnlinkOAuthRequest,
-    UnlinkOAuthResponse, UserInfo, YouTubeVideo
+  ApproveMintRequest,
+  ApproveMintResponse,
+  ApproveTokenSaleRequest,
+  ApproveTokenSaleResponse,
+  BuyTokenListingRequest,
+  BuyTokenListingResponse,
+  CancelTokenListingRequest,
+  CancelTokenListingResponse,
+  CreateTokenRequest,
+  CreateTokenResponse,
+  EditUserRequest,
+  EditUserResponse,
+  GetListingsForTokenRequest,
+  GetListingsForTokenResponse,
+  GetOAuthLinkRequest,
+  GetOAuthLinkResponse,
+  GetOwnUploadsRequest,
+  GetOwnUploadsResponse,
+  GetSignedTokenImageUploadUrlResponse,
+  GetTokenImageUploadUrlRequest,
+  GetTokenMarketSummaryRequest,
+  GetTokenMarketSummaryResponse,
+  GetTokenOwnershipResponse,
+  GetTokenOwnershipsResponse,
+  GetTokenRequest,
+  GetTokenResponse,
+  GetTokensCreatedResponse,
+  GetTokensOwnedResponse,
+  GetTokenTradesForUserRequest,
+  GetTokenTradesForUserResponse,
+  GetUserByIdRequest,
+  GetUserByUsernameRequest,
+  GetUserResponse,
+  IdentifyWithEmailRequest,
+  IdentifyWithEmailResponse,
+  IdentifyWithWalletRequest,
+  IdentifyWithWalletResponse,
+  InitResponse,
+  isUsername,
+  ListTokenForSaleRequest,
+  ListTokenForSaleResponse,
+  LoginResponse,
+  LoginWithEmailRequest,
+  LoginWithWalletRequest,
+  MintTokenRequest,
+  MintTokenResponse,
+  OAuthCheckLinkRequest,
+  OAuthCheckLinkResponse,
+  OAuthLinkRequest,
+  Protocol,
+  TokenData,
+  TokenDTO,
+  TokenOwnershipDTO,
+  UnlinkOAuthRequest,
+  UnlinkOAuthResponse,
+  UserInfo,
+  YouTubeVideo
 } from '@fanbase/shared';
 
 import HttpClient from './HttpClient';
@@ -42,6 +84,24 @@ export class ApiClient {
   }
 
   // Token Market
+
+  async getTokenTradesForUser(
+    count?: number,
+    page?: number
+  ): Promise<GetTokenTradesForUserResponse> {
+    return this.client.request<
+      GetTokenTradesForUserResponse,
+      GetTokenTradesForUserRequest
+    >({
+      method: 'GET',
+      endpoint: '/market/trades',
+      authentication: 'required',
+      params: {
+        count,
+        page
+      }
+    });
+  }
 
   async cancelTokenListing(listingId: string): Promise<string> {
     const response = await this.client.request<

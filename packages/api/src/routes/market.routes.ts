@@ -30,6 +30,14 @@ export default function init(
   );
 
   router.get(
+    '/trades',
+    pagination,
+    authMiddleware,
+    (req: Request, res: Response, next: NextFunction) =>
+      marketController.getTokenTradesForUser(req, res, next)
+  );
+
+  router.get(
     '/tokens/:tokenId/listings',
     pagination,
     (req: Request, res: Response, next: NextFunction) =>

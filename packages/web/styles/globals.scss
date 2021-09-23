@@ -38,12 +38,13 @@ body {
   margin: 0;
 }
 
-p, a {
+p,
+a {
   margin: 0;
   font-size: 11pt;
   opacity: 1;
   letter-spacing: 0.015rem;
-  word-break: break-all
+  word-break: normal;
 }
 
 a {
@@ -52,11 +53,13 @@ a {
   text-decoration: none;
 }
 
-p.small, a.small {
+p.small,
+a.small {
   font-size: 10pt;
 }
 
-p.smaller, a.smaller {
+p.smaller,
+a.smaller {
   font-size: 9pt;
 }
 
@@ -72,44 +75,61 @@ label {
 
 * {
   box-sizing: border-box;
-  font-family: Gilmer, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: Gilmer, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+    Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   font-size: 11pt;
   font-weight: 500;
 }
 
-h1, h2, h3, h4, h5 {
+h1,
+h2,
+h3,
+h4,
+h5 {
   margin: 0;
   padding: 0;
   letter-spacing: 0.025rem;
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   // font-family: Greycliff CF;
   font-weight: bold;
 }
 
-h4, h5 {
+h4,
+h5 {
   font-weight: 700;
 }
 
-h1 { font-size: xx-large; }
-h2 { font-size: x-large; }
-h3 { font-size: larger; }
-h4 { font-size: 13pt; }
-h5 { font-size: medium; }
+h1 {
+  font-size: xx-large;
+}
+h2 {
+  font-size: x-large;
+}
+h3 {
+  font-size: larger;
+}
+h4 {
+  font-size: 13pt;
+}
+h5 {
+  font-size: medium;
+}
 
-input[type=text],
-input[type=email],
-input[type=number],
+input[type='text'],
+input[type='email'],
+input[type='number'],
 textarea {
   outline: none;
   padding: 12px;
 }
 
-input[type=text],
-input[type=email],
-input[type=number],
+input[type='text'],
+input[type='email'],
+input[type='number'],
 textarea {
   width: 100%;
   border: 2px solid #ebebeb;
@@ -120,18 +140,20 @@ textarea {
   min-height: 100px;
 }
 
-input[type=text],
-input[type=email],
-input[type=number],
+input[type='text'],
+input[type='email'],
+input[type='number'],
 textarea {
   -webkit-appearance: none;
 }
 
-input:hover, textarea:hover {
+input:hover,
+textarea:hover {
   border: 2px solid #ebebeb;
 }
 
-input:focus, textarea:focus {
+input:focus,
+textarea:focus {
   border: 2px solid #ebebeb;
 }
 
@@ -148,10 +170,9 @@ input:focus, textarea:focus {
 .container {
   width: 100%;
   min-height: 100vh;
-  padding: 30px 0.75rem 80px;
+  padding: 30px 0.75rem 50px;
   position: absolute;
   top: 80px;
-  bottom: 0;
 }
 
 .full-width {
@@ -238,11 +259,11 @@ input:focus, textarea:focus {
 
 @media screen and (max-width: 499px) {
   .modal-appear-active {
-    animation: slide-up 500ms cubic-bezier(0.175, 0.885, 0.32, 1.0);
+    animation: slide-up 500ms cubic-bezier(0.175, 0.885, 0.32, 1);
   }
-  
+
   .modal-exit-active {
-    animation: slide-down 300ms cubic-bezier(0.175, 0.885, 0.32, 1.0);
+    animation: slide-down 300ms cubic-bezier(0.175, 0.885, 0.32, 1);
   }
 }
 
@@ -273,7 +294,7 @@ input:focus, textarea:focus {
 .modal-step-first-enter-active {
   opacity: 1;
   transition: opacity 300ms;
-  animation: slide-from-left 300ms cubic-bezier(0.175, 0.885, 0.32, 1.0);
+  animation: slide-from-left 300ms cubic-bezier(0.175, 0.885, 0.32, 1);
 }
 
 .modal-step-enter {
@@ -283,7 +304,7 @@ input:focus, textarea:focus {
 .modal-step-enter-active {
   opacity: 1;
   transition: opacity 300ms;
-  animation: slide-from-right 300ms cubic-bezier(0.175, 0.885, 0.32, 1.0);
+  animation: slide-from-right 300ms cubic-bezier(0.175, 0.885, 0.32, 1);
 }
 
 .modal-step-exit {

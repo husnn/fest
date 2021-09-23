@@ -12,12 +12,12 @@ export class TokenTradeDTO {
   buyerId: string;
   buyer: UserDTO;
 
+  isSeller?: boolean; // Current user
+
   tokenListingId: string;
   tokenListing: TokenListingDTO;
 
   quantity: number;
-
-  price: string;
 
   constructor(props?: Partial<TokenTradeDTO>) {
     this.id = props.id;
@@ -34,14 +34,14 @@ export class TokenTradeDTO {
       this.buyer = new UserDTO(props.buyer);
     }
 
+    this.isSeller = props.isSeller;
+
     this.tokenListingId = props.tokenListingId;
     if (props.tokenListing) {
       this.tokenListing = new TokenListingDTO(props.tokenListing);
     }
 
     this.quantity = props.quantity;
-
-    this.price = props.price;
   }
 }
 

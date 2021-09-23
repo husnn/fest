@@ -1,8 +1,14 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 
 import {
-    CurrentUserDTO, TokenDTO, TokenListingDTO, TokenOfferDTO, TokenOwnedDTO, TokenOwnershipDTO,
-    TokenTradeDTO, UserDTO
+  CurrentUserDTO,
+  TokenDTO,
+  TokenListingDTO,
+  TokenOfferDTO,
+  TokenOwnedDTO,
+  TokenOwnershipDTO,
+  TokenTradeDTO,
+  UserDTO
 } from '../dto';
 import { Protocol } from '../enums';
 import { ProtocolConfig } from './';
@@ -40,9 +46,9 @@ export interface PaginatedResponse<T = any> extends Response {
 }
 
 export interface PaginatedRequest extends Request {
-  params?: {
-    count?: number;
-    page?: number;
+  params: {
+    count: number;
+    page: number;
   };
 }
 
@@ -62,6 +68,15 @@ export interface InitResponse extends Response<InitConfig> {}
 /**
  * Token Market
  */
+
+export interface GetTokenTradesForUserResponse
+  extends PaginatedResponse<TokenTradeDTO> {}
+
+export interface GetTokenTradesForUserRequest extends PaginatedRequest {
+  method: 'GET';
+  endpoint: '/market/trades';
+  authentication: 'required';
+}
 
 export interface CancelTokenListingResponse extends Response {
   txHash: string;

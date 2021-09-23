@@ -1,4 +1,9 @@
-import { TokenListingRepository } from '@fanbase/core';
+import {
+  TokenListingRepository,
+  TokenTrade,
+  TokenTradeRepository,
+  WalletRepository
+} from '@fanbase/core';
 import { Protocol, TokenListingStatus } from '@fanbase/shared';
 
 import Job from './Job';
@@ -17,9 +22,13 @@ export default class TokenBuy extends Job<TokenBuyJob> {
     super(props);
   }
 
-  async execute(tokenListingRepository: TokenListingRepository): Promise<void> {
+  async execute(
+    listingRepository: TokenListingRepository,
+    walletRepository: WalletRepository,
+    tradeRepository: TokenTradeRepository
+  ): Promise<void> {
     try {
-      const listing = await tokenListingRepository.findByChainData(
+      const listing = await listingRepository.findByChainData(
         this.props.protocol,
         {
           contract: this.props.contract,
@@ -34,7 +43,22 @@ export default class TokenBuy extends Job<TokenBuyJob> {
 
       if (listing.available == 0) listing.status = TokenListingStatus.Sold;
 
-      await tokenListingRepository.update(listing);
+      await listingRepository.update(listing);
+
+      const buyerWallet = await walletRepository.findByAddress(
+        this.props.protocol,
+        this.props.buyer
+      );
+      if (!buyerWallet) return;
+
+      const trade = new TokenTrade({
+        sellerId: listing.sellerId,
+        buyerId: buyerWallet.ownerId,
+        tokenListingId: listing.id,
+        quantity: this.props.quantity
+      });
+
+      await tradeRepository.create(trade);
     } catch (err) {
       console.log(err);
     }

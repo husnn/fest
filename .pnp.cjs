@@ -4083,6 +4083,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/web3", "npm:1.2.2"],
             ["@types/yup", "npm:0.29.13"],
             ["axios", "npm:0.21.4"],
+            ["decimal.js", "npm:10.3.1"],
             ["formik", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:2.2.9"],
             ["fortmatic", "npm:2.2.1"],
             ["moment", "npm:2.29.1"],
