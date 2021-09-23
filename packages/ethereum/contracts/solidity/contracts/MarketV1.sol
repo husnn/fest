@@ -86,6 +86,12 @@ contract MarketV1 is AccessControl, Pausable {
     uint tokenId,
     uint returned
   );
+
+  event RoyaltyPayment(
+    address beneficiary,
+    address currency,
+    uint amount
+  );
   
   bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
 
@@ -148,6 +154,7 @@ contract MarketV1 is AccessControl, Pausable {
     }
 
     uint sellerNet = payAfterFees(
+      trade.seller,
       subtotal,
       sellerFee,
       buyerFee,
@@ -156,7 +163,7 @@ contract MarketV1 is AccessControl, Pausable {
       trade.currency
     );
 
-    pay(trade.currency, trade.seller, sellerNet);
+    pay(trade.seller, trade.currency, sellerNet);
 
     _wallet.give(
       trade.token,
@@ -172,7 +179,7 @@ contract MarketV1 is AccessControl, Pausable {
     );
   }
 
-  function pay(address currency, address account, uint amount) internal {
+  function pay(address account, address currency, uint amount) internal {
     _earnings[account][currency] += amount;
   }
 
@@ -183,6 +190,7 @@ contract MarketV1 is AccessControl, Pausable {
   }
 
   function payAfterFees(
+    address seller,
     uint subtotal,
     uint sellerFee,
     uint buyerFee,
@@ -195,7 +203,7 @@ contract MarketV1 is AccessControl, Pausable {
       sellerPay = subtotal;
     
     // Pay market fees
-    pay(currency, _feeBeneficiary, sellerFee + buyerFee);
+    pay(_feeBeneficiary, currency, sellerFee + buyerFee);
 
     if (!IERC165(token).supportsInterface(_INTERFACE_ID_FEES))
       return sellerPay;
@@ -208,6 +216,7 @@ contract MarketV1 is AccessControl, Pausable {
     uint[] memory feeBps = tokenWithFees.getFeeBps(tokenId);
 
     for (uint i = 0; i < feeBps.length; i++) {
+      if (recipients[i] == seller) continue;
       if (sellerPay == 0) break;
 
       uint fee = (subtotal * feeBps[i]) / hundredPct;
@@ -219,7 +228,9 @@ contract MarketV1 is AccessControl, Pausable {
         sellerPay -= fee;
       }
 
-      pay(currency, recipients[i], fee);
+      pay(recipients[i], currency, fee);
+
+      emit RoyaltyPayment(recipients[i], currency, fee);
     }
   }
 

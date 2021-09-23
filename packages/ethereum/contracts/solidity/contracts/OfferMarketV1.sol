@@ -95,6 +95,7 @@ contract OfferMarketV1 is MarketV1 {
     );
     
     uint sellerNet = payAfterFees(
+      offer.seller,
       offer.price,
       sellerFee,
       buyerFee,

@@ -1,10 +1,10 @@
 require('dotenv').config();
 
-const Token = artifacts.require("TokenV1");
-const FAN = artifacts.require("FAN");
+const Token = artifacts.require('TokenV1');
+const FAN = artifacts.require('FAN');
 
-const MarketWallet = artifacts.require("MarketWalletV1");
-const OfferMarket = artifacts.require("OfferMarketV1");
+const MarketWallet = artifacts.require('MarketWalletV1');
+const OfferMarket = artifacts.require('OfferMarketV1');
 
 const sigUtil = require('eth-sig-util');
 const { expectEvent, expectRevert } = require('@openzeppelin/test-helpers');
@@ -34,12 +34,13 @@ contract('MarketV1', async (accounts) => {
       const hash = await TokenContract.getMintHash(
         accounts[3],
         supply,
+        '',
         expiry,
         salt
       );
-  
+
       const privateKey = Buffer.from(process.env.DEPLOYER_PRIVATE_KEY, 'hex');
-  
+
       signature = sigUtil.personalSign(privateKey, { data: hash });
     });
 
@@ -47,9 +48,17 @@ contract('MarketV1', async (accounts) => {
 
     it('execute mint from a non-minter, non-creator account', async () => {
       const receipt = await TokenContract.mint(
-        accounts[3], supply, [], "", expiry, salt, signature, { from: accounts[2] }
+        accounts[3],
+        supply,
+        '',
+        [],
+        '',
+        expiry,
+        salt,
+        signature,
+        { from: accounts[2] }
       );
-  
+
       expectEvent(receipt, 'Minted');
 
       tokenId = receipt.logs[1].args.id.toString();
@@ -59,7 +68,7 @@ contract('MarketV1', async (accounts) => {
     const token = TokenContract.address;
     const quantity = 1;
     const currency = FANContract.address;
-    const price = 10**5;
+    const price = 10 ** 5;
 
     expiry = Math.floor(Date.now() / 1000) + 30;
     salt = 65465;
@@ -75,14 +84,16 @@ contract('MarketV1', async (accounts) => {
         expiry,
         salt
       );
-      
+
       const privateKey = Buffer.from(process.env.DEPLOYER_PRIVATE_KEY, 'hex');
-  
+
       signature = sigUtil.personalSign(privateKey, { data: hash });
     });
 
     it('allow wallet to transfer token to itself', async () => {
-      await TokenContract.setApprovalForAll(WalletContract.address, true, { from: seller });
+      await TokenContract.setApprovalForAll(WalletContract.address, true, {
+        from: seller
+      });
     });
 
     const list = () =>
@@ -100,19 +111,19 @@ contract('MarketV1', async (accounts) => {
           from: accounts[2]
         }
       );
-    
+
     it('prevent listing unapproved token', async () => {
       await MarketContract.setTokenApproval(Token.address, false);
-      await expectRevert(list(), "Token contract is not allowed.")
+      await expectRevert(list(), 'Token contract is not allowed.');
     });
 
     it('approve token', async () => {
       await MarketContract.setTokenApproval(Token.address, true);
     });
-    
+
     it('prevent listing with unapproved currency', async () => {
       await MarketContract.setCurrencyApproval(FAN.address, false);
-      await expectRevert(list(), "Currency is not allowed.")
+      await expectRevert(list(), 'Currency is not allowed.');
     });
 
     it('approve currency', async () => {
@@ -137,9 +148,16 @@ contract('MarketV1', async (accounts) => {
 
       tradeId = receipt.logs[0].args.tradeId.toString();
 
-      const newTokenQuantityOwned = await TokenContract.balanceOf(seller, tokenId);
+      const newTokenQuantityOwned = await TokenContract.balanceOf(
+        seller,
+        tokenId
+      );
 
-      assert.equal(newTokenQuantityOwned, supply - quantity, 'Wrong seller token balance.');
+      assert.equal(
+        newTokenQuantityOwned,
+        supply - quantity,
+        'Wrong seller token balance.'
+      );
     });
 
     it('prevent buying excessive amount', async () => {
@@ -156,22 +174,28 @@ contract('MarketV1', async (accounts) => {
       );
     });
 
-    let buyerFee = price / 100 * 5;
-    let sellerFee = price / 100 * 5;
-    
+    let buyerFee = (price / 100) * 5;
+    let sellerFee = (price / 100) * 5;
+
     it('execute trade', async () => {
       const buyerBalanceInitial = price + 25000;
 
-      await FANContract.transfer(buyer, buyerBalanceInitial, { from: accounts[0] });
+      await FANContract.transfer(buyer, buyerBalanceInitial, {
+        from: accounts[0]
+      });
 
-      await FANContract.approve(MarketContract.address, buyerBalanceInitial, { from: buyer });
+      await FANContract.approve(MarketContract.address, buyerBalanceInitial, {
+        from: buyer
+      });
 
-      const receipt = await MarketContract.buy(tradeId, quantity, { from: buyer });
+      const receipt = await MarketContract.buy(tradeId, quantity, {
+        from: buyer
+      });
       expectEvent(receipt, 'Buy');
 
       const buyerBalance = await FANContract.balanceOf(buyer);
       assert.equal(buyerBalance, buyerBalanceInitial - price - buyerFee);
-      
+
       const sellerBalance = await MarketContract.getBalance(currency, seller);
       assert.equal(sellerBalance, price - sellerFee);
     });
@@ -184,12 +208,20 @@ contract('MarketV1', async (accounts) => {
     });
 
     it('withdraw market fees to beneficiary', async () => {
-      let marketBeneficiaryBalance = await MarketContract.getBalance(currency, accounts[0]);
+      let marketBeneficiaryBalance = await MarketContract.getBalance(
+        currency,
+        accounts[0]
+      );
       assert.equal(marketBeneficiaryBalance, buyerFee + sellerFee);
 
-      await MarketContract.withdraw(currency, marketBeneficiaryBalance, { from: accounts[0] });
+      await MarketContract.withdraw(currency, marketBeneficiaryBalance, {
+        from: accounts[0]
+      });
 
-      marketBeneficiaryBalance = await MarketContract.getBalance(currency, accounts[0]);
+      marketBeneficiaryBalance = await MarketContract.getBalance(
+        currency,
+        accounts[0]
+      );
       assert.equal(marketBeneficiaryBalance, 0);
     });
 
@@ -217,9 +249,9 @@ contract('MarketV1', async (accounts) => {
           expiry,
           salt
         );
-        
+
         const privateKey = Buffer.from(process.env.DEPLOYER_PRIVATE_KEY, 'hex');
-    
+
         signature = sigUtil.personalSign(privateKey, { data: hash });
       });
 
@@ -240,28 +272,39 @@ contract('MarketV1', async (accounts) => {
         );
 
         expectEvent(receipt, 'ListForSale');
-  
-        tradeId = receipt.logs[0].args.tradeId.toString();
-  
-        const newTokenQuantityOwned = await TokenContract.balanceOf(seller, tokenId);
-  
-        assert.equal(newTokenQuantityOwned, supply - quantity - quantityForSale, 'Wrong seller token balance.');
-      }); 
 
-      it('prevent non-seller, non-admin from cancelling trade', async () => {  
-        await expectRevert(
-          MarketContract.cancel(tradeId, { from: accounts[5] }),
-          "Only seller or admin can close the trade."
+        tradeId = receipt.logs[0].args.tradeId.toString();
+
+        const newTokenQuantityOwned = await TokenContract.balanceOf(
+          seller,
+          tokenId
+        );
+
+        assert.equal(
+          newTokenQuantityOwned,
+          supply - quantity - quantityForSale,
+          'Wrong seller token balance.'
         );
       });
 
-      it('cancel trade and return tokens', async () => {  
+      it('prevent non-seller, non-admin from cancelling trade', async () => {
+        await expectRevert(
+          MarketContract.cancel(tradeId, { from: accounts[5] }),
+          'Only seller or admin can close the trade.'
+        );
+      });
+
+      it('cancel trade and return tokens', async () => {
         const receipt = await MarketContract.cancel(tradeId, { from: seller });
         expectEvent(receipt, 'CancelListing');
 
         const tokensOwned = await TokenContract.balanceOf(seller, tokenId);
 
-        assert.equal(tokensOwned, supply - quantity, 'Wrong seller token balance.');
+        assert.equal(
+          tokensOwned,
+          supply - quantity,
+          'Wrong seller token balance.'
+        );
       });
     });
   });
