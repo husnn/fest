@@ -39,7 +39,7 @@ export const AuthProvider: React.FC = ({
 
   useEffect(() => {
     if (redirect && !isAuthenticated) {
-      router.push(`/login`);
+      router.push(`/login?redirect=${router.route}`);
     }
   }, [isAuthenticated, redirect]);
 

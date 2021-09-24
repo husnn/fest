@@ -6,19 +6,30 @@ import React, { useState } from 'react';
 import { CreateTokenSchema, TokenType, YouTubeVideo } from '@fanbase/shared';
 
 import MediaUploader from '../components/MediaUploader';
-import YouTubeVideoList, { YouTubeVideoRow } from '../components/YouTubeVideoList';
+import YouTubeVideoList, {
+  YouTubeVideoRow
+} from '../components/YouTubeVideoList';
 import ApiClient from '../modules/api/ApiClient';
 import { useHeader } from '../modules/navigation';
 import styles from '../styles/CreateToken.module.scss';
 import {
-    AttributesInput, Button, Checkbox, FormInput, RadioGroup, TextArea, TextInput
+  AttributesInput,
+  Button,
+  Checkbox,
+  FormInput,
+  RadioGroup,
+  TextArea,
+  TextInput
 } from '../ui';
 import Modal from '../ui/Modal';
 import { RadioOption } from '../ui/RadioGroup';
 import { getTokenUrl } from '../utils';
+import useAuthentication from '../modules/auth/useAuthentication';
 
 export default function CreateTokenPage() {
-  useHeader(['home', 'profile']);
+  useHeader();
+
+  useAuthentication(true);
 
   const router = useRouter();
 

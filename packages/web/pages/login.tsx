@@ -26,9 +26,13 @@ export default function Login() {
 
   const [loginWithEmail, setLoginWithEmail] = useState(false);
 
+  const { redirect } = router.query;
+
   useEffect(() => {
     if (isAuthenticated) {
-      router.push(getProfileUrl(currentUser));
+      router.push(
+        (redirect && redirect.toString()) || getProfileUrl(currentUser)
+      );
     }
   }, [isAuthenticated]);
 

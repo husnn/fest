@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { LinkType } from '../../components/Header';
 import { Button } from '../../ui';
@@ -10,6 +10,8 @@ export const useHeader = (toShow?: string[], toHide?: string[]) => {
   const context = React.useContext(HeaderContext);
 
   const { isAuthenticated, currentUser, clearAuth } = useAuthentication();
+
+  const [redirectPath, setRedirectPath] = useState<string>();
 
   const links: LinkType[] = [
     // {
@@ -57,7 +59,7 @@ export const useHeader = (toShow?: string[], toHide?: string[]) => {
       id: 'login',
       title: 'Login',
       visible: !isAuthenticated,
-      route: '/login',
+      route: `/login${redirectPath ? `?redirect=${redirectPath}` : ''}`,
       render: () => (
         <Button color="secondary" size="small">
           Login
@@ -81,6 +83,11 @@ export const useHeader = (toShow?: string[], toHide?: string[]) => {
     const linksToShow = filteredLinks();
     context.setLinks(linksToShow);
   }, [isAuthenticated, currentUser]);
+
+  useEffect(() => {
+    const currentPath = window.location.pathname;
+    setRedirectPath(currentPath !== '/' ? currentPath : null);
+  }, []);
 
   return context;
 };

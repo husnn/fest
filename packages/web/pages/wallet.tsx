@@ -13,6 +13,7 @@ import { useWeb3 } from '../modules/web3';
 import { CurrencyBalance } from '../types';
 import { Button } from '../ui';
 import { getNativeCurrency } from '../utils';
+import { useHeader } from '../modules/navigation';
 
 const WalletInfo = styled.div`
   margin: 20px 0;
@@ -23,6 +24,8 @@ const WalletInfo = styled.div`
 `;
 
 export const WalletPage = () => {
+  useHeader();
+
   const { currentUser } = useAuthentication(true);
 
   const web3 = useWeb3();

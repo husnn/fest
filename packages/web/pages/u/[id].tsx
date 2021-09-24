@@ -8,7 +8,10 @@ import { TokenDTO, TokenOwnedDTO, UserDTO } from '@fanbase/shared';
 import TokensCreated from '../../components/TokensCreated';
 import TokensOwned from '../../components/TokensOwned';
 import ApiClient from '../../modules/api/ApiClient';
-import { getCurrentUser, saveCurrentUser } from '../../modules/auth/authStorage';
+import {
+  getCurrentUser,
+  saveCurrentUser
+} from '../../modules/auth/authStorage';
 import useAuthentication from '../../modules/auth/useAuthentication';
 import { useHeader } from '../../modules/navigation';
 import useTabs, { Tab, Tabs } from '../../modules/navigation/useTabs';
@@ -16,10 +19,10 @@ import styles from '../../styles/Profile.module.scss';
 import { Button, Link } from '../../ui';
 import ButtonGroup from '../../ui/ButtonGroup';
 import ResponsiveTabs from '../../ui/ResponsiveTabs';
-import { getDisplayName, getProfileUrl, getTokenOwnershipUrl, getTokenUrl } from '../../utils';
+import { getDisplayName, getTokenOwnershipUrl, getTokenUrl } from '../../utils';
 
 export default function ProfilePage() {
-  useHeader(['create-token', 'market', 'wallet', 'profile']);
+  useHeader();
 
   const router = useRouter();
 
