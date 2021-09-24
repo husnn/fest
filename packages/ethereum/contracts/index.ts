@@ -33,7 +33,7 @@ const get = (name: keyof typeof interfaces, address?: string) => {
   if (!instance) {
     address = address || getAddress(name as string, network);
 
-    console.log(`${name} contract at ${address}`);
+    // console.log(`${name} contract at ${address}`);
 
     instance = new web3Instance.eth.Contract(
       interfaces[name].abi as any,

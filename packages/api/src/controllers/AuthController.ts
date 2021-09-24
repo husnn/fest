@@ -1,11 +1,20 @@
 import { NextFunction, Request, Response } from 'express';
 
 import {
-    EthereumService, IdentifyWithEmail, IdentifyWithWallet, LoginError, LoginWithEmail,
-    LoginWithWallet, MailService, UserRepository, WalletRepository
+  EthereumService,
+  IdentifyWithEmail,
+  IdentifyWithWallet,
+  LoginError,
+  LoginWithEmail,
+  LoginWithWallet,
+  MailService,
+  UserRepository,
+  WalletRepository
 } from '@fanbase/core';
 import {
-    IdentifyWithEmailResponse, IdentifyWithWalletResponse, LoginResponse
+  IdentifyWithEmailResponse,
+  IdentifyWithWalletResponse,
+  LoginResponse
 } from '@fanbase/shared';
 
 import { HttpError, HttpResponse, ValidationError } from '../http';
@@ -35,10 +44,7 @@ class AuthController {
       walletRepository
     );
 
-    this.loginWithEmailUseCase = new LoginWithEmail(
-      userRepository,
-      walletRepository
-    );
+    this.loginWithEmailUseCase = new LoginWithEmail(userRepository);
 
     this.loginWithWalletUseCase = new LoginWithWallet(
       userRepository,
@@ -49,17 +55,19 @@ class AuthController {
 
   async loginWithEmail(req: Request, res: Response, next: NextFunction) {
     try {
-      const { email, code } = req.body;
+      const { email, password, code } = req.body;
 
-      const result = await this.loginWithEmailUseCase.exec({ email, code });
+      const result = await this.loginWithEmailUseCase.exec({
+        email,
+        password,
+        code
+      });
 
       if (!result.success) {
         switch (result.error) {
           case LoginError.CODE_EXPIRED:
           case LoginError.CODE_INCORRECT:
             throw new ValidationError('Incorrect or expired code.');
-          case LoginError.USER_NOT_FOUND:
-            throw new ValidationError('Could not find user.');
           default:
             throw new HttpError('Could not login.');
         }
@@ -99,11 +107,11 @@ class AuthController {
 
   async identifyWithEmail(req: Request, res: Response, next: NextFunction) {
     try {
-      const { email } = req.body;
+      const { email, password } = req.body;
 
       if (!email) throw new ValidationError('Missing email address.');
 
-      await this.identifyWithEmailUseCase.exec({ email });
+      await this.identifyWithEmailUseCase.exec({ email, password });
 
       return new HttpResponse<IdentifyWithEmailResponse>(res);
     } catch (err) {

@@ -497,13 +497,18 @@ export class ApiClient {
 
   // Auth
 
-  async loginWithEmail(email: string, code: string): Promise<LoginResponse> {
+  async loginWithEmail(
+    email: string,
+    password: string,
+    code: string
+  ): Promise<LoginResponse> {
     return this.client.request<LoginResponse, LoginWithEmailRequest>({
       method: 'POST',
       endpoint: '/auth/login/email',
       authentication: 'none',
       body: {
         email,
+        password,
         code
       }
     });
@@ -548,7 +553,7 @@ export class ApiClient {
     return { code, message };
   }
 
-  async identifyWithEmail(email: string): Promise<void> {
+  async identifyWithEmail(email: string, password: string): Promise<void> {
     await this.client.request<
       IdentifyWithEmailResponse,
       IdentifyWithEmailRequest
@@ -556,7 +561,7 @@ export class ApiClient {
       method: 'POST',
       endpoint: '/auth/identify/email',
       authentication: 'none',
-      body: { email }
+      body: { email, password }
     });
   }
 }

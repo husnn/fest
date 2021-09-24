@@ -15,6 +15,12 @@ const UserSchema = new EntitySchema<User>({
       unique: true,
       nullable: true
     },
+    password: {
+      type: 'text',
+      name: 'password',
+      nullable: true,
+      select: false
+    },
     username: {
       type: 'text',
       name: 'username',

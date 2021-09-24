@@ -1,4 +1,4 @@
-import React, { createRef, useEffect, useRef, useState } from 'react';
+import React, { createRef, useRef, useState } from 'react';
 
 import styled from '@emotion/styled';
 
@@ -6,7 +6,7 @@ import { colors, corners } from '../styles/constants';
 
 type DigitInputProps = {
   length?: number;
-  onDelete: () => void;
+  onDelete?: () => void;
   onEnter: (code: string) => void;
 };
 
@@ -64,7 +64,7 @@ const DigitInput: React.FC<DigitInputProps> = ({
     } else {
       newCode = code.slice(0, -1);
       focusIndex -= 1;
-      onDelete();
+      onDelete ? onDelete() : null;
     }
 
     setCode(newCode);

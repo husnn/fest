@@ -7,7 +7,7 @@ export const useAuthentication = (redirect = false) => {
 
   useEffect(() => {
     context.setRedirect(redirect);
-  }, []);
+  });
 
   return context;
 };

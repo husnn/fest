@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 
 import { getExpiryDate, randomInteger } from '@fanbase/shared';
 
@@ -9,6 +10,7 @@ export class User {
   readonly id: string;
 
   email: string;
+  password: string;
   phone: string;
   emailVerified: boolean;
   phoneVerified: boolean;
@@ -25,7 +27,19 @@ export class User {
 
   constructor(data?: Partial<User>) {
     Object.assign(this, data);
+
     this.loginCode = User.newLoginCode();
+  }
+
+  async hashPassword() {
+    this.password = await bcrypt.hash(
+      this.password,
+      10 || process.env.PASSWORD_SALT_ROUNDS
+    );
+  }
+
+  static async verifyPassword(provided: string, actual: string) {
+    return bcrypt.compare(provided, actual);
   }
 
   static fromJwt(token: string) {

@@ -354,6 +354,7 @@ export interface LoginResponse extends Response {
 export interface LoginWithEmailRequest extends Request {
   body: {
     email: string;
+    password: string;
     code: string;
   };
 }
@@ -375,6 +376,7 @@ export interface IdentifyWithEmailResponse extends Response {}
 export interface IdentifyWithEmailRequest extends Request {
   body: {
     email: string;
+    password: string;
   };
 }
 

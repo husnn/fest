@@ -10,6 +10,7 @@ import { LoginError } from './errors';
 
 export interface LoginWithEmailInput {
   email: string;
+  password: string;
   code: string;
 }
 
@@ -23,22 +24,23 @@ export class LoginWithEmail extends UseCase<
   LoginWithEmailOutput
 > {
   private userRepository: UserRepository;
-  private walletRepository: WalletRepository;
 
-  constructor(
-    userRepository: UserRepository,
-    walletRepository: WalletRepository
-  ) {
+  constructor(userRepository: UserRepository) {
     super();
     this.userRepository = userRepository;
-    this.walletRepository = walletRepository;
   }
 
   async exec(data: LoginWithEmailInput): Promise<Result<LoginWithEmailOutput>> {
-    const user = await this.userRepository.findByEmail(
-      data.email,
-      'user.loginCode'
+    const user = await this.userRepository.findByEmail(data.email, [
+      'password',
+      'loginCode'
+    ]);
+
+    const isPasswordCorrect = await User.verifyPassword(
+      data.password,
+      user.password
     );
+    if (!isPasswordCorrect) return Result.fail(LoginError.PASSWORD_INCORRECT);
 
     const { value: code, expiry } = user.loginCode;
 
@@ -52,9 +54,6 @@ export class LoginWithEmail extends UseCase<
 
     user.loginCode.expiry = new Date();
     this.userRepository.update(user);
-
-    // user.wallet = await this.walletRepository.get(user.walletId);
-    // console.log(user.wallet);
 
     return Result.ok({
       token: User.generateJwt(user),

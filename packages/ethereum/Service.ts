@@ -11,8 +11,6 @@ import {
   EthereumService as IEthereumService,
   generateWalletId,
   Result,
-  Token,
-  TokenListing,
   TxResult,
   Wallet
 } from '@fanbase/core';

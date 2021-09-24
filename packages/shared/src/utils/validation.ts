@@ -13,3 +13,6 @@ export const isEmailAddress = (value: string) =>
   EMAIL_REGEX.test(String(value).toLowerCase());
 
 export const isUsername = (value: string) => USERNAME_REGEX.test(value);
+
+export const isValidPassword = (value: string) =>
+  value && value.length >= 8 && value.length <= 16;

@@ -121,7 +121,7 @@ export default function MarketPage() {
     trades: TokenTradeDTO[];
   }>();
 
-  useHeader(['wallet', 'profile']);
+  useHeader();
 
   const router = useRouter();
 

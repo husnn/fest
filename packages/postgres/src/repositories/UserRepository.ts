@@ -19,26 +19,30 @@ export class UserRepository
       .add(token);
   }
 
-  get(
-    id: string,
-    relations?: string[],
-    select?: 'user.loginCode'
-  ): Promise<User> {
-    return this.db
+  get(id: string, select?: Array<keyof User>): Promise<User> {
+    const query = this.db
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.wallet', 'wallet')
-      .where('user.id = :id', { id })
-      .addSelect(select)
-      .getOne();
+      .where('user.id = :id', { id });
+
+    if (select) {
+      query.addSelect(select.map((property) => `user.${property}`));
+    }
+
+    return query.getOne();
   }
 
-  findByEmail(email: string, select?: 'user.loginCode'): Promise<User> {
-    return this.db
+  findByEmail(email: string, select?: Array<keyof User>): Promise<User> {
+    const query = this.db
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.wallet', 'wallet')
-      .where('LOWER(user.email) = LOWER(:email)', { email })
-      .addSelect(select)
-      .getOne();
+      .where('LOWER(user.email) = LOWER(:email)', { email });
+
+    if (select) {
+      query.addSelect(select.map((property) => `user.${property}`));
+    }
+
+    return query.getOne();
   }
 
   findByUsername(username: string): Promise<User> {

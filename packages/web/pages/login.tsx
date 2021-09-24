@@ -19,7 +19,7 @@ export default function Login() {
   useHeader([]);
 
   const router = useRouter();
-  const { wallet, requestSignature } = useWeb3();
+  const { requestSignature, activate } = useWeb3();
 
   const { isAuthenticated, setAuthenticated, currentUser, setCurrentUser } =
     useAuthentication();
@@ -43,16 +43,17 @@ export default function Login() {
   };
 
   const loginWithWallet = async () => {
+    const wallet = await activate();
     if (!wallet) return;
 
     try {
       const identificationData = await ApiClient.instance?.identifyWithWallet(
-        wallet.address
+        wallet
       );
 
       const signature = await requestSignature(
         identificationData.message,
-        wallet.address
+        wallet
       );
 
       const { token, user } = await ApiClient.instance?.loginWithWallet(
@@ -63,7 +64,7 @@ export default function Login() {
 
       onLogin(token, user);
     } catch (err) {
-      console.log(`Could not login. ${err}`);
+      console.log(`Could not login. ${err.message}`);
     }
   };
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import styled from '@emotion/styled';
 
-import Modal from '../ui/Modal';
+import Modal, { ModalProps } from '../ui/Modal';
 
 interface Step {
   title?: string;
@@ -13,6 +13,7 @@ interface Step {
 
 export interface ModalWithStepsProps {
   stepIndex: number;
+  setStepIndex: (index: number) => void;
   step: Step;
   setSteps: (steps: Step[]) => void;
   goForward?: () => void;
@@ -32,7 +33,7 @@ const ModalError = styled.p`
 
 const ModalWithSteps =
   (Component: React.ComponentType<ModalWithStepsProps>) =>
-  ({ showing, setShowing, ...props }) => {
+  ({ showing, setShowing, ...props }: any) => {
     const [steps, setSteps] = useState<Step[]>([]);
 
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
@@ -44,6 +45,11 @@ const ModalWithSteps =
     const [error, setError] = useState('');
 
     const [closing, setClosing] = useState(false);
+
+    const switchToStep = (index: number) => {
+      setCurrentStepIndex(index);
+      setCurrentStep(steps[index]);
+    };
 
     const goForward = () => {
       if (currentStepIndex < steps.length - 1) {
@@ -61,6 +67,7 @@ const ModalWithSteps =
       }
 
       setError(null);
+      setOkEnabled(true);
     };
 
     return (
@@ -85,6 +92,7 @@ const ModalWithSteps =
       >
         <Component
           stepIndex={currentStepIndex}
+          setStepIndex={switchToStep}
           step={steps[currentStepIndex]}
           setSteps={(steps: Step[]) => {
             setCurrentStep(steps[currentStepIndex]);
@@ -93,6 +101,7 @@ const ModalWithSteps =
           setOkEnabled={setOkEnabled}
           onOkPressed={onOkPressed}
           pressOk={() => setOnOkPressed(!onOkPressed)}
+          goBack={() => goBack()}
           goForward={() => goForward()}
           close={() => setShowing(false)}
           setError={setError}

@@ -5,13 +5,14 @@ import { EthereumTx } from '@fanbase/shared';
 
 import { Web3Context } from './Web3Provider';
 
-export const useWeb3 = () => {
+export const useWeb3 = (autoActivate = false) => {
   const context = React.useContext(Web3Context);
 
   const [ethereum, setEthereum] = useState<EthereumService>();
 
   useEffect(() => {
     if (!context.web3) return;
+    if (autoActivate) context.activate();
     EthereumService.getInstance(context.web3).then((instance) =>
       setEthereum(instance)
     );

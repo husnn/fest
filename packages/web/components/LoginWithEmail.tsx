@@ -1,6 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { CurrentUserDTO, isEmailAddress } from '@fanbase/shared';
+import {
+  CurrentUserDTO,
+  isEmailAddress,
+  isValidPassword
+} from '@fanbase/shared';
 
 import ApiClient from '../modules/api/ApiClient';
 import styles from '../styles/Login.module.scss';
@@ -15,8 +19,10 @@ type LoginWithEmailProps = {
 const LoginWithEmail: React.FC<LoginWithEmailProps & ModalWithStepsProps> = ({
   onLogin,
   stepIndex,
+  setStepIndex,
   setSteps,
   setOkEnabled,
+  goBack,
   goForward,
   onOkPressed,
   pressOk,
@@ -28,7 +34,13 @@ const LoginWithEmail: React.FC<LoginWithEmailProps & ModalWithStepsProps> = ({
       {
         title: 'Enter your email address',
         description: 'Log in to your existing account or create a new one.',
-        ok: 'Send code'
+        ok: 'Next'
+      },
+      {
+        title: 'Enter password',
+        description: 'Log in to your existing account or create a new one.',
+        ok: 'Send code',
+        backable: true
       },
       {
         title: 'Enter login code',
@@ -40,34 +52,38 @@ const LoginWithEmail: React.FC<LoginWithEmailProps & ModalWithStepsProps> = ({
   }, []);
 
   const [email, setEmail] = useState('');
-  const [code, setCode] = useState('');
+  const [password, setPassword] = useState('');
 
   const login = async (email: string, code: string) => {
     setError(null);
     setOkEnabled(false);
+
     try {
       const { token, user } = await ApiClient.instance?.loginWithEmail(
         email,
+        password,
         code
       );
 
       onLogin(token, user);
       close();
     } catch (err) {
+      setStepIndex(0);
       setOkEnabled(true);
-      setError('Incorrect or expired code.');
+      setError('Incorrect password or code. Try again.');
     }
   };
 
-  const sendCode = async () => {
+  const identify = async () => {
     setOkEnabled(false);
+
     try {
-      await ApiClient.getInstance()?.identifyWithEmail(email);
+      await ApiClient.getInstance()?.identifyWithEmail(email, password);
       goForward();
     } catch (err) {
+      goBack();
       console.log(err);
     }
-    setOkEnabled(true);
   };
 
   const isInitialMount = useRef(true);
@@ -79,12 +95,13 @@ const LoginWithEmail: React.FC<LoginWithEmailProps & ModalWithStepsProps> = ({
     }
 
     if (stepIndex == 0) {
-      sendCode();
-      goForward ? goForward() : null;
+      goForward();
+      setPassword('');
+      setOkEnabled(false);
     }
 
     if (stepIndex == 1) {
-      login(email, code);
+      identify();
     }
   }, [onOkPressed]);
 
@@ -103,8 +120,11 @@ const LoginWithEmail: React.FC<LoginWithEmailProps & ModalWithStepsProps> = ({
               placeholder="vader@deathstar.space"
               value={email}
               onChange={(e) => {
+                setError(null);
+
                 const text = e.target.value;
                 setEmail(text);
+
                 setOkEnabled(!!isEmailAddress(text));
               }}
             />
@@ -114,21 +134,28 @@ const LoginWithEmail: React.FC<LoginWithEmailProps & ModalWithStepsProps> = ({
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              login(email, code);
+              pressOk();
             }}
           >
-            <DigitInput
-              length={6}
-              onDelete={() => {
-                setCode('');
-                setError(null);
-              }}
-              onEnter={(code: string) => {
-                login(email, code);
-                setCode(code);
+            <TextInput
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => {
+                const text = e.target.value;
+                setPassword(text);
+                setOkEnabled(!!isValidPassword(text));
               }}
             />
           </form>
+        )}
+        {stepIndex == 2 && (
+          <DigitInput
+            length={6}
+            onEnter={(code: string) => {
+              login(email, code);
+            }}
+          />
         )}
       </div>
     </div>

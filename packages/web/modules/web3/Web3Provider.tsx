@@ -16,6 +16,8 @@ type Wallet = {
 };
 
 export type Web3ContextProps = {
+  init: () => Promise<void>;
+  activate: () => Promise<string>;
   web3: Web3;
   config: ProtocolConfig;
   wallet: Wallet;
@@ -28,8 +30,6 @@ export const Web3Context = React.createContext<Web3ContextProps>(null);
 
 export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
   const { clearAuth } = useAuthentication();
-
-  const initialMount = useRef(true);
 
   const [wallet, setWallet] = useState<{
     type: WalletType;
@@ -47,13 +47,17 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
 
   const [networkId, setNetworkId] = useState<number>();
 
+  const [isMetaMask, setIsMetaMask] = useState(false);
+
+  const initialMount = useRef(true);
+
   useEffect(() => {
     if (!initialMount.current) return; // Skip if not browser or initial load
 
     initWeb3();
 
     initialMount.current = false;
-  });
+  }, []);
 
   useEffect(() => {
     if (!chainId || !networkId || !config.chainId || !config.networkId) return;
@@ -71,7 +75,6 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
     if (!wallet) return;
 
     const currentUser = getCurrentUser();
-
     if (!currentUser) return;
 
     if (currentUser.wallet.address !== wallet.address) {
@@ -101,6 +104,8 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
         // MetaMask available
         provider = window.ethereum;
 
+        setIsMetaMask(true);
+
         provider.on('accountsChanged', (accounts: string[]) => {
           if (accounts.length > 0)
             setWallet({
@@ -120,22 +125,6 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
 
         provider = fm.getProvider();
       }
-
-      let accounts: string[];
-
-      try {
-        accounts = await provider.request({ method: 'eth_requestAccounts' });
-      } catch (err) {
-        console.log(`Could not connect to MetaMask. ${err}`);
-        return;
-      }
-
-      const selectedAccount = accounts[0];
-
-      setWallet({
-        type: WalletType.EXTERNAL,
-        address: selectedAccount
-      });
     } else {
       // User has custodial wallet
       provider = new Web3.providers.HttpProvider(rpcUrl);
@@ -159,8 +148,42 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
     setWeb3(web3);
   };
 
-  const requestSignature = (msg: string) =>
-    web3.eth.personal.sign(msg, wallet.address, '');
+  const activate = async (): Promise<string> => {
+    const currentUser = getCurrentUser();
+
+    if (
+      !web3 ||
+      (currentUser && currentUser?.wallet.type == WalletType.INTERNAL)
+    )
+      return;
+
+    let accounts: string[];
+
+    try {
+      if (isMetaMask) {
+        accounts = await web3.givenProvider.request({
+          method: 'eth_requestAccounts'
+        });
+      } else {
+        accounts = await web3.eth.getAccounts();
+      }
+    } catch (err) {
+      console.log(`Could not connect to MetaMask. ${err}`);
+      return;
+    }
+
+    const selectedAccount = accounts[0];
+
+    setWallet({
+      type: WalletType.EXTERNAL,
+      address: selectedAccount
+    });
+
+    return selectedAccount;
+  };
+
+  const requestSignature = (msg: string, address: string) =>
+    web3.eth.personal.sign(msg, address, '');
 
   const awaitTxConfirmation = (hash: string): Promise<void> => {
     return new Promise((resolve, reject) => {
@@ -185,6 +208,8 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
   return (
     <Web3Context.Provider
       value={{
+        init: initWeb3,
+        activate,
         web3,
         config,
         wallet,
