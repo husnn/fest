@@ -7,6 +7,7 @@ import {
   UserDTO,
   WalletDTO
 } from '@fanbase/shared';
+import { fetchInitConfig, getConfig } from '../config';
 
 export const isProduction = process.env.NODE_ENV === 'production';
 
@@ -95,15 +96,27 @@ export const getImageUrl = (
   return url;
 };
 
-export const getNativeCurrency = (): Currency => {
-  return {
-    name: process.env.NATIVE_TOKEN_NAME || 'Ether',
-    symbol: process.env.NATIVE_TOKEN_SYMBOL || 'ETH',
-    contract: '0',
-    decimals: parseInt(process.env.NATIVE_TOKEN_DECIMALS || '18')
-  };
-};
-
 export const reloadInTime = (router: NextRouter, seconds: number) => {
   setTimeout(() => router.reload(), seconds * 1000);
+};
+
+export const getNativeToken = (): Currency => {
+  const config = getConfig();
+
+  const currency: Currency = {
+    name: 'Ether',
+    symbol: 'ETH',
+    decimals: 18,
+    contract: '0x0'
+  };
+
+  switch (config?.protocols['ETHEREUM'].chainId) {
+    case 80001:
+      currency.name = 'Polygon';
+      currency.symbol = 'MATIC';
+      currency.decimals = 18;
+      break;
+  }
+
+  return currency;
 };

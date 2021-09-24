@@ -11,7 +11,7 @@ import useAuthentication from '../modules/auth/useAuthentication';
 import { useWeb3 } from '../modules/web3';
 import { CurrencyBalance } from '../types';
 import { Button } from '../ui';
-import { getNativeCurrency, isProduction } from '../utils';
+import { getNativeToken, isProduction } from '../utils';
 import { useHeader } from '../modules/navigation';
 import { ApiClient } from '../modules/api';
 
@@ -96,7 +96,7 @@ export const WalletPage = () => {
 
     const balances: CurrencyBalance[] = [
       {
-        currency: getNativeCurrency(),
+        currency: getNativeToken(),
         balance: Balance(0),
         precision: 5
       },
@@ -120,7 +120,7 @@ export const WalletPage = () => {
   const updateBalance = async (balance: CurrencyBalance) => {
     let bal: string;
 
-    if (balance.currency.symbol === getNativeCurrency().symbol) {
+    if (balance.currency.symbol === getNativeToken().symbol) {
       bal = await web3.ethereum.getEtherBalance(currentUser.wallet.address);
     } else {
       bal = await web3.ethereum.getERC20Balance(
