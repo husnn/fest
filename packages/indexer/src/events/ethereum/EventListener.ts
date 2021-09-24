@@ -1,3 +1,4 @@
+import { waitUntil } from '@fanbase/shared';
 import { RedisClient } from 'redis';
 import Web3 from 'web3';
 
@@ -6,14 +7,13 @@ import JobData from '../../jobs/JobData';
 export abstract class EventListener<T extends JobData> {
   abstract EVENT_NAME: string;
   POLLING_INTERVAL = 10000;
+  MAX_BLOCKS = 1000;
 
   private web3: Web3;
   private redis: RedisClient;
 
   private contract;
   private contractAddress: string;
-
-  private lastBlock: number;
 
   constructor(web3: Web3, redis: RedisClient, contract: any) {
     this.web3 = web3;
@@ -25,32 +25,66 @@ export abstract class EventListener<T extends JobData> {
 
   abstract prepareJob(event: any): T;
 
-  checkForEvents(callback): void {
-    this.contract
-      .getPastEvents(this.EVENT_NAME, {
-        fromBlock: this.lastBlock + 1,
-        toBlock: 'latest'
-      })
-      .then((events: any) => callback(events));
+  async checkForEvents(lastBlock: number, callback): Promise<void> {
+    const latestBlock = await this.web3.eth.getBlockNumber();
+
+    const events = [];
+
+    const getNewEvents = (from: number, to: number) =>
+      this.contract.getPastEvents(this.EVENT_NAME, {
+        fromBlock: from,
+        toBlock: to
+      });
+
+    // console.log(`\nLatest block: ${latestBlock}`);
+
+    let isFirstLoop = true;
+
+    while (lastBlock < latestBlock) {
+      if (!isFirstLoop) await waitUntil(this.POLLING_INTERVAL);
+
+      let toBlock = lastBlock + this.MAX_BLOCKS + 1;
+
+      if (toBlock > latestBlock)
+        toBlock = lastBlock + (latestBlock - lastBlock);
+
+      // console.log(`\nFrom block ${lastBlock + 1}`);
+      // console.log(`To block ${toBlock}`);
+
+      try {
+        const newEvents = await getNewEvents(lastBlock + 1, toBlock);
+        events.push(...newEvents);
+        lastBlock = toBlock;
+      } catch (err) {
+        console.log(err);
+      }
+
+      isFirstLoop = false;
+    }
+
+    callback(events, latestBlock);
   }
 
-  async listen(callback): Promise<void> {
-    this.lastBlock = await this.getLastBlock();
+  async listen(callback, lastBlock?: number): Promise<void> {
+    const startingBlock = lastBlock || (await this.getLastBlock());
 
-    setInterval(() => {
-      this.checkForEvents((events) => {
-        for (const event of events) {
-          console.log(`\nNew event: ${this.EVENT_NAME}`);
+    this.checkForEvents(startingBlock, async (events: [], toBlock: number) => {
+      this.updateLastBlock(toBlock);
 
-          const { blockNumber } = event;
-          this.updateLastBlock(blockNumber);
+      // console.log(`\nReceived ${events.length} new ${this.EVENT_NAME} events.`);
 
-          const job = this.prepareJob(event);
+      for (const event of events) {
+        console.log(`\nNew event: ${this.EVENT_NAME}`);
 
-          if (job) callback(job);
-        }
+        const job = this.prepareJob(event);
+
+        if (job) callback(job);
+      }
+
+      waitUntil(this.POLLING_INTERVAL).then(() => {
+        this.listen(callback, toBlock);
       });
-    }, this.POLLING_INTERVAL);
+    });
   }
 
   getLastBlockKey(): string {
@@ -60,7 +94,6 @@ export abstract class EventListener<T extends JobData> {
   }
 
   updateLastBlock(blockNumber: number): void {
-    this.lastBlock = blockNumber;
     this.redis.set(this.getLastBlockKey(), blockNumber.toString());
   }
 

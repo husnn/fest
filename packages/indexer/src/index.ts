@@ -23,6 +23,9 @@ import TokenListForSale, { TokenListForSaleJob } from './jobs/TokenListForSale';
 import TokenMint, { TokenMintJob } from './jobs/TokenMint';
 import TokenTransfer, { TokenTransferJob } from './jobs/TokenTransfer';
 import { createServer } from './server';
+import TokenRoyaltyPayment, {
+  TokenRoyaltyPaymentJob
+} from './jobs/TokenRoyaltyPayment';
 
 const redisClient = redis.createClient(redisConfig.url);
 
@@ -63,6 +66,13 @@ ethereumListener.on('market-cancel', (event: TokenCancelListingJob) => {
   tokenTradeQueue.createJob(event).save();
 });
 
+ethereumListener.on(
+  'market-royalty-payment',
+  (event: TokenRoyaltyPaymentJob) => {
+    tokenTradeQueue.createJob(event).save();
+  }
+);
+
 (async () => {
   await Postgres.init(postgresConfig);
   console.log('Connected to database.');
@@ -94,7 +104,12 @@ ethereumListener.on('market-cancel', (event: TokenCancelListingJob) => {
 
   tokenTradeQueue.process(
     async (
-      job: Queue.Job<TokenListForSaleJob | TokenBuyJob | TokenCancelListingJob>,
+      job: Queue.Job<
+        | TokenListForSaleJob
+        | TokenBuyJob
+        | TokenCancelListingJob
+        | TokenRoyaltyPaymentJob
+      >,
       done
     ) => {
       if ((job.data as TokenListForSaleJob).seller !== undefined) {
@@ -117,6 +132,13 @@ ethereumListener.on('market-cancel', (event: TokenCancelListingJob) => {
         return new TokenCancelListing(
           job.data as TokenCancelListingJob
         ).execute(tokenListingRepository);
+      } else if (
+        (job.data as TokenRoyaltyPaymentJob).beneficiary !== undefined
+      ) {
+        // Royalty payment
+        return new TokenRoyaltyPayment(
+          job.data as TokenRoyaltyPaymentJob
+        ).execute();
       }
 
       done();

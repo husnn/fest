@@ -88,6 +88,8 @@ contract MarketV1 is AccessControl, Pausable {
   );
 
   event RoyaltyPayment(
+    address token,
+    uint tokenId,
     address beneficiary,
     address currency,
     uint amount
@@ -230,7 +232,7 @@ contract MarketV1 is AccessControl, Pausable {
 
       pay(recipients[i], currency, fee);
 
-      emit RoyaltyPayment(recipients[i], currency, fee);
+      emit RoyaltyPayment(token, tokenId, recipients[i], currency, fee);
     }
   }
 

@@ -9,6 +9,7 @@ import TokenCancelListingListener from './TokenCancelListingListener';
 import TokenListingListener from './TokenListingListener';
 import TokenMintListener from './TokenMintListener';
 import TokenTransferListener from './TokenTransferListener';
+import TokenRoyaltyPaymentListener from './TokenRoyaltyPaymentListener';
 
 export default class EthereumListener extends EventEmitter {
   constructor(web3: Web3, redis: RedisClient) {
@@ -41,6 +42,12 @@ export default class EthereumListener extends EventEmitter {
       new TokenBuyListener(web3, redis, marketContract).listen((job) => {
         this.emit('market-buy', job);
       });
+
+      new TokenRoyaltyPaymentListener(web3, redis, marketContract).listen(
+        (job) => {
+          this.emit('market-royalty-payment', job);
+        }
+      );
     });
   }
 }
