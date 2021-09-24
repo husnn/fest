@@ -9,7 +9,8 @@ import {
 } from '@fanbase/shared';
 import { fetchInitConfig, getConfig } from '../config';
 
-export const isProduction = process.env.NODE_ENV === 'production';
+export const isProduction =
+  (process.env.NEXT_PUBLIC_VERCEL_ENV || process.env.NODE_ENV) === 'production';
 
 export const getTokenUrl = (token?: TokenDTO, id?: string): string =>
   `/tokens/${token ? token.id : id}`;
