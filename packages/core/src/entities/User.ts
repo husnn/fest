@@ -42,7 +42,7 @@ export class User {
 
   static newLoginCode() {
     return {
-      value: randomInteger().toString(),
+      value: randomInteger(6).toString(),
       expiry: getExpiryDate()
     };
   }

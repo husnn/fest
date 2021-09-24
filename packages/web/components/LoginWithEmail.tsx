@@ -118,6 +118,7 @@ const LoginWithEmail: React.FC<LoginWithEmailProps & ModalWithStepsProps> = ({
             }}
           >
             <DigitInput
+              length={6}
               onDelete={() => {
                 setCode('');
                 setError(null);

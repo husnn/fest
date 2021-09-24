@@ -1,7 +1,7 @@
 export const randomIntBetween = (min = 0, max = 999999): number =>
   Math.floor(Math.random() * (max - min + 1) + min);
 
-export const randomInteger = (digits = 4): number =>
+export const randomInteger = (digits: number): number =>
   randomIntBetween(10 ** (digits - 1), 10 ** digits - 1);
 
 export const randomNumericString = (length = 32): string => {

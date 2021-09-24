@@ -1,3 +1,5 @@
+export const isDevelopment = process.env.NODE_ENV === 'development';
+
 export default {
   secret: process.env.SECRET || 'hVmYq3t6w9z$C&F)J@McQfTjWnZr4u7x',
   jwt: {
