@@ -1,7 +1,14 @@
 import { NextRouter } from 'next/router';
-import Web3 from 'web3';
 
-import { Currency, Price, TokenDTO, TokenOwnershipDTO, UserDTO, WalletDTO } from '@fanbase/shared';
+import {
+  Currency,
+  TokenDTO,
+  TokenOwnershipDTO,
+  UserDTO,
+  WalletDTO
+} from '@fanbase/shared';
+
+export const isProduction = process.env.NODE_ENV === 'production';
 
 export const getTokenUrl = (token?: TokenDTO, id?: string): string =>
   `/tokens/${token ? token.id : id}`;

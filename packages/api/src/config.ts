@@ -4,8 +4,9 @@ import { GoogleConfig } from './services/GoogleService';
 import { YouTubeConfig } from './services/YouTubeService';
 import { AppConfig } from './types/AppConfig';
 
+export const isProduction = process.env.NODE_ENV === 'production';
+
 const appConfig: AppConfig = {
-  isProduction: process.env.NODE_ENV === 'production',
   protocol: 'http',
   host: process.env.HOST || '0.0.0.0',
   port: parseInt(process.env.API_PORT || process.env.PORT) || 5000,

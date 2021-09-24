@@ -3,6 +3,7 @@ import { Router } from 'express';
 import AuthController from '../controllers/AuthController';
 import ConfigController from '../controllers/ConfigController';
 import GoogleController from '../controllers/GoogleController';
+import InsiderController from '../controllers/InsiderController';
 import MarketController from '../controllers/MarketController';
 import TokenController from '../controllers/TokenController';
 import UserController from '../controllers/UserController';
@@ -13,6 +14,8 @@ import initMarketRoutes from './market.routes';
 import initTokenRoutes from './token.routes';
 import initUserRoutes from './user.routes';
 import initYouTubeRoutes from './youtube.routes';
+import initInsiderRoutes from './insider.routes';
+import { isProduction } from '../config';
 
 export default function initRoutes(
   router: Router,
@@ -22,9 +25,13 @@ export default function initRoutes(
   googleController: GoogleController,
   youTubeController: YouTubeController,
   tokenController: TokenController,
-  marketController: MarketController
+  marketController: MarketController,
+  insiderController: InsiderController
 ) {
   router.get('/init', (req, res) => configController.init(req, res));
+
+  if (!isProduction)
+    router.use('/insider', initInsiderRoutes(router, insiderController));
 
   router.use('/auth', initAuthRoutes(router, authController));
   router.use('/users', initUserRoutes(router, userController));

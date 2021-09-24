@@ -2,7 +2,6 @@ import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 
 import styled from '@emotion/styled';
-import Contracts from '@fanbase/eth-contracts';
 import { Balance } from '@fanbase/shared';
 import { RampInstantSDK } from '@ramp-network/ramp-instant-sdk';
 
@@ -12,8 +11,9 @@ import useAuthentication from '../modules/auth/useAuthentication';
 import { useWeb3 } from '../modules/web3';
 import { CurrencyBalance } from '../types';
 import { Button } from '../ui';
-import { getNativeCurrency } from '../utils';
+import { getNativeCurrency, isProduction } from '../utils';
 import { useHeader } from '../modules/navigation';
+import { ApiClient } from '../modules/api';
 
 const WalletInfo = styled.div`
   margin: 20px 0;
@@ -30,11 +30,13 @@ export const WalletPage = () => {
 
   const web3 = useWeb3();
 
+  const [addingFunds, setAddingFunds] = useState(false);
+
   const sendFunds = () => {
     return;
   };
 
-  const addFunds = () => {
+  const addFunds = async () => {
     // const transak = new TransakSDK({
     //   apiKey: process.env.NEXT_PUBLIC_TRANSAK_API_KEY,
     //   environment: 'STAGING',
@@ -55,6 +57,21 @@ export const WalletPage = () => {
 
     // transak.init();
 
+    if (!isProduction) {
+      setAddingFunds(true);
+      try {
+        const result = await ApiClient.getInstance().requestTestFunds(
+          selectedCurrencyBalance.currency.contract
+        );
+        await web3.awaitTxConfirmation(result.txHash);
+        updateBalance(selectedCurrencyBalance);
+      } catch (err) {
+        console.log(err);
+      }
+      setAddingFunds(false);
+      return;
+    }
+
     new RampInstantSDK({
       hostAppName: 'Maker DAO',
       hostLogoUrl:
@@ -71,6 +88,9 @@ export const WalletPage = () => {
     []
   );
 
+  const [selectedCurrencyBalance, setSelectedCurrencyBalance] =
+    useState<CurrencyBalance>();
+
   useEffect(() => {
     if (!web3.ethereum) return;
 
@@ -81,12 +101,16 @@ export const WalletPage = () => {
         precision: 5
       },
       ...web3.config.currencies.map((currency, index: number) => {
-        return {
+        const balance: CurrencyBalance = {
           currency,
           balance: Balance(0),
           precision: 3,
           selected: index == 0
         };
+
+        if (index == 0) setSelectedCurrencyBalance(balance);
+
+        return balance;
       })
     ];
 
@@ -105,12 +129,14 @@ export const WalletPage = () => {
       );
     }
 
-    currencyBalances.map((element) => {
+    currencyBalances.map((element: CurrencyBalance) => {
       element.selected = false;
 
       if (element.currency.symbol === balance.currency.symbol) {
         element.balance.set(bal);
         element.selected = true;
+
+        setSelectedCurrencyBalance(element);
       }
 
       return element;
@@ -146,7 +172,12 @@ export const WalletPage = () => {
           <Button size="small" color="secondary" onClick={() => sendFunds()}>
             Send
           </Button>
-          <Button size="small" color="primary" onClick={() => addFunds()}>
+          <Button
+            size="small"
+            color="primary"
+            onClick={() => addFunds()}
+            disabled={addingFunds}
+          >
             Add
           </Button>
         </React.Fragment>

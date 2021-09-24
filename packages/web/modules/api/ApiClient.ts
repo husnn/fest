@@ -49,6 +49,8 @@ import {
   OAuthCheckLinkResponse,
   OAuthLinkRequest,
   Protocol,
+  RequestTestFundsRequest,
+  RequestTestFundsResponse,
   TokenData,
   TokenDTO,
   TokenOwnershipDTO,
@@ -82,6 +84,26 @@ export class ApiClient {
     return this.client.request<InitResponse>({
       method: 'GET',
       endpoint: '/init'
+    });
+  }
+
+  // Insider
+
+  async requestTestFunds(
+    currency: string,
+    protocol = Protocol.ETHEREUM
+  ): Promise<RequestTestFundsResponse> {
+    return this.client.request<
+      RequestTestFundsResponse,
+      RequestTestFundsRequest
+    >({
+      method: 'POST',
+      endpoint: '/insider/test-funds',
+      authentication: 'required',
+      body: {
+        protocol,
+        currencyContract: currency
+      }
     });
   }
 

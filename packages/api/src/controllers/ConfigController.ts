@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 
-import { Config, EthereumService } from '@fanbase/ethereum';
+import { EthereumService } from '@fanbase/core';
+import { Config } from '@fanbase/ethereum';
 import { InitConfig, InitResponse } from '@fanbase/shared';
 
 import { HttpResponse } from '../http';
@@ -17,6 +18,11 @@ export default class ConfigController {
   private config: InitConfig;
 
   async init(req: Request, res: Response) {
+    const config = await this.get();
+    new HttpResponse<InitResponse>(res, { body: config });
+  }
+
+  async get(): Promise<InitConfig> {
     const t = new Date();
 
     if (!this.config || new Date(this.config.expires) <= t) {
@@ -30,6 +36,6 @@ export default class ConfigController {
       };
     }
 
-    new HttpResponse<InitResponse>(res, { body: this.config });
+    return this.config;
   }
 }

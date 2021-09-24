@@ -73,7 +73,7 @@ export class BuyTokenListing extends UseCase<
       );
 
     if (new Decimal(approvedAmount) < total) {
-      const approveTx = await this.ethereumService.buildApproveERC20SpenderTX(
+      const approveTx = await this.ethereumService.buildApproveERC20SpenderTx(
         listing.price.currency.contract,
         wallet.address,
         listing.chain.contract,

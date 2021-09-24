@@ -3,8 +3,14 @@ import express, { Application, Router } from 'express';
 
 import { EthereumService } from '@fanbase/ethereum';
 import {
-    OAuthRepository, TokenListingRepository, TokenOfferRepository, TokenOwnershipRepository,
-    TokenRepository, TokenTradeRepository, UserRepository, WalletRepository
+  OAuthRepository,
+  TokenListingRepository,
+  TokenOfferRepository,
+  TokenOwnershipRepository,
+  TokenRepository,
+  TokenTradeRepository,
+  UserRepository,
+  WalletRepository
 } from '@fanbase/postgres';
 
 import { googleConfig, youTubeConfig } from './config';
@@ -23,6 +29,8 @@ import MetadataStore from './services/MetadataStore';
 import TokenMediaStore from './services/TokenMediaStore';
 import YouTubeService from './services/YouTubeService';
 import { AppConfig } from './types/AppConfig';
+import InsiderController from './controllers/InsiderController';
+import { EthereumService as IEthereumService } from '@fanbase/core';
 
 class App {
   app: Application;
@@ -47,7 +55,7 @@ class App {
     const tokenTradeRepository = new TokenTradeRepository();
     const tokenOfferRepository = new TokenOfferRepository();
 
-    const ethereumService = EthereumService.instance;
+    const ethereumService: IEthereumService = EthereumService.instance;
     const mailService = new MailService();
 
     const metadataStore = new MetadataStore(
@@ -110,6 +118,12 @@ class App {
 
     const configController = new ConfigController(ethereumService);
 
+    const insiderController = new InsiderController(
+      configController,
+      walletRepository,
+      ethereumService
+    );
+
     const router = Router();
 
     initRoutes(
@@ -120,7 +134,8 @@ class App {
       googleController,
       youTubeController,
       tokenController,
-      marketController
+      marketController,
+      insiderController
     );
 
     app.use('/v1', router);

@@ -1,4 +1,11 @@
-import { Field, Form, Formik, FormikErrors, FormikProps, useFormikContext } from 'formik';
+import {
+  Field,
+  Form,
+  Formik,
+  FormikErrors,
+  FormikProps,
+  useFormikContext
+} from 'formik';
 import React, { useEffect, useState } from 'react';
 
 import styled from '@emotion/styled';
@@ -233,7 +240,7 @@ const BuyTokenListing = ({
       executeTransaction={async () => {
         if (!isCustodialWallet) {
           if (!isMarketApprovedSpender) {
-            const tx = await web3.ethereum.buildApproveERC20SpenderTX(
+            const tx = await web3.ethereum.buildApproveERC20SpenderTx(
               listing.price.currency.contract,
               currentUser.wallet.address,
               listing.chain.contract,

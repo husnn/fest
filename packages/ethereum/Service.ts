@@ -22,7 +22,8 @@ import {
   CancelTokenListing,
   ListTokenForSale,
   MintToken,
-  WithdrawMarketEarnings
+  WithdrawMarketEarnings,
+  TransferERC20
 } from '@fanbase/eth-transactions';
 import {
   EthereumTx,
@@ -217,7 +218,29 @@ export class EthereumService implements IEthereumService {
     );
   }
 
-  async buildApproveERC20SpenderTX(
+  async buildTransferERC20Tx(
+    currency: string,
+    walletAddress: string,
+    recipientAddress: string,
+    amount: string
+  ): Promise<EthereumTx> {
+    const nonce = await this.web3.eth.getTransactionCount(
+      walletAddress,
+      'pending'
+    );
+
+    const networkId = await this.web3.eth.net.getId();
+    const chainId = await this.web3.eth.getChainId();
+
+    return new TransferERC20(
+      this.web3,
+      currency,
+      recipientAddress,
+      amount
+    ).build(walletAddress, networkId, chainId, nonce, 385000);
+  }
+
+  async buildApproveERC20SpenderTx(
     erc20Address: string,
     walletAddress: string,
     spenderAddress: string,

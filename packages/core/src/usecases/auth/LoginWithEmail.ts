@@ -1,5 +1,5 @@
 import { CurrentUserDTO, isExpired } from '@fanbase/shared';
-import { isDevelopment } from '../../config';
+import { isProduction } from '../../config';
 
 import UseCase from '../../base/UseCase';
 import { User } from '../../entities';
@@ -44,7 +44,7 @@ export class LoginWithEmail extends UseCase<
 
     const { value: code, expiry } = user.loginCode;
 
-    if (!isDevelopment && code !== data.code) {
+    if (isProduction && code !== data.code) {
       return Result.fail(LoginError.CODE_INCORRECT);
     }
 

@@ -12,7 +12,6 @@ import {
 } from '../dto';
 import { Protocol } from '../enums';
 import { ProtocolConfig } from './';
-import { Currency } from './Currency';
 import TokenMetadata from './TokenMetadata';
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT';
@@ -63,6 +62,24 @@ export type InitConfig = {
 };
 
 export interface InitResponse extends Response<InitConfig> {}
+
+/**
+ * Insider
+ */
+
+export interface RequestTestFundsResponse extends Response {
+  txHash: string;
+}
+
+export interface RequestTestFundsRequest extends Request {
+  method: 'POST';
+  endpoint: '/insider/test-funds';
+  authentication: 'required';
+  body: {
+    protocol: Protocol;
+    currencyContract: string;
+  };
+}
 
 /**
  * Token Market

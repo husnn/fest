@@ -20,6 +20,8 @@ export interface EthereumService {
 
   getERC20Balance(address: string, walletAddress: string): Promise<string>;
 
+  toERC20Amount(address: string, amount: string | number): Promise<string>;
+
   priceFromERC20Amount(address: string, amount: string): Promise<Price>;
 
   getERC20Info(address: string): Promise<ERC20Info>;
@@ -45,7 +47,14 @@ export interface EthereumService {
     quantity: number
   ): Promise<EthereumTx>;
 
-  buildApproveERC20SpenderTX(
+  buildTransferERC20Tx(
+    currency: string,
+    from: string,
+    to: string,
+    amount: string
+  ): Promise<EthereumTx>;
+
+  buildApproveERC20SpenderTx(
     erc20Address: string,
     walletAddress: string,
     spenderAddress: string,
