@@ -9,6 +9,7 @@ import { ProtocolConfig, WalletType } from '@fanbase/shared';
 import { fetchInitConfig } from '../../config';
 import { getCurrentUser } from '../auth/authStorage';
 import useAuthentication from '../auth/useAuthentication';
+import Alertbox from '../../ui/Alertbox';
 
 type Wallet = {
   type: WalletType;
@@ -51,6 +52,8 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
 
   const initialMount = useRef(true);
 
+  const [isWrongNetwork, setWrongNetwork] = useState(false);
+
   useEffect(() => {
     if (!initialMount.current) return; // Skip if not browser or initial load
 
@@ -62,13 +65,15 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     if (!chainId || !networkId || !config.chainId || !config.networkId) return;
 
+    let isWrongNetwork = false;
+
     if (chainId !== config.chainId) {
-      console.log(`You're on the wrong chain.`);
+      isWrongNetwork = true;
+    } else if (networkId !== config.networkId) {
+      isWrongNetwork = true;
     }
 
-    if (networkId !== config.networkId) {
-      console.log(`You're on the wrong network.`);
-    }
+    setWrongNetwork(isWrongNetwork);
   }, [chainId, networkId]);
 
   useEffect(() => {
@@ -86,15 +91,15 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
   const initWeb3 = async () => {
     let provider;
 
-    setConfig(
-      await fetchInitConfig()
-        .then((config) => {
-          return config.protocols['ETHEREUM'];
-        })
-        .catch(() => {
-          throw new Error('Could not get config.');
-        })
-    );
+    const ethereumConfig: ProtocolConfig = await fetchInitConfig()
+      .then((config) => {
+        return config.protocols['ETHEREUM'];
+      })
+      .catch(() => {
+        throw new Error('Could not get config.');
+      });
+
+    setConfig(ethereumConfig);
 
     const currentUser = getCurrentUser();
 
@@ -106,12 +111,8 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
 
         setIsMetaMask(true);
 
-        provider.on('accountsChanged', (accounts: string[]) => {
-          if (accounts.length > 0)
-            setWallet({
-              type: WalletType.EXTERNAL,
-              address: accounts[0]
-            });
+        provider.on('chainChanged', function (id: number) {
+          window.location.reload();
         });
       } else {
         // MetaMask NOT available
@@ -143,9 +144,10 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
     setChainId(chain);
     setNetworkId(network);
 
-    await Contracts.init(web3);
-
-    setWeb3(web3);
+    if (chain === ethereumConfig.chainId) {
+      await Contracts.init(web3);
+      setWeb3(web3);
+    }
   };
 
   const activate = async (): Promise<string> => {
@@ -163,6 +165,14 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
       if (isMetaMask) {
         accounts = await web3.givenProvider.request({
           method: 'eth_requestAccounts'
+        });
+
+        web3.givenProvider.on('accountsChanged', (accounts: string[]) => {
+          if (accounts.length > 0)
+            setWallet({
+              type: WalletType.EXTERNAL,
+              address: accounts[0]
+            });
         });
       } else {
         accounts = await web3.eth.getAccounts();
@@ -218,6 +228,11 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
         awaitTxConfirmation
       }}
     >
+      <Alertbox
+        show={isWrongNetwork}
+        title="You're on the wrong network."
+        description={`Switch your MetaMask network to ${config?.chainId}.`}
+      />
       {children}
     </Web3Context.Provider>
   );

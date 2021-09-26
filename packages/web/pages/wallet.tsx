@@ -28,7 +28,7 @@ export const WalletPage = () => {
 
   const { currentUser } = useAuthentication(true);
 
-  const web3 = useWeb3();
+  const web3 = useWeb3(true);
 
   const [addingFunds, setAddingFunds] = useState(false);
 
