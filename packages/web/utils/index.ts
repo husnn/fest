@@ -7,7 +7,7 @@ import {
   UserDTO,
   WalletDTO
 } from '@fanbase/shared';
-import { fetchInitConfig, getConfig } from '../config';
+import { getConfig } from '../config';
 
 export const isProduction =
   (process.env.NEXT_PUBLIC_VERCEL_ENV || process.env.NODE_ENV) === 'production';
@@ -112,6 +112,7 @@ export const getNativeToken = (): Currency => {
   };
 
   switch (config?.protocols['ETHEREUM'].chainId) {
+    case 137:
     case 80001:
       currency.name = 'Polygon';
       currency.symbol = 'MATIC';

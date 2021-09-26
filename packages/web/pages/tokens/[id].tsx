@@ -147,7 +147,9 @@ export default function TokenPage() {
   useEffect(() => {
     setOwn(currentUser && ownership?.walletId == currentUser?.wallet.id);
     if (ownership)
-      router.push({ query: { o: ownership.id } }, undefined, { scroll: false });
+      router.replace({ query: { o: ownership.id } }, undefined, {
+        scroll: false
+      });
   }, [token, ownership]);
 
   const MintToken = ({ onExecuted }: { onExecuted: () => void }) => {

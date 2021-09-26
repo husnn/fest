@@ -5,6 +5,8 @@ import MarketWallet from './build/MarketWalletV1.json';
 import Market from './build/OfferMarketV1.json';
 import Token from './build/TokenV1.json';
 
+import currencies from './currencies';
+
 type ContractBuild = {
   abi: any;
   networks: any;
@@ -57,4 +59,4 @@ const init = async (web3: Web3) => {
   return contractInstances;
 };
 
-export default { init, get };
+export default { init, get, currencies };

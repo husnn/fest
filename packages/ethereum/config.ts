@@ -26,20 +26,32 @@ export const getTokenStandard = async (contract): Promise<TokenStandard> => {
   return TokenStandard.ERC20;
 };
 
-export const generate = async (
-  service: EthereumService
-): Promise<ProtocolConfig> => {
-  const tokenContract = contracts.get('Token');
-  const marketContract = contracts.get('Market');
+const isProduction = process.env.NODE_ENV === 'production';
 
-  const currencies: Currency[] = await Promise.all(
-    [contracts.get('FAN').options.address].map(async (address) => {
+const toCurrencies = async (service: EthereumService, addresses: string[]) =>
+  Promise.all(
+    addresses.map(async (address) => {
       return {
         ...(await service.getERC20Info(address)),
         contract: address
       };
     })
   );
+
+export const generate = async (
+  service: EthereumService
+): Promise<ProtocolConfig> => {
+  const tokenContract = contracts.get('Token');
+  const marketContract = contracts.get('Market');
+
+  const currencyAddresses: string[] = [
+    ...contracts.currencies.getForNetwork(service.chainId)
+  ];
+
+  if (!isProduction)
+    currencyAddresses.push(contracts.get('FAN').options.address);
+
+  const currencies: Currency[] = await toCurrencies(service, currencyAddresses);
 
   const currenciesSupported: Currency[] = [];
 

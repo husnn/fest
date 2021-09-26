@@ -6,7 +6,6 @@ import { Balance } from '@fanbase/shared';
 import { RampInstantSDK } from '@ramp-network/ramp-instant-sdk';
 
 import BalanceView from '../components/BalanceView';
-// import TransakSDK from '@transak/transak-sdk';
 import useAuthentication from '../modules/auth/useAuthentication';
 import { useWeb3 } from '../modules/web3';
 import { CurrencyBalance } from '../types';
@@ -37,27 +36,7 @@ export const WalletPage = () => {
   };
 
   const addFunds = async () => {
-    // const transak = new TransakSDK({
-    //   apiKey: process.env.NEXT_PUBLIC_TRANSAK_API_KEY,
-    //   environment: 'STAGING',
-    //   cryptoCurrencyList: 'DAI',
-    //   defaultCryptoCurrency: 'DAI',
-    //   cryptoCurrencyCode: 'DAI',
-    //   networks: 'MATIC',
-    //   defaultNetwork: 'MATIC',
-    //   walletAddress: currentUser?.wallet.address,
-    //   defaultFiatAmount: 100,
-    //   fiatAmount: 100,
-    //   defaultCryptoAmount: 100,
-    //   email: currentUser?.email,
-    //   hostURL: window.location.origin,
-    //   widgetHeight: '550px',
-    //   widgetWidth: '450px'
-    // });
-
-    // transak.init();
-
-    if (!isProduction) {
+    if (!isProduction && selectedCurrencyBalance.currency.symbol === 'FAN') {
       setAddingFunds(true);
       try {
         const result = await ApiClient.getInstance().requestTestFunds(
@@ -72,15 +51,26 @@ export const WalletPage = () => {
       return;
     }
 
+    let swapAssetPrefix: string;
+
+    switch (web3.config.chainId) {
+      case 137:
+      case 80001:
+        swapAssetPrefix = 'MATIC_';
+        break;
+    }
+
     new RampInstantSDK({
-      hostAppName: 'Maker DAO',
-      hostLogoUrl:
-        'https://cdn-images-1.medium.com/max/2600/1*nqtMwugX7TtpcS-5c3lRjw.png',
+      hostAppName: 'Fanbase',
+      hostLogoUrl: 'https://docs.ramp.network/img/logo-1.svg',
+      ...(!isProduction && {
+        url: 'https://ri-widget-staging.firebaseapp.com'
+      }),
       userAddress: currentUser.wallet.address,
       userEmailAddress: currentUser.email,
-      defaultAsset: 'MATIC_DAI',
-      variant: 'mobile',
-      url: 'https://ri-widget-staging-ropsten.firebaseapp.com/'
+      swapAsset: `${swapAssetPrefix ? swapAssetPrefix : ''}${
+        selectedCurrencyBalance.currency.symbol
+      }`
     }).show();
   };
 
@@ -169,16 +159,16 @@ export const WalletPage = () => {
         onSelect={(currency: CurrencyBalance) => updateBalance(currency)}
       >
         <React.Fragment>
-          <Button size="small" color="secondary" onClick={() => sendFunds()}>
+          {/* <Button size="small" color="secondary" onClick={() => sendFunds()}>
             Send
-          </Button>
+          </Button> */}
           <Button
             size="small"
             color="primary"
             onClick={() => addFunds()}
             disabled={addingFunds}
           >
-            Add
+            Add funds
           </Button>
         </React.Fragment>
       </BalanceView>

@@ -4085,7 +4085,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@fanbase/shared", "workspace:packages/shared"],
             ["@ramp-network/ramp-instant-sdk", "npm:2.5.0"],
             ["@svgr/webpack", "npm:5.5.0"],
-            ["@transak/transak-sdk", "npm:1.0.111"],
             ["@types/axios", "npm:0.14.0"],
             ["@types/bn.js", "npm:5.1.0"],
             ["@types/node", "npm:15.14.9"],
@@ -4588,17 +4587,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@tootallnate-once-npm-1.1.2-0517220057-e1fb1bbbc1.zip/node_modules/@tootallnate/once/",
           "packageDependencies": [
             ["@tootallnate/once", "npm:1.1.2"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["@transak/transak-sdk", [
-        ["npm:1.0.111", {
-          "packageLocation": "./.yarn/cache/@transak-transak-sdk-npm-1.0.111-446e70c8c9-a4a6f98060.zip/node_modules/@transak/transak-sdk/",
-          "packageDependencies": [
-            ["@transak/transak-sdk", "npm:1.0.111"],
-            ["events", "npm:3.3.0"],
-            ["request", "npm:2.88.2"]
           ],
           "linkType": "HARD",
         }]

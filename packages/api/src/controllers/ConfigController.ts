@@ -6,7 +6,7 @@ import { InitConfig, InitResponse } from '@fanbase/shared';
 
 import { HttpResponse } from '../http';
 
-const EXPIRATION_SECS = 100;
+const EXPIRATION_SECS = 300; // 5 mins
 
 export default class ConfigController {
   private ethereumService: EthereumService;

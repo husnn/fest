@@ -21,6 +21,7 @@ import { CurrencyBalance } from '../../types';
 import { Button, Link } from '../../ui';
 import { getTokenUrl, reloadInTime } from '../../utils';
 import TokenTradeRow from '../../ui/TokenTradeRow';
+import Head from 'next/head';
 
 const MarketSection = styled.div`
   margin: 30px 0;
@@ -187,6 +188,9 @@ export default function MarketPage() {
 
   return currentUser ? (
     <div className="container boxed" style={{ maxWidth: 800 }}>
+      <Head>
+        <title>Market</title>
+      </Head>
       <MarketSection>
         <h2>Earnings</h2>
         <BalanceView
