@@ -113,21 +113,21 @@ contract('MarketV1', async (accounts) => {
       );
 
     it('prevent listing unapproved token', async () => {
-      await MarketContract.setTokenApproval(Token.address, false);
+      await MarketContract.setTokensApproval([Token.address], false);
       await expectRevert(list(), 'Token contract is not allowed.');
     });
 
     it('approve token', async () => {
-      await MarketContract.setTokenApproval(Token.address, true);
+      await MarketContract.setTokensApproval([Token.address], true);
     });
 
     it('prevent listing with unapproved currency', async () => {
-      await MarketContract.setCurrencyApproval(FAN.address, false);
+      await MarketContract.setCurrenciesApproval([FAN.address], false);
       await expectRevert(list(), 'Currency is not allowed.');
     });
 
     it('approve currency', async () => {
-      await MarketContract.setCurrencyApproval(FAN.address, true);
+      await MarketContract.setCurrenciesApproval([FAN.address], true);
     });
 
     // Migration already assigns admin role.

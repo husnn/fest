@@ -93,24 +93,21 @@ contract OfferMarketV1 is MarketV1 {
       address(this),
       offer.price + buyerFee
     );
-    
-    uint sellerNet = payAfterFees(
+
+    exchange(
       offer.seller,
-      offer.price,
-      sellerFee,
-      buyerFee,
-      offer.token,
-      offer.tokenId,
-      offer.currency
-    );
-
-    pay(offer.currency, offer.seller, sellerNet);
-
-    _wallet.give(
-      offer.token,
       offer.buyer,
-      offer.tokenId,
-      offer.quantity
+      offer.currency,
+      offer.price,
+      MarketFees(
+        buyerFee,
+        sellerFee
+      ),
+      TokenOrder(
+        offer.token,
+        offer.tokenId,
+        offer.quantity
+      )
     );
   }
 

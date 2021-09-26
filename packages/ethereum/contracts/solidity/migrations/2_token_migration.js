@@ -14,11 +14,12 @@ module.exports = async function (deployer) {
 
   await deployer.deploy(MarketWallet);
   await deployer.deploy(OfferMarket, MarketWallet.address);
-   
+
   const walletInstance = await MarketWallet.deployed();
   await walletInstance.grantRole(ADMIN_ROLE, OfferMarket.address);
 
   const marketInstance = await OfferMarket.deployed();
-  await marketInstance.setTokenApproval(Token.address, true);
-  await marketInstance.setCurrencyApproval(FAN.address, true);
+
+  await marketInstance.setTokensApproval([Token.address], true);
+  await marketInstance.setCurrenciesApproval([FAN.address], true);
 };

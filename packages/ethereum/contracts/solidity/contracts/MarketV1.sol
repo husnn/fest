@@ -23,7 +23,18 @@ struct Trade {
   TradeStatus status;
 }
 
-contract MarketV1 is AccessControl, Pausable {
+struct MarketFees {
+  uint buyer;
+  uint seller;
+}
+
+struct TokenOrder {
+  address token;
+  uint id;
+  uint quantity;
+}
+
+contract MarketV1 is AccessControl {
   using ECDSA for bytes32;
 
   bytes internal constant EMPTY = "";
@@ -69,7 +80,7 @@ contract MarketV1 is AccessControl, Pausable {
     uint price
   );
 
-  event Sell(
+  event Sold(
     uint tradeId
   );
 
@@ -118,7 +129,7 @@ contract MarketV1 is AccessControl, Pausable {
     return _trades[tradeId];
   }
 
-  function buy(uint tradeId, uint quantity) public whenNotPaused {
+  function buy(uint tradeId, uint quantity) public {
     Trade memory trade = _trades[tradeId];
 
     // Require trade is still open
@@ -147,37 +158,62 @@ contract MarketV1 is AccessControl, Pausable {
       subtotal + buyerFee
     );
 
+    exchange(
+      trade.seller,
+      msg.sender,
+      trade.currency,
+      subtotal,
+      MarketFees(
+        buyerFee,
+        sellerFee
+      ),
+      TokenOrder(
+        trade.token,
+        trade.tokenId,
+        quantity
+      )
+    );
+
     uint available = trade.available - quantity;
     _trades[tradeId].available = available;
 
     if (available == 0) {
       _trades[tradeId].status = TradeStatus.Sold;
-      emit Sell(tradeId);
+      emit Sold(tradeId);
     }
-
-    uint sellerNet = payAfterFees(
-      trade.seller,
-      subtotal,
-      sellerFee,
-      buyerFee,
-      trade.token,
-      trade.tokenId,
-      trade.currency
-    );
-
-    pay(trade.seller, trade.currency, sellerNet);
-
-    _wallet.give(
-      trade.token,
-      msg.sender,
-      trade.tokenId,
-      quantity
-    );
 
     emit Buy(
       tradeId,
       msg.sender,
       quantity
+    );
+  }
+
+  function exchange(
+    address seller,
+    address buyer,
+    address currency,
+    uint subtotal,
+    MarketFees memory fees,
+    TokenOrder memory order
+  ) internal {
+    uint sellerNet = payAfterFees(
+      seller,
+      currency,
+      subtotal,
+      fees.seller,
+      fees.buyer,
+      order.token,
+      order.id
+    );
+
+    pay(seller, currency, sellerNet);
+
+    _wallet.give(
+      order.token,
+      buyer,
+      order.id,
+      order.quantity
     );
   }
 
@@ -193,12 +229,12 @@ contract MarketV1 is AccessControl, Pausable {
 
   function payAfterFees(
     address seller,
+    address currency,
     uint subtotal,
     uint sellerFee,
     uint buyerFee,
     address token,
-    uint tokenId,
-    address currency
+    uint tokenId
   ) internal returns (uint sellerPay) {
     if (subtotal > sellerFee)
       subtotal = subtotal - sellerFee;
@@ -269,7 +305,7 @@ contract MarketV1 is AccessControl, Pausable {
     uint expiry,
     uint salt,
     bytes calldata signature
-  ) public whenNotPaused {
+  ) public {
     require(price >= minTokenPrice, "Price is too low.");
     require(price <= maxTokenPrice, "Price is too high.");
     require(quantity <= maxTradeQuantity, "Quantity exceeds maximum.");
@@ -406,12 +442,16 @@ contract MarketV1 is AccessControl, Pausable {
     return _approvedCurrencies[currency];
   }
 
-  function setTokenApproval(address token, bool isApproved) public onlyRole(ADMIN_ROLE) {
-    _approvedTokens[token] = isApproved;
+  function setTokensApproval(address[] calldata tokens, bool isApproved) public onlyRole(ADMIN_ROLE) {
+    for (uint i = 0; i < tokens.length; i++) {
+      _approvedTokens[tokens[i]] = isApproved;
+    }
   }
 
-  function setCurrencyApproval(address currency, bool isApproved) public onlyRole(ADMIN_ROLE) {
-    _approvedCurrencies[currency] = isApproved;
+  function setCurrenciesApproval(address[] calldata currencies, bool isApproved) public onlyRole(ADMIN_ROLE) {
+    for (uint i = 0; i < currencies.length; i++) {
+      _approvedCurrencies[currencies[i]] = isApproved;
+    }
   }
   
   function setMaxTokenPriceEther(uint256 price) public onlyRole(ADMIN_ROLE) {
@@ -438,13 +478,5 @@ contract MarketV1 is AccessControl, Pausable {
 
   function setFeeBeneficiary(address beneficiary) public onlyRole(DEFAULT_ADMIN_ROLE) {
     _feeBeneficiary = beneficiary;
-  }
-  
-  function pause() public onlyRole(ADMIN_ROLE) {
-    super._pause();
-  }
-
-  function resume() public onlyRole(ADMIN_ROLE) {
-    super._unpause();
   }
 }

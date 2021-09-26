@@ -108,11 +108,11 @@ contract('MarketV1', async (accounts) => {
     });
 
     it('approve token', async () => {
-      await MarketContract.setTokenApproval(Token.address, true);
+      await MarketContract.setTokensApproval([Token.address], true);
     });
 
     it('approve currency', async () => {
-      await MarketContract.setCurrencyApproval(FAN.address, true);
+      await MarketContract.setCurrenciesApproval([FAN.address], true);
     });
 
     it('grant admin role to market for wallet', async () => {
