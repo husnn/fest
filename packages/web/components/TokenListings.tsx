@@ -1,23 +1,20 @@
-import moment from 'moment';
-import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
-
-import styled from '@emotion/styled';
-import { TokenDTO, TokenListingDTO, TokenListingStatus } from '@fanbase/shared';
-
-import { ApiClient } from '../modules/api';
-import usePagination from '../modules/api/usePagination';
-import useAuthentication from '../modules/auth/useAuthentication';
 import { Button, Link } from '../ui';
+import React, { useEffect, useState } from 'react';
+import { TokenListingDTO, TokenListingStatus } from '@fanbase/shared';
 import { getDisplayName, getProfileUrl } from '../utils';
+
 import BuyTokenListing from './BuyTokenListing';
+import moment from 'moment';
+import styled from '@emotion/styled';
+import useAuthentication from '../modules/auth/useAuthentication';
+import { useRouter } from 'next/router';
 
 const Container = styled.div``;
 
 const TokenListingRow = styled.div<{ active: boolean }>`
   margin: 20px -10px;
   padding: 10px 20px 20px;
-  background-color: #fafafa;
+  background-color: white;
   display: grid;
   align-items: center;
   grid-template-columns: 2fr 1fr;
@@ -102,18 +99,19 @@ const TokenListing = ({ listing }: { listing: TokenListingDTO }) => {
 };
 
 type TokenListingsProps = {
-  token: TokenDTO;
+  listings: TokenListingDTO[];
+  currentUserId?: string;
+  hasMore: boolean;
+  loadMore?: () => void;
 };
 
-export const TokenListings = ({ token }: TokenListingsProps) => {
-  const { currentUser } = useAuthentication();
-
-  const [listings, setListings] = useState([]);
-
-  const { data, loadMore, hasMore } = usePagination<TokenListingDTO>(
-    (count: number, page: number) =>
-      ApiClient.instance.getListingsForToken(token.id, count || 5, page)
-  );
+export const TokenListings = ({
+  listings,
+  currentUserId,
+  hasMore,
+  loadMore
+}: TokenListingsProps) => {
+  const [listingsToShow, setListingsToShow] = useState<TokenListingDTO[]>([]);
 
   useEffect(() => {
     // const existing = new Set();
@@ -125,15 +123,14 @@ export const TokenListings = ({ token }: TokenListingsProps) => {
     //   }
     // });
 
-    data.sort((a) => a.seller.id == currentUser?.id && -1);
+    listings.sort((a) => a.seller.id == currentUserId && -1);
 
-    setListings(data);
-  }, [data]);
+    setListingsToShow(listings);
+  }, [listings]);
 
-  return listings && listings.length > 0 ? (
+  return (
     <Container>
-      <h3>Market Listings</h3>
-      {listings?.map((item: TokenListingDTO) => (
+      {listingsToShow?.map((item: TokenListingDTO) => (
         <TokenListing key={item.id} listing={item} />
       ))}
       {hasMore && (
@@ -142,7 +139,7 @@ export const TokenListings = ({ token }: TokenListingsProps) => {
         </Button>
       )}
     </Container>
-  ) : null;
+  );
 };
 
 export default TokenListings;

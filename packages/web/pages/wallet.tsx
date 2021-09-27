@@ -1,18 +1,17 @@
-import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
-
-import styled from '@emotion/styled';
-import { Balance } from '@fanbase/shared';
-import { RampInstantSDK } from '@ramp-network/ramp-instant-sdk';
-
-import BalanceView from '../components/BalanceView';
-import useAuthentication from '../modules/auth/useAuthentication';
-import { useWeb3 } from '../modules/web3';
-import { CurrencyBalance } from '../types';
-import { Button } from '../ui';
 import { getNativeToken, isProduction } from '../utils';
-import { useHeader } from '../modules/navigation';
+
 import { ApiClient } from '../modules/api';
+import { Balance } from '@fanbase/shared';
+import BalanceView from '../ui/BalanceView';
+import { Button } from '../ui';
+import { CurrencyBalance } from '../types';
+import Head from 'next/head';
+import { RampInstantSDK } from '@ramp-network/ramp-instant-sdk';
+import styled from '@emotion/styled';
+import useAuthentication from '../modules/auth/useAuthentication';
+import { useHeader } from '../modules/navigation';
+import { useWeb3 } from '../modules/web3';
 
 const WalletInfo = styled.div`
   margin: 20px 0;
@@ -56,7 +55,8 @@ export const WalletPage = () => {
     switch (web3.config.chainId) {
       case 137:
       case 80001:
-        swapAssetPrefix = 'MATIC_';
+        if (selectedCurrencyBalance.currency.symbol !== 'MATIC')
+          swapAssetPrefix = 'MATIC_';
         break;
     }
 

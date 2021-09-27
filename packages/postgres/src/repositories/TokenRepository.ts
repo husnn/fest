@@ -1,8 +1,8 @@
-import { Token, TokenRepository as ITokenRepository } from '@fanbase/core';
-import { Protocol } from '@fanbase/shared';
+import { TokenRepository as ITokenRepository, Token } from '@fanbase/core';
 
-import TokenSchema from '../schemas/TokenSchema';
+import { Protocol } from '@fanbase/shared';
 import Repository from './Repository';
+import TokenSchema from '../schemas/TokenSchema';
 
 export class TokenRepository
   extends Repository<Token>

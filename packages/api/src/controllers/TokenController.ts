@@ -1,18 +1,41 @@
-import { NextFunction, Request, Response } from 'express';
-
 import {
-    ApproveMint, ApproveTokenSale, CreateToken, EthereumService, GetToken, GetTokenOwnership,
-    GetTokenOwnerships, GetYouTubeChannel, GoogleService, IPFSService, ListTokenForSale,
-    MediaService, MintToken, OAuthRepository, TokenOwnershipRepository, TokenRepository,
-    UserRepository, WalletRepository, YouTubeService
+  ApproveMint,
+  ApproveTokenSale,
+  CommunityRepository,
+  CreateCommunity,
+  CreateToken,
+  EthereumService,
+  GetToken,
+  GetTokenOwnership,
+  GetTokenOwnerships,
+  GetYouTubeChannel,
+  GoogleService,
+  IPFSService,
+  ListTokenForSale,
+  MediaService,
+  MintToken,
+  OAuthRepository,
+  TokenOwnershipRepository,
+  TokenRepository,
+  UserRepository,
+  WalletRepository,
+  YouTubeService
 } from '@fanbase/core';
 import {
-    ApproveMintResponse, ApproveTokenSaleResponse, CreateTokenResponse,
-    GetSignedTokenImageUploadUrlResponse, GetTokenOwnershipResponse, GetTokenOwnershipsResponse,
-    GetTokenResponse, ListTokenForSaleResponse, MintTokenResponse, TokenData
+  ApproveMintResponse,
+  ApproveTokenSaleResponse,
+  CreateTokenResponse,
+  GetSignedTokenImageUploadUrlResponse,
+  GetTokenOwnershipResponse,
+  GetTokenOwnershipsResponse,
+  GetTokenResponse,
+  ListTokenForSaleResponse,
+  MintTokenResponse,
+  TokenData
 } from '@fanbase/shared';
-
 import { HttpError, NotFoundError } from '../http';
+import { NextFunction, Request, Response } from 'express';
+
 import HttpResponse from '../http/HttpResponse';
 
 class TokenController {
@@ -38,7 +61,9 @@ class TokenController {
     tokenOwnershipRepository: TokenOwnershipRepository,
     oAuthRepository: OAuthRepository,
     googleService: GoogleService,
-    youtubeService: YouTubeService
+    youtubeService: YouTubeService,
+    communityRepository: CommunityRepository,
+    createCommunityUseCase: CreateCommunity
   ) {
     this.mediaService = mediaService;
 
@@ -54,10 +79,11 @@ class TokenController {
       mediaService,
       metadataStore,
       youtubeService,
-      getYouTubeChannelUseCase
+      getYouTubeChannelUseCase,
+      createCommunityUseCase
     );
 
-    this.getTokenUseCase = new GetToken(tokenRepository);
+    this.getTokenUseCase = new GetToken(tokenRepository, communityRepository);
 
     this.approveMintUseCase = new ApproveMint(
       walletRepository,

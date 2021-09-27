@@ -1,24 +1,14 @@
-import React from 'react';
-
-import styled from '@emotion/styled';
-import { TokenDTO } from '@fanbase/shared';
-
 import { Button } from './Button';
+import React from 'react';
+import { TokenDTO } from '@fanbase/shared';
 import TokenGridItem from './TokenGridItem';
+import styled from '@emotion/styled';
 
 const CollectionGrid = styled.div`
-  width: 100%;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   grid-gap: 10px;
-
-  @media screen and (max-width: 500px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @media screen and (max-width: 360px) {
-    grid-template-columns: 1fr;
-  }
 `;
 
 type TokenCollectionProps = {

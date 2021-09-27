@@ -1,8 +1,5 @@
-import cors from 'cors';
-import express, { Application, Router } from 'express';
-
-import { EthereumService } from '@fanbase/ethereum';
 import {
+  CommunityRepository,
   OAuthRepository,
   TokenListingRepository,
   TokenOfferRepository,
@@ -12,25 +9,32 @@ import {
   UserRepository,
   WalletRepository
 } from '@fanbase/postgres';
-
+import {
+  CreateCommunity,
+  EthereumService as IEthereumService
+} from '@fanbase/core';
+import express, { Application, Router } from 'express';
 import { googleConfig, youTubeConfig } from './config';
+
+import { AppConfig } from './types/AppConfig';
 import AuthController from './controllers/AuthController';
+import CommunityController from './controllers/CommunityController';
 import ConfigController from './controllers/ConfigController';
+import { EthereumService } from '@fanbase/ethereum';
 import GoogleController from './controllers/GoogleController';
+import GoogleService from './services/GoogleService';
+import InsiderController from './controllers/InsiderController';
+import MailService from './services/MailService';
 import MarketController from './controllers/MarketController';
+import MetadataStore from './services/MetadataStore';
 import TokenController from './controllers/TokenController';
+import TokenMediaStore from './services/TokenMediaStore';
 import UserController from './controllers/UserController';
 import YouTubeController from './controllers/YouTubeController';
+import YouTubeService from './services/YouTubeService';
+import cors from 'cors';
 import errorHandler from './middleware/errorHandler';
 import initRoutes from './routes';
-import GoogleService from './services/GoogleService';
-import MailService from './services/MailService';
-import MetadataStore from './services/MetadataStore';
-import TokenMediaStore from './services/TokenMediaStore';
-import YouTubeService from './services/YouTubeService';
-import { AppConfig } from './types/AppConfig';
-import InsiderController from './controllers/InsiderController';
-import { EthereumService as IEthereumService } from '@fanbase/core';
 
 class App {
   app: Application;
@@ -54,6 +58,7 @@ class App {
     const tokenListingRepository = new TokenListingRepository();
     const tokenTradeRepository = new TokenTradeRepository();
     const tokenOfferRepository = new TokenOfferRepository();
+    const communityRepository = new CommunityRepository();
 
     const ethereumService: IEthereumService = EthereumService.instance;
     const mailService = new MailService();
@@ -94,6 +99,11 @@ class App {
 
     const mediaStore = new TokenMediaStore();
 
+    const createCommunityUseCase = new CreateCommunity(
+      tokenRepository,
+      communityRepository
+    );
+
     const tokenController = new TokenController(
       tokenRepository,
       mediaStore,
@@ -104,7 +114,9 @@ class App {
       tokenOwnershipRepository,
       oAuthRepository,
       googleService,
-      youTubeService
+      youTubeService,
+      communityRepository,
+      createCommunityUseCase
     );
 
     const marketController = new MarketController(
@@ -124,12 +136,18 @@ class App {
       ethereumService
     );
 
+    const communityController = new CommunityController(
+      tokenRepository,
+      communityRepository
+    );
+
     const router = Router();
 
     initRoutes(
       router,
       configController,
       authController,
+      communityController,
       userController,
       googleController,
       youTubeController,

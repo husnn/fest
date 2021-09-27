@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 
 import {
+  CommunityDTO,
   CurrentUserDTO,
   TokenDTO,
   TokenListingDTO,
@@ -10,6 +11,7 @@ import {
   TokenTradeDTO,
   UserDTO
 } from '../dto';
+
 import { Protocol } from '../enums';
 import { ProtocolConfig } from './';
 import TokenMetadata from './TokenMetadata';

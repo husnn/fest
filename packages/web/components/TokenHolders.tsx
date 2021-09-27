@@ -1,13 +1,12 @@
-import React, { useEffect } from 'react';
-
-import styled from '@emotion/styled';
+import { Button, Link } from '../ui';
 import { CurrentUserDTO, TokenOwnershipDTO } from '@fanbase/shared';
+import React, { useEffect } from 'react';
+import { getDisplayName, getProfileUrl } from '../utils';
 
 import ApiClient from '../modules/api/ApiClient';
-import usePagination from '../modules/api/usePagination';
+import styled from '@emotion/styled';
 import useAuthentication from '../modules/auth/useAuthentication';
-import { Button, Link } from '../ui';
-import { getDisplayName, getProfileUrl } from '../utils';
+import usePagination from '../modules/api/usePagination';
 
 const Container = styled.div`
   > * + * {
@@ -22,7 +21,7 @@ const HolderRow = styled.div<{
   padding: 20px;
   display: flex;
   flex-direction: column;
-  background: #fafafa;
+  background-color: white;
   opacity: ${(props) => (props.selected ? 1 : '0.5')};
   box-shadow: ${(props) =>
     props.selected && '0px 5px 10px 5px rgba(0, 0, 0, 0.05);'};

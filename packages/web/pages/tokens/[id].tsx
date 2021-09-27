@@ -1,43 +1,51 @@
-import Head from 'next/head';
-import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
-import { setTimeout } from 'timers';
-
-import styled from '@emotion/styled';
+/** @jsxImportSource @emotion/react */
+import { Button, Link } from '../../ui';
 import {
   Protocol,
   TokenDTO,
+  TokenListingDTO,
   TokenOwnershipDTO,
   WalletType
 } from '@fanbase/shared';
+import React, { useEffect, useState } from 'react';
+import { getCommunityUrl, getDisplayName, getProfileUrl } from '../../utils';
 
+import ApiClient from '../../modules/api/ApiClient';
 import CreateTokenListing from '../../components/CreateTokenListing';
+import Head from 'next/head';
+import Modal from '../../ui/Modal';
+import SpinnerSvg from '../../public/images/spinner.svg';
+import TokenCommunities from '../../components/TokenCommunities';
 import TokenHolders from '../../components/TokenHolders';
 import TokenListings from '../../components/TokenListings';
-import ApiClient from '../../modules/api/ApiClient';
+import { css } from '@emotion/react';
+import { setTimeout } from 'timers';
+import styled from '@emotion/styled';
 import useAuthentication from '../../modules/auth/useAuthentication';
+import usePagination from '../../modules/api/usePagination';
+import { useRouter } from 'next/router';
 import useWeb3 from '../../modules/web3/useWeb3';
-import SpinnerSvg from '../../public/images/spinner.svg';
-import { Button, Link } from '../../ui';
-import Modal from '../../ui/Modal';
-import { getDisplayName, getProfileUrl } from '../../utils';
 
 const TokenContainer = styled.div`
   width: 100%;
   padding-bottom: 50px;
   display: flex;
-  flex-direction: row-reverse;
-  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
 
-  @media screen and (max-width: 500px) {
-    flex-direction: column-reverse;
+  > div {
+    flex-grow: 1;
+  }
+
+  > * + * {
+    margin-top: 20px;
   }
 `;
 
 const TokenMain = styled.div`
   width: 100%;
-  max-width: 500px;
-  flex: 1;
+  max-width: 600px;
+  flex-basis: 60%;
 
   > * + * {
     margin-top: 20px;
@@ -85,21 +93,11 @@ const TokenActions = styled.div`
   }
 `;
 
-const TokenHoldersContainer = styled.div`
-  width: 100%;
-  min-width: 300px;
-  margin-left: 30px;
-  flex: 0.5;
-
-  @media screen and (max-width: 500px) {
-    margin: 30px 0;
-  }
-`;
-
 const PreviewContainer = styled.div`
-  position: relative;
   width: 100%;
   height: auto;
+  display: flex;
+  justify-content: center;
   overflow: hidden;
 
   img {
@@ -110,6 +108,36 @@ const PreviewContainer = styled.div`
     border-radius: 10px;
   }
 `;
+
+const Section = ({
+  title,
+  children
+}: {
+  title?: string;
+  children: React.ReactElement;
+}) => {
+  const SectionHeading = styled.h2`
+    margin-bottom: 20px;
+  `;
+
+  return (
+    <div
+      css={css`
+        height: fit-content;
+        background-color: #fafafa;
+        padding: 30px 20px;
+        border-radius: 30px;
+
+        @media screen and (min-width: 500px) {
+          padding: 50px 30px;
+        }
+      `}
+    >
+      {title && <SectionHeading>{title}</SectionHeading>}
+      {children}
+    </div>
+  );
+};
 
 export default function TokenPage() {
   const router = useRouter();
@@ -126,9 +154,18 @@ export default function TokenPage() {
   const [minting, setMinting] = useState(false);
   const [creatingListing, setCreatingListing] = useState(false);
 
+  const {
+    data: listings,
+    loadMore: loadMoreListings,
+    hasMore: hasMoreListings
+  } = usePagination<TokenListingDTO>(
+    (count: number, page: number, ...args) =>
+      ApiClient.instance.getListingsForToken(...args, count || 5, page),
+    [token?.id]
+  );
+
   useEffect(() => {
     if (!id) return;
-
     ApiClient.instance?.getToken(id as string).then(async (token: TokenDTO) => {
       setToken(token);
     });
@@ -230,7 +267,7 @@ export default function TokenPage() {
   };
 
   return (
-    <div className="boxed">
+    <div className="container boxed wider">
       <Head>
         <title>{token?.name || id}</title>
       </Head>
@@ -266,20 +303,6 @@ export default function TokenPage() {
 
       {token && (
         <TokenContainer>
-          {token.minted && (
-            <TokenHoldersContainer>
-              <h3>Top holders</h3>
-              <TokenHolders
-                token={token.id}
-                selected={ownership}
-                setSelected={(o: TokenOwnershipDTO) => setOwnership(o)}
-                currentUser={currentUser}
-                listForSale={() => {
-                  setCreatingListing(true);
-                }}
-              />
-            </TokenHoldersContainer>
-          )}
           <TokenMain>
             <TokenHeading>
               <h1>{token?.name}</h1>
@@ -307,7 +330,9 @@ export default function TokenPage() {
             </TokenCreatorCard>
 
             {token.description && (
-              <p style={{ whiteSpace: 'pre-line' }}>{token.description}</p>
+              <Section title="Description">
+                <p>{token.description}</p>
+              </Section>
             )}
 
             {token?.creatorId == currentUser?.id && !token?.minted && (
@@ -324,8 +349,41 @@ export default function TokenPage() {
               </TokenActions>
             )}
 
-            <TokenListings token={token} />
+            {token.communities && token.communities.length > 0 && (
+              <Section title="Communities">
+                <TokenCommunities
+                  communities={token.communities}
+                  onSelected={(community) =>
+                    router.push(getCommunityUrl(community))
+                  }
+                />
+              </Section>
+            )}
+
+            {listings && listings.length > 0 && (
+              <Section title="Market listings">
+                <TokenListings
+                  listings={listings}
+                  currentUserId={currentUser?.id}
+                  hasMore={hasMoreListings}
+                  loadMore={loadMoreListings}
+                />
+              </Section>
+            )}
           </TokenMain>
+          {token.minted && (
+            <Section title="Holders">
+              <TokenHolders
+                token={token.id}
+                selected={ownership}
+                setSelected={(o: TokenOwnershipDTO) => setOwnership(o)}
+                currentUser={currentUser}
+                listForSale={() => {
+                  setCreatingListing(true);
+                }}
+              />
+            </Section>
+          )}
         </TokenContainer>
       )}
     </div>

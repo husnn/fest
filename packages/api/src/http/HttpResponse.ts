@@ -1,6 +1,6 @@
-import { Response as ExpressResponse } from 'express';
-
 import { PaginatedResponse, Response } from '@fanbase/shared';
+
+import { Response as ExpressResponse } from 'express';
 
 export class HttpResponse<U extends Response | PaginatedResponse> {
   constructor(
@@ -12,7 +12,9 @@ export class HttpResponse<U extends Response | PaginatedResponse> {
       total?: number;
     }
   ) {
-    const success = data?.success || true;
+    const success = data
+      ? data.success || typeof data.error === 'undefined'
+      : true;
     const status = data?.status || 200;
 
     const response: Response = {

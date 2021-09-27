@@ -1,3 +1,4 @@
+import { IPFSService, MediaService, YouTubeService } from '../../services';
 import {
   Percentage,
   TokenAttributes,
@@ -6,14 +7,14 @@ import {
   TokenType
 } from '@fanbase/shared';
 
-import UseCase from '../../base/UseCase';
+import { CreateCommunity } from '../../usecases';
+import { GetYouTubeChannel } from '../google/GetYouTubeChannel';
+import { Result } from '../../Result';
 import { Token } from '../../entities';
 import { TokenRepository } from '../../repositories';
+import UseCase from '../../base/UseCase';
 import UserRepository from '../../repositories/UserRepository';
-import { Result } from '../../Result';
-import { IPFSService, MediaService, YouTubeService } from '../../services';
 import { generateTokenId } from '../../utils';
-import { GetYouTubeChannel } from '../google/GetYouTubeChannel';
 
 export interface CreateTokenInput {
   user: string;
@@ -35,6 +36,7 @@ export class CreateToken extends UseCase<CreateTokenInput, CreateTokenOutput> {
   private metadataStore: IPFSService;
   private youtubeService: YouTubeService;
   private getYouTubeChannelUseCase: GetYouTubeChannel;
+  private createCommunityUseCase: CreateCommunity;
 
   constructor(
     tokenRepository: TokenRepository,
@@ -42,7 +44,8 @@ export class CreateToken extends UseCase<CreateTokenInput, CreateTokenOutput> {
     mediaService: MediaService,
     metadataStore: IPFSService,
     youtubeService: YouTubeService,
-    getYouTubeChannelUseCase: GetYouTubeChannel
+    getYouTubeChannelUseCase: GetYouTubeChannel,
+    createCommunityUseCase: CreateCommunity
   ) {
     super();
 
@@ -52,6 +55,7 @@ export class CreateToken extends UseCase<CreateTokenInput, CreateTokenOutput> {
     this.metadataStore = metadataStore;
     this.youtubeService = youtubeService;
     this.getYouTubeChannelUseCase = getYouTubeChannelUseCase;
+    this.createCommunityUseCase = createCommunityUseCase;
   }
 
   async exec(data: CreateTokenInput): Promise<Result<CreateTokenOutput>> {
@@ -123,8 +127,13 @@ export class CreateToken extends UseCase<CreateTokenInput, CreateTokenOutput> {
     });
 
     token = await this.tokenRepository.create(token);
-
     await this.userRepository.addToken(data.user, token.id);
+
+    await this.createCommunityUseCase.exec({
+      name: data.name,
+      creator: data.user,
+      tokens: [token.id]
+    });
 
     return Result.ok(token.id);
   }

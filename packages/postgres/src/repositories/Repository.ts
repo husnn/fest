@@ -1,4 +1,8 @@
-import { EntitySchema, getRepository, Repository as PostgresRepository } from 'typeorm';
+import {
+  EntitySchema,
+  Repository as PostgresRepository,
+  getRepository
+} from 'typeorm';
 
 import { Repository as IRepository } from '@fanbase/core';
 
@@ -11,6 +15,10 @@ export abstract class Repository<T> implements IRepository<T> {
 
   get(id: string, relations?: string[]): Promise<T> {
     return this.db.findOne(id, { relations });
+  }
+
+  getBatch(ids: string[]): Promise<T[]> {
+    return this.db.findByIds(ids);
   }
 
   create(item: T): Promise<T> {

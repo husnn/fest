@@ -1,12 +1,13 @@
-import { NextRouter } from 'next/router';
-
 import {
+  CommunityDTO,
   Currency,
   TokenDTO,
   TokenOwnershipDTO,
   UserDTO,
   WalletDTO
 } from '@fanbase/shared';
+
+import { NextRouter } from 'next/router';
 import { getConfig } from '../config';
 
 export const isProduction =
@@ -25,6 +26,9 @@ export const getProfileUrl = ({
   username?: string;
   id?: string;
 }): string => `/u/${username || id}`;
+
+export const getCommunityUrl = (community: CommunityDTO) =>
+  `/c/${community.id}`;
 
 export const specific =
   <T>() =>
@@ -62,6 +66,7 @@ export const getImageUrl = (
     maxWidth?: number;
     maxHeight?: number;
     fit?: 'crop';
+    blur?: number;
   },
   override = false
 ) => {
@@ -81,7 +86,8 @@ export const getImageUrl = (
         ...(params.height && { h: params.height }),
         ...(params.maxWidth && { 'max-w': params.maxWidth }),
         ...(params.maxHeight && { 'max-h': params.maxHeight }),
-        ...(params.fit && { fit: params.fit })
+        ...(params.fit && { fit: params.fit }),
+        ...(params.blur && { blur: params.blur })
       }
     : undefined;
 

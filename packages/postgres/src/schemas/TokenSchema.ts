@@ -1,5 +1,4 @@
 import { EntitySchema } from 'typeorm';
-
 import { Token } from '@fanbase/core';
 import { TokenType } from '@fanbase/shared';
 
@@ -76,6 +75,11 @@ const TokenSchema = new EntitySchema<Token>({
         name: 'creator_id',
         referencedColumnName: 'id'
       }
+    },
+    communities: {
+      type: 'many-to-many',
+      target: 'community',
+      inverseSide: 'tokens'
     }
   }
 });

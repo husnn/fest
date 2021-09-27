@@ -1,13 +1,11 @@
-import React from 'react';
-
-import styled from '@emotion/styled';
-import { TokenDTO } from '@fanbase/shared';
-
 import { getDisplayName, getImageUrl } from '../utils';
+
+import React from 'react';
+import { TokenDTO } from '@fanbase/shared';
+import styled from '@emotion/styled';
 
 const GridItem = styled.div`
   width: 100%;
-  // height: 320px;
   padding: 20px 10px;
 
   text-align: center;
@@ -29,11 +27,12 @@ const GridItem = styled.div`
   }
 `;
 
-const Preview = styled.div`
+const Preview = styled.div<{ bg?: string }>`
   width: 100%;
-  height: 200px;
+  height: 250px;
 
-  background: url(/images/ic-token.svg) #f5f5f5;
+  background: url(${(props) => (props.bg ? props.bg : `/images/ic-token.svg`)})
+    #f5f5f5;
   background-repeat: no-repeat;
   background-position: center;
   background-size: 50%;
@@ -44,7 +43,6 @@ const Preview = styled.div`
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: 50% 100%;
     border-radius: 20px;
   }
 `;
@@ -107,9 +105,15 @@ const TokenGridItem = ({
 
   return (
     <GridItem onClick={() => (onClick ? onClick(token) : null)}>
-      <Preview>
+      <Preview
+        bg={
+          token.image
+            ? getImageUrl(token.image, { width: 250, height: 250, blur: 100 })
+            : null
+        }
+      >
         {token.image && (
-          <img src={getImageUrl(token.image, { width: 250, height: 250 })} />
+          <img src={getImageUrl(token.image, { width: 350, height: 350 })} />
         )}
       </Preview>
       <TokenInfo>

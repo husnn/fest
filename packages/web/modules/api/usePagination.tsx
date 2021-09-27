@@ -3,7 +3,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { PaginatedResponse } from '@fanbase/shared';
 
 const usePagination = <U extends unknown>(
-  query?: (count: number, page: number) => Promise<PaginatedResponse<U>>
+  query: (count: number, page: number, args?) => Promise<PaginatedResponse<U>>,
+  args = []
 ) => {
   const [data, setData] = useState<U[]>([]);
 
@@ -13,7 +14,7 @@ const usePagination = <U extends unknown>(
   const [hasMore, setHasMore] = useState(false);
 
   const fetch = () => {
-    query(count, page).then((res: PaginatedResponse<U>) => {
+    query(count, page, ...args).then((res: PaginatedResponse<U>) => {
       setData([...data, ...res.body]);
 
       setCount(res.count);
@@ -26,11 +27,15 @@ const usePagination = <U extends unknown>(
   const isInitialMount = useRef(true);
 
   useEffect(() => {
+    for (const x of args) {
+      if (typeof x === 'undefined') return;
+    }
+
     if (isInitialMount.current) {
       isInitialMount.current = false;
       fetch();
     }
-  }, []);
+  }, args);
 
   const loadMore = () => fetch();
 

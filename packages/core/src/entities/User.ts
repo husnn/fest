@@ -1,10 +1,9 @@
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
-
 import { getExpiryDate, randomInteger } from '@fanbase/shared';
 
 import Token from './Token';
 import Wallet from './Wallet';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 export class User {
   readonly id: string;

@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 
-import styled from '@emotion/styled';
-
 import { Link } from '../ui';
 import { LinkType } from './Header';
+import styled from '@emotion/styled';
 
 const MenuContainer = styled.div`
   width: 100%;
@@ -31,12 +30,12 @@ const MenuLink = styled.div<{ indentLevel?: number }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  ${(props) => `padding: 15px ${20 + 10 * props.indentLevel}px`};
 
   a {
     font-weight: bold;
     opacity: 0.7;
     flex: 1;
+    ${(props) => `padding: 15px ${20 + 10 * props.indentLevel}px`};
 
     &:hover {
       opacity: 0.9;
@@ -46,15 +45,12 @@ const MenuLink = styled.div<{ indentLevel?: number }>`
   &:hover {
     background: #eee;
   }
-
-  img {
-    width: ;
-  }
 `;
 
 const LinkArrow = styled.div<{ open: boolean }>`
   width: 20px;
   height: 20px;
+  margin-right: 20px;
   background: url('/images/ic-arrow-down.svg');
   background-size: 60%;
   background-position: center;

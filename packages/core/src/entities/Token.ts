@@ -5,6 +5,7 @@ import {
   TokenType
 } from '@fanbase/shared';
 
+import Community from './Community';
 import User from './User';
 
 export class Token {
@@ -34,6 +35,8 @@ export class Token {
   chain?: TokenChainData;
 
   minted: boolean;
+
+  communities: Community[];
 
   constructor(data?: Partial<Token>) {
     Object.assign(this, data);

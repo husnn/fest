@@ -1,7 +1,6 @@
-import React from 'react';
-
-import useGoogleAuth from '../modules/youtube/useGoogleAuth';
 import Button from '../ui/Button';
+import React from 'react';
+import useGoogleAuth from '../modules/youtube/useGoogleAuth';
 
 type GoogleButtonProps = {
   linked?: boolean;
@@ -15,6 +14,7 @@ export const GoogleButton: React.FC<GoogleButtonProps> = ({
 
   return (
     <Button
+      size="small"
       color={isLinked ? 'normal' : 'secondary'}
       onClick={async () => {
         if (!isLinked) {

@@ -2,11 +2,10 @@
 
 import React, { useEffect, useState } from 'react';
 
-import styled from '@emotion/styled';
-
-import { useHeader } from '../modules/navigation';
 import { Link } from '../ui';
 import MobileMenu from './MobileMenu';
+import styled from '@emotion/styled';
+import { useHeader } from '../modules/navigation';
 
 export type LinkType = {
   id: string;
@@ -41,7 +40,7 @@ const HeaderContainer = styled.div`
 const HeaderWrapper = styled.div`
   width: 100%;
   height: 100%;
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 0.75rem;
   display: flex;
@@ -55,10 +54,6 @@ const HeaderMenu = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-
-  > * + * {
-    margin-left: 10px;
-  }
 
   a {
     width: 100%;
@@ -78,58 +73,35 @@ const HeaderMenu = styled.div`
   }
 `;
 
-const LinkDropdown = styled.div`
-  min-width: 180px;
-  padding: 10px 0;
-  margin-top: 20px;
-  background: white;
-  position: absolute;
-  visibility: hidden;
-  display: flex;
-  flex-direction: column;
-  transform: translateX(-50%);
-  border-radius: 10px;
-  box-shadow: 3px 3px 20px 2px rgba(0, 0, 0, 0.1);
-  opacity: 0;
-  transition: all 200ms ease 100ms;
-  z-index: 1;
-
-  > div {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-
-    span {
-      width: 100%;
-      margin: 0;
-      padding: 10px 20px;
-      display: flex;
-      flex-direction: column;
-      cursor: pointer;
-
-      a {
-        width: 100%;
-        padding: 0;
-        float: left;
-
-        &:hover {
-          background: none;
-        }
-      }
-
-      &:hover {
-        background-color: #eee;
-      }
-    }
-  }
-`;
-
 const HeaderItem = styled.span`
   &:hover {
     > div {
       opacity: 1;
       visibility: visible;
     }
+  }
+`;
+
+const LinkDropdown = styled.div`
+  min-width: 180px;
+  margin-top: 20px;
+  padding: 10px 0;
+  position: absolute;
+  background: white;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  transform: translateX(-50%);
+  box-shadow: 3px 3px 20px 2px rgba(0, 0, 0, 0.1);
+  transition: all 200ms ease 100ms;
+  visibility: hidden;
+  border-radius: 10px;
+  opacity: 0;
+  z-index: 1;
+
+  a {
+    padding: 10px 20px;
+    display: block;
   }
 `;
 
@@ -171,7 +143,7 @@ const Header: React.FC<HeaderProps> = () => {
     links: LinkType[];
     level?: number;
   }) => (
-    <HeaderMenu>
+    <React.Fragment>
       {links.map((link: LinkType, index: number) => {
         return link.visible != false ? (
           <HeaderItem key={index}>
@@ -184,7 +156,7 @@ const Header: React.FC<HeaderProps> = () => {
           </HeaderItem>
         ) : null;
       })}
-    </HeaderMenu>
+    </React.Fragment>
   );
 
   const [visibleCount, setVisibleCount] = useState(0);
@@ -206,7 +178,11 @@ const Header: React.FC<HeaderProps> = () => {
         <Link href="/">
           <h2 style={{ fontFamily: 'Gilmer' }}>Fanbase</h2>
         </Link>
-        {links && !singleLink && <HeaderLinks links={links} />}
+        {links && !singleLink && (
+          <HeaderMenu>
+            <HeaderLinks links={links} />
+          </HeaderMenu>
+        )}
         {links.length > 0 &&
           (!singleLink ? (
             <MenuClose

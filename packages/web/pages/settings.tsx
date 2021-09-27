@@ -1,27 +1,25 @@
-import { Field, Form, Formik, FormikProps } from 'formik';
-import { useRouter } from 'next/router';
-import React from 'react';
-
-import { css, Global } from '@emotion/react';
-import styled from '@emotion/styled';
-import { UserInfoSchema } from '@fanbase/shared';
-
-import { GoogleButton } from '../components';
-import ApiClient from '../modules/api/ApiClient';
-import { saveCurrentUser } from '../modules/auth/authStorage';
-import useAuthentication from '../modules/auth/useAuthentication';
-import { fontSize } from '../styles/constants';
-import styles from '../styles/Settings.module.scss';
 import { Button, FormInput, TextArea, TextInput } from '../ui';
+import { Field, Form, Formik, FormikProps } from 'formik';
+import { Global, css } from '@emotion/react';
+
+import ApiClient from '../modules/api/ApiClient';
+import { GoogleButton } from '../components';
+import React from 'react';
+import { UserInfoSchema } from '@fanbase/shared';
+import { fontSize } from '../styles/constants';
 import { getProfileUrl } from '../utils';
+import { saveCurrentUser } from '../modules/auth/authStorage';
+import styled from '@emotion/styled';
+import styles from '../styles/Settings.module.scss';
+import useAuthentication from '../modules/auth/useAuthentication';
+import { useRouter } from 'next/router';
 
 const SettingsSheet = styled.div`
-  max-width: 400px;
+  max-width: 450px;
   margin: 0 auto;
-  padding-bottom: 50px;
+  padding-bottom: 30px;
   display: flex;
   flex-direction: column;
-  // gap: 50px;
 
   > * + * {
     margin-top: 50px;
@@ -32,7 +30,6 @@ const SettingsBlock = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  // gap: 20px;
 
   > * + * {
     margin-top: 20px;
@@ -45,16 +42,17 @@ export default function SettingsPage() {
   const { currentUser, setCurrentUser } = useAuthentication(true);
 
   return (
-    <div className="boxed">
+    <div className="container boxed" style={{ marginTop: 30 }}>
       {currentUser && (
         <SettingsSheet>
-          <SettingsBlock>
+          <h1>Settings</h1>
+          {/* <SettingsBlock>
             <FormInput label="Your public address">
               <h3 className="wallet-address">{currentUser.wallet?.address}</h3>
             </FormInput>
-          </SettingsBlock>
+          </SettingsBlock> */}
           <SettingsBlock>
-            <h3>Edit profile</h3>
+            <h2>Your info</h2>
             <Formik
               initialValues={{
                 name: currentUser.name || '',
@@ -171,7 +169,8 @@ export default function SettingsPage() {
             </Formik>
           </SettingsBlock>
           <SettingsBlock>
-            <h3>Connect to YouTube</h3>
+            <h2>Connect to YouTube</h2>
+            <p>Sign in to turn your videos into tokens.</p>
             <GoogleButton
               onLinkReceived={(link: string) => {
                 router.push(link);

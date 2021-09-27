@@ -6,6 +6,7 @@ import TokenSchema from './TokenSchema';
 import TokenTradeSchema from './TokenTradeSchema';
 import UserSchema from './UserSchema';
 import WalletSchema from './WalletSchema';
+import CommunitySchema from './CommunitySchema';
 
 export default [
   OAuthSchema,
@@ -15,5 +16,6 @@ export default [
   TokenOwnershipSchema,
   TokenSchema,
   UserSchema,
-  WalletSchema
+  WalletSchema,
+  CommunitySchema
 ];

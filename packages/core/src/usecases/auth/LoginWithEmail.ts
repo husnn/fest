@@ -1,12 +1,11 @@
 import { CurrentUserDTO, isExpired } from '@fanbase/shared';
-import { isProduction } from '../../config';
 
+import { LoginError } from './errors';
+import { Result } from '../../Result';
 import UseCase from '../../base/UseCase';
 import { User } from '../../entities';
-import { WalletRepository } from '../../repositories';
 import UserRepository from '../../repositories/UserRepository';
-import { Result } from '../../Result';
-import { LoginError } from './errors';
+import { isProduction } from '../../config';
 
 export interface LoginWithEmailInput {
   email: string;

@@ -1,7 +1,6 @@
 import { Protocol } from '@fanbase/shared';
-
-import { Token } from '../entities';
 import Repository from './Repository';
+import { Token } from '../entities';
 
 export interface TokenRepository extends Repository<Token> {
   findByChainData(data: {
