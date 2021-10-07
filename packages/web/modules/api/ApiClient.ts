@@ -9,6 +9,8 @@ import {
   CancelTokenListingResponse,
   CreateTokenRequest,
   CreateTokenResponse,
+  DoAuthPrecheckRequest,
+  DoAuthPrecheckResponse,
   EditUserRequest,
   EditUserResponse,
   GetListingsForTokenRequest,
@@ -25,10 +27,10 @@ import {
   GetTokenOwnershipsResponse,
   GetTokenRequest,
   GetTokenResponse,
-  GetTokensCreatedResponse,
-  GetTokensOwnedResponse,
   GetTokenTradesForUserRequest,
   GetTokenTradesForUserResponse,
+  GetTokensCreatedResponse,
+  GetTokensOwnedResponse,
   GetUserByIdRequest,
   GetUserByUsernameRequest,
   GetUserResponse,
@@ -37,7 +39,6 @@ import {
   IdentifyWithWalletRequest,
   IdentifyWithWalletResponse,
   InitResponse,
-  isUsername,
   ListTokenForSaleRequest,
   ListTokenForSaleResponse,
   LoginResponse,
@@ -51,15 +52,16 @@ import {
   Protocol,
   RequestTestFundsRequest,
   RequestTestFundsResponse,
-  TokenData,
   TokenDTO,
+  TokenData,
   TokenOwnershipDTO,
   UnlinkOAuthRequest,
   UnlinkOAuthResponse,
   UserInfo,
   WithdrawMarketEarningsRequest,
   WithdrawMarketEarningsResponse,
-  YouTubeVideo
+  YouTubeVideo,
+  isUsername
 } from '@fanbase/shared';
 
 import HttpClient from './HttpClient';
@@ -518,6 +520,22 @@ export class ApiClient {
   }
 
   // Auth
+
+  async doAuthPrecheck(email: string): Promise<boolean> {
+    const response = await this.client.request<
+      DoAuthPrecheckResponse,
+      DoAuthPrecheckRequest
+    >({
+      method: 'POST',
+      endpoint: '/precheck',
+      authentication: 'none',
+      body: {
+        email
+      }
+    });
+
+    return response.exists;
+  }
 
   async loginWithEmail(
     email: string,

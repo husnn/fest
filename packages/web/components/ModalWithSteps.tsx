@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 
+import Modal from '../ui/Modal';
 import styled from '@emotion/styled';
-
-import Modal, { ModalProps } from '../ui/Modal';
 
 interface Step {
   title?: string;

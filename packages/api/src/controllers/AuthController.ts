@@ -1,6 +1,5 @@
-import { NextFunction, Request, Response } from 'express';
-
 import {
+  DoAuthPrecheck,
   EthereumService,
   IdentifyWithEmail,
   IdentifyWithWallet,
@@ -12,14 +11,20 @@ import {
   WalletRepository
 } from '@fanbase/core';
 import {
+  DoAuthPrecheckResponse,
   IdentifyWithEmailResponse,
   IdentifyWithWalletResponse,
-  LoginResponse
+  LoginResponse,
+  isEmailAddress
 } from '@fanbase/shared';
-
 import { HttpError, HttpResponse, ValidationError } from '../http';
+import { NextFunction, Request, Response } from 'express';
 
 class AuthController {
+  private userRepository: UserRepository;
+
+  private doAuthPrecheckUseCase: DoAuthPrecheck;
+
   private identifyWithEmailUseCase: IdentifyWithEmail;
   private identifyWithWalletUseCase: IdentifyWithWallet;
 
@@ -32,6 +37,10 @@ class AuthController {
     ethereumService: EthereumService,
     mailService: MailService
   ) {
+    this.userRepository = userRepository;
+
+    this.doAuthPrecheckUseCase = new DoAuthPrecheck(userRepository);
+
     this.identifyWithEmailUseCase = new IdentifyWithEmail(
       userRepository,
       walletRepository,
@@ -51,6 +60,26 @@ class AuthController {
       walletRepository,
       ethereumService
     );
+  }
+
+  async doPrecheck(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { email } = req.body;
+
+      if (!isEmailAddress(email))
+        throw new ValidationError('Please provide a valid email address.');
+
+      const precheck = await this.doAuthPrecheckUseCase.exec({ email });
+
+      if (!precheck.success)
+        throw new HttpError('Could not perform auth precheck.');
+
+      return new HttpResponse<DoAuthPrecheckResponse>(res, {
+        exists: precheck.data.exists
+      });
+    } catch (err) {
+      next(err);
+    }
   }
 
   async loginWithEmail(req: Request, res: Response, next: NextFunction) {

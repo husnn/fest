@@ -1,22 +1,20 @@
+import { CurrentUserDTO, isValidPassword } from '@fanbase/shared';
+import ModalWithSteps, { ModalWithStepsProps } from './ModalWithSteps';
 import React, { useEffect, useRef, useState } from 'react';
 
-import {
-  CurrentUserDTO,
-  isEmailAddress,
-  isValidPassword
-} from '@fanbase/shared';
-
 import ApiClient from '../modules/api/ApiClient';
-import styles from '../styles/Login.module.scss';
 import DigitInput from '../ui/DigitInput';
 import TextInput from '../ui/TextInput';
-import ModalWithSteps, { ModalWithStepsProps } from './ModalWithSteps';
 
 type LoginWithEmailProps = {
+  email: string;
+  newUser?: boolean;
   onLogin: (token: string, user: CurrentUserDTO) => void;
 };
 
 const LoginWithEmail: React.FC<LoginWithEmailProps & ModalWithStepsProps> = ({
+  email,
+  newUser = false,
   onLogin,
   stepIndex,
   setStepIndex,
@@ -32,15 +30,11 @@ const LoginWithEmail: React.FC<LoginWithEmailProps & ModalWithStepsProps> = ({
   useEffect(() => {
     setSteps([
       {
-        title: 'Enter your email address',
-        description: 'Log in to your existing account or create a new one.',
-        ok: 'Next'
-      },
-      {
-        title: 'Enter password',
-        description: 'Log in to your existing account or create a new one.',
-        ok: 'Send code',
-        backable: true
+        title: newUser ? 'Create a new account' : 'Welcome back!',
+        description: newUser
+          ? 'First time? So glad you`ll be joining us 🤗 . Now create a password for your brand new account.'
+          : 'Enter your password to login.',
+        ok: 'Send code'
       },
       {
         title: 'Enter login code',
@@ -51,10 +45,9 @@ const LoginWithEmail: React.FC<LoginWithEmailProps & ModalWithStepsProps> = ({
     ]);
   }, []);
 
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const login = async (email: string, code: string) => {
+  const login = async (code: string) => {
     setError(null);
     setOkEnabled(false);
 
@@ -69,17 +62,16 @@ const LoginWithEmail: React.FC<LoginWithEmailProps & ModalWithStepsProps> = ({
       close();
     } catch (err) {
       setStepIndex(0);
-      setOkEnabled(true);
       setError('Incorrect password or code. Try again.');
     }
   };
 
   const identify = async () => {
+    goForward();
     setOkEnabled(false);
 
     try {
-      await ApiClient.getInstance()?.identifyWithEmail(email, password);
-      goForward();
+      await ApiClient.getInstance().identifyWithEmail(email, password);
     } catch (err) {
       goBack();
       console.log(err);
@@ -95,69 +87,41 @@ const LoginWithEmail: React.FC<LoginWithEmailProps & ModalWithStepsProps> = ({
     }
 
     if (stepIndex == 0) {
-      goForward();
-      setPassword('');
-      setOkEnabled(false);
-    }
-
-    if (stepIndex == 1) {
       identify();
     }
   }, [onOkPressed]);
 
   return (
-    <div className={styles.loginWithEmail}>
-      <div className={styles.loginWithEmailStep}>
-        {stepIndex == 0 && (
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              pressOk();
-            }}
-          >
-            <TextInput
-              type="email"
-              placeholder="vader@deathstar.space"
-              value={email}
-              onChange={(e) => {
-                setError(null);
+    <div>
+      {stepIndex == 0 && (
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            pressOk();
+          }}
+        >
+          <TextInput
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => {
+              setError(null);
 
-                const text = e.target.value;
-                setEmail(text);
-
-                setOkEnabled(!!isEmailAddress(text));
-              }}
-            />
-          </form>
-        )}
-        {stepIndex == 1 && (
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              pressOk();
-            }}
-          >
-            <TextInput
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => {
-                const text = e.target.value;
-                setPassword(text);
-                setOkEnabled(!!isValidPassword(text));
-              }}
-            />
-          </form>
-        )}
-        {stepIndex == 2 && (
-          <DigitInput
-            length={6}
-            onEnter={(code: string) => {
-              login(email, code);
+              const text = e.target.value;
+              setPassword(text);
+              setOkEnabled(!!isValidPassword(text));
             }}
           />
-        )}
-      </div>
+        </form>
+      )}
+      {stepIndex == 1 && (
+        <DigitInput
+          length={6}
+          onEnter={(code: string) => {
+            login(code);
+          }}
+        />
+      )}
     </div>
   );
 };

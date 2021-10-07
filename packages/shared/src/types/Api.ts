@@ -365,6 +365,19 @@ export interface EditUserRequest extends Request {
  * Login
  */
 
+export interface DoAuthPrecheckResponse extends Response {
+  exists: boolean;
+}
+
+export interface DoAuthPrecheckRequest extends Request {
+  method: 'POST';
+  endpoint: '/precheck';
+  authentication: 'none';
+  body: {
+    email: string;
+  };
+}
+
 export interface LoginResponse extends Response {
   token: string;
   user: CurrentUserDTO;

@@ -1,13 +1,12 @@
-import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
-import ReactDOM from 'react-dom';
-import { CSSTransition } from 'react-transition-group';
 
-import styled from '@emotion/styled';
-
-import { corners } from '../styles/constants';
 import Button from './Button';
+import { CSSTransition } from 'react-transition-group';
+import Image from 'next/image';
 import Link from './Link';
+import ReactDOM from 'react-dom';
+import { corners } from '../styles/constants';
+import styled from '@emotion/styled';
 
 export type ModalProps = {
   show: boolean;
@@ -31,7 +30,7 @@ const ModalTitle = styled.h3``;
 const ModalDescription = styled.p`
   margin: 10px 0 0;
   font-size: 10pt;
-  opacity: 0.5;
+  color: #9a9a9a;
 `;
 
 const ModalOverlay = styled.div`

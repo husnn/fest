@@ -7,7 +7,10 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 class MailService implements IMailService {
   send(email: Email) {
-    if (process.env.NODE_ENV !== 'production') console.log(email.content);
+    if (process.env.NODE_ENV !== 'production') {
+      console.log(email.content);
+      return;
+    }
 
     const msg: MailDataRequired = {
       to: email.to,

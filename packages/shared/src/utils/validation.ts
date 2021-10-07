@@ -10,7 +10,7 @@ export const USERNAME_REGEX =
 export const isUUID = (value: string) => UUID_REGEX.test(value);
 
 export const isEmailAddress = (value: string) =>
-  EMAIL_REGEX.test(String(value).toLowerCase());
+  value ? EMAIL_REGEX.test(String(value).toLowerCase()) : false;
 
 export const isUsername = (value: string) => USERNAME_REGEX.test(value);
 

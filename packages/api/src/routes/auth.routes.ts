@@ -3,6 +3,10 @@ import { NextFunction, Request, Response, Router } from 'express';
 import AuthController from '../controllers/AuthController';
 
 export default function init(router: Router, authController: AuthController) {
+  router.post('/precheck', (req: Request, res: Response, next: NextFunction) =>
+    authController.doPrecheck(req, res, next)
+  );
+
   router.post(
     '/identify/email',
     (req: Request, res: Response, next: NextFunction) =>
