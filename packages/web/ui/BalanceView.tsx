@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
-import styled from '@emotion/styled';
-
 import { CurrencyBalance } from '../types';
+import styled from '@emotion/styled';
 
 const Container = styled.div`
   margin: 20px 0;
 `;
 
-const BalanceContainer = styled.div`
+const Wrapper = styled.div`
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr;
@@ -50,12 +49,13 @@ const CurrencyTab = styled.div<{ selected: boolean }>`
   }
 `;
 
-const Balance = styled.div`
+const BalanceContainer = styled.div`
   padding: 50px;
   background: #f5f5f5;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   text-align: center;
   border-radius: 30px;
 
@@ -69,6 +69,12 @@ const Balance = styled.div`
     word-break: break-word;
   }
 
+  > * + * {
+    margin-top: 15px;
+  }
+`;
+
+const Balance = styled.div`
   > * + * {
     margin-top: 5px;
   }
@@ -109,7 +115,7 @@ export const BalanceView = ({
 
   return (
     <Container>
-      <BalanceContainer>
+      <Wrapper>
         <CurrencySelection>
           {balances?.map((balance: CurrencyBalance, index: number) => (
             <CurrencyTab
@@ -123,21 +129,25 @@ export const BalanceView = ({
             </CurrencyTab>
           ))}
         </CurrencySelection>
-        <Balance>
-          <p>Your balance</p>
-          {selected && (
-            <React.Fragment>
-              <h1>
-                {selected.balance.displayAmount.toFixed(
-                  selected.precision || 5
-                )}
-              </h1>
-              <p>{selected.currency.symbol}</p>
-            </React.Fragment>
-          )}
+        <BalanceContainer>
+          <Balance>
+            <p>Your balance</p>
+            {selected ? (
+              <React.Fragment>
+                <h1>
+                  {selected.balance.displayAmount.toFixed(
+                    selected.precision || 5
+                  )}
+                </h1>
+                <p>{selected.currency.symbol}</p>
+              </React.Fragment>
+            ) : (
+              <h1>{Number(0).toFixed(3)}</h1>
+            )}
+          </Balance>
           <BalanceActions>{children}</BalanceActions>
-        </Balance>
-      </BalanceContainer>
+        </BalanceContainer>
+      </Wrapper>
     </Container>
   );
 };
