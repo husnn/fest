@@ -136,7 +136,7 @@ export const WalletPage = () => {
   };
 
   return currentUser ? (
-    <div className="boxed">
+    <div className="container boxed">
       <Head>
         <title>Wallet</title>
       </Head>

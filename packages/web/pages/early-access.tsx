@@ -4,6 +4,7 @@ import {
   Button,
   Checkbox,
   FormInput,
+  Link,
   RadioGroup,
   RadioOption,
   TextInput
@@ -32,7 +33,7 @@ const Box = styled.div`
 `;
 
 const Header = styled.div`
-  padding: 10px 0 5px;
+  margin-bottom: 10px;
 `;
 
 const Error = styled.p`
@@ -230,9 +231,11 @@ export const EarlyAccessPage = () => {
               <h3>You&apos;re on our radar now</h3>
               <p>Keep an eye out for an email from us.</p>
             </div>
-            <Button color="secondary" size="small">
-              Return home
-            </Button>
+            <Link href="/" style={{ display: 'block' }}>
+              <Button color="secondary" size="small">
+                Return home
+              </Button>
+            </Link>
           </SuccessBox>
         )}
       </Box>

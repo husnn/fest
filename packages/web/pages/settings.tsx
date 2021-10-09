@@ -42,16 +42,16 @@ export default function SettingsPage() {
   const { currentUser, setCurrentUser } = useAuthentication(true);
 
   return (
-    <div className="container boxed" style={{ marginTop: 30 }}>
+    <div className="container boxed">
       {currentUser && (
         <SettingsSheet>
-          <h1>Settings</h1>
           {/* <SettingsBlock>
             <FormInput label="Your public address">
-              <h3 className="wallet-address">{currentUser.wallet?.address}</h3>
+            <h3 className="wallet-address">{currentUser.wallet?.address}</h3>
             </FormInput>
           </SettingsBlock> */}
           <SettingsBlock>
+            <h1>Settings</h1>
             <h2>Your info</h2>
             <Formik
               initialValues={{

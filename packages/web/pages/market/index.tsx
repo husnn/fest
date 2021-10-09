@@ -23,7 +23,6 @@ import { useRouter } from 'next/router';
 import { useWeb3 } from '../../modules/web3';
 
 const MarketSection = styled.div`
-  margin: 30px 0;
   padding: 30px;
   background-color: #fafafa;
   border-radius: 20px;
