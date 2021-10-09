@@ -56,13 +56,15 @@ class AuthController {
       walletRepository,
       ethereumService,
       mailService,
-      authCheck
+      authCheck,
+      inviteRepository
     );
 
     this.identifyWithWalletUseCase = new IdentifyWithWallet(
       userRepository,
       walletRepository,
-      authCheck
+      authCheck,
+      inviteRepository
     );
 
     this.loginWithEmailUseCase = new LoginWithEmail(userRepository);

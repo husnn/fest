@@ -15,6 +15,7 @@ type AuthCheckInput = {
 
 type AuthCheckOutput = {
   isCreator: boolean;
+  invite?: Invite;
 };
 
 export class AuthCheck extends UseCase<AuthCheckInput, AuthCheckOutput> {
@@ -32,20 +33,23 @@ export class AuthCheck extends UseCase<AuthCheckInput, AuthCheckOutput> {
   }
 
   async exec(data: AuthCheckInput): Promise<Result<AuthCheckOutput>> {
+    let invite: Invite;
     let isCreator = false;
 
     if (isInviteOnly) {
       const entry = await this.waitlistRepository.findByEmailOrWallet(
         data.email || data.wallet
       );
-      if ((!entry || !entry.isAccepted) && !data.inviteCode)
-        return Result.fail(AuthError.INVITE_CODE_MISSING);
 
-      isCreator = entry.type === WaitlistEntryType.CREATOR;
+      if (entry) {
+        if (!entry.isAccepted && !data.inviteCode)
+          return Result.fail(AuthError.INVITE_CODE_MISSING);
+        isCreator = entry.type === WaitlistEntryType.CREATOR;
+      }
     }
 
     if (data.inviteCode) {
-      const invite = await this.inviteRepository.findByCode(data.inviteCode);
+      invite = await this.inviteRepository.findByCode(data.inviteCode);
       if (!invite) return Result.fail(AuthError.INVITE_NOT_FOUND);
 
       if (!Invite.validate(invite))
@@ -53,9 +57,9 @@ export class AuthCheck extends UseCase<AuthCheckInput, AuthCheckOutput> {
 
       if (!isCreator) isCreator = invite.isCreator;
 
-      await this.inviteRepository.update(Invite.use(invite));
+      invite = await this.inviteRepository.update(Invite.use(invite));
     }
 
-    return Result.ok({ isCreator });
+    return Result.ok({ isCreator, invite });
   }
 }

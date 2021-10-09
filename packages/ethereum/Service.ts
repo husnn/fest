@@ -1,20 +1,8 @@
 /* eslint-disable */
 
 import * as BIP39 from 'bip39';
-import Decimal from 'decimal.js';
 import * as sigUtil from 'eth-sig-util';
-import { hdkey } from 'ethereumjs-wallet';
-import Web3 from 'web3';
 
-import {
-  ERC20Info,
-  EthereumService as IEthereumService,
-  generateWalletId,
-  Result,
-  TxResult,
-  Wallet
-} from '@fanbase/core';
-import Contracts from '@fanbase/eth-contracts';
 import {
   ApproveSpender,
   ApproveTokenMarket,
@@ -22,9 +10,17 @@ import {
   CancelTokenListing,
   ListTokenForSale,
   MintToken,
-  WithdrawMarketEarnings,
-  TransferERC20
+  TransferERC20,
+  WithdrawMarketEarnings
 } from '@fanbase/eth-transactions';
+import {
+  ERC20Info,
+  EthereumService as IEthereumService,
+  Result,
+  TxResult,
+  Wallet,
+  generateWalletId
+} from '@fanbase/core';
 import {
   EthereumTx,
   Price,
@@ -33,7 +29,11 @@ import {
   WalletType
 } from '@fanbase/shared';
 
+import Contracts from '@fanbase/eth-contracts';
+import Decimal from 'decimal.js';
 import ERC20Abi from './abi/ERC20.json';
+import Web3 from 'web3';
+import { hdkey } from 'ethereumjs-wallet';
 
 export class EthereumService implements IEthereumService {
   static instance: EthereumService;
@@ -519,7 +519,7 @@ export class EthereumService implements IEthereumService {
       .getWallet();
 
     return new Wallet({
-      id: generateWalletId(),
+      id: generateWalletId()(),
       type: WalletType.INTERNAL,
       protocol: Protocol.ETHEREUM,
       address: wallet.getAddressString(),

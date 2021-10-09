@@ -1,12 +1,17 @@
 import { EthereumService, MailService } from '../../services';
-import { UserRepository, WalletRepository } from '../../repositories';
+import {
+  InviteRepository,
+  UserRepository,
+  WalletRepository
+} from '../../repositories';
 
-import { AuthCheck } from '@fanbase/core';
+import { AuthCheck } from './AuthCheck';
 import { AuthError } from './errors';
 import { LoginCodeEmail } from '../../emails';
 import { Result } from '../../Result';
 import UseCase from '../../base/UseCase';
 import { User } from '../../entities';
+import { generateInvitesForNewUser } from '../invites';
 import { generateUserId } from '../../utils';
 import { isValidPassword } from '@fanbase/shared';
 
@@ -32,12 +37,15 @@ export class IdentifyWithEmail extends UseCase<
 
   private authCheck: AuthCheck;
 
+  private inviteRepository: InviteRepository;
+
   constructor(
     userRepository: UserRepository,
     walletRepository: WalletRepository,
     ethereumService: EthereumService,
     mailService: MailService,
-    authCheck: AuthCheck
+    authCheck: AuthCheck,
+    inviteRepository: InviteRepository
   ) {
     super();
 
@@ -48,6 +56,8 @@ export class IdentifyWithEmail extends UseCase<
     this.mailService = mailService;
 
     this.authCheck = authCheck;
+
+    this.inviteRepository = inviteRepository;
   }
 
   async exec(
@@ -67,7 +77,7 @@ export class IdentifyWithEmail extends UseCase<
       if (!check.success) return Result.fail(check.error);
 
       user = new User({
-        id: generateUserId(),
+        id: generateUserId()(),
         email: data.email.trim().toLowerCase(), // @BeforeInsert Trim and convert to lowercase
         password: data.password,
         isCreator: check.data.isCreator
@@ -84,6 +94,12 @@ export class IdentifyWithEmail extends UseCase<
 
       user.walletId = wallet.id;
       user = await this.userRepository.update(user);
+
+      generateInvitesForNewUser(
+        this.inviteRepository,
+        user.id,
+        check.data.isCreator
+      );
     } else {
       user.loginCode = User.newLoginCode();
       user = await this.userRepository.update(user);

@@ -12,6 +12,9 @@ export class InviteRepository
   }
 
   findByCode(code: string): Promise<Invite> {
-    return this.db.findOne({ code });
+    return this.db
+      .createQueryBuilder()
+      .where('LOWER(code) = LOWER(:code)', { code })
+      .getOne();
   }
 }

@@ -22,7 +22,8 @@ const InviteSchema = new EntitySchema<Invite>({
     },
     expiryDate: {
       type: 'timestamp',
-      name: 'expiry_date'
+      name: 'expiry_date',
+      nullable: true
     },
     ownerId: {
       type: 'text',

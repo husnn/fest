@@ -114,7 +114,7 @@ export class CreateToken extends UseCase<CreateTokenInput, CreateTokenOutput> {
     }
 
     let token = new Token({
-      id: generateTokenId(),
+      id: generateTokenId()(),
       creatorId: data.user,
       type,
       name,

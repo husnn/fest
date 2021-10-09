@@ -1,8 +1,11 @@
+import { Protocol, decryptText } from '@fanbase/shared';
 import {
-    generateTokenOwnershipId, TokenOwnership, TokenOwnershipRepository, TokenRepository,
-    WalletRepository
+  TokenOwnership,
+  TokenOwnershipRepository,
+  TokenRepository,
+  WalletRepository,
+  generateTokenOwnershipId
 } from '@fanbase/core';
-import { decryptText, Protocol } from '@fanbase/shared';
 
 import Job from './Job';
 
@@ -52,7 +55,7 @@ export default class TokenMint extends Job<TokenMintJob> {
       );
 
       const ownership = new TokenOwnership({
-        id: generateTokenOwnershipId(),
+        id: generateTokenOwnershipId()(),
         walletId: creatorWallet.id,
         tokenId,
         quantity: this.props.supply

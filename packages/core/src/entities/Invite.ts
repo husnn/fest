@@ -26,7 +26,7 @@ export class Invite {
   static validate(invite: Invite) {
     return (
       invite.status === InviteStatus.ACTIVE &&
-      invite.expiryDate > new Date() &&
+      (!invite.expiryDate || invite.expiryDate > new Date()) &&
       invite.useCount <= invite.maxUseCount
     );
   }
@@ -38,7 +38,7 @@ export class Invite {
       invite.status = InviteStatus.USED;
     }
 
-    if (invite.expiryDate <= new Date()) {
+    if (invite.expiryDate && invite.expiryDate <= new Date()) {
       invite.status = InviteStatus.EXPIRED;
     }
 

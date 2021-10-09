@@ -1,8 +1,13 @@
-import {
-    generateTokenOwnershipId, generateWalletId, TokenOwnership, TokenOwnershipRepository,
-    TokenRepository, Wallet, WalletRepository
-} from '@fanbase/core';
 import { Protocol, WalletType } from '@fanbase/shared';
+import {
+  TokenOwnership,
+  TokenOwnershipRepository,
+  TokenRepository,
+  Wallet,
+  WalletRepository,
+  generateTokenOwnershipId,
+  generateWalletId
+} from '@fanbase/core';
 
 import Job from './Job';
 
@@ -71,7 +76,7 @@ export default class TokenTransfer extends Job<TokenTransferJob> {
 
       if (!toWallet) {
         toWallet = new Wallet({
-          id: generateWalletId(),
+          id: generateWalletId()(),
           type: WalletType.EXTERNAL,
           protocol: this.props.protocol,
           address: this.props.to
@@ -80,7 +85,7 @@ export default class TokenTransfer extends Job<TokenTransferJob> {
         await walletRepository.create(toWallet);
 
         const toOwnership = new TokenOwnership({
-          id: generateTokenOwnershipId(),
+          id: generateTokenOwnershipId()(),
           walletId: toWallet.id,
           tokenId: token.id,
           quantity: this.props.quantity
@@ -95,7 +100,7 @@ export default class TokenTransfer extends Job<TokenTransferJob> {
 
         if (!toOwnership) {
           toOwnership = new TokenOwnership({
-            id: generateTokenOwnershipId(),
+            id: generateTokenOwnershipId()(),
             walletId: toWallet.id,
             tokenId: token.id,
             quantity: this.props.quantity

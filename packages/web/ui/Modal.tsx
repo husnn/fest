@@ -194,36 +194,34 @@ const Modal: React.FC<ModalProps> = ({
                   )}
                 </ModalHead>
               )}
-              <form onSubmit={(e) => e.preventDefault()}>
-                <ModalBody>{children}</ModalBody>
-                {(ok || cancel) && (
-                  <ModalActions>
-                    {ok && (
-                      <Button
-                        type="submit"
-                        color="primary"
-                        disabled={!okEnabled}
-                        onClick={() => {
-                          onOkPressed();
-                          if (hasSteps) setInProp(true);
-                        }}
-                      >
-                        {ok}
-                      </Button>
-                    )}
-                    {cancel && (
-                      <Link
-                        className="smaller"
-                        onClick={() => {
-                          requestClose();
-                        }}
-                      >
-                        {cancel}
-                      </Link>
-                    )}
-                  </ModalActions>
-                )}
-              </form>
+              <ModalBody>{children}</ModalBody>
+              {(ok || cancel) && (
+                <ModalActions>
+                  {ok && (
+                    <Button
+                      type="submit"
+                      color="primary"
+                      disabled={!okEnabled}
+                      onClick={() => {
+                        onOkPressed();
+                        if (hasSteps) setInProp(true);
+                      }}
+                    >
+                      {ok}
+                    </Button>
+                  )}
+                  {cancel && (
+                    <Link
+                      className="smaller"
+                      onClick={() => {
+                        requestClose();
+                      }}
+                    >
+                      {cancel}
+                    </Link>
+                  )}
+                </ModalActions>
+              )}
             </ModalContent>
           </CSSTransition>
         </ModalContainer>

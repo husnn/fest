@@ -56,7 +56,8 @@ const HeaderMenu = styled.div`
   align-items: center;
 
   a {
-    width: 100%;
+    width: 95%;
+    margin: 0 auto;
     padding: 10px;
     border-radius: 10px;
     opacity: 0.5;

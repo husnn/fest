@@ -41,7 +41,7 @@ export class CreateCommunity extends UseCase<
     if (tokens.length < 1) return Result.fail();
 
     let community = new Community({
-      id: generateCommunityId(),
+      id: generateCommunityId()(),
       creatorId: data.creator,
       name: data.name,
       tokens

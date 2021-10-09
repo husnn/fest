@@ -1,12 +1,13 @@
+import { AuthCheck, InviteRepository } from '@fanbase/core';
 import { Protocol, WalletType, encryptText } from '@fanbase/shared';
 import { User, Wallet } from '../../entities';
 import { generateUserId, generateWalletId } from '../../utils';
 
-import { AuthCheck } from '@fanbase/core';
 import { Result } from '../../Result';
 import UseCase from '../../base/UseCase';
 import UserRepository from '../../repositories/UserRepository';
 import WalletRepository from '../../repositories/WalletRepository';
+import { generateInvitesForNewUser } from '../invites';
 
 export interface IdentifyWithWalletInput {
   protocol: Protocol;
@@ -31,10 +32,13 @@ export class IdentifyWithWallet extends UseCase<
 
   private authCheck: AuthCheck;
 
+  private inviteRepository: InviteRepository;
+
   constructor(
     userRepository: UserRepository,
     walletRepository: WalletRepository,
-    authCheck: AuthCheck
+    authCheck: AuthCheck,
+    inviteRepository: InviteRepository
   ) {
     super();
 
@@ -42,6 +46,8 @@ export class IdentifyWithWallet extends UseCase<
     this.walletRepository = walletRepository;
 
     this.authCheck = authCheck;
+
+    this.inviteRepository = inviteRepository;
   }
 
   async exec(
@@ -63,7 +69,7 @@ export class IdentifyWithWallet extends UseCase<
       if (!check.success) return Result.fail(check.error);
 
       user = new User({
-        id: generateUserId(),
+        id: generateUserId()(),
         isCreator: check.data.isCreator
       });
 
@@ -71,7 +77,7 @@ export class IdentifyWithWallet extends UseCase<
 
       if (!wallet) {
         wallet = new Wallet({
-          id: generateWalletId(),
+          id: generateWalletId()(),
           type: WalletType.EXTERNAL,
           protocol: data.protocol,
           ownerId: user.id,
@@ -86,6 +92,12 @@ export class IdentifyWithWallet extends UseCase<
 
       user.walletId = wallet.id;
       user = await this.userRepository.update(user);
+
+      generateInvitesForNewUser(
+        this.inviteRepository,
+        user.id,
+        check.data.isCreator
+      );
     }
 
     if (!user) {
