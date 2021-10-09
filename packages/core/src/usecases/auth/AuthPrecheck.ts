@@ -1,6 +1,7 @@
+import { UserRepository, WaitlistRepository } from '../../repositories';
+
 import Result from '../../Result';
 import UseCase from '../../base/UseCase';
-import { UserRepository } from '../../repositories';
 import { isInviteOnly } from '../../config';
 
 type AuthPrecheckInput = {
@@ -17,19 +18,33 @@ export class AuthPrecheck extends UseCase<
   AuthPrecheckOutput
 > {
   private userRepository: UserRepository;
+  private waitlistRepository: WaitlistRepository;
 
-  constructor(userRepository: UserRepository) {
+  constructor(
+    userRepository: UserRepository,
+    waitlistRepository: WaitlistRepository
+  ) {
     super();
 
     this.userRepository = userRepository;
+    this.waitlistRepository = waitlistRepository;
   }
 
   async exec(data: AuthPrecheckInput): Promise<Result<AuthPrecheckOutput>> {
+    let needsInvite = false;
+
     const user = await this.userRepository.findByEmailOrWallet(data.identifier);
+
+    if (isInviteOnly) {
+      const entry = await this.waitlistRepository.findByEmailOrWallet(
+        data.identifier
+      );
+      needsInvite = !entry || !entry.isAccepted;
+    }
 
     return Result.ok({
       exists: !!user,
-      needsInvite: isInviteOnly
+      needsInvite
     });
   }
 }

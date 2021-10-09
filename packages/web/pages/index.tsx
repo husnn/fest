@@ -24,9 +24,9 @@ export default function Home() {
           <span style={{ whiteSpace: 'nowrap' }}>NFT-backed</span>
           <span style={{ display: 'block' }}>community</span>
         </h1>
-        <Link href="/login">
+        <Link href="/early-access">
           <Button color="primary" size="small">
-            Get started
+            Join Waitlist
           </Button>
         </Link>
         <img

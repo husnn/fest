@@ -35,7 +35,17 @@ const WaitlistEntrySchema = new EntitySchema<WaitlistEntry>({
       type: 'bool',
       default: false
     }
-  }
+  },
+  indices: [
+    {
+      columns: ['type', 'email'],
+      unique: true
+    },
+    {
+      columns: ['type', 'wallet'],
+      unique: true
+    }
+  ]
 });
 
 export default WaitlistEntrySchema;

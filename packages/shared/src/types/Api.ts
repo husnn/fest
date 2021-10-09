@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 
 import {
-  CommunityDTO,
   CurrentUserDTO,
   TokenDTO,
   TokenListingDTO,
@@ -11,8 +10,8 @@ import {
   TokenTradeDTO,
   UserDTO
 } from '../dto';
+import { Protocol, WaitlistEntryType } from '../enums';
 
-import { Protocol } from '../enums';
 import { ProtocolConfig } from './';
 import TokenMetadata from './TokenMetadata';
 
@@ -359,6 +358,24 @@ export interface EditUserResponse extends Response {
 export interface EditUserRequest extends Request {
   authenticated: 'required';
   body: UserInfo;
+}
+
+/**
+ * Waitlist
+ */
+
+export interface JoinWaitlistResponse extends Response {}
+export interface JoinWaitlistRequest extends Request {
+  method: 'POST';
+  endpoint: '/waitlist';
+  authentication: 'none';
+  body: {
+    type: WaitlistEntryType;
+    emailAddress: string;
+    useWallet: boolean;
+    walletAddress?: string;
+    socialMedia?: string;
+  };
 }
 
 /**

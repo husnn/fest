@@ -4,4 +4,5 @@ export * from './google';
 export * from './token';
 export * from './market';
 export * from './community';
+export * from './waitlist';
 // export * from "./offer";

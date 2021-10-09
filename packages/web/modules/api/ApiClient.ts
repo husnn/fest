@@ -39,6 +39,8 @@ import {
   IdentifyWithWalletRequest,
   IdentifyWithWalletResponse,
   InitResponse,
+  JoinWaitlistRequest,
+  JoinWaitlistResponse,
   ListTokenForSaleRequest,
   ListTokenForSaleResponse,
   LoginResponse,
@@ -58,6 +60,7 @@ import {
   UnlinkOAuthRequest,
   UnlinkOAuthResponse,
   UserInfo,
+  WaitlistEntryType,
   WithdrawMarketEarningsRequest,
   WithdrawMarketEarningsResponse,
   YouTubeVideo,
@@ -517,6 +520,29 @@ export class ApiClient {
     });
 
     return response.body.link;
+  }
+
+  // Waitlist
+
+  async joinWaitlist(
+    entryType: WaitlistEntryType,
+    emailAddress: string,
+    useWallet: boolean,
+    walletAddress?: string,
+    socialMedia?: string
+  ): Promise<JoinWaitlistResponse> {
+    return this.client.request<JoinWaitlistResponse, JoinWaitlistRequest>({
+      method: 'POST',
+      endpoint: '/waitlist',
+      authentication: 'none',
+      body: {
+        type: entryType,
+        emailAddress,
+        useWallet,
+        walletAddress,
+        socialMedia
+      }
+    });
   }
 
   // Auth

@@ -69,7 +69,8 @@ export class IdentifyWithEmail extends UseCase<
       user = new User({
         id: generateUserId(),
         email: data.email.trim().toLowerCase(), // @BeforeInsert Trim and convert to lowercase
-        password: data.password
+        password: data.password,
+        isCreator: check.data.isCreator
       });
 
       await user.hashPassword();

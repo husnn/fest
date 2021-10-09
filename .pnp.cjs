@@ -4103,6 +4103,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["next-http-proxy-middleware", "npm:1.1.1"],
             ["next-transpile-modules", "npm:7.3.0"],
             ["react", "npm:17.0.2"],
+            ["react-confetti", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:6.0.1"],
             ["react-device-detect", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:1.17.0"],
             ["react-dom", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:17.0.2"],
             ["react-dropzone", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:11.4.2"],
@@ -4112,6 +4113,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["typescript", "patch:typescript@npm%3A4.2.4#~builtin<compat/typescript>::version=4.2.4&hash=32657b"],
             ["url-loader", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:4.1.1"],
             ["web3", "npm:1.5.3"],
+            ["yup", "npm:0.32.9"],
             ["zustand", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:3.5.10"]
           ],
           "linkType": "SOFT",
@@ -13124,6 +13126,29 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["react-confetti", [
+        ["npm:6.0.1", {
+          "packageLocation": "./.yarn/cache/react-confetti-npm-6.0.1-250f70ffe1-4dd6bef9ad.zip/node_modules/react-confetti/",
+          "packageDependencies": [
+            ["react-confetti", "npm:6.0.1"]
+          ],
+          "linkType": "SOFT",
+        }],
+        ["virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:6.0.1", {
+          "packageLocation": "./.yarn/__virtual__/react-confetti-virtual-51c8c3a573/0/cache/react-confetti-npm-6.0.1-250f70ffe1-4dd6bef9ad.zip/node_modules/react-confetti/",
+          "packageDependencies": [
+            ["react-confetti", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:6.0.1"],
+            ["@types/react", "npm:17.0.6"],
+            ["react", "npm:17.0.2"],
+            ["tween-functions", "npm:1.2.0"]
+          ],
+          "packagePeers": [
+            "@types/react",
+            "react"
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["react-device-detect", [
         ["npm:1.17.0", {
           "packageLocation": "./.yarn/cache/react-device-detect-npm-1.17.0-d5e8931ab0-bd3583e392.zip/node_modules/react-device-detect/",
@@ -15040,6 +15065,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["tunnel-agent", "npm:0.6.0"],
             ["safe-buffer", "npm:5.2.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["tween-functions", [
+        ["npm:1.2.0", {
+          "packageLocation": "./.yarn/cache/tween-functions-npm-1.2.0-4c24ac77a5-880708d680.zip/node_modules/tween-functions/",
+          "packageDependencies": [
+            ["tween-functions", "npm:1.2.0"]
           ],
           "linkType": "HARD",
         }]

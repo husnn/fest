@@ -63,7 +63,8 @@ export class IdentifyWithWallet extends UseCase<
       if (!check.success) return Result.fail(check.error);
 
       user = new User({
-        id: generateUserId()
+        id: generateUserId(),
+        isCreator: check.data.isCreator
       });
 
       user = await this.userRepository.create(user);

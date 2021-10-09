@@ -32,6 +32,7 @@ import MetadataStore from './services/MetadataStore';
 import TokenController from './controllers/TokenController';
 import TokenMediaStore from './services/TokenMediaStore';
 import UserController from './controllers/UserController';
+import WaitlistController from './controllers/WaitlistController';
 import YouTubeController from './controllers/YouTubeController';
 import YouTubeService from './services/YouTubeService';
 import cors from 'cors';
@@ -80,6 +81,8 @@ class App {
       ethereumService,
       mailService
     );
+
+    const waitlistController = new WaitlistController(waitlistRepository);
 
     const userController = new UserController(
       userRepository,
@@ -152,6 +155,7 @@ class App {
     initRoutes(
       router,
       configController,
+      waitlistController,
       authController,
       communityController,
       userController,

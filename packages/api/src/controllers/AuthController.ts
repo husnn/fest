@@ -17,8 +17,7 @@ import {
   AuthPrecheckResponse,
   IdentifyWithEmailResponse,
   IdentifyWithWalletResponse,
-  LoginResponse,
-  isEmailAddress
+  LoginResponse
 } from '@fanbase/shared';
 import {
   HttpError,
@@ -45,7 +44,10 @@ class AuthController {
     ethereumService: EthereumService,
     mailService: MailService
   ) {
-    this.doAuthPrecheckUseCase = new AuthPrecheck(userRepository);
+    this.doAuthPrecheckUseCase = new AuthPrecheck(
+      userRepository,
+      waitlistRepository
+    );
 
     const authCheck = new AuthCheck(waitlistRepository, inviteRepository);
 

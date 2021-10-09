@@ -18,7 +18,7 @@ export class WaitlistRepository
     return this.db
       .createQueryBuilder('entry')
       .where('entry.email = :identifier', { identifier })
-      .orWhere('entry.wallet = :identifier', { identifier })
+      .orWhere('LOWER(entry.wallet) = LOWER(:identifier)', { identifier })
       .getOne();
   }
 }

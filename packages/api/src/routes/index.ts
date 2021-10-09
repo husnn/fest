@@ -7,6 +7,7 @@ import MarketController from '../controllers/MarketController';
 import { Router } from 'express';
 import TokenController from '../controllers/TokenController';
 import UserController from '../controllers/UserController';
+import WaitlistController from '../controllers/WaitlistController';
 import YouTubeController from '../controllers/YouTubeController';
 import initAuthRoutes from './auth.routes';
 import initCommunityRoutes from './community.routes';
@@ -21,6 +22,7 @@ import { isProduction } from '../config';
 export default function initRoutes(
   router: Router,
   configController: ConfigController,
+  waitlistController: WaitlistController,
   authController: AuthController,
   communityController: CommunityController,
   userController: UserController,
@@ -34,6 +36,10 @@ export default function initRoutes(
 
   if (!isProduction)
     router.use('/insider', initInsiderRoutes(router, insiderController));
+
+  router.post('/waitlist', (req, res, next) =>
+    waitlistController.joinWaitlist(req, res, next)
+  );
 
   router.use('/auth', initAuthRoutes(router, authController));
   router.use('/users', initUserRoutes(router, userController));
