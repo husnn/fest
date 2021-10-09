@@ -31,6 +31,7 @@ const TokenContainer = styled.div`
   padding-bottom: 50px;
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 20px;
 
   > div {
@@ -44,8 +45,8 @@ const TokenContainer = styled.div`
 
 const TokenMain = styled.div`
   width: 100%;
-  max-width: 600px;
-  flex-basis: 60%;
+  max-width: 700px;
+  flex-basis: 50%;
 
   > * + * {
     margin-top: 20px;

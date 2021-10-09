@@ -1,7 +1,7 @@
-import { Wallet, WalletRepository as IWalletRepository } from '@fanbase/core';
+import { WalletRepository as IWalletRepository, Wallet } from '@fanbase/core';
 
-import WalletSchema from '../schemas/WalletSchema';
 import Repository from './Repository';
+import WalletSchema from '../schemas/WalletSchema';
 
 export class WalletRepository
   extends Repository<Wallet>

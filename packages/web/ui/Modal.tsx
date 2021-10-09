@@ -90,6 +90,10 @@ const ModalContent = styled.div`
   > * + * {
     margin-top: 10px;
   }
+
+  > form > * + * {
+    margin-top: 10px;
+  }
 `;
 
 const ModalHead = styled.div`
@@ -190,33 +194,36 @@ const Modal: React.FC<ModalProps> = ({
                   )}
                 </ModalHead>
               )}
-              <ModalBody>{children}</ModalBody>
-              {(ok || cancel) && (
-                <ModalActions>
-                  {ok && (
-                    <Button
-                      color="primary"
-                      disabled={!okEnabled}
-                      onClick={() => {
-                        onOkPressed();
-                        if (hasSteps) setInProp(true);
-                      }}
-                    >
-                      {ok}
-                    </Button>
-                  )}
-                  {cancel && (
-                    <Link
-                      className="smaller"
-                      onClick={() => {
-                        requestClose();
-                      }}
-                    >
-                      {cancel}
-                    </Link>
-                  )}
-                </ModalActions>
-              )}
+              <form onSubmit={(e) => e.preventDefault()}>
+                <ModalBody>{children}</ModalBody>
+                {(ok || cancel) && (
+                  <ModalActions>
+                    {ok && (
+                      <Button
+                        type="submit"
+                        color="primary"
+                        disabled={!okEnabled}
+                        onClick={() => {
+                          onOkPressed();
+                          if (hasSteps) setInProp(true);
+                        }}
+                      >
+                        {ok}
+                      </Button>
+                    )}
+                    {cancel && (
+                      <Link
+                        className="smaller"
+                        onClick={() => {
+                          requestClose();
+                        }}
+                      >
+                        {cancel}
+                      </Link>
+                    )}
+                  </ModalActions>
+                )}
+              </form>
             </ModalContent>
           </CSSTransition>
         </ModalContainer>

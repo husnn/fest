@@ -6,6 +6,7 @@ import ApiClient from '../modules/api/ApiClient';
 import Button from '../ui/Button';
 import Head from 'next/head';
 import LoginWithEmail from '../components/LoginWithEmail';
+import Modal from '../ui/Modal';
 import { TextInput } from '../ui';
 import { getProfileUrl } from '../utils';
 import styled from '@emotion/styled';
@@ -23,9 +24,13 @@ export default function Login() {
   const { isAuthenticated, setAuthenticated, currentUser, setCurrentUser } =
     useAuthentication();
 
+  const [requestInvite, setRequestInvite] = useState(false);
+
   const [loginWithEmail, setLoginWithEmail] = useState(false);
 
   const { redirect } = router.query;
+
+  const [error, setError] = useState();
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -49,9 +54,19 @@ export default function Login() {
     const wallet = await activate();
     if (!wallet) return;
 
+    setError(null);
+
     try {
+      const check = await ApiClient.getInstance().doAuthPrecheck(wallet);
+
+      if (!check.exists && check.needsInvite && !inviteCode) {
+        setRequestInvite(true);
+        return;
+      }
+
       const identificationData = await ApiClient.instance?.identifyWithWallet(
-        wallet
+        wallet,
+        inviteCode
       );
 
       const signature = await requestSignature(
@@ -67,6 +82,7 @@ export default function Login() {
 
       onLogin(token, user);
     } catch (err) {
+      setError(err.message);
       console.log(`Could not login. ${err.message}`);
     }
   };
@@ -106,27 +122,65 @@ export default function Login() {
     }
   `;
 
+  const InviteCode = styled.div`
+    margin: -20px -15px 0;
+    padding: 15px;
+    background-color: #fafafa;
+    border-radius: 10px;
+
+    display: flex;
+    justify-content: space-between;
+
+    > img {
+      padding: 5px;
+      cursor: pointer;
+      opacity: 0.5;
+    }
+
+    > img:hover {
+      opacity: 0.7;
+    }
+  `;
+
+  const EmailForm = styled.form`
+    display: flex;
+    flex-direction: column;
+
+    > * + * {
+      margin-top: 20px;
+    }
+  `;
+
+  const AuthError = styled.p`
+    color: red;
+    text-align: center;
+  `;
+
   const EmailInput = ({
     initialEmail,
     onSubmit
   }: {
     initialEmail: string;
-    onSubmit: (email: string, exists: boolean) => void;
+    onSubmit: (
+      email: string,
+      check: { exists: boolean; needsInvite?: boolean }
+    ) => void;
   }) => {
     const [email, setEmail] = useState(initialEmail || '');
-    const [emailLoginEnabled, setEmailLoginEnabled] = useState(false);
 
-    const checkEmail = async (email: string) => {
-      setEmailLoginEnabled(false);
+    const [enabled, setEnabled] = useState(!!isEmailAddress(initialEmail));
 
-      const exists = await ApiClient.getInstance().doAuthPrecheck(email);
-      onSubmit(email, exists);
+    const doPrecheck = async (email: string) => {
+      setEnabled(false);
 
-      setEmailLoginEnabled(true);
+      const check = await ApiClient.getInstance().doAuthPrecheck(email);
+      onSubmit(email, check);
+
+      setEnabled(true);
     };
 
     return (
-      <React.Fragment>
+      <EmailForm>
         <h2>Hey, friend 👋🏼</h2>
         <p className="small">
           Enter your email address to sign up or log into your existing account.
@@ -138,23 +192,51 @@ export default function Login() {
             const v = e.target.value;
             setEmail(v);
 
-            setEmailLoginEnabled(!!isEmailAddress(v));
+            setEnabled(!!isEmailAddress(v));
           }}
         />
 
         <Button
           color="primary"
-          disabled={!emailLoginEnabled}
-          onClick={() => checkEmail(email)}
+          disabled={!enabled}
+          onClick={() => doPrecheck(email)}
         >
           Continue with email
         </Button>
-      </React.Fragment>
+      </EmailForm>
     );
   };
 
   const [email, setEmail] = useState('');
   const [isNewUser, setNewUser] = useState(false);
+
+  const [inviteCode, setInviteCode] = useState<string>();
+
+  const InviteBox = ({
+    onCodeSubmit
+  }: {
+    onCodeSubmit: (code: string) => void;
+  } & React.HTMLAttributes<HTMLDivElement>) => {
+    const [input, setInput] = useState('');
+
+    return (
+      <Modal
+        show={true}
+        title="Got an invite?"
+        description="Fanbase is currently invite-only. Enter your code to get early access."
+        ok="Enter"
+        onOkPressed={() => onCodeSubmit(input)}
+        okEnabled={true}
+        requestClose={() => setRequestInvite(false)}
+      >
+        <TextInput
+          placeholder="Invite code"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+        />
+      </Modal>
+    );
+  };
 
   return (
     <Container>
@@ -162,11 +244,39 @@ export default function Login() {
         <title>Continue to Fanbase</title>
       </Head>
       <Box>
+        {inviteCode && (
+          <InviteCode>
+            <p>🎉 Your invite code &lsquo;{inviteCode}&rsquo; has been set.</p>
+            <img
+              src="images/ic-close.svg"
+              width={20}
+              onClick={() => {
+                setInviteCode(null);
+                setError(null);
+              }}
+            />
+          </InviteCode>
+        )}
+        {requestInvite && (
+          <InviteBox
+            onCodeSubmit={(code: string) => {
+              setInviteCode(code);
+              setRequestInvite(false);
+            }}
+          />
+        )}
+
         <EmailInput
           initialEmail={email}
-          onSubmit={(email: string, exists: boolean) => {
+          onSubmit={(email: string, check) => {
             setEmail(email);
-            setNewUser(!exists);
+            setNewUser(!check.exists);
+
+            if (!check.exists && check.needsInvite && !inviteCode) {
+              setRequestInvite(true);
+              return;
+            }
+
             setLoginWithEmail(true);
           }}
         />
@@ -179,8 +289,11 @@ export default function Login() {
           Continue with wallet
         </Button>
 
+        <AuthError className="smaller">{error}</AuthError>
+
         <LoginWithEmail
           email={email}
+          inviteCode={inviteCode}
           newUser={isNewUser}
           showing={loginWithEmail}
           setShowing={setLoginWithEmail}

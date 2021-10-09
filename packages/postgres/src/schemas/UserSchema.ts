@@ -1,5 +1,4 @@
 import { EntitySchema } from 'typeorm';
-
 import { User } from '@fanbase/core';
 
 const UserSchema = new EntitySchema<User>({
@@ -46,6 +45,15 @@ const UserSchema = new EntitySchema<User>({
     walletId: {
       type: 'uuid',
       name: 'wallet_id',
+      nullable: true
+    },
+    isCreator: {
+      type: 'bool',
+      name: 'is_creator',
+      default: false
+    },
+    lastLogin: {
+      type: 'timestamp',
       nullable: true
     }
   },

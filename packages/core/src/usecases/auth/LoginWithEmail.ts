@@ -1,6 +1,6 @@
 import { CurrentUserDTO, isExpired } from '@fanbase/shared';
 
-import { LoginError } from './errors';
+import { AuthError } from './errors';
 import { Result } from '../../Result';
 import UseCase from '../../base/UseCase';
 import { User } from '../../entities';
@@ -39,24 +39,28 @@ export class LoginWithEmail extends UseCase<
       data.password,
       user.password
     );
-    if (!isPasswordCorrect) return Result.fail(LoginError.PASSWORD_INCORRECT);
+    if (!isPasswordCorrect) return Result.fail(AuthError.PASSWORD_INCORRECT);
 
     const { value: code, expiry } = user.loginCode;
 
     if (isProduction && code !== data.code) {
-      return Result.fail(LoginError.CODE_INCORRECT);
+      return Result.fail(AuthError.CODE_INCORRECT);
     }
 
     if (isExpired(expiry)) {
-      return Result.fail(LoginError.CODE_EXPIRED);
+      return Result.fail(AuthError.CODE_EXPIRED);
     }
 
+    const userDTO = new CurrentUserDTO(user);
+
     user.loginCode.expiry = new Date();
+    user.lastLogin = new Date();
+
     this.userRepository.update(user);
 
     return Result.ok({
       token: User.generateJwt(user),
-      user: new CurrentUserDTO(user)
+      user: userDTO
     });
   }
 }

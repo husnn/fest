@@ -23,6 +23,8 @@ export class User {
     value: string;
     expiry: Date;
   };
+  isCreator: boolean;
+  lastLogin: Date;
 
   constructor(data?: Partial<User>) {
     Object.assign(this, data);

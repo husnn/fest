@@ -1,4 +1,5 @@
-export * from './DoAuthPrecheck';
+export * from './AuthCheck';
+export * from './AuthPrecheck';
 export * from './IdentifyWithEmail';
 export * from './IdentifyWithWallet';
 export * from './LoginWithEmail';

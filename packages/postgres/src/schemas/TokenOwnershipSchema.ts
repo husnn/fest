@@ -1,5 +1,4 @@
 import { EntitySchema } from 'typeorm';
-
 import { TokenOwnership } from '@fanbase/core';
 
 const TokenOwnershipSchema = new EntitySchema<TokenOwnership>({

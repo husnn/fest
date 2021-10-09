@@ -1,7 +1,7 @@
-import { User, UserRepository as IUserRepository } from '@fanbase/core';
+import { UserRepository as IUserRepository, User } from '@fanbase/core';
 
-import UserSchema from '../schemas/UserSchema';
 import Repository from './Repository';
+import UserSchema from '../schemas/UserSchema';
 
 export class UserRepository
   extends Repository<User>
@@ -9,6 +9,15 @@ export class UserRepository
 {
   constructor() {
     super(UserSchema);
+  }
+
+  findByEmailOrWallet(identifier: string): Promise<User> {
+    return this.db
+      .createQueryBuilder('user')
+      .innerJoinAndSelect('user.wallet', 'wallet')
+      .where('user.email = :identifier', { identifier })
+      .orWhere('wallet.address = :identifier', { identifier })
+      .getOne();
   }
 
   async addToken(user: string, token: string): Promise<void> {

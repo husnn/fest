@@ -9,18 +9,19 @@ import TextInput from '../ui/TextInput';
 type LoginWithEmailProps = {
   email: string;
   newUser?: boolean;
+  inviteCode?: string;
   onLogin: (token: string, user: CurrentUserDTO) => void;
 };
 
 const LoginWithEmail: React.FC<LoginWithEmailProps & ModalWithStepsProps> = ({
   email,
   newUser = false,
+  inviteCode,
   onLogin,
   stepIndex,
   setStepIndex,
   setSteps,
   setOkEnabled,
-  goBack,
   goForward,
   onOkPressed,
   pressOk,
@@ -67,14 +68,19 @@ const LoginWithEmail: React.FC<LoginWithEmailProps & ModalWithStepsProps> = ({
   };
 
   const identify = async () => {
-    goForward();
     setOkEnabled(false);
+    goForward();
 
     try {
-      await ApiClient.getInstance().identifyWithEmail(email, password);
+      await ApiClient.getInstance().identifyWithEmail(
+        email,
+        password,
+        inviteCode
+      );
     } catch (err) {
-      goBack();
-      console.log(err);
+      setStepIndex(0);
+      setError(err.message);
+      setOkEnabled(true);
     }
   };
 

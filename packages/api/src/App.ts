@@ -1,5 +1,6 @@
 import {
   CommunityRepository,
+  InviteRepository,
   OAuthRepository,
   TokenListingRepository,
   TokenOfferRepository,
@@ -7,6 +8,7 @@ import {
   TokenRepository,
   TokenTradeRepository,
   UserRepository,
+  WaitlistRepository,
   WalletRepository
 } from '@fanbase/postgres';
 import {
@@ -51,6 +53,8 @@ class App {
     app.use(express.json());
 
     const userRepository = new UserRepository();
+    const waitlistRepository = new WaitlistRepository();
+    const inviteRepository = new InviteRepository();
     const oAuthRepository = new OAuthRepository();
     const walletRepository = new WalletRepository();
     const tokenRepository = new TokenRepository();
@@ -71,6 +75,8 @@ class App {
     const authController = new AuthController(
       userRepository,
       walletRepository,
+      waitlistRepository,
+      inviteRepository,
       ethereumService,
       mailService
     );

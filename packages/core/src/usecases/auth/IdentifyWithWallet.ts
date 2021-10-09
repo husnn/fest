@@ -1,15 +1,17 @@
-import { encryptText, Protocol, WalletType } from '@fanbase/shared';
-
-import UseCase from '../../base/UseCase';
+import { Protocol, WalletType, encryptText } from '@fanbase/shared';
 import { User, Wallet } from '../../entities';
+import { generateUserId, generateWalletId } from '../../utils';
+
+import { AuthCheck } from '@fanbase/core';
+import { Result } from '../../Result';
+import UseCase from '../../base/UseCase';
 import UserRepository from '../../repositories/UserRepository';
 import WalletRepository from '../../repositories/WalletRepository';
-import { Result } from '../../Result';
-import { generateUserId, generateWalletId } from '../../utils';
 
 export interface IdentifyWithWalletInput {
   protocol: Protocol;
   address: string;
+  invite?: string;
 }
 
 export interface IdentifyWithWalletOutput {
@@ -27,14 +29,19 @@ export class IdentifyWithWallet extends UseCase<
   private userRepository: UserRepository;
   private walletRepository: WalletRepository;
 
+  private authCheck: AuthCheck;
+
   constructor(
     userRepository: UserRepository,
-    walletRepository: WalletRepository
+    walletRepository: WalletRepository,
+    authCheck: AuthCheck
   ) {
     super();
 
     this.userRepository = userRepository;
     this.walletRepository = walletRepository;
+
+    this.authCheck = authCheck;
   }
 
   async exec(
@@ -48,6 +55,13 @@ export class IdentifyWithWallet extends UseCase<
     );
 
     if (!wallet || !wallet.ownerId) {
+      const check = await this.authCheck.exec({
+        wallet: data.address,
+        inviteCode: data.invite
+      });
+
+      if (!check.success) return Result.fail(check.error);
+
       user = new User({
         id: generateUserId()
       });

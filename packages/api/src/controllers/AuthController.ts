@@ -1,29 +1,35 @@
 import {
-  DoAuthPrecheck,
+  AuthCheck,
+  AuthError,
+  AuthPrecheck,
   EthereumService,
   IdentifyWithEmail,
   IdentifyWithWallet,
-  LoginError,
+  InviteRepository,
   LoginWithEmail,
   LoginWithWallet,
   MailService,
   UserRepository,
+  WaitlistRepository,
   WalletRepository
 } from '@fanbase/core';
 import {
-  DoAuthPrecheckResponse,
+  AuthPrecheckResponse,
   IdentifyWithEmailResponse,
   IdentifyWithWalletResponse,
   LoginResponse,
   isEmailAddress
 } from '@fanbase/shared';
-import { HttpError, HttpResponse, ValidationError } from '../http';
+import {
+  HttpError,
+  HttpResponse,
+  NotFoundError,
+  ValidationError
+} from '../http';
 import { NextFunction, Request, Response } from 'express';
 
 class AuthController {
-  private userRepository: UserRepository;
-
-  private doAuthPrecheckUseCase: DoAuthPrecheck;
+  private doAuthPrecheckUseCase: AuthPrecheck;
 
   private identifyWithEmailUseCase: IdentifyWithEmail;
   private identifyWithWalletUseCase: IdentifyWithWallet;
@@ -34,23 +40,27 @@ class AuthController {
   constructor(
     userRepository: UserRepository,
     walletRepository: WalletRepository,
+    waitlistRepository: WaitlistRepository,
+    inviteRepository: InviteRepository,
     ethereumService: EthereumService,
     mailService: MailService
   ) {
-    this.userRepository = userRepository;
+    this.doAuthPrecheckUseCase = new AuthPrecheck(userRepository);
 
-    this.doAuthPrecheckUseCase = new DoAuthPrecheck(userRepository);
+    const authCheck = new AuthCheck(waitlistRepository, inviteRepository);
 
     this.identifyWithEmailUseCase = new IdentifyWithEmail(
       userRepository,
       walletRepository,
       ethereumService,
-      mailService
+      mailService,
+      authCheck
     );
 
     this.identifyWithWalletUseCase = new IdentifyWithWallet(
       userRepository,
-      walletRepository
+      walletRepository,
+      authCheck
     );
 
     this.loginWithEmailUseCase = new LoginWithEmail(userRepository);
@@ -64,18 +74,19 @@ class AuthController {
 
   async doPrecheck(req: Request, res: Response, next: NextFunction) {
     try {
-      const { email } = req.body;
+      const { identifier } = req.body;
 
-      if (!isEmailAddress(email))
-        throw new ValidationError('Please provide a valid email address.');
+      if (!identifier)
+        throw new ValidationError('Please provide an email or wallet address.');
 
-      const precheck = await this.doAuthPrecheckUseCase.exec({ email });
+      const precheck = await this.doAuthPrecheckUseCase.exec({ identifier });
 
       if (!precheck.success)
         throw new HttpError('Could not perform auth precheck.');
 
-      return new HttpResponse<DoAuthPrecheckResponse>(res, {
-        exists: precheck.data.exists
+      return new HttpResponse<AuthPrecheckResponse>(res, {
+        exists: precheck.data.exists,
+        needsInvite: precheck.data.needsInvite
       });
     } catch (err) {
       next(err);
@@ -94,8 +105,8 @@ class AuthController {
 
       if (!result.success) {
         switch (result.error) {
-          case LoginError.CODE_EXPIRED:
-          case LoginError.CODE_INCORRECT:
+          case AuthError.CODE_EXPIRED:
+          case AuthError.CODE_INCORRECT:
             throw new ValidationError('Incorrect or expired code.');
           default:
             throw new HttpError('Could not login.');
@@ -134,13 +145,32 @@ class AuthController {
     }
   }
 
+  getIdentificationError(error): HttpError {
+    switch (error) {
+      case AuthError.INVITE_CODE_MISSING:
+        return new ValidationError('Sorry, we are currently invite-only.');
+      case AuthError.INVITE_NOT_FOUND:
+        return new NotFoundError('Could not find invite.');
+      case AuthError.INVITE_INVALID:
+        return new ValidationError('Expired or inactive invite.');
+      default:
+        return new HttpError();
+    }
+  }
+
   async identifyWithEmail(req: Request, res: Response, next: NextFunction) {
     try {
-      const { email, password } = req.body;
+      const { email, password, invite } = req.body;
 
       if (!email) throw new ValidationError('Missing email address.');
 
-      await this.identifyWithEmailUseCase.exec({ email, password });
+      const result = await this.identifyWithEmailUseCase.exec({
+        email,
+        password,
+        invite
+      });
+
+      if (!result.success) throw this.getIdentificationError(result.error);
 
       return new HttpResponse<IdentifyWithEmailResponse>(res);
     } catch (err) {
@@ -150,7 +180,7 @@ class AuthController {
 
   async identifyWithWallet(req: Request, res: Response, next: NextFunction) {
     try {
-      const { protocol, address } = req.body;
+      const { protocol, address, invite } = req.body;
 
       if (!protocol || !address) {
         throw new ValidationError('Missing wallet protocol or address.');
@@ -158,10 +188,11 @@ class AuthController {
 
       const result = await this.identifyWithWalletUseCase.exec({
         protocol,
-        address
+        address,
+        invite
       });
 
-      if (!result.success) throw new HttpError();
+      if (!result.success) throw this.getIdentificationError(result.error);
 
       return new HttpResponse<IdentifyWithWalletResponse>(res, {
         body: {

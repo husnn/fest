@@ -365,16 +365,17 @@ export interface EditUserRequest extends Request {
  * Login
  */
 
-export interface DoAuthPrecheckResponse extends Response {
+export interface AuthPrecheckResponse extends Response {
   exists: boolean;
+  needsInvite?: boolean;
 }
 
-export interface DoAuthPrecheckRequest extends Request {
+export interface AuthPrecheckRequest extends Request {
   method: 'POST';
   endpoint: '/precheck';
   authentication: 'none';
   body: {
-    email: string;
+    identifier: string;
   };
 }
 
@@ -409,6 +410,7 @@ export interface IdentifyWithEmailRequest extends Request {
   body: {
     email: string;
     password: string;
+    invite?: string;
   };
 }
 
@@ -423,5 +425,6 @@ export interface IdentifyWithWalletRequest extends Request {
   body: {
     protocol: Protocol;
     address: string;
+    invite?: string;
   };
 }

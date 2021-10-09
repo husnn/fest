@@ -1,9 +1,8 @@
+import { Request, Response } from '@fanbase/shared';
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 
-import { Request, Response } from '@fanbase/shared';
-
-import { getAuthToken } from '../auth/authStorage';
 import HttpClient from './HttpClient';
+import { getAuthToken } from '../auth/authStorage';
 
 export default class AxiosClient extends HttpClient {
   private axios: AxiosInstance;

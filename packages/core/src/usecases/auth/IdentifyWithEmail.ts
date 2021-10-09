@@ -1,17 +1,19 @@
-import { isValidPassword } from '@fanbase/shared';
-import UseCase from '../../base/UseCase';
-import { LoginCodeEmail } from '../../emails';
-import { User } from '../../entities';
-import UserRepository from '../../repositories/UserRepository';
-import WalletRepository from '../../repositories/WalletRepository';
-import { Result } from '../../Result';
 import { EthereumService, MailService } from '../../services';
+import { UserRepository, WalletRepository } from '../../repositories';
+
+import { AuthCheck } from '@fanbase/core';
+import { AuthError } from './errors';
+import { LoginCodeEmail } from '../../emails';
+import { Result } from '../../Result';
+import UseCase from '../../base/UseCase';
+import { User } from '../../entities';
 import { generateUserId } from '../../utils';
-import { LoginError } from './errors';
+import { isValidPassword } from '@fanbase/shared';
 
 export interface IdentifyWithEmailInput {
   email: string;
   password: string;
+  invite?: string;
 }
 
 export interface IdentifyWithEmailOutput {
@@ -24,32 +26,46 @@ export class IdentifyWithEmail extends UseCase<
 > {
   private userRepository: UserRepository;
   private walletRepository: WalletRepository;
+
   private ethereumService: EthereumService;
   private mailService: MailService;
+
+  private authCheck: AuthCheck;
 
   constructor(
     userRepository: UserRepository,
     walletRepository: WalletRepository,
     ethereumService: EthereumService,
-    mailService: MailService
+    mailService: MailService,
+    authCheck: AuthCheck
   ) {
     super();
 
     this.userRepository = userRepository;
     this.walletRepository = walletRepository;
+
     this.ethereumService = ethereumService;
     this.mailService = mailService;
+
+    this.authCheck = authCheck;
   }
 
   async exec(
     data: IdentifyWithEmailInput
   ): Promise<Result<IdentifyWithEmailOutput>> {
     if (!isValidPassword(data.password))
-      return Result.fail(LoginError.PASSWORD_INVALID);
+      return Result.fail(AuthError.PASSWORD_INVALID);
 
     let user = await this.userRepository.findByEmail(data.email);
 
     if (!user) {
+      const check = await this.authCheck.exec({
+        email: data.email,
+        inviteCode: data.invite
+      });
+
+      if (!check.success) return Result.fail(check.error);
+
       user = new User({
         id: generateUserId(),
         email: data.email.trim().toLowerCase(), // @BeforeInsert Trim and convert to lowercase

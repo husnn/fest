@@ -1,17 +1,17 @@
 import {
   CurrentUserDTO,
+  Protocol,
   decryptText,
-  isExpired,
-  Protocol
+  isExpired
 } from '@fanbase/shared';
 
+import { AuthError } from './errors';
+import { EthereumService } from '../../services';
+import { Result } from '../../Result';
 import UseCase from '../../base/UseCase';
 import { User } from '../../entities';
 import UserRepository from '../../repositories/UserRepository';
 import WalletRepository from '../../repositories/WalletRepository';
-import { Result } from '../../Result';
-import { EthereumService } from '../../services';
-import { LoginError } from './errors';
 import { msgToSign } from './IdentifyWithWallet';
 
 export interface LoginWithWalletInput {
@@ -65,21 +65,25 @@ export class LoginWithWallet extends UseCase<
     const decryptedCode = decryptText(data.code);
 
     if (code !== decryptedCode) {
-      return Result.fail(LoginError.CODE_INCORRECT);
+      return Result.fail(AuthError.CODE_INCORRECT);
     }
 
     if (isExpired(expiry)) {
-      return Result.fail(LoginError.CODE_EXPIRED);
+      return Result.fail(AuthError.CODE_EXPIRED);
     }
-
-    user.loginCode.expiry = new Date();
-    this.userRepository.update(user);
 
     // user.wallet = wallet;
 
+    const userDTO = new CurrentUserDTO(user);
+
+    user.loginCode.expiry = new Date();
+    user.lastLogin = new Date();
+
+    this.userRepository.update(user);
+
     return Result.ok({
       token: User.generateJwt(user),
-      user: new CurrentUserDTO(user)
+      user: userDTO
     });
   }
 }

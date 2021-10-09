@@ -3,14 +3,14 @@ import {
   ApproveMintResponse,
   ApproveTokenSaleRequest,
   ApproveTokenSaleResponse,
+  AuthPrecheckRequest,
+  AuthPrecheckResponse,
   BuyTokenListingRequest,
   BuyTokenListingResponse,
   CancelTokenListingRequest,
   CancelTokenListingResponse,
   CreateTokenRequest,
   CreateTokenResponse,
-  DoAuthPrecheckRequest,
-  DoAuthPrecheckResponse,
   EditUserRequest,
   EditUserResponse,
   GetListingsForTokenRequest,
@@ -521,20 +521,15 @@ export class ApiClient {
 
   // Auth
 
-  async doAuthPrecheck(email: string): Promise<boolean> {
-    const response = await this.client.request<
-      DoAuthPrecheckResponse,
-      DoAuthPrecheckRequest
-    >({
+  async doAuthPrecheck(identifier: string): Promise<AuthPrecheckResponse> {
+    return this.client.request<AuthPrecheckResponse, AuthPrecheckRequest>({
       method: 'POST',
       endpoint: '/precheck',
       authentication: 'none',
       body: {
-        email
+        identifier
       }
     });
-
-    return response.exists;
   }
 
   async loginWithEmail(
@@ -573,6 +568,7 @@ export class ApiClient {
 
   async identifyWithWallet(
     address: string,
+    invite?: string,
     protocol = Protocol.ETHEREUM
   ): Promise<{ code: string; message: string }> {
     const response = await this.client.request<
@@ -584,7 +580,8 @@ export class ApiClient {
       authentication: 'none',
       body: {
         protocol,
-        address
+        address,
+        invite
       }
     });
 
@@ -593,7 +590,11 @@ export class ApiClient {
     return { code, message };
   }
 
-  async identifyWithEmail(email: string, password: string): Promise<void> {
+  async identifyWithEmail(
+    email: string,
+    password: string,
+    invite?: string
+  ): Promise<void> {
     await this.client.request<
       IdentifyWithEmailResponse,
       IdentifyWithEmailRequest
@@ -601,7 +602,7 @@ export class ApiClient {
       method: 'POST',
       endpoint: '/auth/identify/email',
       authentication: 'none',
-      body: { email, password }
+      body: { email, password, invite }
     });
   }
 }

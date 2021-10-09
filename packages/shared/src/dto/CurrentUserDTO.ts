@@ -7,6 +7,9 @@ export class CurrentUserDTO {
   username?: string;
   bio?: string;
   wallet: WalletDTO;
+  isCreator: boolean;
+  lastLogin: Date;
+  isFirstLogin?: boolean;
 
   constructor(props: CurrentUserDTO) {
     this.id = props.id;
@@ -15,5 +18,8 @@ export class CurrentUserDTO {
     this.username = props.username;
     this.bio = props.bio;
     this.wallet = new WalletDTO(props.wallet);
+    this.isCreator = props.isCreator;
+    this.lastLogin = props.lastLogin;
+    this.isFirstLogin = !this.lastLogin;
   }
 }
