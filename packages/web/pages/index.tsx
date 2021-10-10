@@ -26,7 +26,7 @@ export default function Home() {
         </h1>
         <Link href="/early-access">
           <Button color="primary" size="small">
-            Join Waitlist
+            Get early access
           </Button>
         </Link>
         <img

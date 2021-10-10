@@ -1,9 +1,13 @@
-import { Price, randomNumericString } from '@fanbase/shared';
+import {
+  TokenOwnershipRepository,
+  TokenRepository,
+  WalletRepository
+} from '../../repositories';
 
-import UseCase from '../../base/UseCase';
-import { TokenOwnershipRepository, TokenRepository, WalletRepository } from '../../repositories';
-import { Result } from '../../Result';
 import { EthereumService } from '../../services';
+import { Result } from '../../Result';
+import UseCase from '../../base/UseCase';
+import { randomNumericString } from '@fanbase/shared';
 
 export interface ApproveTokenSaleInput {
   user: string;

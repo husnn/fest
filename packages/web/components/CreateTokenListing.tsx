@@ -1,14 +1,13 @@
+import { Button, FormInput, TextInput } from '../ui';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import React, { useEffect, useState } from 'react';
-import Web3 from 'web3';
-
-import styled from '@emotion/styled';
 import { TokenDTO, TokenOwnershipDTO, WalletType } from '@fanbase/shared';
 
 import ApiClient from '../modules/api/ApiClient';
+import Web3 from 'web3';
+import styled from '@emotion/styled';
 import useAuthentication from '../modules/auth/useAuthentication';
 import { useWeb3 } from '../modules/web3';
-import { Button, FormInput, TextInput } from '../ui';
 
 type CreateTokenListingProps = {
   token: TokenDTO;
@@ -50,7 +49,7 @@ export const CreateTokenListing = ({
       web3.ethereum
         .checkMarketApproved(token.chain.contract, currentUser.wallet.address)
         .then((approved) => {
-          setMarketApproved(approved); // TODO
+          setMarketApproved(approved);
         });
     }
   }, [web3.ethereum]);
@@ -60,7 +59,7 @@ export const CreateTokenListing = ({
 
     let txHash;
 
-    const actualPrice = Web3.utils.toWei(price.toString());
+    const actualPrice = await web3.ethereum.toERC20Amount(currency, price);
 
     if (currentUser.wallet.type == WalletType.INTERNAL) {
       txHash = await ApiClient.instance?.listForSale(token.id, quantity, {

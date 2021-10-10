@@ -30,6 +30,10 @@ const MarketSection = styled.div`
   > * + * {
     margin-top: 20px;
   }
+
+  :not(:first-of-type) {
+    margin-top: 30px;
+  }
 `;
 
 const ListingRow = styled.div`

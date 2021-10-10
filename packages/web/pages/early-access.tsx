@@ -153,7 +153,7 @@ export const EarlyAccessPage = () => {
           <form onSubmit={handleSubmit}>
             <Header>
               <h1>Join the waitlist</h1>
-              <h3>Be one of the first people to get access.</h3>
+              <p>Be one of the first people to get access.</p>
             </Header>
             <FormInput label="Are you a fan or creator?">
               <RadioGroup

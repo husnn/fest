@@ -34,6 +34,17 @@ const SettingsBlock = styled.div`
   > * + * {
     margin-top: 20px;
   }
+
+  :first-of-type {
+    margin-top: 20px;
+  }
+`;
+
+const BlockHeader = styled.div`
+  padding: 10px 0;
+  > * + * {
+    margin-top: 5px;
+  }
 `;
 
 export default function SettingsPage() {
@@ -45,14 +56,16 @@ export default function SettingsPage() {
     <div className="container boxed">
       {currentUser && (
         <SettingsSheet>
+          <h1>Settings</h1>
           {/* <SettingsBlock>
             <FormInput label="Your public address">
             <h3 className="wallet-address">{currentUser.wallet?.address}</h3>
             </FormInput>
           </SettingsBlock> */}
           <SettingsBlock>
-            <h1>Settings</h1>
-            <h2>Your info</h2>
+            <BlockHeader>
+              <h2>Your info</h2>
+            </BlockHeader>
             <Formik
               initialValues={{
                 name: currentUser.name || '',
@@ -169,8 +182,10 @@ export default function SettingsPage() {
             </Formik>
           </SettingsBlock>
           <SettingsBlock>
-            <h2>Connect to YouTube</h2>
-            <p>Sign in to turn your videos into tokens.</p>
+            <BlockHeader>
+              <h2>Connect to YouTube</h2>
+              <p>Sign in to turn your videos into tokens.</p>
+            </BlockHeader>
             <GoogleButton
               onLinkReceived={(link: string) => {
                 router.push(link);

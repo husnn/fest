@@ -141,9 +141,7 @@ export const WalletPage = () => {
         <title>Wallet</title>
       </Head>
       <h1>Your wallet</h1>
-      <p style={{ marginTop: 10 }}>
-        See your balances and most recent transactions.
-      </p>
+      <p>See your balances and most recent transactions.</p>
       <WalletInfo>
         <p
           style={{
