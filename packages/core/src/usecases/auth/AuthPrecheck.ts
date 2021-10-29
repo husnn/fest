@@ -33,11 +33,13 @@ export class AuthPrecheck extends UseCase<
   async exec(data: AuthPrecheckInput): Promise<Result<AuthPrecheckOutput>> {
     let needsInvite = false;
 
-    const user = await this.userRepository.findByEmailOrWallet(data.identifier);
+    const identifier = data.identifier.trim().toLowerCase();
+
+    const user = await this.userRepository.findByEmailOrWallet(identifier);
 
     if (isInviteOnly) {
       const entry = await this.waitlistRepository.findByEmailOrWallet(
-        data.identifier
+        identifier
       );
       needsInvite = !entry || !entry.isAccepted;
     }

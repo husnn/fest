@@ -60,7 +60,7 @@ export class JoinWaitlist extends UseCase<
     } else {
       entry = new WaitlistEntry({
         type: data.type,
-        email: data.email,
+        email: data.email.trim().toLowerCase(),
         wallet: data.wallet?.toLowerCase(),
         socialMedia: data.social
       });

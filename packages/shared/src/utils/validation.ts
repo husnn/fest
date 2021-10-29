@@ -7,6 +7,8 @@ export const EMAIL_REGEX =
 export const USERNAME_REGEX =
   /^(?=[a-zA-Z0-9._]{3,15}$)(?!.*[_.]{2})[^_.].*[^_.]$/;
 
+export const ETHEREUM_ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/;
+
 export const isUUID = (value: string) => UUID_REGEX.test(value);
 
 export const isEmailAddress = (value: string) =>
@@ -16,3 +18,6 @@ export const isUsername = (value: string) => USERNAME_REGEX.test(value);
 
 export const isValidPassword = (value: string) =>
   value && value.length >= 8 && value.length <= 16;
+
+export const isEthereumAddress = (value: string) =>
+  value && ETHEREUM_ADDRESS_REGEX.test(value);

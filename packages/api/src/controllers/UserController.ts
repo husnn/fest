@@ -1,26 +1,48 @@
-import { NextFunction, Request, Response } from 'express';
-
 import {
-    EditUser, GetTokensCreated, GetTokensOwned, GetUser, TokenOwnershipRepository, TokenRepository,
-    UserRepository, WalletRepository
+  EditUser,
+  EnableCreatorMode,
+  GetReferralSummary,
+  GetTokensCreated,
+  GetTokensOwned,
+  GetUser,
+  InviteError,
+  InviteRepository,
+  TokenOwnershipRepository,
+  TokenRepository,
+  UserRepository,
+  WalletRepository
 } from '@fanbase/core';
 import {
-    EditUserResponse, GetTokensCreatedResponse, GetTokensOwnedResponse, GetUserResponse, UserInfo
+  EditUserResponse,
+  EnableCreatorModeResponse,
+  GetReferralSummaryResponse,
+  GetTokensCreatedResponse,
+  GetTokensOwnedResponse,
+  GetUserResponse,
+  UserInfo
 } from '@fanbase/shared';
-
-import { HttpError, HttpResponse, NotFoundError, ValidationError } from '../http';
+import {
+  HttpError,
+  HttpResponse,
+  NotFoundError,
+  ValidationError
+} from '../http';
+import { NextFunction, Request, Response } from 'express';
 
 class UserController {
   private editUserUseCase: EditUser;
   private getUserUseCase: GetUser;
   private getTokensOwnedUseCase: GetTokensOwned;
   private getTokensCreatedUseCase: GetTokensCreated;
+  private enableCreatorModeUseCase: EnableCreatorMode;
+  private getReferralSummaryUseCase: GetReferralSummary;
 
   constructor(
     userRepository: UserRepository,
     walletRepository: WalletRepository,
     tokenRepository: TokenRepository,
-    tokenOwnershipRepository: TokenOwnershipRepository
+    tokenOwnershipRepository: TokenOwnershipRepository,
+    inviteRepository: InviteRepository
   ) {
     this.editUserUseCase = new EditUser(userRepository, walletRepository);
     this.getUserUseCase = new GetUser(userRepository, walletRepository);
@@ -29,6 +51,67 @@ class UserController {
       userRepository,
       tokenOwnershipRepository
     );
+    this.enableCreatorModeUseCase = new EnableCreatorMode(
+      userRepository,
+      inviteRepository
+    );
+    this.getReferralSummaryUseCase = new GetReferralSummary(
+      userRepository,
+      inviteRepository
+    );
+  }
+
+  async getReferralSummary(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<HttpResponse<GetReferralSummaryResponse>> {
+    try {
+      const result = await this.getReferralSummaryUseCase.exec({
+        user: req.user
+      });
+      if (!result.success)
+        throw new HttpError('Could not get referral summary.');
+
+      return new HttpResponse<GetReferralSummaryResponse>(res, {
+        invites: result.data.invites
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async enableCreatorMode(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<HttpResponse<EnableCreatorModeResponse>> {
+    try {
+      const { code } = req.body;
+
+      const result = await this.enableCreatorModeUseCase.exec({
+        user: req.user,
+        code
+      });
+      if (!result.success) {
+        switch (result.error) {
+          case InviteError.INVITE_NOT_FOUND:
+            throw new HttpError('Could not find invite code.');
+          case InviteError.INVITE_INVALID:
+            throw new HttpError('Invite is expired or has already been used.');
+          case InviteError.USER_INELIGIBLE:
+            throw new HttpError("You're not allowed to use this code.");
+          case InviteError.OWN_CODE:
+            throw new HttpError('You cannot use your own invite code.');
+          default:
+            throw new HttpError();
+        }
+      }
+
+      return new HttpResponse<EnableCreatorModeResponse>(res);
+    } catch (err) {
+      next(err);
+    }
   }
 
   async getTokensOwned(

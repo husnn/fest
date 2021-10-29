@@ -1,10 +1,10 @@
 import { InviteRepository, WaitlistRepository } from '../../repositories';
+import { InviteType, WaitlistEntryType } from '@fanbase/shared';
 
 import { AuthError } from '../auth/errors';
 import { Invite } from '../../entities';
 import Result from '../../Result';
 import UseCase from '../../base/UseCase';
-import { WaitlistEntryType } from '@fanbase/shared';
 import { isInviteOnly } from '../../config';
 
 type AuthCheckInput = {
@@ -38,7 +38,7 @@ export class AuthCheck extends UseCase<AuthCheckInput, AuthCheckOutput> {
 
     if (isInviteOnly) {
       const entry = await this.waitlistRepository.findByEmailOrWallet(
-        data.email || data.wallet
+        data.email.trim().toLowerCase() || data.wallet.trim().toLowerCase()
       );
 
       if (entry) {
@@ -49,13 +49,15 @@ export class AuthCheck extends UseCase<AuthCheckInput, AuthCheckOutput> {
     }
 
     if (data.inviteCode) {
-      invite = await this.inviteRepository.findByCode(data.inviteCode);
+      invite = await this.inviteRepository.findByCode(
+        data.inviteCode.trim().toLowerCase()
+      );
       if (!invite) return Result.fail(AuthError.INVITE_NOT_FOUND);
 
       if (!Invite.validate(invite))
         return Result.fail(AuthError.INVITE_INVALID);
 
-      if (!isCreator) isCreator = invite.isCreator;
+      if (!isCreator) isCreator = invite.type === InviteType.CREATOR;
 
       invite = await this.inviteRepository.update(Invite.use(invite));
     }

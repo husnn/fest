@@ -12,6 +12,21 @@ export default function init(router: Router, userController: UserController) {
       userController.editUser(req, res, next)
   );
 
+  router.post(
+    '/enable-creator',
+    authMiddleware,
+    (req: Request, res: Response, next: NextFunction) =>
+      userController.enableCreatorMode(req, res, next)
+  );
+
+  router.get(
+    '/referral',
+    authMiddleware,
+    (req: Request, res: Response, next: NextFunction) => {
+      userController.getReferralSummary(req, res, next);
+    }
+  );
+
   router.get('/users/:id?', (req: Request, res: Response, next: NextFunction) =>
     userController.get(req, res, next)
   );

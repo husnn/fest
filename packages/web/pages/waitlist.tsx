@@ -64,7 +64,7 @@ export const JoinWaitlistSchema = Yup.object().shape({
     })
 });
 
-export const EarlyAccessPage = () => {
+export const WaitlistPage = () => {
   const userTypeOptions: RadioOption[] = [
     { id: 'fan', label: 'Fan' },
     { id: 'creator', label: 'Creator' }
@@ -119,6 +119,7 @@ export const EarlyAccessPage = () => {
         )
         .then((res) => {
           if (res.success) setHasJoined(true);
+          window.scrollTo(0, 0);
         })
         .catch((err) => {
           setFieldError('global', err.message);
@@ -129,7 +130,7 @@ export const EarlyAccessPage = () => {
   return (
     <div className="container boxed wider">
       <Head>
-        <title>Early Access</title>
+        <title>Waitlist</title>
       </Head>
       {hasJoined && (
         <Confetti
@@ -169,7 +170,7 @@ export const EarlyAccessPage = () => {
             {isCreator && (
               <FormInput
                 label="Social media"
-                description="You need at least 1000 fans for a chance to be accepted."
+                description="Established creators are more likely to be approved."
                 error={errors.socialMedia}
               >
                 <TextInput
@@ -243,4 +244,4 @@ export const EarlyAccessPage = () => {
   );
 };
 
-export default EarlyAccessPage;
+export default WaitlistPage;

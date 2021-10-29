@@ -1,6 +1,7 @@
+import { InviteStatus, InviteType } from '@fanbase/shared';
+
 import { EntitySchema } from 'typeorm';
 import { Invite } from '@fanbase/core';
-import { InviteStatus } from '@fanbase/shared';
 
 const InviteSchema = new EntitySchema<Invite>({
   name: 'invite',
@@ -25,6 +26,11 @@ const InviteSchema = new EntitySchema<Invite>({
       name: 'expiry_date',
       nullable: true
     },
+    type: {
+      type: 'enum',
+      enum: InviteType,
+      default: InviteType.BASIC
+    },
     ownerId: {
       type: 'text',
       name: 'owner_id'
@@ -39,11 +45,6 @@ const InviteSchema = new EntitySchema<Invite>({
     maxUseCount: {
       type: 'integer',
       nullable: true
-    },
-    isCreator: {
-      type: 'bool',
-      name: 'is_creator',
-      default: false
     }
   },
   relations: {

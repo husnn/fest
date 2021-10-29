@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-
-import { LinkType } from '../../components/Header';
-import { Button } from '../../ui';
 import { getDisplayName, getProfileUrl } from '../../utils';
-import useAuthentication from '../auth/useAuthentication';
+
+import { Button } from '../../ui';
 import { HeaderContext } from './HeaderProvider';
+import { LinkType } from '../../components/Header';
+import useAuthentication from '../auth/useAuthentication';
 
 export const useHeader = (toShow?: string[], toHide?: string[]) => {
   const context = React.useContext(HeaderContext);
@@ -47,6 +47,11 @@ export const useHeader = (toShow?: string[], toHide?: string[]) => {
           id: 'settings',
           title: 'Settings',
           route: '/settings'
+        },
+        {
+          id: 'referral',
+          title: 'Referral',
+          route: '/referral'
         },
         {
           id: 'signout',

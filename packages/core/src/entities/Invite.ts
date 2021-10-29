@@ -1,4 +1,5 @@
-import { InviteStatus } from '@fanbase/shared';
+import { InviteStatus, InviteType } from '@fanbase/shared';
+
 import User from './User';
 
 export class Invite {
@@ -9,6 +10,8 @@ export class Invite {
   status: InviteStatus;
   expiryDate: Date;
 
+  type: InviteType;
+
   ownerId: string;
   owner: User;
 
@@ -16,8 +19,6 @@ export class Invite {
 
   useCount: number;
   maxUseCount: number;
-
-  isCreator: boolean;
 
   constructor(data?: Partial<Invite>) {
     Object.assign(this, data);

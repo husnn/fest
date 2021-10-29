@@ -1,14 +1,15 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+
 import httpProxyMiddleware from 'next-http-proxy-middleware';
 
 export default (req: NextApiRequest, res: NextApiResponse) =>
   process.env.NODE_ENV !== 'production'
     ? httpProxyMiddleware(req, res, {
-        target: 'http://localhost:5000',
+        target: process.env.NEXT_PUBLIC_API_URL,
         pathRewrite: [
           {
             patternStr: '^/api',
-            replaceStr: '/v1'
+            replaceStr: ''
           }
         ]
       })

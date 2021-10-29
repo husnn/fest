@@ -2,6 +2,7 @@
 
 import {
   CurrentUserDTO,
+  InviteDTO,
   TokenDTO,
   TokenListingDTO,
   TokenOfferDTO,
@@ -356,8 +357,35 @@ export interface EditUserResponse extends Response {
 }
 
 export interface EditUserRequest extends Request {
-  authenticated: 'required';
+  authentication: 'required';
   body: UserInfo;
+}
+
+/**
+ * Referral
+ */
+
+export interface GetReferralSummaryResponse extends Response {
+  invites: InviteDTO[];
+}
+
+export interface GetReferralSummaryRequest extends Request {
+  method: 'GET';
+  endpoint: '/referral';
+  authentication: 'required';
+}
+
+/**
+ * Creator mode
+ */
+
+export interface EnableCreatorModeResponse extends Response {}
+
+export interface EnableCreatorModeRequest extends Request {
+  method: 'POST';
+  endpoint: '/users/enable-creator';
+  authentication: 'required';
+  body: { code: string };
 }
 
 /**

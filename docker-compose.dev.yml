@@ -1,4 +1,4 @@
-version: "3.8"
+version: '3.8'
 
 services:
   postgres:
@@ -13,9 +13,9 @@ services:
     restart: always
 
   redis:
-    image: "redis:alpine"
+    image: redis:alpine
     ports:
-      - 6379:6379
+      - 6390:6379
     restart: always
 
 volumes:

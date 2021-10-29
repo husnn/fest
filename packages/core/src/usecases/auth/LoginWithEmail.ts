@@ -30,10 +30,10 @@ export class LoginWithEmail extends UseCase<
   }
 
   async exec(data: LoginWithEmailInput): Promise<Result<LoginWithEmailOutput>> {
-    const user = await this.userRepository.findByEmail(data.email, [
-      'password',
-      'loginCode'
-    ]);
+    const user = await this.userRepository.findByEmail(
+      data.email.trim().toLowerCase(),
+      ['password', 'loginCode']
+    );
 
     const isPasswordCorrect = await User.verifyPassword(
       data.password,

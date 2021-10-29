@@ -1,9 +1,11 @@
 import { Invite, InviteRepository, generateInviteCode } from '..';
 
+import { InviteType } from '@fanbase/shared';
+
 export const generateInvites = (
   inviteRepository: InviteRepository,
   user: string,
-  isCreator = false,
+  type: InviteType,
   count = 1,
   maxUseCount = 1,
   expiryDate?: Date
@@ -13,10 +15,10 @@ export const generateInvites = (
   while (i < count) {
     const invite = new Invite({
       expiryDate,
+      type,
       ownerId: user,
       code: generateInviteCode()(),
-      maxUseCount,
-      isCreator
+      maxUseCount
     });
 
     inviteRepository.create(invite);
@@ -30,6 +32,10 @@ export const generateInvitesForNewUser = (
   user: string,
   isCreator: boolean
 ) => {
-  generateInvites(inviteRepository, user, isCreator, 3);
-  if (isCreator) generateInvites(inviteRepository, user, false, 1, 1000);
+  if (isCreator) {
+    generateInvites(inviteRepository, user, InviteType.CREATOR, 3);
+    generateInvites(inviteRepository, user, InviteType.FAN, 1, 1000);
+    return;
+  }
+  generateInvites(inviteRepository, user, InviteType.BASIC, 3);
 };

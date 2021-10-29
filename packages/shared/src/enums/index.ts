@@ -1,4 +1,5 @@
 export * from './InviteStatus';
+export * from './InviteType';
 export * from './OAuthProvider';
 export * from './OfferStatus';
 export * from './OrderType';

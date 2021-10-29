@@ -88,7 +88,8 @@ class App {
       userRepository,
       walletRepository,
       tokenRepository,
-      tokenOwnershipRepository
+      tokenOwnershipRepository,
+      inviteRepository
     );
 
     const googleService = new GoogleService(googleConfig);

@@ -9,6 +9,7 @@ import {
 
 import { NextRouter } from 'next/router';
 import { getConfig } from '../config';
+import { getCurrentUser } from '../modules/auth/authStorage';
 
 export const isProduction =
   (process.env.NEXT_PUBLIC_VERCEL_ENV || process.env.NODE_ENV) === 'production';
@@ -25,7 +26,7 @@ export const getProfileUrl = ({
 }: {
   username?: string;
   id?: string;
-}): string => `/u/${username || id}`;
+}): string => `/u/${username || id || getCurrentUser().id}`;
 
 export const getCommunityUrl = (community: CommunityDTO) =>
   `/c/${community.id}`;

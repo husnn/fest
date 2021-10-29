@@ -66,11 +66,13 @@ export class IdentifyWithEmail extends UseCase<
     if (!isValidPassword(data.password))
       return Result.fail(AuthError.PASSWORD_INVALID);
 
-    let user = await this.userRepository.findByEmail(data.email);
+    const email = data.email.trim().toLowerCase();
+
+    let user = await this.userRepository.findByEmail(email);
 
     if (!user) {
       const check = await this.authCheck.exec({
-        email: data.email,
+        email,
         inviteCode: data.invite
       });
 
@@ -78,7 +80,7 @@ export class IdentifyWithEmail extends UseCase<
 
       user = new User({
         id: generateUserId()(),
-        email: data.email.trim().toLowerCase(), // @BeforeInsert Trim and convert to lowercase
+        email, // @BeforeInsert Trim and convert to lowercase
         password: data.password,
         isCreator: check.data.isCreator
       });

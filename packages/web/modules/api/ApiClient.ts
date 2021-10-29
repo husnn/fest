@@ -13,12 +13,16 @@ import {
   CreateTokenResponse,
   EditUserRequest,
   EditUserResponse,
+  EnableCreatorModeRequest,
+  EnableCreatorModeResponse,
   GetListingsForTokenRequest,
   GetListingsForTokenResponse,
   GetOAuthLinkRequest,
   GetOAuthLinkResponse,
   GetOwnUploadsRequest,
   GetOwnUploadsResponse,
+  GetReferralSummaryRequest,
+  GetReferralSummaryResponse,
   GetSignedTokenImageUploadUrlResponse,
   GetTokenImageUploadUrlRequest,
   GetTokenMarketSummaryRequest,
@@ -286,7 +290,7 @@ export class ApiClient {
     return this.client.request<EditUserResponse, EditUserRequest>({
       method: 'POST',
       endpoint: '/me',
-      authenticated: 'required',
+      authentication: 'required',
       body: data
     });
   }
@@ -520,6 +524,33 @@ export class ApiClient {
     });
 
     return response.body.link;
+  }
+
+  // Referral
+
+  async getReferralSummary(): Promise<GetReferralSummaryResponse> {
+    return this.client.request<
+      GetReferralSummaryResponse,
+      GetReferralSummaryRequest
+    >({
+      method: 'GET',
+      endpoint: '/referral',
+      authentication: 'required'
+    });
+  }
+
+  // Creator Mode
+
+  async enableCreatorMode(code: string): Promise<EnableCreatorModeResponse> {
+    return this.client.request<
+      EnableCreatorModeResponse,
+      EnableCreatorModeRequest
+    >({
+      method: 'POST',
+      endpoint: '/users/enable-creator',
+      authentication: 'required',
+      body: { code }
+    });
   }
 
   // Waitlist

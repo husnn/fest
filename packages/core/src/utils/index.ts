@@ -5,7 +5,7 @@ const alphanumeric =
 
 const lowerAlphanumeric = 'abcdefghijklmnopqrstuvwxyz0123456789';
 
-export const generateUserId = () => customAlphabet(alphanumeric, 8);
+export const generateUserId = () => customAlphabet(alphanumeric, 16);
 export const generateWalletId = () => customAlphabet(alphanumeric, 12);
 export const generateTokenId = () => customAlphabet(alphanumeric, 10);
 export const generateCommunityId = () => customAlphabet(alphanumeric, 12);
