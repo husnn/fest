@@ -12,6 +12,7 @@ export class WaitlistEntry {
   socialMedia: string;
 
   isAccepted: boolean;
+  dateAccepted: Date;
 
   constructor(data?: Partial<WaitlistEntry>) {
     Object.assign(this, data);

@@ -5,10 +5,7 @@
   "workspaces": [
     "packages/*"
   ],
-  "engines": {
-    "node": "14.15.0"
-  },
-  "packageManager": "yarn@3.0.2",
+  "packageManager": "yarn@3.1.0",
   "scripts": {
     "eslint:check": "eslint --ext .js,.jsx,.ts,.tsx .",
     "eslint:fix": "eslint --fix --ext .js,.jsx,.ts,.tsx .",
@@ -17,9 +14,11 @@
     "web": "yarn workspace @fanbase/web",
     "api": "yarn workspace @fanbase/api",
     "indexer": "yarn workspace @fanbase/indexer",
-    "eth-contracts": "yarn workspace @fanbase/eth-contracts"
+    "eth-contracts": "yarn workspace @fanbase/eth-contracts",
+    "console": "yarn workspace @fanbase/console"
   },
   "devDependencies": {
+    "@types/mjml": "^4.7.0",
     "@typescript-eslint/eslint-plugin": "^4.26.1",
     "@typescript-eslint/parser": "^4.26.1",
     "@yarnpkg/pnpify": "^3.0.0-rc.6",

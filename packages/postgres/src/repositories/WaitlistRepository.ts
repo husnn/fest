@@ -21,4 +21,18 @@ export class WaitlistRepository
       .orWhere('LOWER(entry.wallet) = LOWER(:identifier)', { identifier })
       .getOne();
   }
+
+  async getAll(): Promise<{
+    entries: WaitlistEntry[];
+    total: number;
+  }> {
+    const [entries, count] = await this.db
+      .createQueryBuilder()
+      .getManyAndCount();
+
+    return {
+      entries,
+      total: count
+    };
+  }
 }

@@ -1,0 +1,31 @@
+html
+  head
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
+    script.
+      $(document).ready(function(){
+        $('a.accept').click(function(e){
+          e.preventDefault();
+          const id = $(this).attr('data');
+          $(this).closest('.entry').css( "background-color", "green" );
+          $.post(`/waitlist/${id}/accept`);
+        });
+      });
+    style.
+      .accepted {
+        background-color: grey;
+      }
+      .accepted > .accept {
+        display: none;
+      }
+    title= Waitlist
+  body
+    h1= "Waitlist Entries"
+
+    ul
+      each val in entries
+        li.entry(class=val.isAccepted && "accepted")
+          p= moment(val.entryDate).fromNow()
+          if val.isAccepted
+            p Accepted #{moment(val.dateAccepted).fromNow()}
+          p= val.email 
+          a.accept(href="#", data=val.id)= "Accept entry"

@@ -34,6 +34,11 @@ const WaitlistEntrySchema = new EntitySchema<WaitlistEntry>({
     isAccepted: {
       type: 'bool',
       default: false
+    },
+    dateAccepted: {
+      type: 'timestamp',
+      name: 'date_accepted',
+      nullable: true
     }
   },
   indices: [

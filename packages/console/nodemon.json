@@ -1,0 +1,14 @@
+{
+  "verbose": true,
+  "quiet": true,
+  "watch": ["dist"],
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "ext": "js,ts,json",
+  "events": {
+    "restart": "kill-port 5002",
+    "crash": "kill-port 5002"
+  },
+  "delay": 100
+}
