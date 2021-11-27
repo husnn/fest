@@ -1,25 +1,23 @@
-import { GetServerSideProps } from 'next';
-import Head from 'next/head';
-import { useRouter } from 'next/router';
+import { Button, Link } from '../../ui';
 import React, { useEffect, useState } from 'react';
-
 import { TokenDTO, TokenOwnedDTO, UserDTO } from '@fanbase/shared';
-
-import TokensCreated from '../../components/TokensCreated';
-import TokensOwned from '../../components/TokensOwned';
-import ApiClient from '../../modules/api/ApiClient';
 import {
   getCurrentUser,
   saveCurrentUser
 } from '../../modules/auth/authStorage';
+import { getDisplayName, getTokenOwnershipUrl, getTokenUrl } from '../../utils';
+import useTabs, { Tab, Tabs } from '../../modules/navigation/useTabs';
+
+import ApiClient from '../../modules/api/ApiClient';
+import ButtonGroup from '../../ui/ButtonGroup';
+import Head from 'next/head';
+import ResponsiveTabs from '../../ui/ResponsiveTabs';
+import TokensCreated from '../../components/TokensCreated';
+import TokensOwned from '../../components/TokensOwned';
+import styles from '../../styles/Profile.module.scss';
 import useAuthentication from '../../modules/auth/useAuthentication';
 import { useHeader } from '../../modules/navigation';
-import useTabs, { Tab, Tabs } from '../../modules/navigation/useTabs';
-import styles from '../../styles/Profile.module.scss';
-import { Button, Link } from '../../ui';
-import ButtonGroup from '../../ui/ButtonGroup';
-import ResponsiveTabs from '../../ui/ResponsiveTabs';
-import { getDisplayName, getTokenOwnershipUrl, getTokenUrl } from '../../utils';
+import { useRouter } from 'next/router';
 
 export default function ProfilePage() {
   useHeader();
@@ -35,9 +33,9 @@ export default function ProfilePage() {
   const { initTabs, tabSelected, selectTab } = useTabs();
 
   const TABS = {
-    POSTS: {
-      id: 'posts',
-      title: 'Posts'
+    COMMUNITIES: {
+      id: 'communities',
+      title: 'Communities'
     },
     TOKENS_CREATED: {
       id: 'tokens_created',
@@ -162,8 +160,8 @@ export default function ProfilePage() {
         />
         {user && (
           <div className={styles.tabContent}>
-            {tabSelected?.id == TABS.POSTS.id && (
-              <div className={styles.postsTab}></div>
+            {tabSelected?.id == TABS.COMMUNITIES.id && (
+              <div className={styles.communitiesTab}></div>
             )}
             {tabSelected?.id == TABS.TOKENS_CREATED.id && (
               <TokensCreated
@@ -187,9 +185,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  return {
-    props: {}
-  };
-};

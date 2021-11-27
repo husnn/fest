@@ -4,10 +4,9 @@ import MarketController from '../controllers/MarketController';
 import authMiddleware from '../middleware/authMiddleware';
 import pagination from '../middleware/pagination';
 
-export default function init(
-  router: Router,
-  marketController: MarketController
-): Router {
+export default function init(marketController: MarketController): Router {
+  const router = Router();
+
   router.get(
     '/summary',
     authMiddleware,

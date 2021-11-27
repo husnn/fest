@@ -4,7 +4,9 @@ import UserController from '../controllers/UserController';
 import authMiddleware from '../middleware/authMiddleware';
 import pagination from '../middleware/pagination';
 
-export default function init(router: Router, userController: UserController) {
+export default function init(userController: UserController) {
+  const router = Router();
+
   router.post(
     '/me',
     authMiddleware,

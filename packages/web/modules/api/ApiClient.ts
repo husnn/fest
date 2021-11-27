@@ -15,6 +15,8 @@ import {
   EditUserResponse,
   EnableCreatorModeRequest,
   EnableCreatorModeResponse,
+  GetCommunityRequest,
+  GetCommunityResponse,
   GetListingsForTokenRequest,
   GetListingsForTokenResponse,
   GetOAuthLinkRequest,
@@ -93,6 +95,15 @@ export class ApiClient {
     return this.client.request<InitResponse>({
       method: 'GET',
       endpoint: '/init'
+    });
+  }
+
+  // Community
+
+  async getCommunity(id: string): Promise<GetCommunityResponse> {
+    return this.client.request<GetCommunityResponse, GetCommunityRequest>({
+      method: 'GET',
+      endpoint: `/communities/${id}`
     });
   }
 
@@ -581,7 +592,7 @@ export class ApiClient {
   async doAuthPrecheck(identifier: string): Promise<AuthPrecheckResponse> {
     return this.client.request<AuthPrecheckResponse, AuthPrecheckRequest>({
       method: 'POST',
-      endpoint: '/precheck',
+      endpoint: '/auth/precheck',
       authentication: 'none',
       body: {
         identifier

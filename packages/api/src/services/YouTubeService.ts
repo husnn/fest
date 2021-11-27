@@ -1,6 +1,10 @@
-import Axios from 'axios';
+import {
+  YouTubeService as IYouTubeService,
+  Result,
+  YouTubeChannel
+} from '@fanbase/core';
 
-import { Result, YouTubeChannel, YouTubeService as IYouTubeService } from '@fanbase/core';
+import Axios from 'axios';
 import { YouTubeVideo } from '@fanbase/shared';
 
 export interface YouTubeConfig {
@@ -52,27 +56,6 @@ class YouTubeService implements IYouTubeService {
 
     return Result.ok(new YouTubeChannel(response.data.items[0]));
   }
-
-  // async getUploadPlaylist(channel: string): Promise<
-  //   Result<{
-  //     id: string;
-  //   }>
-  // > {
-  //   const response = await Axios.get(
-  //     "https://www.googleapis.com/youtube/v3/playlists",
-  //     {
-  //       params: {
-  //         key: this.config.apiKey,
-  //         part: "contentDetails",
-  //         channelId: channel,
-  //       },
-  //     }
-  //   );
-
-  //   const { uploads } = response.data.contentDetails.relatedPlaylists;
-
-  //   return Result.ok({ id: uploads });
-  // }
 
   async getOwnUploadPlaylist(accessToken: string): Promise<Result<string>> {
     const ownChannelResult = await this.getOwnChannel(accessToken);

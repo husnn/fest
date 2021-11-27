@@ -2,7 +2,9 @@ import { NextFunction, Request, Response, Router } from 'express';
 
 import AuthController from '../controllers/AuthController';
 
-export default function init(router: Router, authController: AuthController) {
+export default function init(authController: AuthController) {
+  const router = Router();
+
   router.post('/precheck', (req: Request, res: Response, next: NextFunction) =>
     authController.doPrecheck(req, res, next)
   );

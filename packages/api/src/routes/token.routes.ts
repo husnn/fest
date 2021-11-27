@@ -4,10 +4,9 @@ import TokenController from '../controllers/TokenController';
 import authMiddleware from '../middleware/authMiddleware';
 import pagination from '../middleware/pagination';
 
-export default function init(
-  router: Router,
-  tokenController: TokenController
-): Router {
+export default function init(tokenController: TokenController): Router {
+  const router = Router();
+
   router.get(
     '/image-upload-url',
     (req: Request, res: Response, next: NextFunction) => {

@@ -1,11 +1,10 @@
-import { NextFunction, Request, Response, Router } from 'express';
 import authMiddleware from '../middleware/authMiddleware';
 import InsiderController from '../controllers/InsiderController';
+import { NextFunction, Request, Response, Router } from 'express';
 
-export default function init(
-  router: Router,
-  insiderController: InsiderController
-): Router {
+export default function init(insiderController: InsiderController): Router {
+  const router = Router();
+
   router.post(
     '/test-funds',
     authMiddleware,

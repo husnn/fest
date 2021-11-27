@@ -3,10 +3,9 @@ import { NextFunction, Request, Response, Router } from 'express';
 import GoogleController from '../controllers/GoogleController';
 import authMiddleware from '../middleware/authMiddleware';
 
-export default function init(
-  router: Router,
-  googleController: GoogleController
-) {
+export default function init(googleController: GoogleController) {
+  const router = Router();
+
   router.post(
     '/unlink',
     authMiddleware,

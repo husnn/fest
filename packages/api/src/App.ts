@@ -148,6 +148,7 @@ class App {
 
     const communityController = new CommunityController(
       tokenRepository,
+      userRepository,
       communityRepository
     );
 

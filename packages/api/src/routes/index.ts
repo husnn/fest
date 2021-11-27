@@ -32,20 +32,21 @@ export default function initRoutes(
   marketController: MarketController,
   insiderController: InsiderController
 ) {
-  router.get('/init', (req, res) => configController.init(req, res));
+  if (!isProduction) {
+    router.use('/insider', initInsiderRoutes(insiderController));
+  }
 
-  if (!isProduction)
-    router.use('/insider', initInsiderRoutes(router, insiderController));
+  router.get('/init', (req, res) => configController.init(req, res));
 
   router.post('/waitlist', (req, res, next) =>
     waitlistController.joinWaitlist(req, res, next)
   );
 
-  router.use('/auth', initAuthRoutes(router, authController));
-  router.use('/users', initUserRoutes(router, userController));
-  router.use('/google', initGoogleRoutes(router, googleController));
-  router.use('/youtube', initYouTubeRoutes(router, youTubeController));
-  router.use('/market', initMarketRoutes(router, marketController));
-  router.use('/community', initCommunityRoutes(router, communityController));
-  router.use('/tokens', initTokenRoutes(router, tokenController));
+  router.use('/auth', initAuthRoutes(authController));
+  router.use('/users', initUserRoutes(userController));
+  router.use('/google', initGoogleRoutes(googleController));
+  router.use('/youtube', initYouTubeRoutes(youTubeController));
+  router.use('/market', initMarketRoutes(marketController));
+  router.use('/tokens', initTokenRoutes(tokenController));
+  router.use('/communities', initCommunityRoutes(communityController));
 }

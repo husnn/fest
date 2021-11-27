@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 
 import {
+  CommunityDTO,
   CurrentUserDTO,
   InviteDTO,
   TokenDTO,
@@ -64,6 +65,16 @@ export type InitConfig = {
 };
 
 export interface InitResponse extends Response<InitConfig> {}
+
+/**
+ * Community
+ */
+
+export interface GetCommunityResponse extends Response<CommunityDTO> {}
+
+export interface GetCommunityRequest extends Request {
+  method: 'GET';
+}
 
 /**
  * Insider
@@ -417,7 +428,7 @@ export interface AuthPrecheckResponse extends Response {
 
 export interface AuthPrecheckRequest extends Request {
   method: 'POST';
-  endpoint: '/precheck';
+  endpoint: '/auth/precheck';
   authentication: 'none';
   body: {
     identifier: string;

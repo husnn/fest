@@ -3,10 +3,9 @@ import { NextFunction, Request, Response, Router } from 'express';
 import YouTubeController from '../controllers/YouTubeController';
 import authMiddleware from '../middleware/authMiddleware';
 
-export default function init(
-  router: Router,
-  youTubeController: YouTubeController
-) {
+export default function init(youTubeController: YouTubeController) {
+  const router = Router();
+
   router.get(
     '/uploads',
     authMiddleware,
