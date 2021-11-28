@@ -38,7 +38,7 @@ export class AuthCheck extends UseCase<AuthCheckInput, AuthCheckOutput> {
 
     if (isInviteOnly) {
       const entry = await this.waitlistRepository.findByEmailOrWallet(
-        data.email.trim().toLowerCase() || data.wallet.trim().toLowerCase()
+        data.email?.trim().toLowerCase() || data.wallet?.trim().toLowerCase()
       );
 
       if (entry) {

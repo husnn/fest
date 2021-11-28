@@ -300,7 +300,7 @@ export class ApiClient {
   async editUser(data: UserInfo): Promise<EditUserResponse> {
     return this.client.request<EditUserResponse, EditUserRequest>({
       method: 'POST',
-      endpoint: '/me',
+      endpoint: '/users/me',
       authentication: 'required',
       body: data
     });
@@ -545,7 +545,7 @@ export class ApiClient {
       GetReferralSummaryRequest
     >({
       method: 'GET',
-      endpoint: '/referral',
+      endpoint: '/users/referral',
       authentication: 'required'
     });
   }

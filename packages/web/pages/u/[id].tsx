@@ -67,8 +67,12 @@ export default function ProfilePage() {
 
   useEffect(() => {
     initTabs(TABS);
-    fetchUser();
   }, []);
+
+  useEffect(() => {
+    if (!id) return;
+    fetchUser();
+  }, [id]);
 
   const isSelf =
     currentUser &&

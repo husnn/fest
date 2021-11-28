@@ -7,20 +7,6 @@ import pagination from '../middleware/pagination';
 export default function init(userController: UserController) {
   const router = Router();
 
-  router.post(
-    '/me',
-    authMiddleware,
-    (req: Request, res: Response, next: NextFunction) =>
-      userController.editUser(req, res, next)
-  );
-
-  router.post(
-    '/enable-creator',
-    authMiddleware,
-    (req: Request, res: Response, next: NextFunction) =>
-      userController.enableCreatorMode(req, res, next)
-  );
-
   router.get(
     '/referral',
     authMiddleware,
@@ -29,7 +15,7 @@ export default function init(userController: UserController) {
     }
   );
 
-  router.get('/users/:id?', (req: Request, res: Response, next: NextFunction) =>
+  router.get('/:id?', (req: Request, res: Response, next: NextFunction) =>
     userController.get(req, res, next)
   );
 
@@ -45,6 +31,20 @@ export default function init(userController: UserController) {
     pagination,
     (req: Request, res: Response, next: NextFunction) =>
       userController.getTokensOwned(req, res, next)
+  );
+
+  router.post(
+    '/me',
+    authMiddleware,
+    (req: Request, res: Response, next: NextFunction) =>
+      userController.editUser(req, res, next)
+  );
+
+  router.post(
+    '/enable-creator',
+    authMiddleware,
+    (req: Request, res: Response, next: NextFunction) =>
+      userController.enableCreatorMode(req, res, next)
   );
 
   return router;

@@ -368,6 +368,8 @@ export interface EditUserResponse extends Response {
 }
 
 export interface EditUserRequest extends Request {
+  method: 'POST';
+  endpoint: '/users/me';
   authentication: 'required';
   body: UserInfo;
 }
@@ -382,7 +384,7 @@ export interface GetReferralSummaryResponse extends Response {
 
 export interface GetReferralSummaryRequest extends Request {
   method: 'GET';
-  endpoint: '/referral';
+  endpoint: '/users/referral';
   authentication: 'required';
 }
 
