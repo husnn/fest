@@ -1,8 +1,7 @@
 import { Express, NextFunction, Request, Response } from 'express';
+import { MailService, WaitlistRepository } from '@fanbase/core';
 
 import { AcceptanceEmail } from './AcceptanceEmail';
-import { MailService } from '@fanbase/core';
-import { WaitlistRepository } from '@fanbase/postgres';
 import moment from 'moment';
 
 export default (

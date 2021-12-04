@@ -1,8 +1,7 @@
+import Postgres, { WaitlistRepository } from '@fanbase/postgres';
 import { appConfig, postgresConfig } from './config';
 
 import { MailService } from './MailService';
-import Postgres from '@fanbase/postgres';
-import { WaitlistRepository } from '@fanbase/postgres';
 import express from 'express';
 import waitlist from './waitlist/waitlist.controller';
 
