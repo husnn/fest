@@ -25,7 +25,7 @@ import ConfigController from './controllers/ConfigController';
 import { EthereumService } from '@fanbase/ethereum';
 import GoogleController from './controllers/GoogleController';
 import GoogleService from './services/GoogleService';
-import InsiderController from './controllers/InsiderController';
+import InternalController from './controllers/InternalController';
 import MailService from './services/MailService';
 import MarketController from './controllers/MarketController';
 import MetadataStore from './services/MetadataStore';
@@ -140,7 +140,7 @@ class App {
 
     const configController = new ConfigController(ethereumService);
 
-    const insiderController = new InsiderController(
+    const internalController = new InternalController(
       configController,
       walletRepository,
       ethereumService
@@ -165,7 +165,7 @@ class App {
       youTubeController,
       tokenController,
       marketController,
-      insiderController
+      internalController
     );
 
     app.use('/v1', router);

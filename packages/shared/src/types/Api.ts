@@ -77,7 +77,7 @@ export interface GetCommunityRequest extends Request {
 }
 
 /**
- * Insider
+ * Internal
  */
 
 export interface RequestTestFundsResponse extends Response {
@@ -86,7 +86,7 @@ export interface RequestTestFundsResponse extends Response {
 
 export interface RequestTestFundsRequest extends Request {
   method: 'POST';
-  endpoint: '/insider/test-funds';
+  endpoint: '/internal/test-funds';
   authentication: 'required';
   body: {
     protocol: Protocol;

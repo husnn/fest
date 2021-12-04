@@ -107,7 +107,7 @@ export class ApiClient {
     });
   }
 
-  // Insider
+  // Internal
 
   async requestTestFunds(
     currency: string,
@@ -118,7 +118,7 @@ export class ApiClient {
       RequestTestFundsRequest
     >({
       method: 'POST',
-      endpoint: '/insider/test-funds',
+      endpoint: '/internal/test-funds',
       authentication: 'required',
       body: {
         protocol,

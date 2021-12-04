@@ -1,11 +1,12 @@
-import { EthereumService } from '@fanbase/core';
-import { WalletRepository } from '@fanbase/postgres';
-import { RequestTestFundsResponse } from '@fanbase/shared';
-import { NextFunction, Request, Response } from 'express';
 import { HttpError, HttpResponse, ValidationError } from '../http';
-import ConfigController from './ConfigController';
+import { NextFunction, Request, Response } from 'express';
 
-export class InsiderController {
+import ConfigController from './ConfigController';
+import { EthereumService } from '@fanbase/core';
+import { RequestTestFundsResponse } from '@fanbase/shared';
+import { WalletRepository } from '@fanbase/postgres';
+
+export class InternalController {
   private configController: ConfigController;
   private walletRepository: WalletRepository;
   private ethereumService: EthereumService;
@@ -60,4 +61,4 @@ export class InsiderController {
   }
 }
 
-export default InsiderController;
+export default InternalController;
