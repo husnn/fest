@@ -296,6 +296,7 @@ class TokenController {
         royaltyPct,
         attributes
       });
+      if (!result.success) throw new HttpError('Could not create token.');
 
       return new HttpResponse<CreateTokenResponse>(res, {
         body: {

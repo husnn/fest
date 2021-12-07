@@ -15,6 +15,7 @@ import { TokenRepository } from '../../repositories';
 import UseCase from '../../base/UseCase';
 import UserRepository from '../../repositories/UserRepository';
 import { generateTokenId } from '../../utils';
+import { isProduction } from '../../config';
 
 export interface CreateTokenInput {
   user: string;
@@ -103,9 +104,9 @@ export class CreateToken extends UseCase<CreateTokenInput, CreateTokenOutput> {
     };
 
     const pinResult = await this.metadataStore.saveJson(metadata);
-    if (!pinResult.success) return Result.fail();
+    if (!pinResult.success && isProduction) return Result.fail();
 
-    const metadataUri = pinResult.data;
+    const metadataUri = pinResult.data || 'a-cool-metadata-uri';
 
     const fees: TokenFee[] = [];
 
