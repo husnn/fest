@@ -1,10 +1,10 @@
 import { Button, FormInput, TextInput } from '../ui';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import React, { useEffect, useState } from 'react';
+import ShadowTextInput, { ShadowOption } from '../ui/ShadowTextInput';
 import { TokenDTO, TokenOwnershipDTO, WalletType } from '@fanbase/shared';
 
 import ApiClient from '../modules/api/ApiClient';
-import Web3 from 'web3';
 import styled from '@emotion/styled';
 import useAuthentication from '../modules/auth/useAuthentication';
 import { useWeb3 } from '../modules/web3';
@@ -29,6 +29,7 @@ const Container = styled.div`
     }
   }
 `;
+
 const TokenInfo = styled.div``;
 const ListingInfo = styled.div``;
 
@@ -41,6 +42,8 @@ export const CreateTokenListing = ({
   const web3 = useWeb3();
 
   const [marketApproved, setMarketApproved] = useState(false);
+  const [currencyOptions, setCurrencyOptions] = useState<ShadowOption[]>();
+  const [currency, setCurrency] = useState(web3.config.market.defaultCurrency);
 
   useEffect(() => {
     if (!web3.ethereum) return;
@@ -52,18 +55,25 @@ export const CreateTokenListing = ({
           setMarketApproved(approved);
         });
     }
+
+    setCurrencyOptions(
+      web3.config.market.currenciesSupported.map((ccy) => {
+        return {
+          id: ccy.symbol,
+          text: ccy.symbol,
+          data: ccy
+        };
+      }));
   }, [web3.ethereum]);
 
   const listForSale = async (quantity: number, price: number) => {
-    const currency = web3.config.market.defaultCurrency.contract;
-
     let txHash;
 
-    const actualPrice = await web3.ethereum.toERC20Amount(currency, price);
+    const actualPrice = await web3.ethereum.toERC20Amount(currency.contract, price);
 
     if (currentUser.wallet.type == WalletType.INTERNAL) {
       txHash = await ApiClient.instance?.listForSale(token.id, quantity, {
-        currency,
+        currency: currency.contract,
         amount: actualPrice
       });
     } else {
@@ -71,7 +81,7 @@ export const CreateTokenListing = ({
         token.id,
         quantity,
         {
-          currency,
+          currency: currency.contract,
           amount: actualPrice
         }
       );
@@ -82,7 +92,7 @@ export const CreateTokenListing = ({
         token.chain.id,
         quantity,
         {
-          currency,
+          currency: currency.contract,
           amount: actualPrice
         },
         approval.expiry,
@@ -167,9 +177,13 @@ export const CreateTokenListing = ({
                 <Field
                   type="number"
                   id="price"
-                  component={TextInput}
+                  component={ShadowTextInput}
                   value={values.price}
                   onChange={handleChange}
+                  options={currencyOptions}
+                  optionSelected={(option: ShadowOption) =>
+                    setCurrency(option.data)
+                  }
                 />
               </FormInput>
             </ListingInfo>

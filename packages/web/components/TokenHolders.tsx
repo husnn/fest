@@ -121,15 +121,16 @@ const TokenHolders = ({
                       List for sale
                     </Button>
                   ) : (
-                    <Button
-                      size="small"
-                      color="secondary"
-                      onClick={() => {
-                        // Make and send offer
-                      }}
-                    >
-                      Make offer
-                    </Button>
+                    // <Button
+                    //   size="small"
+                    //   color="secondary"
+                    //   onClick={() => {
+                    //     // Make and send offer
+                    //   }}
+                    // >
+                    //   Make offer
+                    // </Button>
+                    null
                   )}
                 </React.Fragment>
               )}
