@@ -1,6 +1,8 @@
 import {
+  CommunityRepository,
   EditUser,
   EnableCreatorMode,
+  GetCommunitiesForUser,
   GetReferralSummary,
   GetTokensCreated,
   GetTokensOwned,
@@ -18,6 +20,7 @@ import {
   GetReferralSummaryResponse,
   GetTokensCreatedResponse,
   GetTokensOwnedResponse,
+  GetUserCommunitiesResponse,
   GetUserResponse,
   UserInfo
 } from '@fanbase/shared';
@@ -32,6 +35,7 @@ import { NextFunction, Request, Response } from 'express';
 class UserController {
   private editUserUseCase: EditUser;
   private getUserUseCase: GetUser;
+  private getCommunitiesForUserUseCase: GetCommunitiesForUser;
   private getTokensOwnedUseCase: GetTokensOwned;
   private getTokensCreatedUseCase: GetTokensCreated;
   private enableCreatorModeUseCase: EnableCreatorMode;
@@ -42,7 +46,8 @@ class UserController {
     walletRepository: WalletRepository,
     tokenRepository: TokenRepository,
     tokenOwnershipRepository: TokenOwnershipRepository,
-    inviteRepository: InviteRepository
+    inviteRepository: InviteRepository,
+    communityRepository: CommunityRepository
   ) {
     this.editUserUseCase = new EditUser(userRepository, walletRepository);
     this.getUserUseCase = new GetUser(userRepository, walletRepository);
@@ -59,6 +64,44 @@ class UserController {
       userRepository,
       inviteRepository
     );
+    this.getCommunitiesForUserUseCase = new GetCommunitiesForUser(
+      communityRepository
+    );
+  }
+
+  async getCommunities(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<HttpResponse<GetUserCommunitiesResponse>> {
+    const count = req.pagination.count;
+    const page = req.pagination.page;
+
+    try {
+      const { id } = req.params;
+
+      const response = await this.getCommunitiesForUserUseCase.exec({
+        user: id,
+        count,
+        page
+      });
+
+      const { communities, total } = response.data;
+
+      return new HttpResponse<GetUserCommunitiesResponse>(
+        res,
+        {
+          body: communities
+        },
+        {
+          count,
+          page,
+          total
+        }
+      );
+    } catch (err) {
+      next(err);
+    }
   }
 
   async getReferralSummary(

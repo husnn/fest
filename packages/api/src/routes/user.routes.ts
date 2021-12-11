@@ -20,6 +20,13 @@ export default function init(userController: UserController) {
   );
 
   router.get(
+    '/:id/communities',
+    pagination,
+    (req: Request, res: Response, next: NextFunction) =>
+      userController.getCommunities(req, res, next)
+  );
+
+  router.get(
     '/:id/tokens-created',
     pagination,
     (req: Request, res: Response, next: NextFunction) =>

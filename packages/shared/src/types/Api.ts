@@ -336,6 +336,9 @@ export interface GetOAuthLinkRequest extends Request {
  * User
  */
 
+export interface GetUserCommunitiesResponse
+  extends PaginatedResponse<CommunityDTO> {}
+
 export interface GetTokensOwnedResponse
   extends PaginatedResponse<TokenOwnedDTO> {}
 

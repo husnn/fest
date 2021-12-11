@@ -39,6 +39,7 @@ import {
   GetTokensOwnedResponse,
   GetUserByIdRequest,
   GetUserByUsernameRequest,
+  GetUserCommunitiesResponse,
   GetUserResponse,
   IdentifyWithEmailRequest,
   IdentifyWithEmailResponse,
@@ -273,6 +274,21 @@ export class ApiClient {
   }
 
   // User
+
+  async getCommunitiesForUser(
+    userId: string,
+    count?: number,
+    page?: number
+  ): Promise<GetUserCommunitiesResponse> {
+    return this.client.request<GetUserCommunitiesResponse>({
+      method: 'GET',
+      endpoint: `/users/${userId}/communities`,
+      params: {
+        count,
+        page
+      }
+    });
+  }
 
   async getUserByUsername(username: string): Promise<GetUserResponse> {
     return this.client.request<GetUserResponse, GetUserByUsernameRequest>({

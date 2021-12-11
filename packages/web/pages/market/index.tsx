@@ -223,9 +223,9 @@ export default function MarketPage() {
               />
             ))}
           </div>
-          <Button color="secondary" style={{ width: '100%' }}>
+          {/* <Button color="secondary" style={{ width: '100%' }}>
             View all
-          </Button>
+          </Button> */}
         </MarketSection>
       )}
       {tokenMarketSummary?.trades?.length > 0 && (
@@ -234,13 +234,13 @@ export default function MarketPage() {
           {tokenMarketSummary?.trades?.map((trade: TokenTradeDTO) => (
             <TokenTradeRow key={trade.id} trade={trade} />
           ))}
-          <Button
+          {/* <Button
             color="secondary"
             style={{ width: '100%' }}
             onClick={() => router.push('/market/trades')}
           >
             View all
-          </Button>
+          </Button> */}
         </MarketSection>
       )}
       {listingToCancel && (

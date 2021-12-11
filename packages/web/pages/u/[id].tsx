@@ -14,6 +14,7 @@ import Head from 'next/head';
 import ResponsiveTabs from '../../ui/ResponsiveTabs';
 import TokensCreated from '../../components/TokensCreated';
 import TokensOwned from '../../components/TokensOwned';
+import UserCommunities from '../../components/UserCommunities';
 import styles from '../../styles/Profile.module.scss';
 import useAuthentication from '../../modules/auth/useAuthentication';
 import { useHeader } from '../../modules/navigation';
@@ -118,6 +119,7 @@ export default function ProfilePage() {
             {user ? (
               !isSelf ? (
                 <span></span>
+              ) : (
                 // <ButtonGroup
                 //   dropdown={
                 //     <React.Fragment>
@@ -137,7 +139,6 @@ export default function ProfilePage() {
                 //     {followed ? 'Unfollow' : 'Follow'}
                 //   </Button>
                 // </ButtonGroup>
-              ) : (
                 <Link href="/settings">
                   <Button size="small" color="secondary">
                     Edit profile
@@ -166,7 +167,7 @@ export default function ProfilePage() {
         {user && (
           <div className={styles.tabContent}>
             {tabSelected?.id == TABS.COMMUNITIES.id && (
-              <div className={styles.communitiesTab}></div>
+              <UserCommunities user={user.id} />
             )}
             {tabSelected?.id == TABS.TOKENS_CREATED.id && (
               <TokensCreated
