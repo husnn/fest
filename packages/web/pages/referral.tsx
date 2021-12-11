@@ -78,20 +78,11 @@ export const ReferralPage = () => {
     );
   };
 
-  const [hasFanInvites, setHasFanInvites] = useState(false);
-
   useEffect(() => {
     ApiClient.getInstance()
       .getReferralSummary()
       .then((response) => {
         setInvites(response.invites);
-
-        response.invites.forEach((invite) => {
-          if (invite.type === InviteType.FAN) {
-            setHasFanInvites(true);
-            return;
-          }
-        });
       })
       .catch((err) => {
         console.log(err);
@@ -100,33 +91,35 @@ export const ReferralPage = () => {
 
   const Box = ({
     title,
-    type = InviteType.BASIC
+    types = [InviteType.BASIC]
   }: {
     title: string;
-    type?: InviteType;
+    types?: InviteType[];
   }) => {
-    return (
+    const invitesToShow = invites.filter((invite) =>
+      types.includes(invite.type)
+    );
+
+    return invitesToShow.length > 0 ? (
       <div>
         <h2 style={{ marginBottom: 10 }}>{title}</h2>
         <CodeCollection className="two-col">
-          {invites.map(
-            (invite) =>
-              invite.type === type && (
-                <InviteCode key={invite.code} invite={invite} />
-              )
-          )}
+          {invitesToShow.map((invite) => (
+            <InviteCode key={invite.code} invite={invite} />
+          ))}
         </CodeCollection>
       </div>
-    );
+    ) : null;
   };
 
   return (
     <div className="container boxed">
       <Container>
-        <Box title="Share these with your friends!" />
-        {hasFanInvites && (
-          <Box title="Share these with your fans!" type={InviteType.FAN} />
-        )}
+        <Box
+          title="Share these with your friends!"
+          types={[InviteType.BASIC, InviteType.CREATOR]}
+        />
+        <Box title="Share these with your fans!" types={[InviteType.FAN]} />
       </Container>
     </div>
   );

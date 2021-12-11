@@ -117,25 +117,26 @@ export default function ProfilePage() {
           <div className={styles.headerActions}>
             {user ? (
               !isSelf ? (
-                <ButtonGroup
-                  dropdown={
-                    <React.Fragment>
-                      {/* <Button color="primary" size="small">
-                        Buy coins
-                      </Button> */}
-                      <Button color="secondary" size="small">
-                        Message
-                      </Button>
-                    </React.Fragment>
-                  }
-                >
-                  <Button
-                    color={followed ? 'normal' : 'secondary'}
-                    size="small"
-                  >
-                    {followed ? 'Unfollow' : 'Follow'}
-                  </Button>
-                </ButtonGroup>
+                <span></span>
+                // <ButtonGroup
+                //   dropdown={
+                //     <React.Fragment>
+                //       {/* <Button color="primary" size="small">
+                //         Buy coins
+                //       </Button> */}
+                //       <Button color="secondary" size="small">
+                //         Message
+                //       </Button>
+                //     </React.Fragment>
+                //   }
+                // >
+                //   <Button
+                //     color={followed ? 'normal' : 'secondary'}
+                //     size="small"
+                //   >
+                //     {followed ? 'Unfollow' : 'Follow'}
+                //   </Button>
+                // </ButtonGroup>
               ) : (
                 <Link href="/settings">
                   <Button size="small" color="secondary">
