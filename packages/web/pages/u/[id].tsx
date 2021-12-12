@@ -2,10 +2,15 @@ import { Button, Link } from '../../ui';
 import React, { useEffect, useState } from 'react';
 import { TokenDTO, TokenOwnedDTO, UserDTO } from '@fanbase/shared';
 import {
+  getCommunityUrl,
+  getDisplayName,
+  getTokenOwnershipUrl,
+  getTokenUrl
+} from '../../utils';
+import {
   getCurrentUser,
   saveCurrentUser
 } from '../../modules/auth/authStorage';
-import { getDisplayName, getTokenOwnershipUrl, getTokenUrl } from '../../utils';
 import useTabs, { Tab, Tabs } from '../../modules/navigation/useTabs';
 
 import ApiClient from '../../modules/api/ApiClient';
@@ -34,10 +39,6 @@ export default function ProfilePage() {
   const { initTabs, tabSelected, selectTab } = useTabs();
 
   const TABS = {
-    COMMUNITIES: {
-      id: 'communities',
-      title: 'Communities'
-    },
     TOKENS_CREATED: {
       id: 'tokens_created',
       title: 'Tokens Created'
@@ -45,6 +46,10 @@ export default function ProfilePage() {
     TOKENS_OWNED: {
       id: 'tokens_owned',
       title: 'Tokens Owned'
+    },
+    COMMUNITIES: {
+      id: 'communities',
+      title: 'Communities'
     }
   } as Tabs;
 
@@ -167,7 +172,12 @@ export default function ProfilePage() {
         {user && (
           <div className={styles.tabContent}>
             {tabSelected?.id == TABS.COMMUNITIES.id && (
-              <UserCommunities user={user.id} />
+              <UserCommunities
+                user={user.id}
+                onCommunitySelected={(community) => {
+                  router.push(getCommunityUrl(community));
+                }}
+              />
             )}
             {tabSelected?.id == TABS.TOKENS_CREATED.id && (
               <TokensCreated

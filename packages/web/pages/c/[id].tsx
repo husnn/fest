@@ -1,8 +1,9 @@
+import React, { useEffect, useState } from 'react';
+
+import { ApiClient } from '../../modules/api';
 import { CommunityDTO } from '@fanbase/shared';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
-import { ApiClient } from '../../modules/api';
 
 export const CommunityPage = () => {
   const router = useRouter();
@@ -13,13 +14,20 @@ export const CommunityPage = () => {
   useEffect(() => {
     if (!id) return;
 
-    ApiClient.getInstance().getCommunity(id as string);
+    ApiClient.getInstance()
+      .getCommunity(id as string)
+      .then((res) => {
+        setCommunity(res.body);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [id]);
 
   return (
     <div className="container">
       <Head>
-        <title>Community</title>
+        <title>{community?.name || 'Community'}</title>
       </Head>
     </div>
   );
