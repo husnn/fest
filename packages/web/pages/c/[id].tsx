@@ -29,6 +29,7 @@ export const CommunityPage = () => {
       <Head>
         <title>{community?.name || 'Community'}</title>
       </Head>
+      <h2>{community?.name}</h2>
     </div>
   );
 };

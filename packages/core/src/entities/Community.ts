@@ -10,6 +10,7 @@ export class Community {
   name: string;
 
   tokens: Token[];
+  users: User[];
 
   constructor(data?: Partial<Community>) {
     Object.assign(this, data);

@@ -1,5 +1,5 @@
-import { Protocol, WalletType } from '@fanbase/shared';
 import {
+  CommunityRepository,
   TokenOwnership,
   TokenOwnershipRepository,
   TokenRepository,
@@ -8,6 +8,7 @@ import {
   generateTokenOwnershipId,
   generateWalletId
 } from '@fanbase/core';
+import { Protocol, WalletType } from '@fanbase/shared';
 
 import Job from './Job';
 
@@ -28,7 +29,8 @@ export default class TokenTransfer extends Job<TokenTransferJob> {
   async execute(
     tokenRepository: TokenRepository,
     walletRepository: WalletRepository,
-    ownershipRepository: TokenOwnershipRepository
+    ownershipRepository: TokenOwnershipRepository,
+    communityRepository: CommunityRepository
   ): Promise<void> {
     try {
       if (
@@ -56,8 +58,6 @@ export default class TokenTransfer extends Job<TokenTransferJob> {
           token.id
         );
 
-        // console.log(`From ownership: \n${JSON.stringify(fromOwnership)}`);
-
         if (fromOwnership) {
           const newQuantity =
             this.props.quantity < fromOwnership.quantity
@@ -66,6 +66,13 @@ export default class TokenTransfer extends Job<TokenTransferJob> {
 
           fromOwnership.quantity = newQuantity;
           await ownershipRepository.update(fromOwnership);
+
+          if (newQuantity == 0) {
+            communityRepository.removeUserForToken(
+              fromWallet.ownerId,
+              token.id
+            );
+          }
         }
       }
 
@@ -73,6 +80,8 @@ export default class TokenTransfer extends Job<TokenTransferJob> {
         this.props.protocol,
         this.props.to
       );
+
+      let toOwnership: TokenOwnership;
 
       if (!toWallet) {
         toWallet = new Wallet({
@@ -84,7 +93,7 @@ export default class TokenTransfer extends Job<TokenTransferJob> {
 
         await walletRepository.create(toWallet);
 
-        const toOwnership = new TokenOwnership({
+        toOwnership = new TokenOwnership({
           id: generateTokenOwnershipId()(),
           walletId: toWallet.id,
           tokenId: token.id,
@@ -93,7 +102,7 @@ export default class TokenTransfer extends Job<TokenTransferJob> {
 
         await ownershipRepository.create(toOwnership);
       } else {
-        let toOwnership = await ownershipRepository.findByWalletAndToken(
+        toOwnership = await ownershipRepository.findByWalletAndToken(
           toWallet.id,
           token.id
         );
@@ -110,9 +119,10 @@ export default class TokenTransfer extends Job<TokenTransferJob> {
         }
 
         await ownershipRepository.update(toOwnership);
-
-        // console.log(`To ownership: \n${JSON.stringify(toOwnership)}`);
       }
+
+      if (toOwnership.quantity == this.props.quantity)
+        communityRepository.addUserForToken(toWallet.ownerId, token.id);
     } catch (err) {
       console.log(err);
     }

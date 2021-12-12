@@ -70,6 +70,11 @@ const UserSchema = new EntitySchema<User>({
       type: 'one-to-many',
       target: 'token',
       inverseSide: 'creator'
+    },
+    communities: {
+      type: 'many-to-many',
+      target: 'community',
+      inverseSide: 'users'
     }
   }
 });

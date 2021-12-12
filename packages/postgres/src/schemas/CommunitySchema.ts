@@ -40,6 +40,22 @@ const CommunitySchema = new EntitySchema<Community>({
           referencedColumnName: 'id'
         }
       }
+    },
+    users: {
+      type: 'many-to-many',
+      target: 'user',
+      inverseSide: 'communities',
+      joinTable: {
+        name: 'users_communities',
+        joinColumn: {
+          name: 'community_id',
+          referencedColumnName: 'id'
+        },
+        inverseJoinColumn: {
+          name: 'user_id',
+          referencedColumnName: 'id'
+        }
+      }
     }
   }
 });

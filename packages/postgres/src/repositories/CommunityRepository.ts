@@ -2,12 +2,11 @@ import {
   Community,
   CommunityRepository as ICommunityRepository
 } from '@fanbase/core';
+import { getManager, getRepository } from 'typeorm';
 
 import CommunitySchema from '../schemas/CommunitySchema';
 import Repository from './Repository';
-import TokenOwnershipSchema from '../schemas/TokenOwnershipSchema';
-import WalletSchema from '../schemas/WalletSchema';
-import { createQueryBuilder } from 'typeorm';
+import UserSchema from '../schemas/UserSchema';
 
 export class CommunityRepository
   extends Repository<Community>
@@ -17,28 +16,51 @@ export class CommunityRepository
     super(CommunitySchema);
   }
 
-  async findForUser(
-    user: string,
+  async addUserForToken(userId: string, tokenId: string): Promise<void> {
+    const user = await getRepository(UserSchema).findOne(userId);
+    if (!user) return;
+
+    const communities = await this.findByToken(tokenId);
+
+    await getManager().transaction(async (manager) => {
+      for await (const community of communities) {
+        await manager
+          .getRepository(CommunitySchema)
+          .createQueryBuilder('community')
+          .relation('users')
+          .of(community)
+          .add(user);
+      }
+    });
+  }
+
+  async removeUserForToken(userId: string, tokenId: string): Promise<void> {
+    const user = await getRepository(UserSchema).findOne(userId);
+    if (!user) return;
+
+    const communities = await this.findByToken(tokenId);
+
+    await getManager().transaction(async (manager) => {
+      for await (const community of communities) {
+        await manager
+          .getRepository(CommunitySchema)
+          .createQueryBuilder('community')
+          .relation('users')
+          .of(community)
+          .remove(user);
+      }
+    });
+  }
+
+  async getAllForUser(
+    userId: string,
     count: number,
     page: number
   ): Promise<{ communities: Community[]; total: number }> {
-    const wallet = await createQueryBuilder(WalletSchema, 'wallet')
-      .where('wallet.ownerId = :user', { user })
-      .getOne();
-
-    const ownerships = await createQueryBuilder(
-      TokenOwnershipSchema,
-      'ownership'
-    )
-      .where('ownership.walletId = :walletId', { walletId: wallet?.id })
-      .getMany();
-
-    const tokenIds = ownerships.map((o) => o.tokenId);
-
     const [communities, total] = await this.db
       .createQueryBuilder('community')
-      .innerJoin('community.tokens', 'token')
-      .where('token.id IN (:...tokenIds)', { tokenIds })
+      .leftJoin('community.users', 'user')
+      .where('user.id = :userId', { userId })
       .skip((page - 1) * count)
       .take(count)
       .getManyAndCount();
@@ -49,31 +71,21 @@ export class CommunityRepository
   async getForUser(id: string, user: string): Promise<[Community, boolean]> {
     const community = await this.db
       .createQueryBuilder('community')
+      .leftJoinAndSelect('community.users', 'user', 'user.id = :user', { user })
       .where('community.id = :id', { id })
-      .leftJoinAndSelect('community.tokens', 'tokens')
       .getOne();
 
-    const tokenIds = community.tokens.map((token) => token.id);
-
-    const wallet = await createQueryBuilder(WalletSchema, 'wallet')
-      .where('wallet.ownerId = :user', { user })
-      .getOne();
-
-    const ownership = await createQueryBuilder(
-      TokenOwnershipSchema,
-      'ownership'
-    )
-      .where('ownership.tokenId IN (:...tokenIds)', { tokenIds })
-      .andWhere('ownership.walletId = :walletId', { walletId: wallet?.id })
-      .getOne();
-
-    return [community, community?.creatorId == user || ownership?.quantity > 0];
+    return [
+      community,
+      community.users.length > 0 || community.creatorId == user
+    ];
   }
 
   async findByToken(id: string): Promise<Community[]> {
     const tokens = await this.db
       .createQueryBuilder('community')
-      .leftJoinAndSelect('community.tokens', 'token', 'token.id = :id', { id })
+      .innerJoin('community.tokens', 'token')
+      .where('token.id = :id', { id })
       .getMany();
 
     return tokens;

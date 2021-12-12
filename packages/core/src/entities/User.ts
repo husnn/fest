@@ -1,5 +1,6 @@
 import { getExpiryDate, randomInteger } from '@fanbase/shared';
 
+import Community from './Community';
 import Token from './Token';
 import Wallet from './Wallet';
 import bcrypt from 'bcryptjs';
@@ -25,6 +26,7 @@ export class User {
   };
   isCreator: boolean;
   lastLogin: Date;
+  communities: Community[];
 
   constructor(data?: Partial<User>) {
     Object.assign(this, data);

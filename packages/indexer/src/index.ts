@@ -1,31 +1,31 @@
 require('dotenv').config(); // eslint-disable-line
 
-import Queue from 'bee-queue';
-import redis from 'redis';
-import Web3 from 'web3';
-
-import { EthereumService } from '@fanbase/ethereum';
 import Postgres, {
+  CommunityRepository,
   TokenListingRepository,
   TokenOwnershipRepository,
   TokenRepository,
   TokenTradeRepository,
   WalletRepository
 } from '@fanbase/postgres';
-
-import { ethConfig, postgresConfig, redisConfig } from './config';
-import EthereumListener from './events/ethereum/EthereumListener';
 import TokenBuy, { TokenBuyJob } from './jobs/TokenBuy';
 import TokenCancelListing, {
   TokenCancelListingJob
 } from './jobs/TokenCancelListing';
 import TokenListForSale, { TokenListForSaleJob } from './jobs/TokenListForSale';
 import TokenMint, { TokenMintJob } from './jobs/TokenMint';
-import TokenTransfer, { TokenTransferJob } from './jobs/TokenTransfer';
-import { createServer } from './server';
 import TokenRoyaltyPayment, {
   TokenRoyaltyPaymentJob
 } from './jobs/TokenRoyaltyPayment';
+import TokenTransfer, { TokenTransferJob } from './jobs/TokenTransfer';
+import { ethConfig, postgresConfig, redisConfig } from './config';
+
+import EthereumListener from './events/ethereum/EthereumListener';
+import { EthereumService } from '@fanbase/ethereum';
+import Queue from 'bee-queue';
+import Web3 from 'web3';
+import { createServer } from './server';
+import redis from 'redis';
 
 const redisClient = redis.createClient(redisConfig.url);
 
@@ -85,12 +85,14 @@ ethereumListener.on(
   const tokenTradeRepository = new TokenTradeRepository();
   const walletRepository = new WalletRepository();
   const ownershipRepository = new TokenOwnershipRepository();
+  const communityRepository = new CommunityRepository();
 
   mintQueue.process(async (job: Queue.Job<TokenMintJob>) => {
     return new TokenMint(job.data).execute(
       tokenRepository,
       walletRepository,
-      ownershipRepository
+      ownershipRepository,
+      communityRepository
     );
   });
 
@@ -98,7 +100,8 @@ ethereumListener.on(
     return new TokenTransfer(job.data).execute(
       tokenRepository,
       walletRepository,
-      ownershipRepository
+      ownershipRepository,
+      communityRepository
     );
   });
 

@@ -30,7 +30,7 @@ export class GetCommunitiesForUser extends UseCase<
   async exec(
     data: GetCommunitiesForUserInput
   ): Promise<Result<GetCommunitiesForUserOutput>> {
-    const result = await this.communityRepository.findForUser(
+    const result = await this.communityRepository.getAllForUser(
       data.user,
       data.count,
       data.page

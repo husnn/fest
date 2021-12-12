@@ -1,11 +1,12 @@
-import { Protocol, decryptText } from '@fanbase/shared';
 import {
+  CommunityRepository,
   TokenOwnership,
   TokenOwnershipRepository,
   TokenRepository,
   WalletRepository,
   generateTokenOwnershipId
 } from '@fanbase/core';
+import { Protocol, decryptText } from '@fanbase/shared';
 
 import Job from './Job';
 
@@ -27,7 +28,8 @@ export default class TokenMint extends Job<TokenMintJob> {
   async execute(
     tokenRepository: TokenRepository,
     walletRepository: WalletRepository,
-    ownershipRepository: TokenOwnershipRepository
+    ownershipRepository: TokenOwnershipRepository,
+    communityRepository: CommunityRepository
   ): Promise<void> {
     try {
       const tokenId = decryptText(this.props.data);
@@ -64,6 +66,8 @@ export default class TokenMint extends Job<TokenMintJob> {
       await ownershipRepository.create(ownership);
 
       await tokenRepository.update(token);
+
+      communityRepository.addUserForToken(creatorWallet.ownerId, token.id);
     } catch (err) {
       console.log(err);
     }
