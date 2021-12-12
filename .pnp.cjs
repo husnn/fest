@@ -4159,8 +4159,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@fanbase/eth-transactions", "workspace:packages/ethereum/transactions"],
             ["@fanbase/ethereum", "workspace:packages/ethereum"],
             ["@fanbase/shared", "workspace:packages/shared"],
-            ["@ramp-network/ramp-instant-sdk", "npm:2.5.0"],
             ["@svgr/webpack", "npm:5.5.0"],
+            ["@transak/transak-sdk", "npm:1.0.111"],
             ["@types/axios", "npm:0.14.0"],
             ["@types/bn.js", "npm:5.1.0"],
             ["@types/node", "npm:15.14.9"],
@@ -4422,16 +4422,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
-      ["@ramp-network/ramp-instant-sdk", [
-        ["npm:2.5.0", {
-          "packageLocation": "./.yarn/cache/@ramp-network-ramp-instant-sdk-npm-2.5.0-f2cc2f7ee5-9f3a8bc297.zip/node_modules/@ramp-network/ramp-instant-sdk/",
-          "packageDependencies": [
-            ["@ramp-network/ramp-instant-sdk", "npm:2.5.0"],
-            ["body-scroll-lock", "npm:2.7.1"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
       ["@sendgrid/client", [
         ["npm:7.5.0", {
           "packageLocation": "./.yarn/cache/@sendgrid-client-npm-7.5.0-f063cd7d41-8212dcfe3f.zip/node_modules/@sendgrid/client/",
@@ -4665,6 +4655,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@tootallnate-once-npm-1.1.2-0517220057-e1fb1bbbc1.zip/node_modules/@tootallnate/once/",
           "packageDependencies": [
             ["@tootallnate/once", "npm:1.1.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@transak/transak-sdk", [
+        ["npm:1.0.111", {
+          "packageLocation": "./.yarn/cache/@transak-transak-sdk-npm-1.0.111-446e70c8c9-a4a6f98060.zip/node_modules/@transak/transak-sdk/",
+          "packageDependencies": [
+            ["@transak/transak-sdk", "npm:1.0.111"],
+            ["events", "npm:3.3.0"],
+            ["request", "npm:2.88.2"]
           ],
           "linkType": "HARD",
         }]
@@ -6242,15 +6243,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["qs", "npm:6.7.0"],
             ["raw-body", "npm:2.4.0"],
             ["type-is", "npm:1.6.18"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["body-scroll-lock", [
-        ["npm:2.7.1", {
-          "packageLocation": "./.yarn/cache/body-scroll-lock-npm-2.7.1-51fc1fe127-7a6b57b931.zip/node_modules/body-scroll-lock/",
-          "packageDependencies": [
-            ["body-scroll-lock", "npm:2.7.1"]
           ],
           "linkType": "HARD",
         }]

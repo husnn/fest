@@ -7,8 +7,8 @@ import BalanceView from '../ui/BalanceView';
 import { Button } from '../ui';
 import { CurrencyBalance } from '../types';
 import Head from 'next/head';
-import { RampInstantSDK } from '@ramp-network/ramp-instant-sdk';
 import styled from '@emotion/styled';
+import transakSDK from '@transak/transak-sdk';
 import useAuthentication from '../modules/auth/useAuthentication';
 import { useHeader } from '../modules/navigation';
 import { useWeb3 } from '../modules/web3';
@@ -16,7 +16,6 @@ import { useWeb3 } from '../modules/web3';
 const WalletInfo = styled.div`
   margin: 20px 0;
   padding: 20px;
-  // background: #f5f5f5;
   border: 1px solid #eee;
   border-radius: 20px;
 `;
@@ -50,28 +49,28 @@ export const WalletPage = () => {
       return;
     }
 
-    let swapAssetPrefix: string;
+    let network = 'ethereum';
 
     switch (web3.config.chainId) {
       case 137:
       case 80001:
-        if (selectedCurrencyBalance.currency.symbol !== 'MATIC')
-          swapAssetPrefix = 'MATIC_';
+        network = 'polygon';
         break;
     }
 
-    new RampInstantSDK({
-      hostAppName: 'Fanbase',
-      hostLogoUrl: 'https://docs.ramp.network/img/logo-1.svg',
-      ...(!isProduction && {
-        url: 'https://ri-widget-staging.firebaseapp.com'
-      }),
-      userAddress: currentUser.wallet.address,
-      userEmailAddress: currentUser.email,
-      swapAsset: `${swapAssetPrefix ? swapAssetPrefix : ''}${
-        selectedCurrencyBalance.currency.symbol
-      }`
-    }).show();
+    new transakSDK({
+      apiKey: process.env.NEXT_PUBLIC_TRANSAK_API_KEY,
+      environment: isProduction ? 'PRODUCTION' : 'STAGING',
+      networks: network,
+      cryptoCurrencyCode: selectedCurrencyBalance.currency.symbol,
+      walletAddress: currentUser.wallet.address,
+      themeColor: '000000',
+      email: currentUser.email,
+      redirectURL: '',
+      hostURL: window.location.origin,
+      widgetHeight: '550px',
+      widgetWidth: '350px'
+    }).init();
   };
 
   const [currencyBalances, setCurrencyBalances] = useState<CurrencyBalance[]>(

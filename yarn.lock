@@ -2913,8 +2913,8 @@ __metadata:
     "@fanbase/eth-transactions": "workspace:packages/ethereum/transactions"
     "@fanbase/ethereum": "workspace:packages/ethereum"
     "@fanbase/shared": "workspace:packages/shared"
-    "@ramp-network/ramp-instant-sdk": ^2.5.0
     "@svgr/webpack": ^5.5.0
+    "@transak/transak-sdk": ^1.0.31
     "@types/axios": ^0.14.0
     "@types/bn.js": ^5.1.0
     "@types/node": ^15.6.0
@@ -3124,15 +3124,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ramp-network/ramp-instant-sdk@npm:^2.5.0":
-  version: 2.5.0
-  resolution: "@ramp-network/ramp-instant-sdk@npm:2.5.0"
-  dependencies:
-    body-scroll-lock: ^2.6.4
-  checksum: 9f3a8bc29744ae475a2d369c3ac8302227d05e62c27115db99747a8223c41b2cbbb2e21b1a63d5b84e90606faa92153c99e864ef5cc54d9071086cb98f890c86
-  languageName: node
-  linkType: hard
-
 "@sendgrid/client@npm:^7.5.0":
   version: 7.5.0
   resolution: "@sendgrid/client@npm:7.5.0"
@@ -3336,6 +3327,16 @@ __metadata:
   version: 1.1.2
   resolution: "@tootallnate/once@npm:1.1.2"
   checksum: e1fb1bbbc12089a0cb9433dc290f97bddd062deadb6178ce9bcb93bb7c1aecde5e60184bc7065aec42fe1663622a213493c48bbd4972d931aae48315f18e1be9
+  languageName: node
+  linkType: hard
+
+"@transak/transak-sdk@npm:^1.0.31":
+  version: 1.0.111
+  resolution: "@transak/transak-sdk@npm:1.0.111"
+  dependencies:
+    events: ^3.1.0
+    request: ^2.88.2
+  checksum: a4a6f980604c29f045198841369fb895b224a5ce606ac9db139378ff889e2dd5d0e268034199ba898844e72c04f8a8fc56c43a2d26cc6754a7c91e957eba192d
   languageName: node
   linkType: hard
 
@@ -4619,13 +4620,6 @@ __metadata:
     raw-body: 2.4.0
     type-is: ~1.6.17
   checksum: 490231b4c89bbd43112762f7ba8e5342c174a6c9f64284a3b0fcabf63277e332f8316765596f1e5b15e4f3a6cf0422e005f4bb3149ed3a224bb025b7a36b9ac1
-  languageName: node
-  linkType: hard
-
-"body-scroll-lock@npm:^2.6.4":
-  version: 2.7.1
-  resolution: "body-scroll-lock@npm:2.7.1"
-  checksum: 7a6b57b9315dad3639ac5aa781ed25c2275a53b3aa1527a580eaaf17096ca5c93293c99c2d12ffc92a11388ac7004c8aa943ac9c356717a393727c9216e183e6
   languageName: node
   linkType: hard
 
@@ -7014,7 +7008,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"events@npm:^3.0.0":
+"events@npm:^3.0.0, events@npm:^3.1.0":
   version: 3.3.0
   resolution: "events@npm:3.3.0"
   checksum: f6f487ad2198aa41d878fa31452f1a3c00958f46e9019286ff4787c84aac329332ab45c9cdc8c445928fc6d7ded294b9e005a7fce9426488518017831b272780
@@ -11918,7 +11912,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"request@npm:^2.79.0":
+"request@npm:^2.79.0, request@npm:^2.88.2":
   version: 2.88.2
   resolution: "request@npm:2.88.2"
   dependencies:
