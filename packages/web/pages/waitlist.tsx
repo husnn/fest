@@ -15,7 +15,10 @@ import { ApiClient } from '../modules/api';
 import Confetti from 'react-confetti';
 import Head from 'next/head';
 import { WaitlistEntryType } from '@fanbase/shared';
+import { getProfileUrl } from '../utils';
+import router from 'next/router';
 import styled from '@emotion/styled';
+import useAuthentication from '../modules/auth/useAuthentication';
 import { useFormik } from 'formik';
 
 const Box = styled.div`
@@ -73,10 +76,16 @@ export const WaitlistPage = () => {
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
 
+  const { currentUser } = useAuthentication();
+
   useEffect(() => {
     setWidth(window.innerWidth);
     setHeight(window.innerHeight);
   }, []);
+
+  useEffect(() => {
+    if (currentUser) router.push(getProfileUrl(currentUser));
+  }, [currentUser]);
 
   const [userType, setUserType] = useState<RadioOption>(userTypeOptions[0]);
   const [hasWallet, setHasWallet] = useState(false);
