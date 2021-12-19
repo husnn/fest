@@ -13,11 +13,11 @@ export abstract class Repository<T> implements IRepository<T> {
     this.db = getRepository<T>(schema);
   }
 
-  get(id: string, relations?: string[]): Promise<T> {
+  get(id: string | number, relations?: string[]): Promise<T> {
     return this.db.findOne(id, { relations });
   }
 
-  getBatch(ids: string[]): Promise<T[]> {
+  getBatch(ids: string[] | number[]): Promise<T[]> {
     return this.db.findByIds(ids);
   }
 

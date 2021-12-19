@@ -1,4 +1,8 @@
 import {
+  NotificationCategory,
+  NotificationPriority,
+  NotificationService,
+  NotificationTopic,
   TokenListingRepository,
   TokenTrade,
   TokenTradeRepository,
@@ -25,7 +29,8 @@ export default class TokenBuy extends Job<TokenBuyJob> {
   async execute(
     listingRepository: TokenListingRepository,
     walletRepository: WalletRepository,
-    tradeRepository: TokenTradeRepository
+    tradeRepository: TokenTradeRepository,
+    notificationService: NotificationService
   ): Promise<void> {
     try {
       const listing = await listingRepository.findByChainData(
@@ -59,6 +64,16 @@ export default class TokenBuy extends Job<TokenBuyJob> {
       });
 
       await tradeRepository.create(trade);
+
+      notificationService.create(listing.sellerId, {
+        priority: NotificationPriority.NORMAL,
+        category: NotificationCategory.MARKET,
+        topic: NotificationTopic.TOKEN_MARKET_SALE,
+        values: {
+          currency: listing.price.currency.symbol,
+          amount: listing.price.displayAmount
+        }
+      });
     } catch (err) {
       console.log(err);
     }

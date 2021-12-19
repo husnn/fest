@@ -1,5 +1,6 @@
 export * from './CommunityRepository';
 export * from './InviteRepository';
+export * from './NotificationRepository';
 export * from './OAuthRepository';
 export * from './ReferralRepository';
 export * from './Repository';

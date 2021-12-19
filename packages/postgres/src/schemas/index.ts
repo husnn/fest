@@ -1,5 +1,6 @@
 import CommunitySchema from './CommunitySchema';
 import InviteSchema from './InviteSchema';
+import NotificationSchema from './NotificationSchema';
 import OAuthSchema from './OAuthSchema';
 import ReferralSchema from './ReferralSchema';
 import TokenListingSchema from './TokenListingSchema';
@@ -14,6 +15,7 @@ import WalletSchema from './WalletSchema';
 export default [
   CommunitySchema,
   InviteSchema,
+  NotificationSchema,
   OAuthSchema,
   ReferralSchema,
   TokenListingSchema,

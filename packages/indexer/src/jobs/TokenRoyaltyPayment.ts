@@ -1,6 +1,14 @@
-import { Protocol } from '@fanbase/shared';
+import {
+  EthereumService,
+  NotificationCategory,
+  NotificationPriority,
+  NotificationService,
+  NotificationTopic,
+  WalletRepository
+} from '@fanbase/core';
 
 import Job from './Job';
+import { Protocol } from '@fanbase/shared';
 
 export type TokenRoyaltyPaymentJob = {
   protocol: Protocol;
@@ -18,11 +26,34 @@ export class TokenRoyaltyPayment extends Job<TokenRoyaltyPaymentJob> {
     super(props);
   }
 
-  async execute(): Promise<void> {
-    console.log(
-      `Royalty payment to ${this.props.beneficiary}
-			of ${this.props.amount} for token ${this.props.token}`
-    );
+  async execute(
+    walletRepository: WalletRepository,
+    ethereumService: EthereumService,
+    notificationService: NotificationService
+  ): Promise<void> {
+    try {
+      const wallet = await walletRepository.findByAddress(
+        this.props.protocol,
+        this.props.beneficiary
+      );
+
+      const price = await ethereumService.priceFromERC20Amount(
+        this.props.currency,
+        this.props.amount
+      );
+
+      notificationService.create(wallet.ownerId, {
+        priority: NotificationPriority.NORMAL,
+        category: NotificationCategory.MARKET,
+        topic: NotificationTopic.TOKEN_MARKET_ROYALTY_PAYMENT,
+        values: {
+          currency: price.currency.symbol,
+          amount: price.displayAmount
+        }
+      });
+    } catch (err) {
+      console.log(err);
+    }
   }
 }
 

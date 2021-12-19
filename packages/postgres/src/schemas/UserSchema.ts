@@ -43,7 +43,7 @@ const UserSchema = new EntitySchema<User>({
       select: false
     },
     walletId: {
-      type: 'uuid',
+      type: 'text',
       name: 'wallet_id',
       nullable: true
     },

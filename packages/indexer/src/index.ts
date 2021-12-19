@@ -2,6 +2,7 @@ require('dotenv').config(); // eslint-disable-line
 
 import Postgres, {
   CommunityRepository,
+  NotificationRepository,
   TokenListingRepository,
   TokenOwnershipRepository,
   TokenRepository,
@@ -22,6 +23,7 @@ import { ethConfig, postgresConfig, redisConfig } from './config';
 
 import EthereumListener from './events/ethereum/EthereumListener';
 import { EthereumService } from '@fanbase/ethereum';
+import { NotificationService } from '@fanbase/core';
 import Queue from 'bee-queue';
 import Web3 from 'web3';
 import { createServer } from './server';
@@ -86,6 +88,9 @@ ethereumListener.on(
   const walletRepository = new WalletRepository();
   const ownershipRepository = new TokenOwnershipRepository();
   const communityRepository = new CommunityRepository();
+  const notificationRepository = new NotificationRepository();
+
+  const notificationService = new NotificationService(notificationRepository);
 
   mintQueue.process(async (job: Queue.Job<TokenMintJob>) => {
     return new TokenMint(job.data).execute(
@@ -128,7 +133,8 @@ ethereumListener.on(
         return new TokenBuy(job.data as TokenBuyJob).execute(
           tokenListingRepository,
           walletRepository,
-          tokenTradeRepository
+          tokenTradeRepository,
+          notificationService
         );
       } else if ((job.data as TokenCancelListingJob).canceller !== undefined) {
         // Cancellation event
@@ -141,7 +147,7 @@ ethereumListener.on(
         // Royalty payment
         return new TokenRoyaltyPayment(
           job.data as TokenRoyaltyPaymentJob
-        ).execute();
+        ).execute(walletRepository, ethereumService, notificationService);
       }
 
       done();

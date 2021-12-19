@@ -1,5 +1,4 @@
 import { EntitySchema } from 'typeorm';
-
 import { TokenTrade } from '@fanbase/core';
 
 const TokenTradeSchema = new EntitySchema<TokenTrade>({
@@ -16,11 +15,11 @@ const TokenTradeSchema = new EntitySchema<TokenTrade>({
       createDate: true
     },
     sellerId: {
-      type: 'uuid',
+      type: 'text',
       name: 'seller_id'
     },
     buyerId: {
-      type: 'uuid',
+      type: 'text',
       name: 'buyer_id'
     },
     tokenListingId: {

@@ -1,5 +1,6 @@
 export * from './Community';
 export * from './Invite';
+export * from './Notification';
 export * from './OAuth';
 export * from './Referral';
 export * from './Token';
