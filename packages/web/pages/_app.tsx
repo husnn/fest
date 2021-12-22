@@ -1,18 +1,17 @@
 import '../styles/globals.scss';
 
-import React from 'react';
-
-import { ThemeProvider } from '@emotion/react';
-
-import Header from '../components/Header';
 import ApiClient from '../modules/api/ApiClient';
-import AxiosClient from '../modules/api/AxiosClient';
-import AuthProvider from '../modules/auth/AuthProvider';
-import HeaderProvider from '../modules/navigation/HeaderProvider';
-import Web3Provider from '../modules/web3/Web3Provider';
-import DefaultTheme from '../styles/themes/DefaultTheme';
-
 import type { AppProps } from 'next/app';
+import AuthProvider from '../modules/auth/AuthProvider';
+import AxiosClient from '../modules/api/AxiosClient';
+import DefaultTheme from '../styles/themes/DefaultTheme';
+import Header from '../components/Header';
+import HeaderProvider from '../modules/navigation/HeaderProvider';
+import HouseSocketProvider from '../modules/house/HouseSocketProvider';
+import React from 'react';
+import { ThemeProvider } from '@emotion/react';
+import Web3Provider from '../modules/web3/Web3Provider';
+
 const axiosClient = new AxiosClient();
 new ApiClient(axiosClient);
 
@@ -23,7 +22,9 @@ function FanbaseApp({ Component, pageProps }: AppProps) {
         <Web3Provider>
           <HeaderProvider>
             <Header />
-            <Component {...pageProps} />
+            <HouseSocketProvider>
+              <Component {...pageProps} />
+            </HouseSocketProvider>
           </HeaderProvider>
         </Web3Provider>
       </AuthProvider>

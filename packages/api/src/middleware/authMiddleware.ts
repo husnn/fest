@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
 
 import { appConfig } from '../config';
+import jwt from 'jsonwebtoken';
 
 export default (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
@@ -9,12 +9,12 @@ export default (req: Request, res: Response, next: NextFunction) => {
 
   if (token == null) return res.sendStatus(401);
 
-  jwt.verify(token, appConfig.jwtSecret, (err: any, data: any) => {
+  jwt.verify(token, appConfig.jwtSecret, (err, data) => {
     if (err) {
       console.log(err);
       return res.sendStatus(403);
     }
-    req.user = data.user;
+    req.user = data.userId;
   });
 
   next();

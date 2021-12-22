@@ -1,5 +1,6 @@
 export * from './InviteStatus';
 export * from './InviteType';
+export * from './MessageType';
 export * from './NotificationTopic';
 export * from './OAuthProvider';
 export * from './OfferStatus';

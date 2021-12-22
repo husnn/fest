@@ -1,6 +1,7 @@
 export * from './CommunityDTO';
 export * from './CurrentUserDTO';
 export * from './InviteDTO';
+export * from './MessageDTO';
 export * from './NotificationDTO';
 export * from './TokenDTO';
 export * from './TokenListingDTO';

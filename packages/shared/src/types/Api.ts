@@ -70,7 +70,18 @@ export interface InitResponse extends Response<InitConfig> {}
  * Community
  */
 
-export interface GetCommunityResponse extends Response<CommunityDTO> {}
+export interface GetCommunityTokenResponse extends Response {
+  token: string;
+}
+
+export interface GetCommunityTokenRequest extends Request {
+  method: 'GET';
+  authentication: 'required';
+}
+
+export interface GetCommunityResponse extends Response<CommunityDTO> {
+  token?: string;
+}
 
 export interface GetCommunityRequest extends Request {
   method: 'GET';

@@ -2,17 +2,21 @@ import {
   CommunityRepository,
   CreateCommunity,
   GetCommunity,
+  GetCommunityToken,
   TokenRepository,
   UserRepository
 } from '@fanbase/core';
+import {
+  GetCommunityResponse,
+  GetCommunityTokenResponse
+} from '@fanbase/shared';
 import { HttpError, HttpResponse } from '../http';
 import { NextFunction, Request, Response } from 'express';
-
-import { GetCommunityResponse } from '@fanbase/shared';
 
 export class CommunityController {
   private createCommunityUseCase: CreateCommunity;
   private getCommunityUseCase: GetCommunity;
+  private getCommunityTokenUseCase: GetCommunityToken;
 
   constructor(
     tokenRepository: TokenRepository,
@@ -28,6 +32,31 @@ export class CommunityController {
       userRepository,
       communityRepository
     );
+
+    this.getCommunityTokenUseCase = new GetCommunityToken(
+      this.getCommunityUseCase
+    );
+  }
+
+  async getToken(req: Request, res: Response, next: NextFunction) {
+    const { id } = req.params;
+
+    try {
+      if (!id) throw new HttpError('Missing community ID.');
+
+      const result = await this.getCommunityTokenUseCase.exec({
+        user: req.user,
+        community: id
+      });
+      if (!result.success)
+        throw new HttpError('Could not get chat token for community.');
+
+      return new HttpResponse<GetCommunityTokenResponse>(res, {
+        token: result.data.token
+      });
+    } catch (err) {
+      next(err);
+    }
   }
 
   async get(req: Request, res: Response, next: NextFunction) {
@@ -41,7 +70,8 @@ export class CommunityController {
       if (!result.success) throw new HttpError();
 
       return new HttpResponse<GetCommunityResponse>(res, {
-        body: result.data.community
+        body: result.data.community,
+        token: result.data.token
       });
     } catch (err) {
       next(err);

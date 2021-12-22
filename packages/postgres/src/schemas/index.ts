@@ -1,8 +1,10 @@
 import CommunitySchema from './CommunitySchema';
 import InviteSchema from './InviteSchema';
+import MessageSchema from './MessageSchema';
 import NotificationSchema from './NotificationSchema';
 import OAuthSchema from './OAuthSchema';
 import ReferralSchema from './ReferralSchema';
+import RoomSchema from './RoomSchema';
 import TokenListingSchema from './TokenListingSchema';
 import TokenOfferSchema from './TokenOfferSchema';
 import TokenOwnershipSchema from './TokenOwnershipSchema';
@@ -15,9 +17,11 @@ import WalletSchema from './WalletSchema';
 export default [
   CommunitySchema,
   InviteSchema,
+  MessageSchema,
   NotificationSchema,
   OAuthSchema,
   ReferralSchema,
+  RoomSchema,
   TokenListingSchema,
   TokenOfferSchema,
   TokenTradeSchema,

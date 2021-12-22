@@ -1,10 +1,14 @@
 import { getExpiryDate, randomInteger } from '@fanbase/shared';
+import jwt, { Jwt } from 'jsonwebtoken';
 
 import Community from './Community';
 import Token from './Token';
 import Wallet from './Wallet';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+
+type JwtPayload = {
+  userId: string;
+};
 
 export class User {
   readonly id: string;
@@ -46,13 +50,11 @@ export class User {
   }
 
   static fromJwt(token: string) {
-    return jwt.verify(token, process.env.JWT_SECRET, (err: any, data: any) => {
-      if (!err) return data.user;
-    });
+    return jwt.verify(token, process.env.JWT_SECRET) as JwtPayload;
   }
 
   static generateJwt(user: User): string {
-    return jwt.sign({ user: user.id }, process.env.JWT_SECRET, {
+    return jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRY
     });
   }

@@ -1,13 +1,21 @@
+import {
+  GetGoogleAuthLink,
+  GetGoogleAuthStatus,
+  GoogleService,
+  LinkGoogle,
+  OAuthRepository,
+  UnlinkGoogle,
+  User
+} from '@fanbase/core';
+import {
+  GetOAuthLinkResponse,
+  OAuthCheckLinkResponse,
+  UnlinkOAuthResponse
+} from '@fanbase/shared';
+import { HttpError, HttpResponse } from '../http';
 import { NextFunction, Request, Response } from 'express';
 
-import {
-    GetGoogleAuthLink, GetGoogleAuthStatus, GoogleService, LinkGoogle, OAuthRepository,
-    UnlinkGoogle, User
-} from '@fanbase/core';
-import { GetOAuthLinkResponse, OAuthCheckLinkResponse, UnlinkOAuthResponse } from '@fanbase/shared';
-
 import { appConfig } from '../config';
-import { HttpError, HttpResponse } from '../http';
 
 class GoogleController {
   private getGoogleAuthLinkUseCase: GetGoogleAuthLink;
@@ -58,7 +66,7 @@ class GoogleController {
       if (!code) {
         code = req.query.code;
         const state = req.query.state;
-        user = state ? User.fromJwt(state.toString()) : null;
+        user = state ? User.fromJwt(state.toString()).userId : null;
       }
 
       if (!user || !code) throw new HttpError('Invalid user or code.');
