@@ -390,7 +390,7 @@ export class EthereumService implements IEthereumService {
     expiry: number,
     salt: string
   ): Promise<Result<{ signature: string }>> {
-    const privateKey = Buffer.from(process.env.PRIVATE_KEY, 'hex');
+    const privateKey = Buffer.from(process.env.ETH_WALLET_PK, 'hex');
 
     const hash = await Contracts.get('Market')
       .methods.getSaleAuthorizationHash(
@@ -455,7 +455,7 @@ export class EthereumService implements IEthereumService {
     expiry: number,
     salt: string
   ): Promise<Result<{ signature: string }>> {
-    const privateKey = Buffer.from(process.env.PRIVATE_KEY, 'hex');
+    const privateKey = Buffer.from(process.env.ETH_WALLET_PK, 'hex');
 
     const contract = Contracts.get('Token');
 

@@ -103,6 +103,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-node", "virtual:c854f68d252b5f7f0a12089c0a8d378315a510bb72adea1f39c1b0225be487e8e77397c9f31c6e3c75f21f0105f5fcce3119b6da233eea7c419991cac2d6f94e#npm:11.1.0"],
             ["eslint-plugin-promise", "virtual:c854f68d252b5f7f0a12089c0a8d378315a510bb72adea1f39c1b0225be487e8e77397c9f31c6e3c75f21f0105f5fcce3119b6da233eea7c419991cac2d6f94e#npm:5.1.1"],
             ["eslint-plugin-react", "virtual:c854f68d252b5f7f0a12089c0a8d378315a510bb72adea1f39c1b0225be487e8e77397c9f31c6e3c75f21f0105f5fcce3119b6da233eea7c419991cac2d6f94e#npm:7.26.1"],
+            ["kill-port", "npm:1.6.1"],
             ["node-gyp", "npm:8.3.0"],
             ["prettier", "npm:2.4.1"],
             ["typescript", "patch:typescript@npm%3A4.4.4#~builtin<compat/typescript>::version=4.4.4&hash=ddd1e8"]
@@ -4007,7 +4008,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@fanbase/console", "workspace:packages/console"],
             ["@fanbase/core", "workspace:packages/core"],
-            ["@fanbase/ethereum", "workspace:packages/ethereum"],
             ["@fanbase/postgres", "workspace:packages/postgres"],
             ["@fanbase/shared", "workspace:packages/shared"],
             ["@sendgrid/mail", "npm:7.5.0"],
@@ -9404,6 +9404,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-node", "virtual:c854f68d252b5f7f0a12089c0a8d378315a510bb72adea1f39c1b0225be487e8e77397c9f31c6e3c75f21f0105f5fcce3119b6da233eea7c419991cac2d6f94e#npm:11.1.0"],
             ["eslint-plugin-promise", "virtual:c854f68d252b5f7f0a12089c0a8d378315a510bb72adea1f39c1b0225be487e8e77397c9f31c6e3c75f21f0105f5fcce3119b6da233eea7c419991cac2d6f94e#npm:5.1.1"],
             ["eslint-plugin-react", "virtual:c854f68d252b5f7f0a12089c0a8d378315a510bb72adea1f39c1b0225be487e8e77397c9f31c6e3c75f21f0105f5fcce3119b6da233eea7c419991cac2d6f94e#npm:7.26.1"],
+            ["kill-port", "npm:1.6.1"],
             ["node-gyp", "npm:8.3.0"],
             ["prettier", "npm:2.4.1"],
             ["typescript", "patch:typescript@npm%3A4.4.4#~builtin<compat/typescript>::version=4.4.4&hash=ddd1e8"]
@@ -9878,6 +9879,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["get-symbol-description", "npm:1.0.0"],
             ["call-bind", "npm:1.0.2"],
             ["get-intrinsic", "npm:1.1.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["get-them-args", [
+        ["npm:1.3.2", {
+          "packageLocation": "./.yarn/cache/get-them-args-npm-1.3.2-fca835a30c-5544dcec7f.zip/node_modules/get-them-args/",
+          "packageDependencies": [
+            ["get-them-args", "npm:1.3.2"]
           ],
           "linkType": "HARD",
         }]
@@ -11421,6 +11431,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["keyv", "npm:4.0.3"],
             ["json-buffer", "npm:3.0.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["kill-port", [
+        ["npm:1.6.1", {
+          "packageLocation": "./.yarn/cache/kill-port-npm-1.6.1-0b328689ea-fda3b20954.zip/node_modules/kill-port/",
+          "packageDependencies": [
+            ["kill-port", "npm:1.6.1"],
+            ["get-them-args", "npm:1.3.2"],
+            ["shell-exec", "npm:1.0.2"]
           ],
           "linkType": "HARD",
         }]
@@ -15318,6 +15339,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/shebang-regex-npm-3.0.0-899a0cd65e-1a2bcae50d.zip/node_modules/shebang-regex/",
           "packageDependencies": [
             ["shebang-regex", "npm:3.0.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["shell-exec", [
+        ["npm:1.0.2", {
+          "packageLocation": "./.yarn/cache/shell-exec-npm-1.0.2-439b1acf5b-0cae6f1511.zip/node_modules/shell-exec/",
+          "packageDependencies": [
+            ["shell-exec", "npm:1.0.2"]
           ],
           "linkType": "HARD",
         }]

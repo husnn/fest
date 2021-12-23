@@ -22,11 +22,11 @@ const sign = <T extends Record<string, string | number>>(
 export const generateCommunityToken = (communityId: string) => {
   return sign<TokenData>(
     { communityId },
-    process.env.COMMUNITY_JWT_SECRET,
-    process.env.COMMUNITY_JWT_EXPIRY
+    process.env.HOUSE_JWT_SECRET,
+    process.env.HOUSE_JWT_EXPIRY
   );
 };
 
 export const verifyCommunityToken = (token: string) => {
-  return verify<TokenData>(token, process.env.COMMUNITY_JWT_SECRET);
+  return verify<TokenData>(token, process.env.HOUSE_JWT_SECRET);
 };

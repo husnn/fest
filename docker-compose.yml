@@ -3,45 +3,117 @@ version: '3.8'
 services:
   postgres:
     image: postgres:alpine
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
 
   redis:
     image: 'redis:alpine'
+    command: redis-server
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_data:/data
 
   indexer:
     build: .
     command: yarn indexer serve
+    env_file: ./packages/indexer/.env
     environment:
+      PORT: 9000
       PG_HOST: postgres
+      PG_PORT: 5432
+      ETH_PROVIDER: http://host:8545
       REDIS_URL: redis://redis:6379
-      ETH_PROVIDER: $ETH_PROVIDER
+    extra_hosts:
+      - 'host:host-gateway'
+    restart: on-failure
     depends_on:
       - postgres
       - redis
 
-  nginx:
-    image: nginx:latest
-    volumes:
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-    ports:
-      - 8080:8080
-
   api:
     build: .
     command: yarn api serve
+    env_file: ./packages/api/.env
     environment:
       PORT: 5000
       PG_HOST: postgres
-      ETH_PROVIDER: $ETH_PROVIDER
-    ports:
-      - 5000:5000
+      PG_PORT: 5432
+      ETH_PROVIDER: http://host:8545
+      INDEXER_HOST: indexer
+      INDEXER_PORT: 9000
+    extra_hosts:
+      - 'host:host-gateway'
+    restart: on-failure
     depends_on:
       - postgres
       - indexer
 
+  house:
+    build: .
+    command: yarn house serve
+    env_file: ./packages/house/.env
+    environment:
+      PORT: 6000
+      PG_HOST: postgres
+      PG_PORT: 5432
+      ETH_PROVIDER: http://host:8545
+      REDIS_URL: redis://redis:6379
+    extra_hosts:
+      - 'host:host-gateway'
+    restart: on-failure
+    depends_on:
+      - postgres
+      - redis
+      - api
+
+  web:
+    build: .
+    command: yarn web serve
+    env_file: ./packages/web/.env.local
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:5050/v1
+      NEXT_PUBLIC_HOUSE_WS: http://localhost:6050
+    restart: on-failure
+    depends_on:
+      - api
+      - house
+
+  console:
+    build: .
+    command: yarn console serve
+    env_file: ./packages/console/.env
+    environment:
+      PORT: 4000
+      PG_HOST: postgres
+      PG_PORT: 5432
+    depends_on:
+      - postgres
+
+  nginx:
+    image: nginx:latest
+    environment:
+      WEB_PORT: 3000
+      CONSOLE_PORT: 4000
+      API_PORT: 5000
+      HOUSE_PORT: 6000
+    ports:
+      - 80:80
+      - 4050:4000
+      - 5050:5000
+      - 6050:6000
+    volumes:
+      - ./nginx/templates:/etc/nginx/templates/
+    restart: on-failure
+    depends_on:
+      - api
+      - house
+      - web
+      - console
+
 volumes:
   postgres_data:
+  redis_data:

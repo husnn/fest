@@ -14,7 +14,7 @@ export const HouseSocketProvider = ({
 
   useEffect(() => {
     setSocket(
-      io(process.env.NEXT_PUBLIC_COMMUNITY_WS, {
+      io(process.env.NEXT_PUBLIC_HOUSE_WS, {
         path: '/',
         query: {
           token: getAuthToken()

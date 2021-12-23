@@ -7,7 +7,8 @@ import Postgres, {
   TokenOwnershipRepository,
   TokenRepository,
   TokenTradeRepository,
-  WalletRepository
+  WalletRepository,
+  defaultConfig as postgresConfig
 } from '@fanbase/postgres';
 import TokenBuy, { TokenBuyJob } from './jobs/TokenBuy';
 import TokenCancelListing, {
@@ -19,7 +20,7 @@ import TokenRoyaltyPayment, {
   TokenRoyaltyPaymentJob
 } from './jobs/TokenRoyaltyPayment';
 import TokenTransfer, { TokenTransferJob } from './jobs/TokenTransfer';
-import { ethConfig, postgresConfig, redisConfig } from './config';
+import { ethConfig, redisConfig } from './config';
 
 import EthereumListener from './events/ethereum/EthereumListener';
 import { EthereumService } from '@fanbase/ethereum';

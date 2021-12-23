@@ -1,12 +1,11 @@
-import net from 'net';
-import { setInterval } from 'timers';
-import Web3 from 'web3';
-
-import { EthereumService } from '@fanbase/ethereum';
-import Postgres from '@fanbase/postgres';
+import Postgres, { defaultConfig as postgresConfig } from '@fanbase/postgres';
+import { appConfig, ethConfig, indexerConfig } from './config';
 
 import App from './App';
-import { appConfig, ethConfig, indexerConfig, postgresConfig } from './config';
+import { EthereumService } from '@fanbase/ethereum';
+import Web3 from 'web3';
+import net from 'net';
+import { setInterval } from 'timers';
 import { setupLogger } from './logger';
 
 const web3 = new Web3(ethConfig.provider);

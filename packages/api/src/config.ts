@@ -1,8 +1,6 @@
-import { PostgresConfig } from '@fanbase/postgres';
-
+import { AppConfig } from './types/AppConfig';
 import { GoogleConfig } from './services/GoogleService';
 import { YouTubeConfig } from './services/YouTubeService';
-import { AppConfig } from './types/AppConfig';
 
 export const isProduction = process.env.NODE_ENV === 'production';
 
@@ -21,7 +19,7 @@ const getApiUrl = () =>
 
 const indexerConfig = {
   host: process.env.INDEXER_HOST || '0.0.0.0',
-  port: parseInt(process.env.INDEXER_PORT) || 7070
+  port: parseInt(process.env.INDEXER_PORT) || 9000
 };
 
 const ethConfig = {
@@ -35,15 +33,6 @@ const mailConfig = {
   sendgrid: {
     apiUrl: process.env.SENDGRID_API_KEY
   }
-};
-
-const postgresConfig: PostgresConfig = {
-  uri: process.env.PG_URL || process.env.DATABASE_URL,
-  host: process.env.PG_HOST || process.env.RDS_HOSTNAME || '127.0.0.1',
-  port: parseInt(process.env.PG_PORT || process.env.RDS_PORT) || 5432,
-  database: process.env.PG_DATABASE || process.env.RDS_DB_NAME || 'postgres',
-  username: process.env.PG_USER || process.env.RDS_USERNAME || 'postgres',
-  password: process.env.PG_PASSWORD || process.env.RDS_PASSWORD || 'postgres'
 };
 
 const googleConfig: GoogleConfig = {
@@ -60,7 +49,6 @@ const youTubeConfig: YouTubeConfig = {
 export {
   appConfig,
   getApiUrl,
-  postgresConfig,
   indexerConfig,
   ethConfig,
   mailConfig,

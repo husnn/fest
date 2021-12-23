@@ -5,10 +5,16 @@ RUN mkdir -p /usr/src/app && \
 
 WORKDIR /usr/src/app
 
-USER node
-
 COPY --chown=node:node . .
 
-RUN chmod +x scripts/install_yarn.sh
+RUN apk add --update --no-cache \
+    build-base \
+    bash \
+    curl \
+    make \
+    nodejs \
+    python3 \
+    yarn \
+  && npm install --global node-gyp
 
 RUN yarn install --inline-builds

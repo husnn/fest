@@ -1,5 +1,4 @@
 #!/bin/bash
-
 _DO_RESET=false
 
 for arg in "$@"

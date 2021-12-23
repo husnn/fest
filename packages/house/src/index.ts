@@ -5,12 +5,14 @@ import {
   MessageDTO,
   SendMessageData
 } from '@fanbase/shared';
-import Postgres, { UserRepository } from '@fanbase/postgres';
+import Postgres, {
+  UserRepository,
+  defaultConfig as postgresConfig
+} from '@fanbase/postgres';
 import { Server, Socket } from 'socket.io';
 import { User, verifyCommunityToken } from '@fanbase/core';
 
 import { createServer } from 'http';
-import { postgresConfig } from './config';
 import redis from 'redis';
 
 const httpServer = createServer();
@@ -128,6 +130,6 @@ redisSub.on('message', (_: string, message: string) => {
   io.to(getChannelKey({ communityId, roomId })).emit('newMessage', messageDTO);
 });
 
-httpServer.listen(process.env.PORT || 3070, () => {
+httpServer.listen(process.env.PORT || 6000, () => {
   console.log('App running.');
 });
