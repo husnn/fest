@@ -16,9 +16,8 @@ export const HouseSocketProvider = ({
     setSocket(
       io(process.env.NEXT_PUBLIC_HOUSE_WS, {
         path: '/',
-        query: {
-          token: getAuthToken()
-        }
+        withCredentials: true,
+        query: { token: getAuthToken() }
       })
     );
   }, []);

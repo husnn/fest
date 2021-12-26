@@ -19,8 +19,9 @@ const httpServer = createServer();
 const io = new Server(httpServer, {
   path: '/',
   cors: {
-    origin: '*',
-    methods: ['GET', 'POST']
+    origin: process.env.CLIENT_URL || 'http://localhost:3000',
+    methods: ['GET', 'POST'],
+    credentials: true
   }
 });
 
@@ -131,5 +132,5 @@ redisSub.on('message', (_: string, message: string) => {
 });
 
 httpServer.listen(process.env.PORT || 6000, () => {
-  console.log('App running.');
+  console.log(`App running at ${(httpServer.address() as any).port}.`);
 });
