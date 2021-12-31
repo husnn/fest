@@ -1,0 +1,39 @@
+[
+  {
+    "name": "${container_name}",
+    "image": "${ecr_repo_url}:${tag}",
+    "command": ["yarn", "${service_name}", "serve"],
+    "essential": true,
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-region": "${aws_cloudwatch_log_group_region}",
+        "awslogs-stream-prefix": "${aws_cloudwatch_log_group_name}",
+        "awslogs-group": "${aws_cloudwatch_log_group_name}"
+      }
+    },
+    "portMappings": [
+      {
+        "containerPort": ${port},
+        "hostPort": ${port},
+        "protocol": "tcp"
+      }
+    ],
+    "environment": ${jsonencode([
+      for key, value in env_vars: {
+        "name": "${key}",
+        "value": "${value}"
+      }
+    ])},
+    "secrets": ${jsonencode([
+      for key in secret_keys: {
+        "name": "${key}",
+        "valueFrom": "${secret_arn}:${key}::"
+      }
+    ])},
+    "cpu": ${cpu},
+    "memory": ${memory},
+    "mountPoints": [],
+    "volumesFrom": []
+  }
+]
