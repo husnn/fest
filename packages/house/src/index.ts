@@ -12,17 +12,35 @@ import Postgres, {
 import { Server, Socket } from 'socket.io';
 import { User, verifyCommunityToken } from '@fanbase/core';
 
+import Express from 'express';
 import { createServer } from 'http';
 import redis from 'redis';
 
-const httpServer = createServer();
+// const httpServer = createServer((req, res) => {
+//   const url = new URL(req.url);
+//   console.log(req);
+//   // if (req.method === 'GET') {
+//   //   const path = url.pathname.substr(1);
+//   //   if (path === '/health') {
+//   //     res.writeHead(200);
+//   //     res.end();
+//   //   }
+//   // }
+// });
+const app = Express();
+const httpServer = createServer(app);
+
 const io = new Server(httpServer, {
-  path: '/',
+  path: '/socket',
   cors: {
     origin: process.env.CLIENT_URL || 'http://localhost:3000',
     methods: ['GET', 'POST'],
     credentials: true
   }
+});
+
+app.get('/health', (req, res) => {
+  res.status(200).send('Ok');
 });
 
 type UserInfo = {

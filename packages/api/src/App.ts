@@ -53,6 +53,10 @@ class App {
     app.use(express.urlencoded({ extended: true }));
     app.use(express.json());
 
+    app.get('/health', (req, res) => {
+      res.status(200).send('Ok');
+    });
+
     const userRepository = new UserRepository();
     const waitlistRepository = new WaitlistRepository();
     const inviteRepository = new InviteRepository();

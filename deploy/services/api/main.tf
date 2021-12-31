@@ -32,6 +32,8 @@ module "service" {
   env_vars = {
     "NODE_ENV"     = var.environment
     "PORT"         = 5000
+    "CLIENT_URL"   = "https://fanbase.lol"
+    "API_URL"      = "https://api.fanbase.lol/v1"
     "DATABASE_URL" = var.postgres_database_url
   }
 

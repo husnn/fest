@@ -12,12 +12,12 @@ resource "aws_lb_target_group" "main" {
 
   health_check {
     healthy_threshold   = "3"
-    interval            = "300"
+    interval            = "20"
     protocol            = "HTTP"
     matcher             = "200-299"
-    timeout             = "120"
+    timeout             = "5"
     path                = var.health_check_path
-    unhealthy_threshold = "10"
+    unhealthy_threshold = "3"
   }
 }
 
