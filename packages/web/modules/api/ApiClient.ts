@@ -458,10 +458,10 @@ export class ApiClient {
       method: 'PUT',
       endpoint: url,
       authentication: 'none',
-      body: file
-      // headers: {
-      //   'Content-Type': file.type
-      // }
+      body: file,
+      headers: {
+        'Content-Type': file.type
+      }
     });
   }
 

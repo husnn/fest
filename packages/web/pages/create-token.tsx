@@ -74,20 +74,23 @@ export default function CreateTokenPage() {
         }}
         validationSchema={CreateTokenSchema}
         onSubmit={async (values) => {
-          const token = await ApiClient.instance?.createToken({
-            type: values.type,
-            resource: values.resource,
-            name: values.name,
-            description: values.description,
-            image: values.image,
-            supply: values.supply,
-            royaltyPct: values.royaltyPercentage,
-            attributes: values.attributes
-          });
+          try {
+            const token = await ApiClient.instance?.createToken({
+              type: values.type,
+              resource: values.resource,
+              name: values.name,
+              description: values.description,
+              image: values.image,
+              supply: values.supply,
+              royaltyPct: values.royaltyPercentage,
+              attributes: values.attributes
+            });
 
-          setCreated(true);
-
-          router.push(getTokenUrl(null, token));
+            setCreated(true);
+            router.push(getTokenUrl(null, token));
+          } catch (err) {
+            console.log(err);
+          }
         }}
       >
         {({

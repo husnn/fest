@@ -1,9 +1,7 @@
 import React from 'react';
-
-import styled from '@emotion/styled';
-
-import fontSize from '../styles/constants/fontSize';
 import Spinner from './Spinner';
+import fontSize from '../styles/constants/fontSize';
+import styled from '@emotion/styled';
 
 type ButtonStyle = 'normal' | 'primary' | 'secondary' | 'ghost';
 
@@ -90,7 +88,7 @@ export const Button = ({
   ...props
 }: ButtonProps) => {
   return (
-    <ButtonStyled disabled={loading || props.disabled} {...props}>
+    <ButtonStyled {...props} disabled={loading || props.disabled}>
       {loading ? <Spinner /> : children}
     </ButtonStyled>
   );

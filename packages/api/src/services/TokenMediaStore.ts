@@ -1,14 +1,14 @@
 // import './allow_s3_cors';
 
+import { MediaService, Result } from '@fanbase/core';
+import { PutObjectCommand, S3 as S3Client } from '@aws-sdk/client-s3';
+
+import { PassThrough } from 'stream';
 import axios from 'axios';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import mime from 'mime-types';
 import { nanoid } from 'nanoid';
 import path from 'path';
-import { PassThrough } from 'stream';
-
-import { PutObjectCommand, S3 as S3Client } from '@aws-sdk/client-s3';
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { MediaService, Result } from '@fanbase/core';
 
 const MEDIA_BASE_PATH = `${process.env.S3_TOKEN_MEDIA_URL}/${process.env.S3_TOKEN_MEDIA_NAME}`;
 
@@ -27,7 +27,7 @@ export class TokenMediaStore implements MediaService {
   }
 
   getFilePath(filename: string, ext: string) {
-    return `media/full/${filename}.${ext}`;
+    return `media/full/${filename}${ext}`;
   }
 
   async pipeFrom(

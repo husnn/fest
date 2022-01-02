@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import Dropzone from 'react-dropzone';
-
-import styled from '@emotion/styled';
 
 import { Button } from '../ui';
+import Dropzone from 'react-dropzone';
+import styled from '@emotion/styled';
 
 const UploaderArea = styled.div`
   width:: 100%;
@@ -51,7 +50,7 @@ export const MediaUploader = ({ onRead }: MediaUploaderProps) => {
 
   return (
     <Dropzone
-      maxFiles={1}
+      multiple={false}
       accept="image/jpeg, image/png"
       onDrop={(files) => {
         if (files.length < 1) return;
