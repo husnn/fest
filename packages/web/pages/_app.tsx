@@ -7,7 +7,6 @@ import AxiosClient from '../modules/api/AxiosClient';
 import DefaultTheme from '../styles/themes/DefaultTheme';
 import Header from '../components/Header';
 import HeaderProvider from '../modules/navigation/HeaderProvider';
-import HouseSocketProvider from '../modules/house/HouseSocketProvider';
 import React from 'react';
 import { ThemeProvider } from '@emotion/react';
 import Web3Provider from '../modules/web3/Web3Provider';
@@ -22,9 +21,7 @@ function FanbaseApp({ Component, pageProps }: AppProps) {
         <Web3Provider>
           <HeaderProvider>
             <Header />
-            <HouseSocketProvider>
-              <Component {...pageProps} />
-            </HouseSocketProvider>
+            <Component {...pageProps} />
           </HeaderProvider>
         </Web3Provider>
       </AuthProvider>

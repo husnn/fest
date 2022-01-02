@@ -10,6 +10,7 @@ import {
 import React, { useEffect, useRef, useState } from 'react';
 
 import { ApiClient } from '../modules/api';
+import HouseSocketProvider from '../modules/house/HouseSocketProvider';
 import { Socket } from 'socket.io-client';
 import { css } from '@emotion/react';
 import useAuthentication from '../modules/auth/useAuthentication';
@@ -275,21 +276,23 @@ export const HousePage = () => {
         flex-direction: row;
       `}
     >
-      <CommunityList
-        selected={community}
-        user={currentUser.id}
-        onSelect={(community: CommunityDTO) => {
-          setCommunity(community);
-        }}
-      />
-      {community && (
-        <Feed
-          socket={socket}
-          messages={communityMessages[community.id]}
-          jwt={jwt}
-          community={community}
+      <HouseSocketProvider>
+        <CommunityList
+          selected={community}
+          user={currentUser.id}
+          onSelect={(community: CommunityDTO) => {
+            setCommunity(community);
+          }}
         />
-      )}
+        {community && (
+          <Feed
+            socket={socket}
+            messages={communityMessages[community.id]}
+            jwt={jwt}
+            community={community}
+          />
+        )}
+      </HouseSocketProvider>
     </div>
   ) : null;
 };
