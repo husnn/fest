@@ -127,6 +127,7 @@ const Section = ({
         height: fit-content;
         background-color: #fafafa;
         padding: 30px 20px;
+        white-space: pre-wrap;
         border-radius: 30px;
 
         @media screen and (min-width: 500px) {
