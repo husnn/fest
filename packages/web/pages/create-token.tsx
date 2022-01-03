@@ -56,9 +56,18 @@ export default function CreateTokenPage() {
   const [hasRoyalties, setHasRoyalties] = useState(true);
   const [hasAttributes, setHasAttributes] = useState(false);
 
-  const [isUploading, setUploading] = useState(false);
+  const [imageFile, setImageFile] = useState<File>(null);
 
   const [created, setCreated] = useState(false);
+
+  const uploadImage = async (file: File) =>
+    ApiClient.instance
+      .getTokenImageUploadUrl(file.name, file.type, file.size)
+      .then((res) => {
+        return ApiClient.instance
+          .uploadImageToS3(res.signedUrl, file)
+          .then(() => res.url);
+      });
 
   return (
     <div className="container boxed">
@@ -75,12 +84,16 @@ export default function CreateTokenPage() {
         validationSchema={CreateTokenSchema}
         onSubmit={async (values) => {
           try {
+            let imageUrl: string;
+
+            if (imageFile) imageUrl = await uploadImage(imageFile);
+
             const token = await ApiClient.instance?.createToken({
               type: values.type,
               resource: values.resource,
               name: values.name,
               description: values.description,
-              image: values.image,
+              image: imageUrl,
               supply: values.supply,
               royaltyPct: values.royaltyPercentage,
               attributes: values.attributes
@@ -176,29 +189,7 @@ export default function CreateTokenPage() {
             {values.type == tokenTypesOptions.BASIC.id && (
               <FormInput label="Image" optional>
                 <MediaUploader
-                  onRead={async (file: File) => {
-                    try {
-                      const response =
-                        await ApiClient.instance.getTokenImageUploadUrl(
-                          file.name,
-                          file.type,
-                          file.size
-                        );
-
-                      setFieldValue('image', response.url);
-
-                      setUploading(true);
-
-                      await ApiClient.instance.uploadImageToS3(
-                        response.signedUrl,
-                        file
-                      );
-                    } catch (err) {
-                      console.log(err);
-                    }
-
-                    setUploading(false);
-                  }}
+                  onRead={async (file: File) => setImageFile(file)}
                 />
               </FormInput>
             )}
@@ -320,7 +311,7 @@ export default function CreateTokenPage() {
               <Button
                 type="submit"
                 color="primary"
-                loading={isUploading || isSubmitting}
+                loading={isSubmitting}
                 disabled={!dirty || !isValid || created}
               >
                 Create
