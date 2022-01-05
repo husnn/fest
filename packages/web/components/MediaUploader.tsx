@@ -69,7 +69,9 @@ export const MediaUploader = ({ onRead }: MediaUploaderProps) => {
           ) : (
             <div className="placeholder">
               <label>Select media file or drop it here</label>
-              <Button size="smaller">Choose file</Button>
+              <Button type="button" size="smaller">
+                Choose file
+              </Button>
             </div>
           )}
         </UploaderArea>
