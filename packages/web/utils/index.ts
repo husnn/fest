@@ -129,3 +129,6 @@ export const getNativeToken = (): Currency => {
 
   return currency;
 };
+
+export const getHouseUrl = (community?: CommunityDTO, id?: string): string =>
+  `/house${community || id ? `?c=${community ? community.id : id}` : ''}`;
