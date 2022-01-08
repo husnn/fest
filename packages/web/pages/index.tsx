@@ -39,7 +39,10 @@ export default function Home() {
           <h2 className={styles.sectionTitle}>Let your work be supported</h2>
           <p className={styles.description}>by those who truly appreciate it</p>
         </span>
-        <Link href="http://paper.fanbase.lol" target="blank">
+        <Link
+          href="https://www.notion.so/Whitepaper-v0-1-1563dc476d2a422e85addaadcb8c1cda"
+          target="blank"
+        >
           <Button color="normal" style={{ margin: '0 auto' }} size="small">
             Read whitepaper
           </Button>
