@@ -17,39 +17,47 @@ export class CommunityRepository
   }
 
   async addUserForToken(userId: string, tokenId: string): Promise<void> {
-    const user = await getRepository(UserSchema).findOne(userId);
-    if (!user) return;
+    try {
+      const user = await getRepository(UserSchema).findOne(userId);
+      if (!user) return;
 
-    const communities = await this.findByToken(tokenId);
+      const communities = await this.findByToken(tokenId);
 
-    await getManager().transaction(async (manager) => {
-      for await (const community of communities) {
-        await manager
-          .getRepository(CommunitySchema)
-          .createQueryBuilder('community')
-          .relation('users')
-          .of(community)
-          .add(user);
-      }
-    });
+      await getManager().transaction(async (manager) => {
+        for await (const community of communities) {
+          await manager
+            .getRepository(CommunitySchema)
+            .createQueryBuilder('community')
+            .relation('users')
+            .of(community)
+            .add(user);
+        }
+      });
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   async removeUserForToken(userId: string, tokenId: string): Promise<void> {
-    const user = await getRepository(UserSchema).findOne(userId);
-    if (!user) return;
+    try {
+      const user = await getRepository(UserSchema).findOne(userId);
+      if (!user) return;
 
-    const communities = await this.findByToken(tokenId);
+      const communities = await this.findByToken(tokenId);
 
-    await getManager().transaction(async (manager) => {
-      for await (const community of communities) {
-        await manager
-          .getRepository(CommunitySchema)
-          .createQueryBuilder('community')
-          .relation('users')
-          .of(community)
-          .remove(user);
-      }
-    });
+      await getManager().transaction(async (manager) => {
+        for await (const community of communities) {
+          await manager
+            .getRepository(CommunitySchema)
+            .createQueryBuilder('community')
+            .relation('users')
+            .of(community)
+            .remove(user);
+        }
+      });
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   async getAllForUser(
