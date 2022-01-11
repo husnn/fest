@@ -18,12 +18,24 @@ class YouTubeService implements IYouTubeService {
     this.config = config;
   }
 
+  static getHighestQualityThumbnail(thumbnails: any): { url: string } {
+    return (
+      thumbnails.maxres ||
+      thumbnails.standard ||
+      thumbnails.high ||
+      thumbnails.medium ||
+      thumbnails.default
+    );
+  }
+
   static MapToVideo(data: any): YouTubeVideo {
+    const thumbnail = this.getHighestQualityThumbnail(data.snippet.thumbnails);
+
     return {
       id: data.id,
       datePublished: data.snippet.publishedAt,
       channelId: data.snippet.channelId,
-      thumbnail: data.snippet.thumbnails.maxres.url,
+      thumbnail: thumbnail.url,
       title: data.snippet.title,
       description: data.snippet.description,
       url: `https://www.youtube.com/watch?v=${data.id}`
@@ -35,7 +47,7 @@ class YouTubeService implements IYouTubeService {
       id: data.snippet.resourceId.videoId,
       datePublished: data.snippet.publishedAt,
       channelId: data.snippet.channelId,
-      thumbnail: data.snippet.thumbnails.standard.url,
+      thumbnail: data.snippet.thumbnails.default.url,
       title: data.snippet.title,
       description: data.snippet.description,
       url: `https://www.youtube.com/watch?v=${data.snippet.resourceId.videoId}`
