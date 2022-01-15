@@ -4212,6 +4212,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["next-transpile-modules", "npm:7.3.0"],
             ["react", "npm:17.0.2"],
             ["react-confetti", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:6.0.1"],
+            ["react-contenteditable", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:3.3.6"],
             ["react-device-detect", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:1.17.0"],
             ["react-dom", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:17.0.2"],
             ["react-dropzone", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:11.4.2"],
@@ -14148,6 +14149,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-is", "npm:16.13.1"]
           ],
           "linkType": "HARD",
+        }],
+        ["npm:15.8.1", {
+          "packageLocation": "./.yarn/cache/prop-types-npm-15.8.1-17c71ee7ee-c056d3f1c0.zip/node_modules/prop-types/",
+          "packageDependencies": [
+            ["prop-types", "npm:15.8.1"],
+            ["loose-envify", "npm:1.4.0"],
+            ["object-assign", "npm:4.1.1"],
+            ["react-is", "npm:16.13.1"]
+          ],
+          "linkType": "HARD",
         }]
       ]],
       ["property-expr", [
@@ -14605,6 +14616,30 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/react", "npm:17.0.6"],
             ["react", "npm:17.0.2"],
             ["tween-functions", "npm:1.2.0"]
+          ],
+          "packagePeers": [
+            "@types/react",
+            "react"
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["react-contenteditable", [
+        ["npm:3.3.6", {
+          "packageLocation": "./.yarn/cache/react-contenteditable-npm-3.3.6-a4e01882b3-3ff8b78e63.zip/node_modules/react-contenteditable/",
+          "packageDependencies": [
+            ["react-contenteditable", "npm:3.3.6"]
+          ],
+          "linkType": "SOFT",
+        }],
+        ["virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:3.3.6", {
+          "packageLocation": "./.yarn/__virtual__/react-contenteditable-virtual-6586a1ca5a/0/cache/react-contenteditable-npm-3.3.6-a4e01882b3-3ff8b78e63.zip/node_modules/react-contenteditable/",
+          "packageDependencies": [
+            ["react-contenteditable", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:3.3.6"],
+            ["@types/react", "npm:17.0.6"],
+            ["fast-deep-equal", "npm:3.1.3"],
+            ["prop-types", "npm:15.8.1"],
+            ["react", "npm:17.0.2"]
           ],
           "packagePeers": [
             "@types/react",

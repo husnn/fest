@@ -2,6 +2,7 @@ import {
   CommunityRepository,
   InviteRepository,
   OAuthRepository,
+  PostRepository,
   TokenListingRepository,
   TokenOfferRepository,
   TokenOwnershipRepository,
@@ -23,12 +24,14 @@ import AuthController from './controllers/AuthController';
 import CommunityController from './controllers/CommunityController';
 import ConfigController from './controllers/ConfigController';
 import { EthereumService } from '@fanbase/ethereum';
+import FeedController from './controllers/FeedController';
 import GoogleController from './controllers/GoogleController';
 import GoogleService from './services/GoogleService';
 import InternalController from './controllers/InternalController';
 import MailService from './services/MailService';
 import MarketController from './controllers/MarketController';
 import MetadataStore from './services/MetadataStore';
+import PostController from './controllers/PostController';
 import TokenController from './controllers/TokenController';
 import TokenMediaStore from './services/TokenMediaStore';
 import UserController from './controllers/UserController';
@@ -68,6 +71,7 @@ class App {
     const tokenTradeRepository = new TokenTradeRepository();
     const tokenOfferRepository = new TokenOfferRepository();
     const communityRepository = new CommunityRepository();
+    const postRepository = new PostRepository();
 
     const ethereumService: IEthereumService = EthereumService.instance;
     const mailService = new MailService();
@@ -157,6 +161,14 @@ class App {
       communityRepository
     );
 
+    const feedController = new FeedController(
+      userRepository,
+      communityRepository,
+      postRepository
+    );
+
+    const postController = new PostController(userRepository, postRepository);
+
     const router = Router();
 
     initRoutes(
@@ -170,7 +182,9 @@ class App {
       youTubeController,
       tokenController,
       marketController,
-      internalController
+      internalController,
+      feedController,
+      postController
     );
 
     app.use('/v1', router);

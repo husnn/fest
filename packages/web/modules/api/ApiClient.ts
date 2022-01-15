@@ -9,6 +9,9 @@ import {
   BuyTokenListingResponse,
   CancelTokenListingRequest,
   CancelTokenListingResponse,
+  CreatePostDTO,
+  CreatePostRequest,
+  CreatePostResponse,
   CreateTokenRequest,
   CreateTokenResponse,
   EditUserRequest,
@@ -19,6 +22,8 @@ import {
   GetCommunityResponse,
   GetCommunityTokenRequest,
   GetCommunityTokenResponse,
+  GetFeedRequest,
+  GetFeedResponse,
   GetListingsForTokenRequest,
   GetListingsForTokenResponse,
   GetOAuthLinkRequest,
@@ -98,6 +103,28 @@ export class ApiClient {
     return this.client.request<InitResponse>({
       method: 'GET',
       endpoint: '/init'
+    });
+  }
+
+  // Feed
+
+  async getFeed(cursor?: string): Promise<GetFeedResponse> {
+    return this.client.request<GetFeedResponse, GetFeedRequest>({
+      method: 'POST',
+      authentication: 'required',
+      endpoint: '/feed',
+      body: { cursor }
+    });
+  }
+
+  // Posts
+
+  async createPost(data: CreatePostDTO): Promise<CreatePostResponse> {
+    return this.client.request<CreatePostResponse, CreatePostRequest>({
+      method: 'POST',
+      authentication: 'required',
+      endpoint: '/posts',
+      body: data
     });
   }
 

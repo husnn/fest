@@ -10,6 +10,7 @@ export const generateWalletId = () => customAlphabet(alphanumeric, 12);
 export const generateTokenId = () => customAlphabet(alphanumeric, 10);
 export const generateCommunityId = () => customAlphabet(alphanumeric, 12);
 export const generateTokenOwnershipId = () => customAlphabet(alphanumeric, 12);
+export const generatePostId = () => customAlphabet(alphanumeric, 12);
 
 export const generateInviteCode = (len = 6) =>
   customAlphabet(lowerAlphanumeric, len);

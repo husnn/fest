@@ -3,6 +3,7 @@ export * from './CurrentUserDTO';
 export * from './InviteDTO';
 export * from './MessageDTO';
 export * from './NotificationDTO';
+export * from './PostDTO';
 export * from './TokenDTO';
 export * from './TokenListingDTO';
 export * from './TokenOfferDTO';
