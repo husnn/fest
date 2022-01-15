@@ -2,6 +2,7 @@ export * from './CommunityRepository';
 export * from './InviteRepository';
 export * from './NotificationRepository';
 export * from './OAuthRepository';
+export * from './PostRepository';
 export * from './ReferralRepository';
 export * from './TokenListingRepository';
 export * from './TokenOfferRepository';

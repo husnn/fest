@@ -4,6 +4,7 @@ import { TokenDTO, TokenOwnedDTO, UserDTO } from '@fanbase/shared';
 import {
   getCommunityUrl,
   getDisplayName,
+  getHomeUrl,
   getTokenOwnershipUrl,
   getTokenUrl
 } from '../../utils';
@@ -175,7 +176,7 @@ export default function ProfilePage() {
               <UserCommunities
                 user={user.id}
                 onCommunitySelected={(community) => {
-                  router.push(getCommunityUrl(community));
+                  router.push(getHomeUrl(community));
                 }}
               />
             )}

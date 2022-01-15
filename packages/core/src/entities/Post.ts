@@ -1,10 +1,8 @@
-import { Community, Room } from '.';
-
-import { MessageType } from '@fanbase/shared';
+import Community from './Community';
 
 type MediaResolution = 'small' | 'regular' | 'high';
 
-type MessageMedia = {
+type PostMedia = {
   variations: Array<{
     resolution: MediaResolution;
     url: string;
@@ -13,24 +11,23 @@ type MessageMedia = {
   isVideo: boolean;
 };
 
-export class Message {
+export class Post {
   id: string;
 
   dateCreated: Date;
   dateUpdated: Date;
 
   communityId: string;
-  community: Community;
-
-  rooms?: Room[];
-
-  type: MessageType;
-  parentId?: string;
+  community?: Community;
 
   userId: string;
 
   text: string;
-  media: MessageMedia[];
+  media?: PostMedia[];
+
+  constructor(data: Partial<Post>) {
+    Object.assign(this, data);
+  }
 }
 
-export default Message;
+export default Post;

@@ -28,6 +28,9 @@ export const getProfileUrl = ({
   id?: string;
 }): string => `/u/${username || id || getCurrentUser().id}`;
 
+export const getHomeUrl = (community?: CommunityDTO) =>
+  `/home${community ? `?c=${community.id}` : ''}`;
+
 export const getCommunityUrl = (community: CommunityDTO) =>
   `/c/${community.id}`;
 
@@ -35,6 +38,9 @@ export const specific =
   <T>() =>
   <U extends T>(argument: U): U =>
     argument;
+
+export const truncateText = (text: string, length: number): string =>
+  text.length > length ? text.substr(0, length) + '...' : text;
 
 export const truncateAddress = (
   address: string,
@@ -132,3 +138,11 @@ export const getNativeToken = (): Currency => {
 
 export const getHouseUrl = (community?: CommunityDTO, id?: string): string =>
   `/house${community || id ? `?c=${community ? community.id : id}` : ''}`;
+
+const PREFERRED_COMMUNITY_ID = 'PREFERRED_COMMUNITY_ID';
+
+export const setPreferredCommunity = (community: CommunityDTO) =>
+  localStorage.setItem(PREFERRED_COMMUNITY_ID, community.id);
+
+export const getPreferredCommunityId = (): string =>
+  localStorage.getItem(PREFERRED_COMMUNITY_ID);

@@ -11,7 +11,7 @@ const MessageSchema = new EntitySchema<Message>({
       generated: 'uuid',
       primary: true
     },
-    datePosted: {
+    dateCreated: {
       type: 'timestamp',
       createDate: true,
       name: 'date_created'

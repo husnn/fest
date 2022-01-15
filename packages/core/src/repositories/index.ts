@@ -3,6 +3,7 @@ export * from './InviteRepository';
 export * from './MessageRepository';
 export * from './NotificationRepository';
 export * from './OAuthRepository';
+export * from './PostRepository';
 export * from './ReferralRepository';
 export * from './Repository';
 export * from './RoomRepository';

@@ -4,6 +4,7 @@ import {
   CommunityDTO,
   CurrentUserDTO,
   InviteDTO,
+  PostDTO,
   TokenDTO,
   TokenListingDTO,
   TokenOfferDTO,
@@ -42,6 +43,7 @@ export interface PaginatedResponse<T = any> extends Response {
   body: T[];
   page: number;
   count: number;
+  cursor?: string;
   nextPage?: number;
   hasMore?: boolean;
 }
@@ -65,6 +67,42 @@ export type InitConfig = {
 };
 
 export interface InitResponse extends Response<InitConfig> {}
+
+/**
+ * Feed
+ */
+
+export interface GetFeedResponse extends PaginatedResponse {
+  body: PostDTO[];
+  cursor?: string;
+}
+
+export interface GetFeedRequest extends Request {
+  method: 'POST';
+  authentication: 'required';
+  endpoint: '/feed';
+  body: {
+    cursor?: string;
+  };
+}
+
+/**
+ * Posts
+ */
+
+export interface CreatePostDTO {
+  text: string;
+  community: string;
+}
+
+export interface CreatePostResponse extends Response {}
+
+export interface CreatePostRequest extends Request {
+  method: 'POST';
+  authentication: 'required';
+  endpoint: '/posts';
+  body: CreatePostDTO;
+}
 
 /**
  * Community

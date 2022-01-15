@@ -87,38 +87,38 @@
         }
       }
     },
-    {
-      "label": "Start House",
-      "type": "shell",
-      "command": "yarn",
-      "args": ["house", "dev"],
-      "isBackground": true,
-      "dependsOn": ["Start API"],
-      "presentation": {
-        "group": "default",
-        "panel": "shared"
-      },
-      "problemMatcher": {
-        "pattern": {
-          "regexp": ".",
-          "file": 1,
-          "location": 2,
-          "message": 3
-        },
-        "background": {
-          "activeOnStart": true,
-          "beginsPattern": ".",
-          "endsPattern": "App running"
-        }
-      }
-    },
+    // {
+    //   "label": "Start House",
+    //   "type": "shell",
+    //   "command": "yarn",
+    //   "args": ["house", "dev"],
+    //   "isBackground": true,
+    //   "dependsOn": ["Start API"],
+    //   "presentation": {
+    //     "group": "default",
+    //     "panel": "shared"
+    //   },
+    //   "problemMatcher": {
+    //     "pattern": {
+    //       "regexp": ".",
+    //       "file": 1,
+    //       "location": 2,
+    //       "message": 3
+    //     },
+    //     "background": {
+    //       "activeOnStart": true,
+    //       "beginsPattern": ".",
+    //       "endsPattern": "App running"
+    //     }
+    //   }
+    // },
     {
       "label": "Start Web",
       "type": "shell",
       "command": "yarn",
       "args": ["web", "dev"],
       "isBackground": true,
-      "dependsOn": ["Start House"],
+      "dependsOn": ["Start API"],
       "presentation": {
         "group": "default",
         "panel": "shared"

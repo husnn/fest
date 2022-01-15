@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from '../ui';
 import MobileMenu from './MobileMenu';
 import styled from '@emotion/styled';
+import useAuthentication from '../modules/auth/useAuthentication';
 import { useHeader } from '../modules/navigation';
 
 export type LinkType = {
@@ -173,10 +174,12 @@ const Header: React.FC<HeaderProps> = () => {
     );
   }, [links]);
 
+  const { isAuthenticated } = useAuthentication();
+
   return (
     <HeaderContainer>
       <HeaderWrapper>
-        <Link href="/">
+        <Link href={isAuthenticated ? '/home' : '/'}>
           <h2 style={{ fontFamily: 'Gilmer' }}>Fanbase</h2>
         </Link>
         {links && !singleLink && (

@@ -6,18 +6,18 @@ import styled from '@emotion/styled';
 const ShadowInputBox = styled.div`
   display: flex;
   align-items: center;
-  justify-content: right;
+  justify-content: flex-end;
 
   input {
-    padding-right: 50px;
+    padding-right: 60px;
   }
 `;
 
-const ShadowText = styled.span<{clickable: boolean;}>`
+const ShadowText = styled.span<{ clickable: boolean }>`
   position: absolute;
   margin-right: 15px;
   font-weight: bold;
-  cursor: ${(props) => props.clickable ? 'pointer' : 'auto'};
+  cursor: ${(props) => (props.clickable ? 'pointer' : 'auto')};
   opacity: 0.3;
 `;
 
@@ -25,7 +25,7 @@ export type ShadowOption = {
   id: string;
   text: string;
   data: any;
-}
+};
 
 interface ShadowTextInputProps extends TextInputProps {
   text?: string;
@@ -55,16 +55,12 @@ export const ShadowTextInput = (props: ShadowTextInputProps) => {
 
     let newIndex = index;
 
-    index < props.options.length - 1
-      ? newIndex++
-      : newIndex = 0;
+    index < props.options.length - 1 ? newIndex++ : (newIndex = 0);
 
     setOption(props.options[newIndex]);
     setIndex(newIndex);
 
-    props.optionSelected
-      ? props.optionSelected(props.options[newIndex])
-      : null;
+    props.optionSelected ? props.optionSelected(props.options[newIndex]) : null;
   };
 
   return (

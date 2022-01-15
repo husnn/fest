@@ -3,6 +3,7 @@ export * from './Invite';
 export * from './Message';
 export * from './Notification';
 export * from './OAuth';
+export * from './Post';
 export * from './Referral';
 export * from './Room';
 export * from './Token';

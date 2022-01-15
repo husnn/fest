@@ -3,6 +3,7 @@ import InviteSchema from './InviteSchema';
 import MessageSchema from './MessageSchema';
 import NotificationSchema from './NotificationSchema';
 import OAuthSchema from './OAuthSchema';
+import PostSchema from './PostSchema';
 import ReferralSchema from './ReferralSchema';
 import RoomSchema from './RoomSchema';
 import TokenListingSchema from './TokenListingSchema';
@@ -20,6 +21,7 @@ export default [
   MessageSchema,
   NotificationSchema,
   OAuthSchema,
+  PostSchema,
   ReferralSchema,
   RoomSchema,
   TokenListingSchema,
