@@ -20,6 +20,9 @@ export class PostRepository
       .createQueryBuilder('post')
       .where('post.community_id IN (:...communityIds)', { communityIds })
       .andWhere('post.date_created < :before', { before })
+      .leftJoinAndSelect('post.community', 'community')
+      .leftJoin('post.user', 'user')
+      .addSelect(['user.id', 'user.username', 'user.name'])
       .orderBy('post.date_created', 'DESC')
       .limit(count)
       .getMany();

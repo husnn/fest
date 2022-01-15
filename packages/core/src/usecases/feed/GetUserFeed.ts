@@ -46,13 +46,15 @@ export class GetUserFeed extends UseCase<GetUserFeedInput, GetUserFeedOutput> {
     const posts = await this.postRepository.getForCommunities(
       communityQuery.communities.map((c) => c.id),
       data.cursor ? new Date(decodeCursor(data.cursor)) : new Date(),
-      50
+      10
     );
-    if (posts.length < 1) return Result.fail();
 
     return Result.ok({
       posts: posts.map((p) => new PostDTO(p)),
-      cursor: encodeCursor(posts[posts.length - 1].dateCreated.toString())
+      cursor:
+        posts.length > 0
+          ? encodeCursor(posts[posts.length - 1].dateCreated.toString())
+          : null
     });
   }
 }

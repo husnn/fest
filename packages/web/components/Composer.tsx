@@ -111,9 +111,11 @@ const ActionSide = styled.div`
 `;
 
 const Composer = ({
+  selected,
   communities,
   onSubmit
 }: {
+  selected?: CommunityDTO;
   communities: CommunityDTO[];
   onSubmit: (text: string, communityId: string) => void;
 }) => {
@@ -159,6 +161,7 @@ const Composer = ({
           </ActionSide>
           <ActionSide>
             <CommunitySelector
+              initial={selected}
               communities={communities}
               onSelect={(c) => (postCommunity.current = c)}
             />

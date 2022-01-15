@@ -1,15 +1,18 @@
+/** @jsxImportSource @emotion/react */
+
+import { CommunityDTO, PostDTO } from '@fanbase/shared';
 import React, { useEffect, useState } from 'react';
-import router, { useRouter } from 'next/router';
 
 import { ApiClient } from '../modules/api';
 import { Button } from '../ui';
-import { CommunityDTO } from '@fanbase/shared';
 import Composer from '../components/Composer';
 import Feed from '../components/Feed';
 import Modal from '../ui/Modal';
+import { css } from '@emotion/react';
 import { getCurrentUser } from '../modules/auth/authStorage';
 import useAuthentication from '../modules/auth/useAuthentication';
 import usePagination from '../modules/api/usePagination';
+import { useRouter } from 'next/router';
 
 const HomePage = () => {
   const router = useRouter();
@@ -18,7 +21,10 @@ const HomePage = () => {
 
   const { currentUser } = useAuthentication(true);
 
+  const [selected, setSelected] = useState<CommunityDTO>();
   const [creatingPost, setCreatingPost] = useState(false);
+
+  const [newPost, setNewPost] = useState<PostDTO>();
 
   useEffect(() => {
     if (!getCurrentUser()) router.push('/');
@@ -30,27 +36,48 @@ const HomePage = () => {
     [currentUser?.id]
   );
 
+  useEffect(() => {
+    if (!communities) return;
+    setSelected(communities.find((community) => community.id == (c as string)));
+  }, [c, communities]);
+
   return (
-    <div className="container boxed">
-      <Feed community={c as string} />
+    <div
+      className="container boxed"
+      css={css`
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      `}
+    >
+      <Feed community={c as string} newPost={newPost} />
       <Modal
         show={creatingPost}
         requestClose={() => setCreatingPost(false)}
         zeroPadding
       >
         <Composer
+          selected={selected}
           communities={communities}
-          onSubmit={(text, community) => {
-            ApiClient.getInstance().createPost({
-              text,
-              community
-            });
+          onSubmit={async (text, community) => {
+            ApiClient.getInstance()
+              .createPost({
+                text,
+                community
+              })
+              .then((res) => {
+                setNewPost(res.body);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
 
             setCreatingPost(false);
           }}
         />
       </Modal>
       <Button
+        css={css``}
         color="primary"
         onClick={() => (!creatingPost ? setCreatingPost(true) : null)}
       >

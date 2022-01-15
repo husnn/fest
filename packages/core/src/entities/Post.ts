@@ -1,4 +1,5 @@
 import Community from './Community';
+import User from './/User';
 
 type MediaResolution = 'small' | 'regular' | 'high';
 
@@ -21,6 +22,7 @@ export class Post {
   community?: Community;
 
   userId: string;
+  user: User;
 
   text: string;
   media?: PostMedia[];

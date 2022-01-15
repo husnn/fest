@@ -44,6 +44,14 @@ const PostSchema = new EntitySchema<Post>({
         name: 'community_id',
         referencedColumnName: 'id'
       }
+    },
+    user: {
+      type: 'many-to-one',
+      target: 'user',
+      joinColumn: {
+        name: 'user_id',
+        referencedColumnName: 'id'
+      }
     }
   }
 });

@@ -8,7 +8,12 @@ import {
   WalletType
 } from '@fanbase/shared';
 import React, { useEffect, useState } from 'react';
-import { getCommunityUrl, getDisplayName, getProfileUrl } from '../../utils';
+import {
+  getCommunityUrl,
+  getDisplayName,
+  getHomeUrl,
+  getProfileUrl
+} from '../../utils';
 
 import ApiClient from '../../modules/api/ApiClient';
 import CreateTokenListing from '../../components/CreateTokenListing';
@@ -355,9 +360,7 @@ export default function TokenPage() {
               <Section title="Communities">
                 <TokenCommunities
                   communities={token.communities}
-                  onSelected={(community) =>
-                    router.push(getCommunityUrl(community))
-                  }
+                  onSelected={(community) => router.push(getHomeUrl(community))}
                 />
               </Section>
             )}
