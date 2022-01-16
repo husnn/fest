@@ -1,5 +1,7 @@
 import { CommunityDTO, UserDTO } from '.';
 
+import { PostMedia } from '../types';
+
 export class PostDTO {
   id: string;
 
@@ -10,6 +12,8 @@ export class PostDTO {
 
   userId: string;
   user: UserDTO;
+
+  media: PostMedia[];
 
   text: string;
 
@@ -23,6 +27,8 @@ export class PostDTO {
 
     this.userId = data.userId;
     if (data.user) this.user = new UserDTO(data.user);
+
+    if (data.media) this.media = data.media;
 
     this.text = data.text;
   }

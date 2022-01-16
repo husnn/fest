@@ -32,7 +32,6 @@ const PostSchema = new EntitySchema<Post>({
     },
     media: {
       type: 'simple-json',
-      array: true,
       nullable: true
     }
   },

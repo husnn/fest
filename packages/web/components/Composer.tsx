@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import {
   getPreferredCommunityId,
   setPreferredCommunity,
@@ -80,7 +80,7 @@ const InputArea = styled.div`
 `;
 
 const Actions = styled.div`
-  height: 60px;
+  min-height: 60px;
   border-top: 1px solid #eee;
   display: flex;
   align-items: center;
@@ -109,6 +109,48 @@ const ActionSide = styled.div`
   }
 `;
 
+const MediaPreview = ({
+  files,
+  onRemove
+}: {
+  files: File[];
+  onRemove: (index: number) => void;
+}) => {
+  return (
+    <div
+      css={css`
+        width: auto;
+        height: 100px;
+        white-space: nowrap;
+        padding: 5px;
+        overflow-y: scroll;
+
+        > * + * {
+          margin-left: 5px;
+        }
+      `}
+    >
+      {files.map((f, i) => (
+        <img
+          key={i}
+          src={window.URL.createObjectURL(f)}
+          css={css`
+            height: 100%;
+            padding: 5px;
+            border-radius: 20px;
+            cursor: pointer;
+
+            &:hover {
+              opacity: 0.7;
+            }
+          `}
+          onClick={() => onRemove(i)}
+        />
+      ))}
+    </div>
+  );
+};
+
 const Composer = ({
   selected,
   communities,
@@ -116,7 +158,7 @@ const Composer = ({
 }: {
   selected?: CommunityDTO;
   communities: CommunityDTO[];
-  onSubmit: (text: string, communityId: string) => void;
+  onSubmit: (text: string, media: File[], communityId: string) => void;
 }) => {
   const elRef = useRef<HTMLElement>();
 
@@ -136,10 +178,31 @@ const Composer = ({
     textRef.current = stripHtml(html).trim();
   }, [html]);
 
+  const [mediaFiles, setMediaFiles] = useState<File[]>([]);
+  const mediaFileRef = useRef<File[]>();
+
+  mediaFileRef.current = mediaFiles;
+
   const submit = () => {
     if (textRef.current.length < 1) return;
-    onSubmit(textRef.current, postCommunity.current.id);
+    onSubmit(textRef.current, mediaFileRef.current, postCommunity.current.id);
     setHtml('');
+  };
+
+  const fileInputRef = useRef<HTMLInputElement>();
+
+  const handleMediaSelection = (e: ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files.length < 1) return;
+
+    const updated = mediaFiles;
+
+    for (const file of Array.from(files)) {
+      if (!updated.find((f) => f.name === file.name && f.size === file.size))
+        updated.push(file);
+    }
+
+    setMediaFiles([...updated]);
   };
 
   return (
@@ -165,9 +228,31 @@ const Composer = ({
             overflow-y: auto;
           `}
         />
+        {mediaFiles.length > 0 && (
+          <Actions>
+            <MediaPreview
+              files={mediaFiles}
+              onRemove={(index) => {
+                mediaFiles.splice(index, 1);
+                setMediaFiles([...mediaFiles]);
+              }}
+            />
+          </Actions>
+        )}
         <Actions>
           <ActionSide>
-            <img src="/images/ic-post-image-upload.png" />
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              multiple={true}
+              style={{ display: 'none' }}
+              onChange={(e) => handleMediaSelection(e)}
+            />
+            <img
+              src="/images/ic-post-image-upload.png"
+              onClick={() => fileInputRef.current.click()}
+            />
           </ActionSide>
           <ActionSide>
             <CommunitySelector

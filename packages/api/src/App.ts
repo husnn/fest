@@ -167,7 +167,11 @@ class App {
       postRepository
     );
 
-    const postController = new PostController(userRepository, postRepository);
+    const postController = new PostController(
+      userRepository,
+      postRepository,
+      mediaStore
+    );
 
     const router = Router();
 

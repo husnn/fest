@@ -13,5 +13,12 @@ export default function init(postController: PostController): Router {
       postController.create(req, res, next)
   );
 
+  router.post(
+    '/media-upload-urls',
+    (req: Request, res: Response, next: NextFunction) => {
+      postController.getMediaUploadURLs(req, res, next);
+    }
+  );
+
   return router;
 }

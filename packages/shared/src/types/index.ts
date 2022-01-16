@@ -4,6 +4,7 @@ export * from './Blockchain';
 export * from './Currency';
 export * from './EthereumTx';
 export * from './Percentage';
+export * from './PostMedia';
 export * from './Price';
 export * from './ProtocolConfig';
 export * from './Socket';

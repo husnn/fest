@@ -90,8 +90,29 @@ export interface GetFeedRequest extends Request {
  * Posts
  */
 
+export interface PostMediaUploadData {
+  name: string;
+  type: string;
+  size: number;
+}
+
+export interface GetPostMediaUploadURLsResponse extends Response {
+  body: Array<{
+    url: string;
+    signedUrl: string;
+  }>;
+}
+
+export interface GetPostMediaUploadURLsRequest extends Request {
+  method: 'POST';
+  authentication: 'required';
+  endpoint: '/posts/media-upload-urls';
+  body: PostMediaUploadData[];
+}
+
 export interface CreatePostDTO {
   text: string;
+  media: string[];
   community: string;
 }
 

@@ -88,22 +88,44 @@ const HomePage = () => {
         <Composer
           selected={selected}
           communities={communities}
-          onSubmit={async (text, community) => {
-            ApiClient.getInstance()
-              .createPost({
-                text,
-                community
-              })
-              .then((res) => {
-                setNewPost({
-                  ...res.body,
-                  user: currentUser,
-                  community: communities.find((c) => c.id === community)
+          onSubmit={async (text, media, community) => {
+            try {
+              const res = await ApiClient.getInstance().getPostMediaUploadURLs(
+                media.map((m) => {
+                  return {
+                    name: m.name,
+                    type: m.type,
+                    size: m.size
+                  };
+                })
+              );
+
+              for (const i in res.body) {
+                await ApiClient.instance.uploadImageToS3(
+                  res.body[i].signedUrl,
+                  media[i]
+                );
+              }
+
+              ApiClient.getInstance()
+                .createPost({
+                  text,
+                  media: res.body.map((m) => m.url),
+                  community
+                })
+                .then((res) => {
+                  setNewPost({
+                    ...res.body,
+                    user: currentUser,
+                    community: communities.find((c) => c.id === community)
+                  });
+                })
+                .catch((err) => {
+                  console.log(err);
                 });
-              })
-              .catch((err) => {
-                console.log(err);
-              });
+            } catch (err) {
+              console.log(err);
+            }
 
             setCreatingPost(false);
           }}

@@ -1,16 +1,6 @@
 import Community from './Community';
+import { PostMedia } from '@fanbase/shared';
 import User from './/User';
-
-type MediaResolution = 'small' | 'regular' | 'high';
-
-type PostMedia = {
-  variations: Array<{
-    resolution: MediaResolution;
-    url: string;
-  }>;
-  sourceUrl: string;
-  isVideo: boolean;
-};
 
 export class Post {
   id: string;

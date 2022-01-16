@@ -30,6 +30,8 @@ import {
   GetOAuthLinkResponse,
   GetOwnUploadsRequest,
   GetOwnUploadsResponse,
+  GetPostMediaUploadURLsRequest,
+  GetPostMediaUploadURLsResponse,
   GetReferralSummaryRequest,
   GetReferralSummaryResponse,
   GetSignedTokenImageUploadUrlResponse,
@@ -65,6 +67,7 @@ import {
   OAuthCheckLinkRequest,
   OAuthCheckLinkResponse,
   OAuthLinkRequest,
+  PostMediaUploadData,
   Protocol,
   RequestTestFundsRequest,
   RequestTestFundsResponse,
@@ -118,6 +121,20 @@ export class ApiClient {
   }
 
   // Posts
+
+  async getPostMediaUploadURLs(
+    media: PostMediaUploadData[]
+  ): Promise<GetPostMediaUploadURLsResponse> {
+    return this.client.request<
+      GetPostMediaUploadURLsResponse,
+      GetPostMediaUploadURLsRequest
+    >({
+      method: 'POST',
+      authentication: 'required',
+      endpoint: '/posts/media-upload-urls',
+      body: media
+    });
+  }
 
   async createPost(data: CreatePostDTO): Promise<CreatePostResponse> {
     return this.client.request<CreatePostResponse, CreatePostRequest>({

@@ -8,6 +8,7 @@ import UseCase from '../../base/UseCase';
 export interface CreatePostInput {
   userId: string;
   text: string;
+  media: string[];
   communityId: string;
 }
 
@@ -31,7 +32,13 @@ export class CreatePost extends UseCase<CreatePostInput, CreatePostOutput> {
       id: generatePostId()(),
       communityId: data.communityId,
       userId: data.userId,
-      text: data.text
+      text: data.text,
+      media: data.media?.map((m) => {
+        return {
+          sourceUrl: m,
+          isVideo: false
+        };
+      })
     });
 
     await this.postRepository.create(post);
