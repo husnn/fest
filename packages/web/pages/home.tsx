@@ -5,8 +5,10 @@ import React, { useEffect, useState } from 'react';
 
 import { ApiClient } from '../modules/api';
 import { Button } from '../ui';
+import CommunityHeader from '../components/CommunityHeader';
 import Composer from '../components/Composer';
 import Feed from '../components/Feed';
+import Head from 'next/head';
 import Modal from '../ui/Modal';
 import { css } from '@emotion/react';
 import { getCurrentUser } from '../modules/auth/authStorage';
@@ -73,6 +75,10 @@ const HomePage = () => {
         align-items: center;
       `}
     >
+      <Head>
+        <title>Home</title>
+      </Head>
+      {selected && <CommunityHeader community={selected} />}
       <Feed community={c as string} newPost={newPost} />
       <Modal
         show={creatingPost}
@@ -89,7 +95,11 @@ const HomePage = () => {
                 community
               })
               .then((res) => {
-                setNewPost({ ...res.body, user: currentUser });
+                setNewPost({
+                  ...res.body,
+                  user: currentUser,
+                  community: communities.find((c) => c.id === community)
+                });
               })
               .catch((err) => {
                 console.log(err);

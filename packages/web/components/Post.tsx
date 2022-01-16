@@ -1,18 +1,37 @@
 /** @jsxImportSource @emotion/react */
-import { PostDTO } from '@fanbase/shared';
+import { CommunityDTO, PostDTO } from '@fanbase/shared';
+import { getDisplayName, getProfileUrl } from '../utils';
+
 import React from 'react';
 import { css } from '@emotion/react';
-import { getDisplayName } from '../utils';
 import moment from 'moment';
+import router from 'next/router';
 import styled from '@emotion/styled';
 
-const Top = styled.div`
+const CommunityInformation = styled.div`
   padding: 10px 0;
   display: flex;
   align-items: center;
+  background-color: #f5f5f5;
+  border: 1px solid #f5f5f5;
+  border-radius: 10px;
+  cursor: pointer;
+
+  img {
+    width: 10px;
+    height: 10px;
+    margin: -2px 10px 0 0;
+    opacity: 0.5;
+  }
+`;
+
+const Top = styled.div`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
 
   > * + * {
-    margin-left: 20px;
+    margin-left: 15px;
   }
 `;
 
@@ -21,27 +40,39 @@ const Metadata = styled.div`
   flex-direction: column;
 
   > * + * {
-    margin-top: 5px;
+    margin-top: 4px;
   }
 `;
 
 const Text = styled.div``;
 
-const Post = ({ data }: { data: PostDTO }) => {
+const Post = ({
+  data,
+  hideCommunity,
+  onCommunitySelect
+}: {
+  data: PostDTO;
+  hideCommunity?: boolean;
+  onCommunitySelect: (community: CommunityDTO) => void;
+}) => {
   return (
     <div
       css={css`
         width: 500px;
+        padding: 10px;
         margin-bottom: 20px;
-        padding: 30px 20px;
         display: flex;
         flex-direction: column;
         white-space: pre-wrap;
         background-color: #fafafa;
         border-radius: 20px;
 
+        > div {
+          padding: 10px 20px;
+        }
+
         > * + * {
-          margin-top: 10px;
+          margin-top: 5px;
         }
 
         @media screen and (max-width: 720px) {
@@ -53,11 +84,17 @@ const Post = ({ data }: { data: PostDTO }) => {
         }
       `}
     >
-      <Top>
+      {!hideCommunity && (
+        <CommunityInformation onClick={() => onCommunitySelect(data.community)}>
+          <img src="/images/ic-circle.png" />
+          <p className="small">{data.community?.name}</p>
+        </CommunityInformation>
+      )}
+      <Top onClick={() => router.push(getProfileUrl(data.user))}>
         <div
           css={css`
-            width: 50px;
-            height: 50px;
+            width: 40px;
+            height: 40px;
           `}
           className="avatar"
         />

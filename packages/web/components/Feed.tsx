@@ -1,10 +1,12 @@
 /** @jsxImportSource @emotion/react */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useReducer, useRef, useState } from 'react';
 
 import { ApiClient } from '../modules/api';
 import Post from './Post';
 import { PostDTO } from '@fanbase/shared';
 import { css } from '@emotion/react';
+import { getHomeUrl } from '../utils';
+import router from 'next/router';
 
 const Feed = ({
   community,
@@ -32,7 +34,7 @@ const Feed = ({
   useEffect(() => {
     const options = {
       root: null,
-      rootMargin: '20px',
+      rootMargin: '10px',
       threshold: 1.0
     };
 
@@ -65,9 +67,18 @@ const Feed = ({
     >
       {posts.map((p) => {
         if (community && p.communityId !== community) return null;
-        return <Post key={p.id} data={p} />;
+        return (
+          <Post
+            key={p.id}
+            data={p}
+            hideCommunity={!!community}
+            onCommunitySelect={(c) =>
+              router.push(getHomeUrl(c), undefined, { shallow: true })
+            }
+          />
+        );
       })}
-      <div ref={loaderRef} />
+      <div ref={loaderRef}>{loaderRef && `You've reached the end :)`}</div>
     </div>
   );
 };
