@@ -65,8 +65,9 @@ const HomePage = () => {
 
   return (
     <div
-      className="container boxed"
       css={css`
+        height: 100vh;
+        margin-top: 80px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -99,7 +100,11 @@ const HomePage = () => {
         />
       </Modal>
       <Button
-        css={css``}
+        css={css`
+          position: fixed;
+          bottom: 5%;
+          right: 8%;
+        `}
         color="primary"
         onClick={() => (!creatingPost ? setCreatingPost(true) : null)}
       >

@@ -31,8 +31,8 @@ const Post = ({ data }: { data: PostDTO }) => {
   return (
     <div
       css={css`
-        width: 95%;
-        margin-bottom: 30px;
+        width: 500px;
+        margin-bottom: 20px;
         padding: 30px 20px;
         display: flex;
         flex-direction: column;
@@ -44,8 +44,12 @@ const Post = ({ data }: { data: PostDTO }) => {
           margin-top: 10px;
         }
 
+        @media screen and (max-width: 720px) {
+          width: 500px;
+        }
+
         @media screen and (max-width: 500px) {
-          width: 95%;
+          width: 100%;
         }
       `}
     >

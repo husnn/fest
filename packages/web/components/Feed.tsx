@@ -35,6 +35,7 @@ const Feed = ({
       rootMargin: '20px',
       threshold: 1.0
     };
+
     const observer = new IntersectionObserver(() => {
       fetchPosts();
     }, options);
@@ -52,19 +53,14 @@ const Feed = ({
   return (
     <div
       css={css`
-        width: 600px;
+        width: 100%;
+        height: 100%;
+        padding: 30px 10px;
+        overflow-y: scroll;
 
         display: flex;
         flex-direction: column;
         align-items: center;
-
-        @media screen and (max-width: 720px) {
-          width: 500px;
-        }
-
-        @media screen and (max-width: 500px) {
-          width: 400px;
-        }
       `}
     >
       {posts.map((p) => {
