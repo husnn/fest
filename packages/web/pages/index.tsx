@@ -1,14 +1,20 @@
 import { Button, Link } from '../ui';
+import React, { useEffect } from 'react';
 
 import Fade from 'react-reveal/Fade';
 import Flash from 'react-reveal/Flash';
 import Head from 'next/head';
-import React from 'react';
+import { getCurrentUser } from '../modules/auth/authStorage';
+import router from 'next/router';
 import styles from '../styles/Home.module.scss';
 import { useHeader } from '../modules/navigation';
 
 export default function Home() {
   useHeader(['profile', 'login']);
+
+  useEffect(() => {
+    if (getCurrentUser()) router.push('/home');
+  }, []);
 
   const currentYear = new Date().getFullYear();
 
