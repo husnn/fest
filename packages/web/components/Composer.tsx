@@ -72,7 +72,6 @@ const Box = styled.div`
 const InputArea = styled.div`
   display: flex;
   flex-direction: column;
-  white-space: pre;
   border-radius: 5px;
 
   @media screen and (min-width: 500px) {
@@ -119,18 +118,27 @@ const Composer = ({
   communities: CommunityDTO[];
   onSubmit: (text: string, communityId: string) => void;
 }) => {
+  const elRef = useRef<HTMLElement>();
+
   const [html, setHtml] = useState<string>('');
-  const htmlRef = useRef<string>('');
+  const textRef = useRef<string>('');
 
   const postCommunity = useRef<CommunityDTO>();
 
+  const stripHtml = (html: string) => {
+    const tmp = document.createElement('DIV');
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || '';
+  };
+
   useEffect(() => {
-    htmlRef.current = html.trim();
+    elRef.current.focus();
+    textRef.current = stripHtml(html).trim();
   }, [html]);
 
   const submit = () => {
-    if (htmlRef.current.length < 1) return;
-    onSubmit(htmlRef.current, postCommunity.current.id);
+    if (textRef.current.length < 1) return;
+    onSubmit(textRef.current, postCommunity.current.id);
     setHtml('');
   };
 
@@ -138,6 +146,7 @@ const Composer = ({
     <Box>
       <InputArea>
         <ContentEditable
+          innerRef={elRef}
           placeholder="Start by typing something..."
           html={html}
           onChange={(e) => setHtml(e.target.value)}
@@ -152,6 +161,7 @@ const Composer = ({
             padding: 20px;
             font-size: 16px;
             outline: none;
+            white-space: pre-wrap;
             overflow-y: auto;
           `}
         />

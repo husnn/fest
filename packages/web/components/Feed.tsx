@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { ApiClient } from '../modules/api';
 import Post from './Post';

@@ -41,6 +41,28 @@ const HomePage = () => {
     setSelected(communities.find((community) => community.id == (c as string)));
   }, [c, communities]);
 
+  useEffect(() => {
+    const evl = (e: KeyboardEvent) => {
+      if (!creatingPost) {
+        if (e.shiftKey && e.key === 'N') {
+          e.preventDefault();
+          setCreatingPost(true);
+        }
+      } else {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          setCreatingPost(false);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', evl);
+
+    return () => {
+      window.removeEventListener('keydown', evl);
+    };
+  }, [creatingPost]);
+
   return (
     <div
       className="container boxed"
@@ -66,7 +88,7 @@ const HomePage = () => {
                 community
               })
               .then((res) => {
-                setNewPost(res.body);
+                setNewPost({ ...res.body, user: currentUser });
               })
               .catch((err) => {
                 console.log(err);

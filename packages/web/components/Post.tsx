@@ -36,6 +36,7 @@ const Post = ({ data }: { data: PostDTO }) => {
         padding: 30px 20px;
         display: flex;
         flex-direction: column;
+        white-space: pre-wrap;
         background-color: #fafafa;
         border-radius: 20px;
 
