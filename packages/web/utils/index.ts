@@ -98,13 +98,17 @@ export const getImageUrl = (
       }
     : undefined;
 
-  const qs = Object.keys(p)
-    .map((key) => `${key}=${p[key]}`)
-    .join('&');
+  let qs: string;
+
+  if (p) {
+    qs = Object.keys(p)
+      .map((key) => `${key}=${p[key]}`)
+      .join('&');
+  }
 
   const url =
     baseUrl && !override
-      ? `${baseUrl}/${endpoint || sourceUrl}?${qs}`
+      ? `${baseUrl}/${endpoint || sourceUrl}${qs ? '?' + qs : ''}`
       : sourceUrl;
 
   return url;

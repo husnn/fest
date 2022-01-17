@@ -4216,6 +4216,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-device-detect", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:1.17.0"],
             ["react-dom", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:17.0.2"],
             ["react-dropzone", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:11.4.2"],
+            ["react-image-lightbox", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:5.1.4"],
             ["react-reveal", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:1.2.2"],
             ["react-transition-group", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:4.4.2"],
             ["sass", "npm:1.43.4"],
@@ -9276,6 +9277,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["md5.js", "npm:1.3.5"],
             ["node-gyp", "npm:8.3.0"],
             ["safe-buffer", "npm:5.2.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["exenv", [
+        ["npm:1.2.2", {
+          "packageLocation": "./.yarn/cache/exenv-npm-1.2.2-eeb9069149-a894f3b60a.zip/node_modules/exenv/",
+          "packageDependencies": [
+            ["exenv", "npm:1.2.2"]
           ],
           "linkType": "HARD",
         }]
@@ -14734,11 +14744,78 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["react-image-lightbox", [
+        ["npm:5.1.4", {
+          "packageLocation": "./.yarn/cache/react-image-lightbox-npm-5.1.4-1a34e6925f-59a209eba5.zip/node_modules/react-image-lightbox/",
+          "packageDependencies": [
+            ["react-image-lightbox", "npm:5.1.4"]
+          ],
+          "linkType": "SOFT",
+        }],
+        ["virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:5.1.4", {
+          "packageLocation": "./.yarn/__virtual__/react-image-lightbox-virtual-e322f2361c/0/cache/react-image-lightbox-npm-5.1.4-1a34e6925f-59a209eba5.zip/node_modules/react-image-lightbox/",
+          "packageDependencies": [
+            ["react-image-lightbox", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:5.1.4"],
+            ["@types/react", "npm:17.0.6"],
+            ["@types/react-dom", "npm:17.0.10"],
+            ["prop-types", "npm:15.7.2"],
+            ["react", "npm:17.0.2"],
+            ["react-dom", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:17.0.2"],
+            ["react-modal", "virtual:e322f2361c17ef4e123853b7c6539ba3cf42924781ae445a3d149b0e4fe73c50b5450e27d32c5be49269139ad0950881f89ec3326d9d298fcb9309713695560e#npm:3.14.4"]
+          ],
+          "packagePeers": [
+            "@types/react-dom",
+            "@types/react",
+            "react-dom",
+            "react"
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["react-is", [
         ["npm:16.13.1", {
           "packageLocation": "./.yarn/cache/react-is-npm-16.13.1-a9b9382b4f-f7a19ac349.zip/node_modules/react-is/",
           "packageDependencies": [
             ["react-is", "npm:16.13.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["react-lifecycles-compat", [
+        ["npm:3.0.4", {
+          "packageLocation": "./.yarn/cache/react-lifecycles-compat-npm-3.0.4-d5e285a39e-a904b0fc0a.zip/node_modules/react-lifecycles-compat/",
+          "packageDependencies": [
+            ["react-lifecycles-compat", "npm:3.0.4"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["react-modal", [
+        ["npm:3.14.4", {
+          "packageLocation": "./.yarn/cache/react-modal-npm-3.14.4-ce910fdbb8-71457de902.zip/node_modules/react-modal/",
+          "packageDependencies": [
+            ["react-modal", "npm:3.14.4"]
+          ],
+          "linkType": "SOFT",
+        }],
+        ["virtual:e322f2361c17ef4e123853b7c6539ba3cf42924781ae445a3d149b0e4fe73c50b5450e27d32c5be49269139ad0950881f89ec3326d9d298fcb9309713695560e#npm:3.14.4", {
+          "packageLocation": "./.yarn/__virtual__/react-modal-virtual-a2f1c9030f/0/cache/react-modal-npm-3.14.4-ce910fdbb8-71457de902.zip/node_modules/react-modal/",
+          "packageDependencies": [
+            ["react-modal", "virtual:e322f2361c17ef4e123853b7c6539ba3cf42924781ae445a3d149b0e4fe73c50b5450e27d32c5be49269139ad0950881f89ec3326d9d298fcb9309713695560e#npm:3.14.4"],
+            ["@types/react", "npm:17.0.6"],
+            ["@types/react-dom", "npm:17.0.10"],
+            ["exenv", "npm:1.2.2"],
+            ["prop-types", "npm:15.7.2"],
+            ["react", "npm:17.0.2"],
+            ["react-dom", "virtual:81a309987ec039a1748b46f9cde99c0822b8cfa0a3619136e67643d5cfba6044ae4d39c81e7dff7b4f1ca944fb86e4815dc23874af30ef84f3c52039d8dd0857#npm:17.0.2"],
+            ["react-lifecycles-compat", "npm:3.0.4"],
+            ["warning", "npm:4.0.3"]
+          ],
+          "packagePeers": [
+            "@types/react-dom",
+            "@types/react",
+            "react-dom",
+            "react"
           ],
           "linkType": "HARD",
         }]
@@ -17330,6 +17407,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/void-elements-npm-3.1.0-4f43780839-0390f81810.zip/node_modules/void-elements/",
           "packageDependencies": [
             ["void-elements", "npm:3.1.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["warning", [
+        ["npm:4.0.3", {
+          "packageLocation": "./.yarn/cache/warning-npm-4.0.3-291e921d6d-4f2cb6a957.zip/node_modules/warning/",
+          "packageDependencies": [
+            ["warning", "npm:4.0.3"],
+            ["loose-envify", "npm:1.4.0"]
           ],
           "linkType": "HARD",
         }]
