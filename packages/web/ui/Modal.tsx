@@ -65,12 +65,11 @@ const ModalContainer = styled.div<ModalContainerProps>`
     margin-top: 20px;
   }
 
-  @media screen and (max-width: 499px) {
-    min-height: 200px;
+  @media screen and (max-width: 500px) {
     bottom: 0;
     right: 0;
     left: 0;
-    padding: 30px;
+    padding: ${(props) => (props.zeroPadding ? '0' : '30px')};
     border-radius: ${corners.lg} ${corners.lg} 0 0;
   }
 

@@ -67,6 +67,7 @@ const CommunitySelector = ({
 
 const Box = styled.div`
   max-width: 500px;
+  padding: 20px 0 0;
 `;
 
 const InputArea = styled.div`
