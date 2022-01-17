@@ -4,6 +4,7 @@ import { Global, css } from '@emotion/react';
 
 import ApiClient from '../modules/api/ApiClient';
 import { GoogleButton } from '../components';
+import Head from 'next/head';
 import React from 'react';
 import { UserInfoSchema } from '@fanbase/shared';
 import { fontSize } from '../styles/constants';
@@ -54,6 +55,9 @@ export default function SettingsPage() {
 
   return (
     <div className="container boxed">
+      <Head>
+        <title>Settings</title>
+      </Head>
       {currentUser && (
         <SettingsSheet>
           <h1>Settings</h1>

@@ -76,7 +76,7 @@ const HomePage = () => {
       `}
     >
       <Head>
-        <title>Home</title>
+        <title>{selected ? selected.name : 'Home'}</title>
       </Head>
       {selected && <CommunityHeader community={selected} />}
       <Feed community={c as string} newPost={newPost} />

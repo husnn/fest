@@ -2,6 +2,7 @@ import { InviteDTO, InviteType } from '@fanbase/shared';
 import React, { useEffect, useState } from 'react';
 
 import { ApiClient } from '../modules/api';
+import Head from 'next/head';
 import styled from '@emotion/styled';
 
 const Container = styled.div`
@@ -114,6 +115,9 @@ export const ReferralPage = () => {
 
   return (
     <div className="container boxed">
+      <Head>
+        <title>Referral</title>
+      </Head>
       <Container>
         <Box
           title="Share these with your friends!"
