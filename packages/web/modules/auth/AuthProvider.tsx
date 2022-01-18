@@ -1,9 +1,8 @@
-import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import { getAuthToken, getCurrentUser, removeAuth } from './authStorage';
 
 import { CurrentUserDTO } from '@fanbase/shared';
-
-import { getAuthToken, getCurrentUser, removeAuth } from './authStorage';
+import { useRouter } from 'next/router';
 
 type AuthContextProps = {
   isAuthenticated: boolean;

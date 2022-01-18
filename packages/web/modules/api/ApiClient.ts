@@ -69,8 +69,12 @@ import {
   OAuthLinkRequest,
   PostMediaUploadData,
   Protocol,
+  RequestPasswordResetRequest,
+  RequestPasswordResetResponse,
   RequestTestFundsRequest,
   RequestTestFundsResponse,
+  ResetPasswordRequest,
+  ResetPasswordResponse,
   TokenDTO,
   TokenData,
   TokenOwnershipDTO,
@@ -182,6 +186,34 @@ export class ApiClient {
         protocol,
         currencyContract: currency
       }
+    });
+  }
+
+  // Password reset
+
+  async resetPassword(
+    token: string,
+    password: string
+  ): Promise<ResetPasswordResponse> {
+    return this.client.request<ResetPasswordResponse, ResetPasswordRequest>({
+      method: 'POST',
+      endpoint: '/auth/reset-password',
+      authentication: 'required',
+      body: { token, password }
+    });
+  }
+
+  async sendPasswordResetRequest(
+    email: string
+  ): Promise<RequestPasswordResetResponse> {
+    return this.client.request<
+      RequestPasswordResetResponse,
+      RequestPasswordResetRequest
+    >({
+      method: 'POST',
+      endpoint: '/auth/reset-password',
+      authentication: 'required',
+      body: { email }
     });
   }
 

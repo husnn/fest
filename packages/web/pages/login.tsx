@@ -238,6 +238,9 @@ export default function Login() {
     );
   };
 
+  const [passwordResetRequestSent, setPasswordResetRequestSent] =
+    useState(false);
+
   return (
     <Container>
       <Head>
@@ -298,7 +301,18 @@ export default function Login() {
           showing={loginWithEmail}
           setShowing={setLoginWithEmail}
           onLogin={onLogin}
+          onPasswordReset={() => {
+            setLoginWithEmail(false);
+            setPasswordResetRequestSent(true);
+            setTimeout(() => setPasswordResetRequestSent(false), 5000);
+          }}
         />
+
+        <Modal
+          show={passwordResetRequestSent}
+          title="Check your email inbox"
+          description={`We sent an email to ${email} with a link to reset your password.`}
+        ></Modal>
       </Box>
     </Container>
   );

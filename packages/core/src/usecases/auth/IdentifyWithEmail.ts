@@ -85,7 +85,7 @@ export class IdentifyWithEmail extends UseCase<
         isCreator: check.data.isCreator
       });
 
-      await user.hashPassword();
+      user.password = await User.hashPassword(user.password);
 
       user = await this.userRepository.create(user);
 

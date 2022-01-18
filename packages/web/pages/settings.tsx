@@ -51,7 +51,7 @@ const BlockHeader = styled.div`
 export default function SettingsPage() {
   const router = useRouter();
 
-  const { currentUser, setCurrentUser } = useAuthentication(true);
+  const { currentUser, setCurrentUser, clearAuth } = useAuthentication(true);
 
   return (
     <div className="container boxed">
@@ -61,11 +61,6 @@ export default function SettingsPage() {
       {currentUser && (
         <SettingsSheet>
           <h1>Settings</h1>
-          {/* <SettingsBlock>
-            <FormInput label="Your public address">
-            <h3 className="wallet-address">{currentUser.wallet?.address}</h3>
-            </FormInput>
-          </SettingsBlock> */}
           <SettingsBlock>
             <BlockHeader>
               <h2>Your info</h2>
@@ -184,6 +179,24 @@ export default function SettingsPage() {
                 </Form>
               )}
             </Formik>
+          </SettingsBlock>
+          <SettingsBlock>
+            <BlockHeader>
+              <h2>Change your password</h2>
+              <p>
+                You can change this by signing out and requesting a password
+                reset.
+              </p>
+            </BlockHeader>
+            <Button
+              size="small"
+              onClick={() => {
+                clearAuth();
+                router.push('/login');
+              }}
+            >
+              Sign out
+            </Button>
           </SettingsBlock>
           <SettingsBlock>
             <BlockHeader>

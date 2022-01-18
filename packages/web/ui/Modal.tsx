@@ -11,9 +11,10 @@ import styled from '@emotion/styled';
 export type ModalProps = {
   show: boolean;
   closing?: boolean;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   title?: string;
   description?: string;
+  error?: string;
   zeroPadding?: boolean;
   backable?: boolean;
   cancel?: string;
@@ -126,12 +127,18 @@ const ModalBody = styled.div`
   padding: 10px 0;
 `;
 
+const AuthError = styled.p`
+  color: red;
+  margin-top: 15px;
+`;
+
 const Modal: React.FC<ModalProps> = ({
   show,
   closing,
   children,
   title,
   description,
+  error,
   zeroPadding,
   backable,
   onBackPressed,
@@ -193,7 +200,15 @@ const Modal: React.FC<ModalProps> = ({
                   )}
                 </ModalHead>
               )}
-              <ModalBody>{children}</ModalBody>
+              <ModalBody>
+                {children}
+                {error && (
+                  <AuthError
+                    dangerouslySetInnerHTML={{ __html: error }}
+                    className="smaller"
+                  />
+                )}
+              </ModalBody>
               {(ok || cancel) && (
                 <ModalActions>
                   {ok && (

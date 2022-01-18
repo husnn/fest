@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response, Router } from 'express';
 
 import AuthController from '../controllers/AuthController';
+import authMiddleware from '../middleware/authMiddleware';
 
 export default function init(authController: AuthController) {
   const router = Router();
@@ -25,6 +26,14 @@ export default function init(authController: AuthController) {
     '/login/email',
     (req: Request, res: Response, next: NextFunction) =>
       authController.loginWithEmail(req, res, next)
+  );
+
+  router.post(
+    '/reset-password',
+    (req: Request, res: Response, next: NextFunction) => {
+      if (req.body.email) authController.requestPasswordReset(req, res, next);
+      else authController.resetPassword(req, res, next);
+    }
   );
 
   router.post(

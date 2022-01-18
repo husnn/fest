@@ -9,6 +9,8 @@ import {
   LoginWithEmail,
   LoginWithWallet,
   MailService,
+  RequestPasswordReset,
+  ResetPassword,
   UserRepository,
   WaitlistRepository,
   WalletRepository
@@ -17,7 +19,9 @@ import {
   AuthPrecheckResponse,
   IdentifyWithEmailResponse,
   IdentifyWithWalletResponse,
-  LoginResponse
+  LoginResponse,
+  RequestPasswordResetResponse,
+  ResetPasswordResponse
 } from '@fanbase/shared';
 import {
   HttpError,
@@ -35,6 +39,9 @@ class AuthController {
 
   private loginWithEmailUseCase: LoginWithEmail;
   private loginWithWalletUseCase: LoginWithWallet;
+
+  private requestPasswordResetUseCase: RequestPasswordReset;
+  private resetPasswordUseCase: ResetPassword;
 
   constructor(
     userRepository: UserRepository,
@@ -74,6 +81,41 @@ class AuthController {
       walletRepository,
       ethereumService
     );
+
+    this.requestPasswordResetUseCase = new RequestPasswordReset(
+      userRepository,
+      mailService
+    );
+
+    this.resetPasswordUseCase = new ResetPassword(userRepository);
+  }
+
+  async resetPassword(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { token, password } = req.body;
+
+      const result = await this.resetPasswordUseCase.exec({ token, password });
+      if (!result.success) throw new HttpError('Could not reset password.');
+
+      return new HttpResponse<ResetPasswordResponse>(res, result.data);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async requestPasswordReset(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { email } = req.body;
+      const result = await this.requestPasswordResetUseCase.exec({
+        email
+      });
+      if (!result.success)
+        throw new HttpError('Could not request password reset.');
+
+      return new HttpResponse<RequestPasswordResetResponse>(res);
+    } catch (err) {
+      next(err);
+    }
   }
 
   async doPrecheck(req: Request, res: Response, next: NextFunction) {

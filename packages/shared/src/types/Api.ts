@@ -69,6 +69,33 @@ export type InitConfig = {
 export interface InitResponse extends Response<InitConfig> {}
 
 /**
+ * Password reset
+ */
+
+export type ResetPasswordResponse = LoginResponse;
+
+export interface ResetPasswordRequest extends Request {
+  method: 'POST';
+  endpoint: '/auth/reset-password';
+  authentication: 'required';
+  body: {
+    token: string;
+    password: string;
+  };
+}
+
+export interface RequestPasswordResetResponse extends Response {}
+
+export interface RequestPasswordResetRequest extends Request {
+  method: 'POST';
+  endpoint: '/auth/reset-password';
+  authentication: 'required';
+  body: {
+    email: string;
+  };
+}
+
+/**
  * Feed
  */
 

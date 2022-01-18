@@ -16,7 +16,7 @@ class MailService implements IMailService {
       to: email.to,
       from: mailConfig.from.noreply,
       subject: email.subject,
-      text: email.content
+      html: email.content
     };
 
     sgMail.send(msg).catch((err: string) => {

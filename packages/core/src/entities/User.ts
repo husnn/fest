@@ -1,10 +1,10 @@
 import { getExpiryDate, randomInteger } from '@fanbase/shared';
-import jwt, { Jwt } from 'jsonwebtoken';
 
 import Community from './Community';
 import Token from './Token';
 import Wallet from './Wallet';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 type JwtPayload = {
   userId: string;
@@ -28,6 +28,10 @@ export class User {
     value: string;
     expiry: Date;
   };
+  passwordResetToken?: {
+    value: string;
+    expiry: Date;
+  };
   isCreator: boolean;
   lastLogin: Date;
   communities: Community[];
@@ -38,25 +42,34 @@ export class User {
     this.loginCode = User.newLoginCode();
   }
 
-  async hashPassword() {
-    this.password = await bcrypt.hash(
-      this.password,
-      10 || process.env.PASSWORD_SALT_ROUNDS
-    );
+  static async hashPassword(password: string) {
+    return bcrypt.hash(password, 10 || process.env.PASSWORD_SALT_ROUNDS);
   }
 
   static async verifyPassword(provided: string, actual: string) {
     return bcrypt.compare(provided, actual);
   }
 
-  static fromJwt(token: string) {
-    return jwt.verify(token, process.env.JWT_SECRET) as JwtPayload;
+  static fromJwt(token: string, secret?: string) {
+    return jwt.verify(token, secret || process.env.JWT_SECRET) as JwtPayload;
   }
 
-  static generateJwt(user: User): string {
-    return jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_EXPIRY
+  static fromResetJwt(token: string) {
+    return User.fromJwt(token, process.env.RESET_JWT_SECRET);
+  }
+
+  static generateJwt(user: User, secret?: string, expiry?: number): string {
+    return jwt.sign({ userId: user.id }, secret || process.env.JWT_SECRET, {
+      expiresIn: expiry || process.env.JWT_EXPIRY
     });
+  }
+
+  static generateResetJwt(user: User, expiryInMins: number): string {
+    return User.generateJwt(
+      user,
+      process.env.RESET_JWT_SECRET,
+      expiryInMins * 60 * 1000
+    );
   }
 
   static newLoginCode() {
