@@ -1,14 +1,13 @@
-import { CurrentUserDTO } from '@fanbase/shared';
-
-import UseCase from '../../base/UseCase';
 import { UserRepository, WalletRepository } from '../../repositories';
+
+import { CurrentUserDTO } from '@fanbase/shared';
 import { Result } from '../../Result';
+import UseCase from '../../base/UseCase';
 
 type EditUserInput = {
   user: string;
   name?: string;
   username?: string;
-  email?: string;
   bio?: string;
 };
 
@@ -30,7 +29,7 @@ export class EditUser extends UseCase<EditUserInput, EditUserOutput> {
   }
 
   async exec(data: EditUserInput): Promise<Result<EditUserOutput>> {
-    const { name, username, email, bio } = data;
+    const { name, username, bio } = data;
 
     const user = await this.userRepository.get(data.user);
 
@@ -38,7 +37,6 @@ export class EditUser extends UseCase<EditUserInput, EditUserOutput> {
 
     if (name) user.name = name.trim(); // @BeforeInsert Trim
     if (username) user.username = username.trim(); // @BeforeInsert Trim and validate
-    if (email) user.email = email.trim().toLowerCase(); // @BeforeInsert Trim and validate
     if (bio) user.bio = bio.trim(); // @BeforeInsert Trim and validate
 
     if (JSON.stringify(original) !== JSON.stringify(user)) {

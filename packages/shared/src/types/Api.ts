@@ -459,7 +459,6 @@ export interface GetUserByUsernameRequest extends Request {
 export type UserInfo = {
   name?: string;
   username?: string;
-  email?: string;
   bio?: string;
 };
 

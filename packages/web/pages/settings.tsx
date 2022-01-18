@@ -69,7 +69,6 @@ export default function SettingsPage() {
               initialValues={{
                 name: currentUser.name || '',
                 username: currentUser.username || '',
-                email: currentUser.email || '',
                 bio: currentUser.bio || ''
               }}
               validationSchema={UserInfoSchema}
@@ -127,7 +126,7 @@ export default function SettingsPage() {
                     />
                   </FormInput>
 
-                  <FormInput
+                  {/* <FormInput
                     label="Email address"
                     error={errors.email as string}
                   >
@@ -139,7 +138,7 @@ export default function SettingsPage() {
                       value={values.email}
                       onChange={handleChange}
                     />
-                  </FormInput>
+                  </FormInput> */}
 
                   <FormInput label="Bio" error={errors.bio as string}>
                     <Field
