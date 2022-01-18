@@ -67,9 +67,7 @@ export const WalletPage = () => {
       themeColor: '000000',
       email: currentUser.email,
       redirectURL: '',
-      hostURL: window.location.origin,
-      widgetHeight: '550px',
-      widgetWidth: '350px'
+      hostURL: window.location.origin
     }).init();
   };
 
