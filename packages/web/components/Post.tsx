@@ -70,9 +70,10 @@ const Media = ({ content }: { content: PostMedia[] }) => {
       {content.map((m, i) => (
         <img
           css={css`
-            max-width: ${content.length > 1 ? '90%' : '100%'};
+            width: ${content.length > 1 ? '90%' : '100%'};
             height: 300px;
             object-fit: cover;
+            cursor: pointer;
 
             border-radius: 10px;
 

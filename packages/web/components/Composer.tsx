@@ -184,14 +184,9 @@ const Composer = ({
 
   mediaFileRef.current = mediaFiles;
 
-  const [isSubmitted, setSubmitted] = useState(false);
-
   const submit = () => {
-    if (isSubmitted || (textRef.current.length < 1 && !mediaFileRef.current))
-      return;
     onSubmit(textRef.current, mediaFileRef.current, postCommunity.current.id);
     setHtml('');
-    setSubmitted(true);
   };
 
   const fileInputRef = useRef<HTMLInputElement>();

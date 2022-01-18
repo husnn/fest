@@ -89,6 +89,8 @@ const HomePage = () => {
           selected={selected}
           communities={communities}
           onSubmit={async (text, media, community) => {
+            setCreatingPost(false);
+
             try {
               const res = await ApiClient.getInstance().getPostMediaUploadURLs(
                 media.map((m) => {
@@ -126,8 +128,6 @@ const HomePage = () => {
             } catch (err) {
               console.log(err);
             }
-
-            setCreatingPost(false);
           }}
         />
       </Modal>
