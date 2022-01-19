@@ -9,6 +9,8 @@ import {
   BuyTokenListingResponse,
   CancelTokenListingRequest,
   CancelTokenListingResponse,
+  ChangeEmailAddressRequest,
+  ChangeEmailAddressResponse,
   CreatePostDTO,
   CreatePostRequest,
   CreatePostResponse,
@@ -69,6 +71,8 @@ import {
   OAuthLinkRequest,
   PostMediaUploadData,
   Protocol,
+  RequestEmailAddressChangeRequest,
+  RequestEmailAddressChangeResponse,
   RequestPasswordResetRequest,
   RequestPasswordResetResponse,
   RequestTestFundsRequest,
@@ -198,7 +202,7 @@ export class ApiClient {
     return this.client.request<ResetPasswordResponse, ResetPasswordRequest>({
       method: 'POST',
       endpoint: '/auth/reset-password',
-      authentication: 'required',
+      authentication: 'optional',
       body: { token, password }
     });
   }
@@ -212,7 +216,7 @@ export class ApiClient {
     >({
       method: 'POST',
       endpoint: '/auth/reset-password',
-      authentication: 'required',
+      authentication: 'optional',
       body: { email }
     });
   }
@@ -399,6 +403,35 @@ export class ApiClient {
       method: 'GET',
       endpoint: `/users/${identifier}`,
       authentication: 'none'
+    });
+  }
+
+  async changeEmailAddress(
+    token: string,
+    password: string
+  ): Promise<ChangeEmailAddressResponse> {
+    return this.client.request<
+      ChangeEmailAddressResponse,
+      ChangeEmailAddressRequest
+    >({
+      method: 'POST',
+      endpoint: `/auth/change-email`,
+      authentication: 'optional',
+      body: { token, password }
+    });
+  }
+
+  async requestEmailAddressChange(
+    email: string
+  ): Promise<RequestEmailAddressChangeResponse> {
+    return this.client.request<
+      RequestEmailAddressChangeResponse,
+      RequestEmailAddressChangeRequest
+    >({
+      method: 'POST',
+      endpoint: `/auth/email-change`,
+      authentication: 'required',
+      body: { email }
     });
   }
 

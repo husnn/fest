@@ -37,6 +37,21 @@ export default function init(authController: AuthController) {
   );
 
   router.post(
+    '/email-change',
+    authMiddleware,
+    (req: Request, res: Response, next: NextFunction) => {
+      authController.requestEmailChange(req, res, next);
+    }
+  );
+
+  router.post(
+    '/change-email',
+    (req: Request, res: Response, next: NextFunction) => {
+      authController.changeEmailAddress(req, res, next);
+    }
+  );
+
+  router.post(
     '/login/wallet',
     (req: Request, res: Response, next: NextFunction) =>
       authController.loginWithWallet(req, res, next)

@@ -8,6 +8,7 @@ import jwt from 'jsonwebtoken';
 
 type JwtPayload = {
   userId: string;
+  email?: string;
 };
 
 export class User {
@@ -25,6 +26,10 @@ export class User {
   wallet: Wallet;
   tokensCreated: Token[];
   loginCode: {
+    value: string;
+    expiry: Date;
+  };
+  emailChangeToken?: {
     value: string;
     expiry: Date;
   };
@@ -54,6 +59,10 @@ export class User {
     return jwt.verify(token, secret || process.env.JWT_SECRET) as JwtPayload;
   }
 
+  static fromEmailChangeJwt(token: string) {
+    return User.fromJwt(token, process.env.EMAIL_CHANGE_JWT_SECRET);
+  }
+
   static fromResetJwt(token: string) {
     return User.fromJwt(token, process.env.RESET_JWT_SECRET);
   }
@@ -64,10 +73,24 @@ export class User {
     });
   }
 
+  static generateEmailChangeJwt(
+    user: User,
+    email: string,
+    expiryInMins: number
+  ): string {
+    return jwt.sign(
+      { userId: user.id, email },
+      process.env.EMAIL_CHANGE_JWT_SECRET || process.env.JWT_SECRET,
+      {
+        expiresIn: expiryInMins * 60 * 1000 || process.env.JWT_EXPIRY
+      }
+    );
+  }
+
   static generateResetJwt(user: User, expiryInMins: number): string {
     return User.generateJwt(
       user,
-      process.env.RESET_JWT_SECRET,
+      process.env.PASSWORD_RESET_JWT_SECRET,
       expiryInMins * 60 * 1000
     );
   }

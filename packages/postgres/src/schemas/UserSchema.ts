@@ -42,6 +42,12 @@ const UserSchema = new EntitySchema<User>({
       nullable: true,
       select: false
     },
+    emailChangeToken: {
+      type: 'simple-json',
+      name: 'email_change_token',
+      nullable: true,
+      select: false
+    },
     passwordResetToken: {
       type: 'simple-json',
       name: 'password_reset_token',

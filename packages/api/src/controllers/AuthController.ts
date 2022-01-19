@@ -2,6 +2,8 @@ import {
   AuthCheck,
   AuthError,
   AuthPrecheck,
+  ChangeEmailAddress,
+  EmailAddressChangeError,
   EthereumService,
   IdentifyWithEmail,
   IdentifyWithWallet,
@@ -9,19 +11,24 @@ import {
   LoginWithEmail,
   LoginWithWallet,
   MailService,
+  RequestEmailAddressChange,
   RequestPasswordReset,
   ResetPassword,
+  ResetPasswordError,
   UserRepository,
   WaitlistRepository,
   WalletRepository
 } from '@fanbase/core';
 import {
   AuthPrecheckResponse,
+  ChangeEmailAddressResponse,
   IdentifyWithEmailResponse,
   IdentifyWithWalletResponse,
   LoginResponse,
+  RequestEmailAddressChangeResponse,
   RequestPasswordResetResponse,
-  ResetPasswordResponse
+  ResetPasswordResponse,
+  isEmailAddress
 } from '@fanbase/shared';
 import {
   HttpError,
@@ -42,6 +49,9 @@ class AuthController {
 
   private requestPasswordResetUseCase: RequestPasswordReset;
   private resetPasswordUseCase: ResetPassword;
+
+  private requestEmailAddressChangeUseCase: RequestEmailAddressChange;
+  private changeEmailAddressUseCase: ChangeEmailAddress;
 
   constructor(
     userRepository: UserRepository,
@@ -88,14 +98,93 @@ class AuthController {
     );
 
     this.resetPasswordUseCase = new ResetPassword(userRepository);
+
+    this.requestEmailAddressChangeUseCase = new RequestEmailAddressChange(
+      userRepository,
+      mailService
+    );
+
+    this.changeEmailAddressUseCase = new ChangeEmailAddress(
+      userRepository,
+      mailService
+    );
+  }
+
+  async changeEmailAddress(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { token, password } = req.body;
+      if (!token || !password)
+        throw new ValidationError('Missing token or password.');
+
+      const result = await this.changeEmailAddressUseCase.exec({
+        token,
+        password
+      });
+      if (!result.success) {
+        switch (result.error) {
+          case EmailAddressChangeError.INVALID_TOKEN:
+            throw new ValidationError('Invalid or expired token.');
+          case EmailAddressChangeError.INCORRECT_PASSWORD:
+            throw new ValidationError('Incorrect password.');
+          default:
+            throw new HttpError('Could not change email address.');
+        }
+      }
+
+      return new HttpResponse<ChangeEmailAddressResponse>(res, {
+        email: result.data.email
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async requestEmailChange(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { email } = req.body;
+      if (!isEmailAddress(email))
+        throw new HttpError('Invalid email address provided.');
+
+      const result = await this.requestEmailAddressChangeUseCase.exec({
+        userId: req.user,
+        email
+      });
+      if (!result.success) {
+        switch (result.error) {
+          case EmailAddressChangeError.SAME_EMAIL:
+            throw new ValidationError(
+              'New email address cannot be the same as existing.'
+            );
+          case EmailAddressChangeError.EMAIL_ALREADY_IN_USE:
+            throw new ValidationError(
+              'The email address provided is already in use.'
+            );
+          default:
+            throw new HttpError('Could not change email address.');
+        }
+      }
+
+      return new HttpResponse<RequestEmailAddressChangeResponse>(res);
+    } catch (err) {
+      next(err);
+    }
   }
 
   async resetPassword(req: Request, res: Response, next: NextFunction) {
     try {
       const { token, password } = req.body;
+      if (!token || !password)
+        throw new ValidationError('Missing token or password.');
 
       const result = await this.resetPasswordUseCase.exec({ token, password });
-      if (!result.success) throw new HttpError('Could not reset password.');
+      if (!result.success) {
+        switch (result.error) {
+          case ResetPasswordError.INVALID_TOKEN:
+            throw new ValidationError('Invalid or expired token.');
+          default:
+            throw new HttpError('Could not reset password.');
+        }
+      }
 
       return new HttpResponse<ResetPasswordResponse>(res, result.data);
     } catch (err) {

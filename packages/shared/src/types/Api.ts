@@ -77,7 +77,7 @@ export type ResetPasswordResponse = LoginResponse;
 export interface ResetPasswordRequest extends Request {
   method: 'POST';
   endpoint: '/auth/reset-password';
-  authentication: 'required';
+  authentication: 'optional';
   body: {
     token: string;
     password: string;
@@ -89,7 +89,7 @@ export interface RequestPasswordResetResponse extends Response {}
 export interface RequestPasswordResetRequest extends Request {
   method: 'POST';
   endpoint: '/auth/reset-password';
-  authentication: 'required';
+  authentication: 'optional';
   body: {
     email: string;
   };
@@ -432,6 +432,30 @@ export interface GetOAuthLinkRequest extends Request {
 /**
  * User
  */
+
+export interface ChangeEmailAddressResponse extends Response {
+  email: string;
+}
+
+export interface ChangeEmailAddressRequest extends Request {
+  method: 'POST';
+  endpoint: '/auth/change-email';
+  authentication: 'optional';
+  body: {
+    token: string;
+    password: string;
+  };
+}
+
+export interface RequestEmailAddressChangeResponse extends Response {}
+export interface RequestEmailAddressChangeRequest extends Request {
+  method: 'POST';
+  endpoint: '/auth/email-change';
+  authentication: 'required';
+  body: {
+    email: string;
+  };
+}
 
 export interface GetUserCommunitiesResponse
   extends PaginatedResponse<CommunityDTO> {}

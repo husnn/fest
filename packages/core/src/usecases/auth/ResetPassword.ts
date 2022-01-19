@@ -1,6 +1,6 @@
+import { AuthError, ResetPasswordError } from './errors';
 import { isExpired, isValidPassword } from '@fanbase/shared';
 
-import { AuthError } from '@fanbase/core';
 import { LoginWithEmail } from './LoginWithEmail';
 import { LoginWithEmailOutput } from './LoginWithEmail';
 import Result from '../../Result';
@@ -43,7 +43,7 @@ export class ResetPassword extends UseCase<
       user.passwordResetToken?.value !== data.token ||
       isExpired(user.passwordResetToken?.expiry)
     )
-      return Result.fail();
+      return Result.fail(ResetPasswordError.INVALID_TOKEN);
 
     user.passwordResetToken.expiry = new Date();
 

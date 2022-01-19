@@ -1,12 +1,12 @@
 import { Button, FormInput, TextArea, TextInput } from '../ui';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import { Global, css } from '@emotion/react';
+import React, { useState } from 'react';
+import { UserInfoSchema, isEmailAddress } from '@fanbase/shared';
 
 import ApiClient from '../modules/api/ApiClient';
 import { GoogleButton } from '../components';
 import Head from 'next/head';
-import React from 'react';
-import { UserInfoSchema } from '@fanbase/shared';
 import { fontSize } from '../styles/constants';
 import { getProfileUrl } from '../utils';
 import { saveCurrentUser } from '../modules/auth/authStorage';
@@ -48,10 +48,24 @@ const BlockHeader = styled.div`
   }
 `;
 
+const BlockForm = styled.form`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  > * + * {
+    margin-top: 20px;
+  }
+`;
+
 export default function SettingsPage() {
   const router = useRouter();
 
   const { currentUser, setCurrentUser, clearAuth } = useAuthentication(true);
+
+  const [newEmail, setNewEmail] = useState(currentUser?.email);
+  const [emailChangeError, setEmailChangeError] = useState();
+  const [emailChangeRequested, setEmailChangeRequested] = useState(false);
 
   return (
     <div className="container boxed">
@@ -126,19 +140,16 @@ export default function SettingsPage() {
                     />
                   </FormInput>
 
-                  {/* <FormInput
-                    label="Email address"
-                    error={errors.email as string}
-                  >
+                  <FormInput label="Email address">
                     <Field
-                      type="email"
                       id="email"
+                      name="email"
                       placeholder="bruce@wayne.inc"
                       component={TextInput}
-                      value={values.email}
-                      onChange={handleChange}
+                      value={currentUser.email}
+                      disabled={true}
                     />
-                  </FormInput> */}
+                  </FormInput>
 
                   <FormInput label="Bio" error={errors.bio as string}>
                     <Field
@@ -179,6 +190,61 @@ export default function SettingsPage() {
               )}
             </Formik>
           </SettingsBlock>
+
+          <SettingsBlock>
+            <BlockHeader>
+              <h2>Change email address</h2>
+              <p>
+                {!emailChangeRequested
+                  ? 'We will send a confirmation email to this address.'
+                  : `An email has been sent to the address provided.
+                  Follow the given instructions to confirm the change.`}
+              </p>
+            </BlockHeader>
+            {!emailChangeRequested && (
+              <BlockForm
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  const requestedTimeout = setTimeout(
+                    () => setEmailChangeRequested(true),
+                    500
+                  );
+
+                  try {
+                    await ApiClient.getInstance().requestEmailAddressChange(
+                      newEmail
+                    );
+                  } catch (err) {
+                    clearTimeout(requestedTimeout);
+                    setEmailChangeRequested(false);
+                    setEmailChangeError(err.message);
+                    console.log(err);
+                  }
+                }}
+              >
+                <FormInput label="New email address" error={emailChangeError}>
+                  <TextInput
+                    type="email"
+                    id="email"
+                    placeholder="bruce@wayne.inc"
+                    value={newEmail}
+                    onChange={(e) => {
+                      setNewEmail(e.target.value);
+                      setEmailChangeError(null);
+                    }}
+                  />
+                </FormInput>
+                <Button
+                  type="submit"
+                  size="small"
+                  disabled={emailChangeRequested || !isEmailAddress(newEmail)}
+                >
+                  Change email
+                </Button>
+              </BlockForm>
+            )}
+          </SettingsBlock>
+
           <SettingsBlock>
             <BlockHeader>
               <h2>Change your password</h2>
@@ -197,6 +263,7 @@ export default function SettingsPage() {
               Sign out
             </Button>
           </SettingsBlock>
+
           <SettingsBlock>
             <BlockHeader>
               <h2>Connect to YouTube</h2>
