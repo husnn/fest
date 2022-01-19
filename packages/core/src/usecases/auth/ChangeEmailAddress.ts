@@ -1,7 +1,7 @@
-import { isEmailAddress, isExpired } from '@fanbase/shared';
+import { EthereumService, MailService } from '../../services';
+import { WalletType, isEmailAddress, isExpired } from '@fanbase/shared';
 
 import { EmailAddressChangeError } from './errors';
-import { MailService } from '../../services';
 import Result from '../../Result';
 import UseCase from '../../base/UseCase';
 import { User } from '../../entities';
@@ -9,7 +9,8 @@ import { UserRepository } from '../../repositories';
 
 export type ChangeEmailAddressInput = {
   token: string;
-  password: string;
+  password?: string;
+  signature?: string;
 };
 
 export type ChangeEmailAddressOutput = {
@@ -21,12 +22,18 @@ export class ChangeEmailAddress extends UseCase<
   ChangeEmailAddressOutput
 > {
   private userRepository: UserRepository;
+  private ethereumService: EthereumService;
   private mailService: MailService;
 
-  constructor(userRepository: UserRepository, mailService: MailService) {
+  constructor(
+    userRepository: UserRepository,
+    ethereumService: EthereumService,
+    mailService: MailService
+  ) {
     super();
 
     this.userRepository = userRepository;
+    this.ethereumService = ethereumService;
     this.mailService = mailService;
   }
 
@@ -48,12 +55,24 @@ export class ChangeEmailAddress extends UseCase<
     )
       return Result.fail(EmailAddressChangeError.INVALID_TOKEN);
 
-    const isPasswordCorrect = await User.verifyPassword(
-      data.password,
-      user.password
-    );
-    if (!isPasswordCorrect)
-      return Result.fail(EmailAddressChangeError.INCORRECT_PASSWORD);
+    if (user.wallet.type == WalletType.INTERNAL) {
+      const isPasswordCorrect = await User.verifyPassword(
+        data.password,
+        user.password
+      );
+      if (!isPasswordCorrect)
+        return Result.fail(EmailAddressChangeError.INCORRECT_PASSWORD);
+    } else {
+      const recoveredAddress = this.ethereumService.recoverAddress(
+        data.token,
+        data.signature
+      );
+      if (
+        !recoveredAddress.success ||
+        recoveredAddress.data?.address !== user.wallet.address
+      )
+        return Result.fail(EmailAddressChangeError.INVALID_SIGNATURE);
+    }
 
     const newEmailAddress = recovered.email.trim().toLowerCase();
 

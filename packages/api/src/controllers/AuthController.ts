@@ -106,19 +106,22 @@ class AuthController {
 
     this.changeEmailAddressUseCase = new ChangeEmailAddress(
       userRepository,
+      ethereumService,
       mailService
     );
   }
 
   async changeEmailAddress(req: Request, res: Response, next: NextFunction) {
     try {
-      const { token, password } = req.body;
-      if (!token || !password)
-        throw new ValidationError('Missing token or password.');
+      const { token, password, signature } = req.body;
+      if (!token) throw new ValidationError('Missing token.');
+      if (!password && !signature)
+        throw new ValidationError('Missing password or signature.');
 
       const result = await this.changeEmailAddressUseCase.exec({
         token,
-        password
+        password,
+        signature
       });
       if (!result.success) {
         switch (result.error) {
@@ -126,6 +129,8 @@ class AuthController {
             throw new ValidationError('Invalid or expired token.');
           case EmailAddressChangeError.INCORRECT_PASSWORD:
             throw new ValidationError('Incorrect password.');
+          case EmailAddressChangeError.INVALID_SIGNATURE:
+            throw new ValidationError('Invalid wallet signature.');
           default:
             throw new HttpError('Could not change email address.');
         }

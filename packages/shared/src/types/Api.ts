@@ -443,7 +443,8 @@ export interface ChangeEmailAddressRequest extends Request {
   authentication: 'optional';
   body: {
     token: string;
-    password: string;
+    password?: string;
+    signature?: string;
   };
 }
 

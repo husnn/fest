@@ -56,7 +56,10 @@ export class RequestEmailAddressChange extends UseCase<
     await this.userRepository.update(user);
 
     this.mailService.send(
-      new ChangeEmail(user.email, emailChangeLink(jwt, expiry))
+      new ChangeEmail(
+        user.email,
+        emailChangeLink(jwt, user.wallet.type, expiry)
+      )
     );
 
     return Result.ok();

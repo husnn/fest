@@ -408,7 +408,8 @@ export class ApiClient {
 
   async changeEmailAddress(
     token: string,
-    password: string
+    password?: string,
+    signature?: string
   ): Promise<ChangeEmailAddressResponse> {
     return this.client.request<
       ChangeEmailAddressResponse,
@@ -417,7 +418,7 @@ export class ApiClient {
       method: 'POST',
       endpoint: `/auth/change-email`,
       authentication: 'optional',
-      body: { token, password }
+      body: { token, password, signature }
     });
   }
 
