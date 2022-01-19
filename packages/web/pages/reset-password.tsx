@@ -20,10 +20,6 @@ export const ResetPasswordPage = () => {
 
   const router = useRouter();
 
-  useEffect(() => {
-    if (getCurrentUser()) router.push(getHomeUrl());
-  }, []);
-
   const { token, expiry } = router.query;
 
   const [password, setPassword] = useState('');
