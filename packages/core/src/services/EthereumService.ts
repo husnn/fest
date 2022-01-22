@@ -70,7 +70,7 @@ export interface EthereumService {
   buildCancelTokenListingTx(
     walletAddress: string,
     listingContract: string,
-    tradeId: string
+    listingId: string
   ): Promise<EthereumTx>;
 
   buildListTokenForSaleTx(

@@ -1,5 +1,4 @@
 import Contracts from '@fanbase/eth-contracts';
-
 import Transaction from './Transaction';
 
 export class ListTokenForSale extends Transaction {
@@ -11,6 +10,7 @@ export class ListTokenForSale extends Transaction {
       quantity: number;
       currency: string;
       price: string;
+      maxPurchasable: number;
       expiry: number;
       salt: string;
       signature: string;
@@ -27,6 +27,7 @@ export class ListTokenForSale extends Transaction {
         data.quantity,
         data.currency,
         data.price,
+        data.maxPurchasable,
         data.expiry,
         data.salt,
         data.signature

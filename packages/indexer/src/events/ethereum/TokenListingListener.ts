@@ -1,7 +1,6 @@
-import { Protocol } from '@fanbase/shared';
-
-import { TokenListForSaleJob } from '../../jobs/TokenListForSale';
 import EventListener from './EventListener';
+import { Protocol } from '@fanbase/shared';
+import { TokenListForSaleJob } from '../../jobs/TokenListForSale';
 
 export class TokenListingListener extends EventListener<TokenListForSaleJob> {
   EVENT_NAME = 'ListForSale';
@@ -10,7 +9,7 @@ export class TokenListingListener extends EventListener<TokenListForSaleJob> {
     const { transactionHash, address, returnValues } = event;
 
     const {
-      tradeId,
+      listingId,
       seller,
       tokenContract,
       tokenId,
@@ -23,7 +22,7 @@ export class TokenListingListener extends EventListener<TokenListForSaleJob> {
       protocol: Protocol.ETHEREUM,
       tx: transactionHash,
       contract: address,
-      id: tradeId,
+      id: listingId,
       seller,
       token: tokenContract,
       tokenId,

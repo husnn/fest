@@ -1,7 +1,7 @@
-import contracts from '@fanbase/eth-contracts';
 import { Currency, ProtocolConfig, TokenStandard } from '@fanbase/shared';
 
 import { EthereumService } from '@fanbase/core';
+import contracts from '@fanbase/eth-contracts';
 
 export const getTokenStandard = async (contract): Promise<TokenStandard> => {
   const tests = [
@@ -89,7 +89,7 @@ export const generate = async (
       limits: {
         maxPrice: await marketContract.methods.maxTokenPrice().call(),
         minPrice: await marketContract.methods.minTokenPrice().call(),
-        maxQuantity: await marketContract.methods.maxTradeQuantity().call()
+        maxQuantity: await marketContract.methods.maxListingQuantity().call()
       },
       percentageScale: await marketContract.methods.hundredPct().call()
     },

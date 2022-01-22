@@ -119,7 +119,7 @@ contract('MarketV1', async (accounts) => {
       await WalletContract.grantRole(ADMIN_ROLE, MarketContract.address);
     });
 
-    let tradeId = 0;
+    let listingId = 0;
     let buyer = accounts[2];
 
     it('list token for sale', async () => {
@@ -130,6 +130,7 @@ contract('MarketV1', async (accounts) => {
         quantity,
         currency,
         price,
+        0,
         expiry,
         salt,
         signature,
@@ -140,7 +141,7 @@ contract('MarketV1', async (accounts) => {
 
       expectEvent(receipt, 'ListForSale');
 
-      tradeId = receipt.logs[0].args.tradeId.toString();
+      listingId = receipt.logs[0].args.listingId.toString();
 
       const newTokenQuantityOwned = await TokenContract.balanceOf(
         seller,
@@ -163,7 +164,7 @@ contract('MarketV1', async (accounts) => {
       totalRoyalties += ((price - sellerFee) * fee.pct) / 100000;
     }
 
-    it('execute trade', async () => {
+    it('execute listing', async () => {
       const buyerBalanceInitial = price + 25000;
 
       await FANContract.transfer(buyer, buyerBalanceInitial, {
@@ -174,7 +175,7 @@ contract('MarketV1', async (accounts) => {
         from: buyer
       });
 
-      const receipt = await MarketContract.buy(tradeId, quantity, {
+      const receipt = await MarketContract.buy(listingId, quantity, {
         from: buyer
       });
       expectEvent(receipt, 'Buy');

@@ -1,69 +1,74 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/access/AccessControl.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
-import "@openzeppelin/contracts/security/Pausable.sol";
+import '@openzeppelin/contracts/access/AccessControl.sol';
+import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
+import '@openzeppelin/contracts/utils/cryptography/ECDSA.sol';
 
-import "./MarketWalletV1.sol";
-import "./HasSecondarySaleFees.sol";
+import './MarketWalletV1.sol';
+import './HasSecondarySaleFees.sol';
 
-enum TradeStatus { Active, Sold, Cancelled }
+enum ListingStatus {
+  Active,
+  Sold,
+  Cancelled
+}
 
-struct Trade {
-  uint id;
+struct Listing {
+  uint256 id;
   address seller;
   address token;
-  uint tokenId;
-  uint quantity;
-  uint available;
+  uint256 tokenId;
+  uint256 quantity;
+  uint256 available;
   address currency;
-  uint price;
-  TradeStatus status;
+  uint256 price;
+  uint256 maxPurchasable;
+  ListingStatus status;
 }
 
 struct MarketFees {
-  uint buyer;
-  uint seller;
+  uint256 buyer;
+  uint256 seller;
 }
 
 struct TokenOrder {
   address token;
-  uint id;
-  uint quantity;
+  uint256 id;
+  uint256 quantity;
 }
 
 contract MarketV1 is AccessControl {
   using ECDSA for bytes32;
 
-  bytes internal constant EMPTY = "";
+  bytes internal constant EMPTY = '';
 
   uint256 public buyerFeePct = 5000;
   uint256 public sellerFeePct = 5000;
   uint256 public hundredPct = 10**5;
 
   uint256 public maxTokenPrice = 10**6 * 1 ether;
-  uint256 public maxTradeQuantity = 10**6;
+  uint256 public maxListingQuantity = 10**6;
   uint256 public minTokenPrice = hundredPct;
 
-  // mapping(bytes => uint[]) public tradeHistory;
+  mapping(uint256 => mapping(address => uint256))
+    public _listingPurchasesForBuyer;
 
-  uint private _tradeId = 0;
+  uint256 private _listingId = 0;
 
-  mapping(uint => Trade) private _trades;
+  mapping(uint256 => Listing) private _listings;
 
   // seller => (currency => revenue)
-  mapping(address => mapping(address => uint)) internal _earnings;
+  mapping(address => mapping(address => uint256)) internal _earnings;
 
   // contract address => isAuthorized
   mapping(address => bool) internal _approvedTokens;
-  uint private _approvedTokenCount = 0;
+  uint256 private _approvedTokenCount = 0;
 
   // contract address => isAuthorized
   mapping(address => bool) internal _approvedCurrencies;
-  uint private _approvedCurrenciesCount = 0;
-  
+  uint256 private _approvedCurrenciesCount = 0;
+
   mapping(bytes32 => bool) private _approvalsExhausted;
 
   address internal _feeBeneficiary;
@@ -71,133 +76,127 @@ contract MarketV1 is AccessControl {
   MarketWalletV1 internal _wallet;
 
   event ListForSale(
-    uint tradeId,
+    uint256 listingId,
     address seller,
     address tokenContract,
-    uint tokenId,
-    uint quantity,
+    uint256 tokenId,
+    uint256 quantity,
     address currency,
-    uint price
+    uint256 price,
+    uint256 maxPurchasable
   );
 
-  event Sold(
-    uint tradeId
-  );
+  event Sold(uint256 listingId);
 
-  event Buy(
-    uint tradeId,
-    address buyer,
-    uint quantity
-  );
+  event Buy(uint256 listingId, address buyer, uint256 quantity);
 
   event CancelListing(
     address operator,
-    uint tradeId,
+    uint256 listingId,
     address tokenContract,
-    uint tokenId,
-    uint returned
+    uint256 tokenId,
+    uint256 returned
   );
 
   event RoyaltyPayment(
     address token,
-    uint tokenId,
+    uint256 tokenId,
     address beneficiary,
     address currency,
-    uint amount
+    uint256 amount
   );
-  
-  bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
+
+  bytes32 public constant ADMIN_ROLE = keccak256('ADMIN_ROLE');
 
   bytes4 private constant _INTERFACE_ID_FEES = 0xb7799584;
 
   constructor(MarketWalletV1 wallet) {
     _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
-    
+
     _setupRole(ADMIN_ROLE, msg.sender);
     _setRoleAdmin(ADMIN_ROLE, DEFAULT_ADMIN_ROLE);
 
     _feeBeneficiary = msg.sender;
     _wallet = wallet;
   }
-  
-  function supportsInterface(bytes4 interfaceID) override(AccessControl)
-    public view returns (bool) {
+
+  function supportsInterface(bytes4 interfaceID)
+    public
+    view
+    override(AccessControl)
+    returns (bool)
+  {
     return super.supportsInterface(interfaceID);
   }
 
-  function get(uint tradeId) public view returns (Trade memory) {
-    return _trades[tradeId];
+  function get(uint256 listingId) public view returns (Listing memory) {
+    return _listings[listingId];
   }
 
-  function buy(uint tradeId, uint quantity) public {
-    Trade memory trade = _trades[tradeId];
+  function buy(uint256 listingId, uint256 quantity) public {
+    Listing memory listing = _listings[listingId];
 
-    // Require trade is still open
-    require(trade.status == TradeStatus.Active, "Trade is not open.");
-
-    // Check quantity
-    require(quantity <= trade.available, "Not enough tokens for sale.");
-
-    // Require buyer to be different from seller
-    require(msg.sender != trade.seller, "Seller cannot be buyer.");
-
-    // Calculate prices
-    uint subtotal = trade.price * quantity;
-
-    IERC20 currency = IERC20(trade.currency);
-
-    (uint sellerFee, uint buyerFee) = calculateMarketFees(subtotal);
-
-    uint allowance = currency.allowance(msg.sender, address(this));
-    require(allowance >= subtotal + buyerFee, "Allowance is too low.");
-
-    // Deposit currency for escrow
-    currency.transferFrom(
-      msg.sender,
-      address(this),
-      subtotal + buyerFee
-    );
-
-    exchange(
-      trade.seller,
-      msg.sender,
-      trade.currency,
-      subtotal,
-      MarketFees(
-        buyerFee,
-        sellerFee
-      ),
-      TokenOrder(
-        trade.token,
-        trade.tokenId,
-        quantity
-      )
-    );
-
-    uint available = trade.available - quantity;
-    _trades[tradeId].available = available;
-
-    if (available == 0) {
-      _trades[tradeId].status = TradeStatus.Sold;
-      emit Sold(tradeId);
+    if (listing.maxPurchasable > 0) {
+      require(
+        _listingPurchasesForBuyer[listingId][msg.sender] + quantity <=
+          listing.maxPurchasable,
+        'Quantity exceeds maximum allowed per buyer.'
+      );
     }
 
-    emit Buy(
-      tradeId,
+    // Require listing is still open
+    require(listing.status == ListingStatus.Active, 'Listing is not open.');
+
+    // Check quantity
+    require(quantity <= listing.available, 'Not enough tokens for sale.');
+
+    // Require buyer to be different from seller
+    require(msg.sender != listing.seller, 'Seller cannot be buyer.');
+
+    // Calculate prices
+    uint256 subtotal = listing.price * quantity;
+
+    IERC20 currency = IERC20(listing.currency);
+
+    (uint256 sellerFee, uint256 buyerFee) = calculateMarketFees(subtotal);
+
+    uint256 allowance = currency.allowance(msg.sender, address(this));
+    require(allowance >= subtotal + buyerFee, 'Allowance is too low.');
+
+    // Deposit currency for escrow
+    currency.transferFrom(msg.sender, address(this), subtotal + buyerFee);
+
+    exchange(
+      listing.seller,
       msg.sender,
-      quantity
+      listing.currency,
+      subtotal,
+      MarketFees(buyerFee, sellerFee),
+      TokenOrder(listing.token, listing.tokenId, quantity)
     );
+
+    _listingPurchasesForBuyer[listingId][msg.sender]++;
+
+    uint256 available = listing.available - quantity;
+    _listings[listingId].available = available;
+
+    if (available == 0) {
+      _listings[listingId].status = ListingStatus.Sold;
+      emit Sold(listingId);
+    }
+
+    emit Buy(listingId, msg.sender, quantity);
   }
 
   function exchange(
     address seller,
     address buyer,
     address currency,
-    uint subtotal,
+    uint256 subtotal,
     MarketFees memory fees,
     TokenOrder memory order
   ) internal {
-    uint sellerNet = payAfterFees(
+    uint256 sellerNet = payAfterFees(
       seller,
       currency,
       subtotal,
@@ -209,20 +208,22 @@ contract MarketV1 is AccessControl {
 
     pay(seller, currency, sellerNet);
 
-    _wallet.give(
-      order.token,
-      buyer,
-      order.id,
-      order.quantity
-    );
+    _wallet.give(order.token, buyer, order.id, order.quantity);
   }
 
-  function pay(address account, address currency, uint amount) internal {
+  function pay(
+    address account,
+    address currency,
+    uint256 amount
+  ) internal {
     _earnings[account][currency] += amount;
   }
 
-  function calculateMarketFees(uint subtotal)
-    internal view returns (uint sellerFee, uint buyerFee) {
+  function calculateMarketFees(uint256 subtotal)
+    internal
+    view
+    returns (uint256 sellerFee, uint256 buyerFee)
+  {
     buyerFee = (subtotal * buyerFeePct) / hundredPct;
     sellerFee = (subtotal * sellerFeePct) / hundredPct;
   }
@@ -230,34 +231,33 @@ contract MarketV1 is AccessControl {
   function payAfterFees(
     address seller,
     address currency,
-    uint subtotal,
-    uint sellerFee,
-    uint buyerFee,
+    uint256 subtotal,
+    uint256 sellerFee,
+    uint256 buyerFee,
     address token,
-    uint tokenId
-  ) internal returns (uint sellerPay) {
-    if (subtotal > sellerFee)
-      subtotal = subtotal - sellerFee;
-      sellerPay = subtotal;
-    
+    uint256 tokenId
+  ) internal returns (uint256 sellerPay) {
+    if (subtotal > sellerFee) subtotal = subtotal - sellerFee;
+    sellerPay = subtotal;
+
     // Pay market fees
     pay(_feeBeneficiary, currency, sellerFee + buyerFee);
 
-    if (!IERC165(token).supportsInterface(_INTERFACE_ID_FEES))
-      return sellerPay;
+    if (!IERC165(token).supportsInterface(_INTERFACE_ID_FEES)) return sellerPay;
 
     HasSecondarySaleFees tokenWithFees = HasSecondarySaleFees(token);
 
-    address payable[] memory recipients =
-      tokenWithFees.getFeeRecipients(tokenId);
+    address payable[] memory recipients = tokenWithFees.getFeeRecipients(
+      tokenId
+    );
 
-    uint[] memory feeBps = tokenWithFees.getFeeBps(tokenId);
+    uint256[] memory feeBps = tokenWithFees.getFeeBps(tokenId);
 
-    for (uint i = 0; i < feeBps.length; i++) {
+    for (uint256 i = 0; i < feeBps.length; i++) {
       if (recipients[i] == seller) continue;
       if (sellerPay == 0) break;
 
-      uint fee = (subtotal * feeBps[i]) / hundredPct;
+      uint256 fee = (subtotal * feeBps[i]) / hundredPct;
 
       if (fee > sellerPay) {
         fee = sellerPay;
@@ -275,46 +275,50 @@ contract MarketV1 is AccessControl {
   function getSaleAuthorizationHash(
     address seller,
     address token,
-    uint tokenId,
-    uint quantity,
+    uint256 tokenId,
+    uint256 quantity,
     address currency,
-    uint price,
-    uint expiry,
-    uint salt
+    uint256 price,
+    uint256 expiry,
+    uint256 salt
   ) public view returns (bytes32) {
-    return keccak256(abi.encodePacked(
-      address(this),
-      seller,
-      token,
-      tokenId,
-      quantity,
-      currency,
-      price,
-      expiry,
-      salt
-    ));
+    return
+      keccak256(
+        abi.encodePacked(
+          address(this),
+          seller,
+          token,
+          tokenId,
+          quantity,
+          currency,
+          price,
+          expiry,
+          salt
+        )
+      );
   }
 
   function listForSale(
     address seller,
     address token,
-    uint tokenId,
-    uint quantity,
+    uint256 tokenId,
+    uint256 quantity,
     address currency,
-    uint price,
-    uint expiry,
-    uint salt,
+    uint256 price,
+    uint256 maxPurchasable,
+    uint256 expiry,
+    uint256 salt,
     bytes calldata signature
   ) public {
-    require(price >= minTokenPrice, "Price is too low.");
-    require(price <= maxTokenPrice, "Price is too high.");
-    require(quantity <= maxTradeQuantity, "Quantity exceeds maximum.");
+    require(price >= minTokenPrice, 'Price is too low.');
+    require(price <= maxTokenPrice, 'Price is too high.');
+    require(quantity <= maxListingQuantity, 'Quantity exceeds maximum.');
 
-    require(_approvedTokens[token], "Token contract is not allowed.");
-    require(_approvedCurrencies[currency], "Currency is not allowed.");
+    require(_approvedTokens[token], 'Token contract is not allowed.');
+    require(_approvedCurrencies[currency], 'Currency is not allowed.');
 
     if (!hasRole(ADMIN_ROLE, msg.sender)) {
-      require(expiry > block.timestamp, "Approval expired.");
+      require(expiry > block.timestamp, 'Approval expired.');
 
       bytes32 saleHash = getSaleAuthorizationHash(
         seller,
@@ -327,16 +331,15 @@ contract MarketV1 is AccessControl {
         salt
       );
 
-      require(!_approvalsExhausted[saleHash], "Approval exhausted.");
-      
-      address recoveredAddress = saleHash
-        .toEthSignedMessageHash()
-        .recover(signature);
-      
+      require(!_approvalsExhausted[saleHash], 'Approval exhausted.');
+
+      address recoveredAddress = saleHash.toEthSignedMessageHash().recover(
+        signature
+      );
+
       require(
-        recoveredAddress != address(0)
-          && hasRole(ADMIN_ROLE, recoveredAddress),
-        "Invalid signature."
+        recoveredAddress != address(0) && hasRole(ADMIN_ROLE, recoveredAddress),
+        'Invalid signature.'
       );
 
       _approvalsExhausted[saleHash] = true;
@@ -345,18 +348,13 @@ contract MarketV1 is AccessControl {
     if (!IERC165(token).supportsInterface(type(IERC1155).interfaceId))
       quantity = 1;
 
-    _wallet.take(
-      token,
-      seller,
-      tokenId,
-      quantity
-    );
+    _wallet.take(token, seller, tokenId, quantity);
 
-    // Create trade
-    _tradeId++;
+    // Create listing
+    _listingId++;
 
-    Trade memory trade = Trade(
-      _tradeId,
+    Listing memory listing = Listing(
+      _listingId,
       seller,
       token,
       tokenId,
@@ -364,74 +362,81 @@ contract MarketV1 is AccessControl {
       quantity,
       currency,
       price,
-      TradeStatus.Active
+      maxPurchasable,
+      ListingStatus.Active
     );
 
-    _trades[_tradeId] = trade;
-
-    // tradeHistory[
-    //   abi.encodePacked(
-    //     token,
-    //     tokenId
-    //   )
-    // ].push(_tradeId);
+    _listings[_listingId] = listing;
 
     emit ListForSale(
-      _tradeId,
+      _listingId,
       seller,
       token,
       tokenId,
       quantity,
       currency,
-      price
+      price,
+      maxPurchasable
     );
   }
 
-  function cancel(uint256 tradeId) public {
-    Trade memory trade = _trades[tradeId];
-    
+  function cancel(uint256 listingId) public {
+    Listing memory listing = _listings[listingId];
+
     require(
-      trade.status == TradeStatus.Active,
-      "Only open trades can be closed."
+      listing.status == ListingStatus.Active,
+      'Only open listings can be closed.'
     );
 
     require(
-      msg.sender == trade.seller || hasRole(ADMIN_ROLE, msg.sender),
-      "Only seller or admin can close the trade."
+      msg.sender == listing.seller || hasRole(ADMIN_ROLE, msg.sender),
+      'Only seller or admin can close the listing.'
     );
-    
-    // Mark trade as cancelled
-    _trades[tradeId].status = TradeStatus.Cancelled;
+
+    // Mark listing as cancelled
+    _listings[listingId].status = ListingStatus.Cancelled;
 
     _wallet.give(
-      trade.token,
-      trade.seller,
-      trade.tokenId,
-      trade.available
+      listing.token,
+      listing.seller,
+      listing.tokenId,
+      listing.available
     );
 
     emit CancelListing(
       msg.sender,
-      tradeId,
-      trade.token,
-      trade.tokenId,
-      trade.available
+      listingId,
+      listing.token,
+      listing.tokenId,
+      listing.available
     );
   }
 
-  function getBalance(address currency, address account) public view returns (uint) {
+  function getBalance(address currency, address account)
+    public
+    view
+    returns (uint256)
+  {
     return _earnings[account][currency];
   }
 
-  function withdraw(address currency, uint amount) public {
+  function withdraw(address currency, uint256 amount) public {
     require(
       _earnings[msg.sender][currency] >= amount,
-      "Insufficient balance to withdraw."
+      'Insufficient balance to withdraw.'
     );
 
     _earnings[msg.sender][currency] -= amount;
 
     IERC20(currency).transfer(msg.sender, amount);
+  }
+
+  function listingPurchasesForBuyer(uint256 listingId, address buyer)
+    public
+    view
+    returns (uint256)
+  {
+    return _listingPurchasesForBuyer[listingId][buyer];
   }
 
   function isTokenApproved(address token) public view returns (bool) {
@@ -442,41 +447,50 @@ contract MarketV1 is AccessControl {
     return _approvedCurrencies[currency];
   }
 
-  function setTokensApproval(address[] calldata tokens, bool isApproved) public onlyRole(ADMIN_ROLE) {
-    for (uint i = 0; i < tokens.length; i++) {
+  function setTokensApproval(address[] calldata tokens, bool isApproved)
+    public
+    onlyRole(ADMIN_ROLE)
+  {
+    for (uint256 i = 0; i < tokens.length; i++) {
       _approvedTokens[tokens[i]] = isApproved;
     }
   }
 
-  function setCurrenciesApproval(address[] calldata currencies, bool isApproved) public onlyRole(ADMIN_ROLE) {
-    for (uint i = 0; i < currencies.length; i++) {
+  function setCurrenciesApproval(address[] calldata currencies, bool isApproved)
+    public
+    onlyRole(ADMIN_ROLE)
+  {
+    for (uint256 i = 0; i < currencies.length; i++) {
       _approvedCurrencies[currencies[i]] = isApproved;
     }
   }
-  
+
   function setMaxTokenPriceEther(uint256 price) public onlyRole(ADMIN_ROLE) {
     maxTokenPrice = price * 1 ether;
   }
-  
+
   function setMaxTokenPriceWei(uint256 price) public onlyRole(ADMIN_ROLE) {
     maxTokenPrice = price;
   }
-  
-  function setMaxTradeQuantity(uint256 quantity) public onlyRole(ADMIN_ROLE) {
-    maxTradeQuantity = quantity;
+
+  function setMaxListingQuantity(uint256 quantity) public onlyRole(ADMIN_ROLE) {
+    maxListingQuantity = quantity;
   }
 
   function setBuyerFeePct(uint256 pct) public onlyRole(ADMIN_ROLE) {
-    require(pct <= hundredPct, "Fee cannot be higher than hundred percent.");
+    require(pct <= hundredPct, 'Fee cannot be higher than hundred percent.');
     buyerFeePct = pct;
   }
-  
+
   function setSellerFeePct(uint256 pct) public onlyRole(ADMIN_ROLE) {
-    require(pct <= hundredPct, "Fee cannot be higher than hundred percent.");
+    require(pct <= hundredPct, 'Fee cannot be higher than hundred percent.');
     sellerFeePct = pct;
   }
 
-  function setFeeBeneficiary(address beneficiary) public onlyRole(DEFAULT_ADMIN_ROLE) {
+  function setFeeBeneficiary(address beneficiary)
+    public
+    onlyRole(DEFAULT_ADMIN_ROLE)
+  {
     _feeBeneficiary = beneficiary;
   }
 }

@@ -16,7 +16,7 @@ export type TokenBuyJob = {
   protocol: Protocol;
   tx: string;
   contract: string;
-  id: string;
+  listingId: string;
   buyer: string;
   quantity: number;
 };
@@ -37,7 +37,7 @@ export default class TokenBuy extends Job<TokenBuyJob> {
         this.props.protocol,
         {
           contract: this.props.contract,
-          id: this.props.id
+          id: this.props.listingId
         }
       );
 

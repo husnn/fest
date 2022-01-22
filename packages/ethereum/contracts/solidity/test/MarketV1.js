@@ -104,6 +104,7 @@ contract('MarketV1', async (accounts) => {
         quantity,
         currency,
         price,
+        0,
         expiry,
         salt,
         signature,
@@ -130,23 +131,18 @@ contract('MarketV1', async (accounts) => {
       await MarketContract.setCurrenciesApproval([FAN.address], true);
     });
 
-    // Migration already assigns admin role.
-    // it('prevent calling wallet contract without admin role', async () => {
-    //   await expectRevert(list(), "AccessControl");
-    // });
-
     it('grant admin role to market for wallet', async () => {
       await WalletContract.grantRole(ADMIN_ROLE, MarketContract.address);
     });
 
-    let tradeId = 0;
+    let listingId = 0;
     let buyer = accounts[1];
 
     it('list token for sale', async () => {
       const receipt = await list();
       expectEvent(receipt, 'ListForSale');
 
-      tradeId = receipt.logs[0].args.tradeId.toString();
+      listingId = receipt.logs[0].args.listingId.toString();
 
       const newTokenQuantityOwned = await TokenContract.balanceOf(
         seller,
@@ -162,14 +158,14 @@ contract('MarketV1', async (accounts) => {
 
     it('prevent buying excessive amount', async () => {
       await expectRevert(
-        MarketContract.buy(tradeId, quantity + 1),
+        MarketContract.buy(listingId, quantity + 1),
         'Not enough tokens for sale.'
       );
     });
 
     it('prevent buying if currency balance too low', async () => {
       await expectRevert(
-        MarketContract.buy(tradeId, quantity),
+        MarketContract.buy(listingId, quantity),
         'Allowance is too low.'
       );
     });
@@ -188,7 +184,7 @@ contract('MarketV1', async (accounts) => {
         from: buyer
       });
 
-      const receipt = await MarketContract.buy(tradeId, quantity, {
+      const receipt = await MarketContract.buy(listingId, quantity, {
         from: buyer
       });
       expectEvent(receipt, 'Buy');
@@ -200,10 +196,10 @@ contract('MarketV1', async (accounts) => {
       assert.equal(sellerBalance, price - sellerFee);
     });
 
-    it('prevent buying closed trade', async () => {
+    it('prevent buying closed listing', async () => {
       await expectRevert(
-        MarketContract.buy(tradeId, quantity),
-        'Trade is not open.'
+        MarketContract.buy(listingId, quantity),
+        'Listing is not open.'
       );
     });
 
@@ -234,7 +230,7 @@ contract('MarketV1', async (accounts) => {
 
     const quantityForSale = 5;
 
-    describe('Cancel trade', async () => {
+    describe('Cancel listing', async () => {
       salt = 54564;
       expiry = Math.floor(Date.now() / 1000) + 30;
 
@@ -263,6 +259,7 @@ contract('MarketV1', async (accounts) => {
           quantityForSale,
           currency,
           price,
+          0,
           expiry,
           salt,
           signature,
@@ -273,7 +270,7 @@ contract('MarketV1', async (accounts) => {
 
         expectEvent(receipt, 'ListForSale');
 
-        tradeId = receipt.logs[0].args.tradeId.toString();
+        listingId = receipt.logs[0].args.listingId.toString();
 
         const newTokenQuantityOwned = await TokenContract.balanceOf(
           seller,
@@ -287,15 +284,15 @@ contract('MarketV1', async (accounts) => {
         );
       });
 
-      it('prevent non-seller, non-admin from cancelling trade', async () => {
+      it('prevent non-seller, non-admin from cancelling listing', async () => {
         await expectRevert(
-          MarketContract.cancel(tradeId, { from: accounts[5] }),
-          'Only seller or admin can close the trade.'
+          MarketContract.cancel(listingId, { from: accounts[5] }),
+          'Only seller or admin can close the listing.'
         );
       });
 
-      it('cancel trade and return tokens', async () => {
-        const receipt = await MarketContract.cancel(tradeId, { from: seller });
+      it('cancel listing and return tokens', async () => {
+        const receipt = await MarketContract.cancel(listingId, { from: seller });
         expectEvent(receipt, 'CancelListing');
 
         const tokensOwned = await TokenContract.balanceOf(seller, tokenId);

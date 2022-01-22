@@ -1,12 +1,12 @@
-import { TokenListingRepository } from '@fanbase/core';
 import { Protocol, TokenListingStatus } from '@fanbase/shared';
 
 import Job from './Job';
+import { TokenListingRepository } from '@fanbase/core';
 
 export type TokenCancelListingJob = {
   protocol: Protocol;
   contract: string;
-  tradeId: string;
+  listingId: string;
   canceller: string;
 };
 
@@ -19,7 +19,7 @@ export default class TokenCancelListing extends Job<TokenCancelListingJob> {
     try {
       const listing = await listingRepository.findByChainData(
         this.props.protocol,
-        { contract: this.props.contract, id: this.props.tradeId }
+        { contract: this.props.contract, id: this.props.listingId }
       );
 
       if (!listing) return;

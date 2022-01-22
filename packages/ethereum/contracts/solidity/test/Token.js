@@ -17,6 +17,8 @@ contract('Token', async (accounts) => {
 
   before(async () => {
     TokenContract = await Token.deployed();
+
+    console.log(accounts[0]);
   });
 
   describe('Supported interfaces', async () => {

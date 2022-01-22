@@ -279,7 +279,7 @@ export class EthereumService implements IEthereumService {
   async buildCancelTokenListingTx(
     walletAddress: string,
     listingContract: string,
-    tradeId: string
+    listingId: string
   ): Promise<EthereumTx> {
     const nonce = await this.web3.eth.getTransactionCount(
       walletAddress,
@@ -289,7 +289,7 @@ export class EthereumService implements IEthereumService {
     const networkId = await this.web3.eth.net.getId();
     const chainId = await this.web3.eth.getChainId();
 
-    const txData = { tradeId };
+    const txData = { listingId };
 
     return new CancelTokenListing(txData, listingContract).build(
       walletAddress,
@@ -328,6 +328,7 @@ export class EthereumService implements IEthereumService {
       quantity,
       currency: price.currency,
       price: price.amount,
+      maxPurchasable: 0,
       expiry,
       salt,
       signature

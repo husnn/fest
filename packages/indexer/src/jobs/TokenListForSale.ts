@@ -1,5 +1,9 @@
 import {
-    EthereumService, TokenListing, TokenListingRepository, TokenRepository, WalletRepository
+  EthereumService,
+  TokenListing,
+  TokenListingRepository,
+  TokenRepository,
+  WalletRepository
 } from '@fanbase/core';
 import { Protocol, TokenListingStatus } from '@fanbase/shared';
 
@@ -26,7 +30,7 @@ export default class TokenListForSale extends Job<TokenListForSaleJob> {
   async execute(
     tokenRepository: TokenRepository,
     walletRepository: WalletRepository,
-    tokenTradeRepository: TokenListingRepository,
+    listingRepository: TokenListingRepository,
     ethereumService: EthereumService
   ): Promise<void> {
     try {
@@ -61,7 +65,7 @@ export default class TokenListForSale extends Job<TokenListForSaleJob> {
         status: TokenListingStatus.Active
       });
 
-      await tokenTradeRepository.create(trade);
+      await listingRepository.create(trade);
     } catch (err) {
       console.log(err);
     }
