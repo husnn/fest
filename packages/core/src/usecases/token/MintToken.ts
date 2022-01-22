@@ -1,15 +1,15 @@
 import {
+  Protocol,
+  WalletType,
   decryptText,
   encryptText,
-  Protocol,
-  randomNumericString,
-  WalletType
+  randomNumericString
 } from '@fanbase/shared';
-
-import UseCase from '../../base/UseCase';
 import { TokenRepository, WalletRepository } from '../../repositories';
-import { Result } from '../../Result';
+
 import { EthereumService } from '../../services';
+import { Result } from '../../Result';
+import UseCase from '../../base/UseCase';
 
 export interface MintTokenInput {
   protocol: Protocol;
@@ -47,8 +47,6 @@ export class MintToken extends UseCase<MintTokenInput, MintTokenOutput> {
       }
     );
 
-    if (wallet.type != WalletType.INTERNAL) return Result.fail();
-
     const token = await this.tokenRepository.get(data.token);
 
     if (!token) return Result.fail();
@@ -67,7 +65,7 @@ export class MintToken extends UseCase<MintTokenInput, MintTokenOutput> {
 
     const { signature } = result.data;
 
-    const tx = await this.ethereumService.buildMintTokenTx(
+    const tx = await this.ethereumService.buildMintTokenProxyTx(
       wallet.address,
       token.supply,
       token.metadataUri,
@@ -80,7 +78,7 @@ export class MintToken extends UseCase<MintTokenInput, MintTokenOutput> {
 
     const txResult = await this.ethereumService.signAndSendTx(
       tx,
-      decryptText(wallet.privateKey)
+      process.env.ETH_WALLET_PK
     );
 
     return txResult.success

@@ -1,7 +1,7 @@
-import { Wallet } from '@fanbase/core';
 import { EthereumTx, Price, TokenFee } from '@fanbase/shared';
 
 import { Result } from '../Result';
+import { Wallet } from '@fanbase/core';
 
 export type ERC20Info = {
   name: string;
@@ -109,6 +109,17 @@ export interface EthereumService {
     expiry: number,
     salt: string
   ): Promise<Result<{ signature: string }>>;
+
+  buildMintTokenProxyTx(
+    creator: string,
+    supply: number,
+    uri: string,
+    fees: TokenFee[],
+    data: string,
+    expiry: number,
+    salt: string,
+    signature: string
+  ): Promise<EthereumTx>;
 
   buildMintTokenTx(
     walletAddress: string,

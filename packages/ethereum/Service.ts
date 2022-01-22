@@ -448,6 +448,44 @@ export class EthereumService implements IEthereumService {
     );
   }
 
+  async buildMintTokenProxyTx(
+    creator: string,
+    supply: number,
+    uri: string,
+    fees: TokenFee[],
+    data: string,
+    expiry: number,
+    salt: string,
+    signature: string
+  ): Promise<EthereumTx> {
+    const nonce = await this.web3.eth.getTransactionCount(
+      process.env.ETH_WALLET_ADDRESS,
+      'pending'
+    );
+
+    const txData = {
+      creator,
+      supply,
+      uri,
+      fees,
+      data,
+      expiry,
+      salt,
+      signature
+    };
+
+    const networkId = await this.web3.eth.net.getId();
+    const chainId = await this.web3.eth.getChainId();
+
+    return new MintToken(txData).build(
+      process.env.ETH_WALLET_ADDRESS,
+      networkId,
+      chainId,
+      nonce,
+      365000
+    );
+  }
+
   async signMint(
     creatorAddress: string,
     supply: number,

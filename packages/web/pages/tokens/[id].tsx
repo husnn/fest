@@ -204,32 +204,10 @@ export default function TokenPage() {
       setExecuting(true);
 
       try {
-        let hash;
-
-        if (currentUser.wallet.type == WalletType.INTERNAL) {
-          hash = await ApiClient.instance?.mintToken(
-            token.id,
-            Protocol.ETHEREUM
-          );
-        } else {
-          const approval = await ApiClient.instance.approveMint(
-            token.id,
-            Protocol.ETHEREUM
-          );
-
-          const tx = await web3.ethereum.buildMintTokenTx(
-            currentUser.wallet.address,
-            token.supply,
-            token.metadataUri,
-            token.fees,
-            approval.data,
-            approval.expiry,
-            approval.salt,
-            approval.signature
-          );
-
-          hash = await web3.ethereum.sendTx(tx);
-        }
+        const hash = await ApiClient.instance?.mintToken(
+          token.id,
+          Protocol.ETHEREUM
+        );
 
         setExecuted(true);
 
