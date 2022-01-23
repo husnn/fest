@@ -187,7 +187,7 @@ contract('MarketV1', async (accounts) => {
       const receipt = await MarketContract.buy(listingId, quantity, {
         from: buyer
       });
-      expectEvent(receipt, 'Buy');
+      expectEvent(receipt, 'Trade');
 
       const buyerBalance = await FANContract.balanceOf(buyer);
       assert.equal(buyerBalance, buyerBalanceInitial - price - buyerFee);

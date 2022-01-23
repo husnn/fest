@@ -47,33 +47,29 @@ contract MarketV1 is AccessControl {
   uint256 public sellerFeePct = 5000;
   uint256 public hundredPct = 10**5;
 
-  uint256 public maxTokenPrice = 10**6 * 1 ether;
   uint256 public maxListingQuantity = 10**6;
   uint256 public minTokenPrice = hundredPct;
+  uint256 public maxTokenPrice = 10**6 * 1 ether;
+
+  MarketWalletV1 internal _wallet;
+  address internal _feeBeneficiary;
+
+  uint256 private _listingId = 0;
+  mapping(uint256 => Listing) private _listings;
 
   mapping(uint256 => mapping(address => uint256))
     public _listingPurchasesForBuyer;
 
-  uint256 private _listingId = 0;
-
-  mapping(uint256 => Listing) private _listings;
-
-  // seller => (currency => revenue)
-  mapping(address => mapping(address => uint256)) internal _earnings;
-
   // contract address => isAuthorized
   mapping(address => bool) internal _approvedTokens;
-  uint256 private _approvedTokenCount = 0;
 
   // contract address => isAuthorized
   mapping(address => bool) internal _approvedCurrencies;
-  uint256 private _approvedCurrenciesCount = 0;
 
   mapping(bytes32 => bool) private _approvalsExhausted;
 
-  address internal _feeBeneficiary;
-
-  MarketWalletV1 internal _wallet;
+  // seller => (currency => revenue)
+  mapping(address => mapping(address => uint256)) internal _earnings;
 
   event ListForSale(
     uint256 listingId,
@@ -86,13 +82,18 @@ contract MarketV1 is AccessControl {
     uint256 maxPurchasable
   );
 
-  event Sold(uint256 listingId);
-
-  event Buy(uint256 listingId, address buyer, uint256 quantity);
+  event Trade(
+    uint256 listingId,
+    address buyer,
+    address seller,
+    uint256 quantity,
+    address currency,
+    uint256 price
+  );
 
   event CancelListing(
-    address operator,
     uint256 listingId,
+    address operator,
     address tokenContract,
     uint256 tokenId,
     uint256 returned
@@ -182,10 +183,16 @@ contract MarketV1 is AccessControl {
 
     if (available == 0) {
       _listings[listingId].status = ListingStatus.Sold;
-      emit Sold(listingId);
     }
 
-    emit Buy(listingId, msg.sender, quantity);
+    emit Trade(
+      listingId,
+      msg.sender,
+      listing.seller,
+      quantity,
+      listing.currency,
+      listing.price
+    );
   }
 
   function exchange(
@@ -404,8 +411,8 @@ contract MarketV1 is AccessControl {
     );
 
     emit CancelListing(
-      msg.sender,
       listingId,
+      msg.sender,
       listing.token,
       listing.tokenId,
       listing.available

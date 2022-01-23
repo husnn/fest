@@ -3,7 +3,7 @@ import { Protocol } from '@fanbase/shared';
 import { TokenBuyJob } from '../../jobs/TokenBuy';
 
 export class TokenBuyListener extends EventListener<TokenBuyJob> {
-  EVENT_NAME = 'Buy';
+  EVENT_NAME = 'Trade';
 
   prepareJob(event: any): TokenBuyJob {
     const { transactionHash, address, returnValues } = event;

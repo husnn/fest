@@ -61,7 +61,7 @@ ethereumListener.on('market-list', (event: TokenListForSaleJob) => {
   tokenTradeQueue.createJob(event).save();
 });
 
-ethereumListener.on('market-buy', (event: TokenBuyJob) => {
+ethereumListener.on('market-trade', (event: TokenBuyJob) => {
   tokenTradeQueue.createJob(event).save();
 });
 

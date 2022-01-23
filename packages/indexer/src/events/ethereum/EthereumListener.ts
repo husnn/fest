@@ -1,15 +1,13 @@
-import { RedisClient } from 'redis';
-import { EventEmitter } from 'stream';
-import Web3 from 'web3';
-
 import Contracts from '@fanbase/eth-contracts';
-
+import { EventEmitter } from 'stream';
+import { RedisClient } from 'redis';
 import TokenBuyListener from './TokenBuyListener';
 import TokenCancelListingListener from './TokenCancelListingListener';
 import TokenListingListener from './TokenListingListener';
 import TokenMintListener from './TokenMintListener';
-import TokenTransferListener from './TokenTransferListener';
 import TokenRoyaltyPaymentListener from './TokenRoyaltyPaymentListener';
+import TokenTransferListener from './TokenTransferListener';
+import Web3 from 'web3';
 
 export default class EthereumListener extends EventEmitter {
   constructor(web3: Web3, redis: RedisClient) {
@@ -40,7 +38,7 @@ export default class EthereumListener extends EventEmitter {
       );
 
       new TokenBuyListener(web3, redis, marketContract).listen((job) => {
-        this.emit('market-buy', job);
+        this.emit('market-trade', job);
       });
 
       new TokenRoyaltyPaymentListener(web3, redis, marketContract).listen(
