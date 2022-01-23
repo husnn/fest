@@ -1,4 +1,5 @@
 const Web3 = require('web3');
+const fs = require('fs');
 
 const Token = artifacts.require('TokenV1');
 const Fest = artifacts.require('Fest');
@@ -21,7 +22,6 @@ module.exports = async function (deployer) {
   await walletInstance.grantRole(ADMIN_ROLE, OfferMarket.address);
 
   const marketInstance = await OfferMarket.deployed();
-
   await marketInstance.setTokensApproval([Token.address], true);
 
   const chainId = await web3.eth.getChainId();
@@ -31,4 +31,23 @@ module.exports = async function (deployer) {
     [Fest.address, ...currenciesToApprove],
     true
   );
+  
+  let deployed = {};
+
+  const outFile = 'deployed.json';
+  const netId = await web3.eth.net.getId();
+
+  fs.readFile(outFile, (err, data) => {
+    if (!err) deployed = JSON.parse(data);
+
+    deployed[netId] = {
+      ...deployed[netId],
+      Fest: Fest.address,
+      Token: Token.address,
+      OfferMarket: OfferMarket.address,
+      MarketWallet: MarketWallet.address
+    };
+  
+    fs.writeFileSync(outFile, JSON.stringify(deployed, null, 2), 'utf-8');
+  });
 };

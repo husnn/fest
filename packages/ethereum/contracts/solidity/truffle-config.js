@@ -13,7 +13,7 @@ module.exports = {
     ropsten: {
       provider: function () {
         return new HDWalletProvider(
-          process.env.MNEMONIC_TEST,
+          process.env.PRIVATE_KEY_ROPSTEN,
           process.env.PROVIDER_ROPSTEN
         );
       },
@@ -24,8 +24,20 @@ module.exports = {
     mumbai: {
       provider: () =>
         new HDWalletProvider(
-          process.env.PRIVATE_KEY_STAGING,
+          process.env.PRIVATE_KEY_TESTNET,
           process.env.PROVIDER_POLYGON_MUMBAI
+        ),
+      network_id: 80001,
+      gasPrice: 2000000000,
+      confirmations: 2,
+      timeoutBlocks: 200,
+      skipDryRun: true
+    },
+    polygon: {
+      provider: () =>
+        new HDWalletProvider(
+          process.env.PRIVATE_KEY_MAINNET,
+          process.env.PROVIDER_POLYGON_MAINNET
         ),
       network_id: 80001,
       gasPrice: 2000000000,
