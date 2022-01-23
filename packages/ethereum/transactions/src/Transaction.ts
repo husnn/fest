@@ -1,8 +1,7 @@
-import { Transaction as EthereumTx } from 'ethereumjs-tx';
-import Web3 from 'web3';
-
 import Common from '@ethereumjs/common';
+import { Transaction as EthereumTx } from 'ethereumjs-tx';
 import { EthereumTx as IEthereumTx } from '@fanbase/shared';
+import Web3 from 'web3';
 
 export class Transaction implements IEthereumTx {
   address: string;
@@ -36,7 +35,7 @@ export class Transaction implements IEthereumTx {
     const common = Common.forCustomChain(
       'mainnet',
       {
-        name: 'fannet',
+        name: 'fest',
         networkId,
         chainId
       },

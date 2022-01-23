@@ -1,7 +1,7 @@
 const Web3 = require('web3');
 
 const Token = artifacts.require('TokenV1');
-const FAN = artifacts.require('FAN');
+const Fest = artifacts.require('Fest');
 
 const MarketWallet = artifacts.require('MarketWalletV1');
 const OfferMarket = artifacts.require('OfferMarketV1');
@@ -11,7 +11,7 @@ const currencies = require('../../currencies');
 const ADMIN_ROLE = Web3.utils.keccak256('ADMIN_ROLE');
 
 module.exports = async function (deployer) {
-  await deployer.deploy(FAN);
+  await deployer.deploy(Fest);
   await deployer.deploy(Token, 'ipfs://');
 
   await deployer.deploy(MarketWallet);
@@ -28,7 +28,7 @@ module.exports = async function (deployer) {
   const currenciesToApprove = currencies.getForNetwork(chainId);
 
   await marketInstance.setCurrenciesApproval(
-    [FAN.address, ...currenciesToApprove],
+    [Fest.address, ...currenciesToApprove],
     true
   );
 };

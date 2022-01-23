@@ -1,10 +1,8 @@
-import Web3 from 'web3';
-
-import FAN from './build/FAN.json';
-import MarketWallet from './build/MarketWalletV1.json';
+import Fest from './build/Fest.json';
 import Market from './build/OfferMarketV1.json';
+import MarketWallet from './build/MarketWalletV1.json';
 import Token from './build/TokenV1.json';
-
+import Web3 from 'web3';
 import currencies from './currencies';
 
 type ContractBuild = {
@@ -17,7 +15,7 @@ const interfaces: { [key: string]: ContractBuild } = {
   Token,
   Market,
   MarketWallet,
-  FAN
+  Fest
 };
 
 const contractInstances: { [key: string]: any } = {};

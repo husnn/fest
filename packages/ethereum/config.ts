@@ -49,7 +49,7 @@ export const generate = async (
   ];
 
   if (!isProduction)
-    currencyAddresses.push(contracts.get('FAN').options.address);
+    currencyAddresses.push(contracts.get('Fest').options.address);
 
   const currencies: Currency[] = await toCurrencies(service, currencyAddresses);
 

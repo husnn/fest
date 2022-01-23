@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const Token = artifacts.require('TokenV1');
-const FAN = artifacts.require('FAN');
+const Fest = artifacts.require('Fest');
 
 const MarketWallet = artifacts.require('MarketWalletV1');
 const OfferMarket = artifacts.require('OfferMarketV1');
@@ -15,7 +15,7 @@ const Web3 = require('web3');
 
 contract('MarketV1', async (accounts) => {
   const TokenContract = await Token.deployed();
-  const FANContract = await FAN.deployed();
+  const FestContract = await Fest.deployed();
   const WalletContract = await MarketWallet.deployed();
   const MarketContract = await OfferMarket.deployed();
 
@@ -67,7 +67,7 @@ contract('MarketV1', async (accounts) => {
     const seller = accounts[3];
     const token = TokenContract.address;
     const quantity = 1;
-    const currency = FANContract.address;
+    const currency = FestContract.address;
     const price = 10 ** 5;
 
     expiry = Math.floor(Date.now() / 1000) + 30;
@@ -123,12 +123,12 @@ contract('MarketV1', async (accounts) => {
     });
 
     it('prevent listing with unapproved currency', async () => {
-      await MarketContract.setCurrenciesApproval([FAN.address], false);
+      await MarketContract.setCurrenciesApproval([Fest.address], false);
       await expectRevert(list(), 'Currency is not allowed.');
     });
 
     it('approve currency', async () => {
-      await MarketContract.setCurrenciesApproval([FAN.address], true);
+      await MarketContract.setCurrenciesApproval([Fest.address], true);
     });
 
     it('grant admin role to market for wallet', async () => {
@@ -176,11 +176,11 @@ contract('MarketV1', async (accounts) => {
     it('execute trade', async () => {
       const buyerBalanceInitial = price + 25000;
 
-      await FANContract.transfer(buyer, buyerBalanceInitial, {
+      await FestContract.transfer(buyer, buyerBalanceInitial, {
         from: accounts[0]
       });
 
-      await FANContract.approve(MarketContract.address, buyerBalanceInitial, {
+      await FestContract.approve(MarketContract.address, buyerBalanceInitial, {
         from: buyer
       });
 
@@ -189,7 +189,7 @@ contract('MarketV1', async (accounts) => {
       });
       expectEvent(receipt, 'Trade');
 
-      const buyerBalance = await FANContract.balanceOf(buyer);
+      const buyerBalance = await FestContract.balanceOf(buyer);
       assert.equal(buyerBalance, buyerBalanceInitial - price - buyerFee);
 
       const sellerBalance = await MarketContract.getBalance(currency, seller);
