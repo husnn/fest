@@ -176,7 +176,7 @@ contract MarketV1 is AccessControl {
       TokenOrder(listing.token, listing.tokenId, quantity)
     );
 
-    _listingPurchasesForBuyer[listingId][msg.sender]++;
+    _listingPurchasesForBuyer[listingId][msg.sender] += quantity;
 
     uint256 available = listing.available - quantity;
     _listings[listingId].available = available;

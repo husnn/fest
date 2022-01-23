@@ -8,7 +8,7 @@ const { assert } = require('chai');
 
 const Web3 = require('web3');
 
-contract('Token', async (accounts) => {
+contract('TokenV1', async (accounts) => {
   const DEFAULT_ADMIN_ROLE = Web3.utils.padLeft('0x0', 64);
   const ADMIN_ROLE = Web3.utils.keccak256('ADMIN_ROLE');
   const MINTER_ROLE = Web3.utils.keccak256('MINTER_ROLE');
@@ -17,8 +17,6 @@ contract('Token', async (accounts) => {
 
   before(async () => {
     TokenContract = await Token.deployed();
-
-    console.log(accounts[0]);
   });
 
   describe('Supported interfaces', async () => {
