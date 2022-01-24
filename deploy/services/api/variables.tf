@@ -1,5 +1,7 @@
 variable "region" {}
 
+variable "app_name" {}
+
 variable "hostname" {}
 
 variable "environment" {}
@@ -22,6 +24,8 @@ variable "postgres_database_url" {}
 variable "ecr_repo_url" {}
 variable "ecr_repo_arn" {}
 
+variable "github_user" {}
+variable "github_repo" {}
 variable "github_branch" {}
 variable "github_token" {}
 
@@ -32,12 +36,12 @@ variable "secrets_manager_arn" {
 
 variable "cpu" {
   type    = number
-  default = 512
+  default = 1024
 }
 
 variable "memory" {
   type    = number
-  default = 1024
+  default = 2048
 }
 
 variable "instance_count" {

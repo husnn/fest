@@ -6,11 +6,11 @@ module "service" {
   cluster_id   = var.cluster_id
   cluster_name = var.cluster_name
 
-  app_name     = "fest"
+  app_name     = var.app_name
   service_name = "house"
 
-  image_name     = "fest"
-  container_name = "fest_house"
+  image_name     = var.app_name
+  container_name = "${var.app_name}_house"
   environment    = var.environment
 
   ecr_repo_url = var.ecr_repo_url
@@ -51,8 +51,8 @@ module "service" {
   instance_count_desired = var.instance_count
   ecr_repo_arn           = var.ecr_repo_arn
 
-  github_username = "husnn"
-  github_repo     = "fest"
+  github_username = var.github_user
+  github_repo     = var.github_repo
   github_branch   = var.github_branch
   github_token    = var.github_token
 }

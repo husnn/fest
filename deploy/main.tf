@@ -3,9 +3,14 @@ provider "aws" {
   region  = "eu-west-1"
 }
 
+provider "aws" {
+  alias  = "virginia"
+  region = "us-east-1"
+}
+
 terraform {
   backend "s3" {
-    bucket = "fest-terraform-state-53186"
+    bucket = "fest-tf-state"
     key    = "state"
     region = "eu-west-1"
   }
@@ -38,6 +43,15 @@ resource "aws_route53_record" "www" {
   records = [var.www_cname_root]
 }
 
+resource "aws_route53_record" "root_staging" {
+  zone_id = aws_route53_zone.main.zone_id
+  name    = "staging"
+  type    = "A"
+
+  ttl     = 3600
+  records = var.a_records_root
+}
+
 module "ssl" {
   source = "./modules/ssl"
 
@@ -66,6 +80,21 @@ resource "aws_db_subnet_group" "main" {
   subnet_ids = module.vpc.private_subnet_ids
 }
 
+module "postgres_main_staging" {
+  source = "./modules/pg"
+
+  name        = "main"
+  environment = "staging"
+
+  vpc_id = module.vpc.id
+
+  subnet_group_name = aws_db_subnet_group.main.name
+
+  allowed_security_group_ids = [
+    module.service_api_staging.security_group_id
+  ]
+}
+
 module "postgres_main_prod" {
   source = "./modules/pg"
 
@@ -77,8 +106,7 @@ module "postgres_main_prod" {
   subnet_group_name = aws_db_subnet_group.main.name
 
   allowed_security_group_ids = [
-    module.service_api_prod.security_group_id,
-    module.service_house_prod.security_group_id
+    module.service_api_prod.security_group_id
   ]
 }
 
@@ -87,45 +115,49 @@ resource "aws_elasticache_subnet_group" "main" {
   subnet_ids = module.vpc.private_subnet_ids
 }
 
-module "redis_house_prod" {
-  source = "./modules/redis"
+# module "redis_indexer_staging" {
+#   source = "./modules/redis"
 
-  name        = "main"
-  environment = "production"
+#   name        = "main"
+#   environment = "staging"
 
-  vpc_id = module.vpc.id
+#   vpc_id = module.vpc.id
 
-  subnet_group_name = aws_elasticache_subnet_group.main.name
+#   subnet_group_name = aws_elasticache_subnet_group.main.name
 
-  allowed_security_group_ids = [
-    module.service_house_prod.security_group_id
-  ]
+#   allowed_security_group_ids = []
+# }
+
+resource "aws_ecr_repository" "main_staging" {
+  name = "${var.app_name}-staging"
 }
 
-resource "aws_ecr_repository" "main" {
-  name = var.app_name
-}
-
-resource "aws_ecs_cluster" "production" {
-  name = "production"
+resource "aws_ecr_repository" "main_prod" {
+  name = "${var.app_name}-prod"
 }
 
 resource "aws_ecs_cluster" "staging" {
   name = "staging"
 }
 
-module "service_api_prod" {
+resource "aws_ecs_cluster" "prod" {
+  name = "prod"
+}
+
+module "service_api_staging" {
   source = "./services/api"
+
+  app_name = var.app_name
 
   region = var.region
 
-  hostname        = "fest.so"
+  hostname        = "staging.${var.domain_name}"
   route53_zone_id = aws_route53_zone.main.zone_id
 
-  environment = "production"
+  environment = "staging"
 
-  cluster_id   = aws_ecs_cluster.production.id
-  cluster_name = aws_ecs_cluster.production.name
+  cluster_id   = aws_ecs_cluster.staging.id
+  cluster_name = aws_ecs_cluster.staging.name
 
   vpc_id     = module.vpc.id
   subnet_ids = module.vpc.public_subnet_ids
@@ -136,11 +168,52 @@ module "service_api_prod" {
 
   lb_listener_arn = module.alb.https_listener_arn
 
-  ecr_repo_url = aws_ecr_repository.main.repository_url
-  ecr_repo_arn = aws_ecr_repository.main.arn
+  ecr_repo_url = aws_ecr_repository.main_staging.repository_url
+  ecr_repo_arn = aws_ecr_repository.main_staging.arn
 
-  secrets_manager_arn = var.api_secrets_manager_arn
+  secrets_manager_arn = var.api_secrets_manager_staging_arn
 
+  github_user   = var.github_user
+  github_repo   = var.github_repo
+  github_branch = "staging"
+  github_token  = var.github_token
+
+  instance_count = 1
+
+  postgres_database_url = module.postgres_main_staging.database_url
+}
+
+module "service_api_prod" {
+  source = "./services/api"
+
+  app_name = var.app_name
+
+  region = var.region
+
+  hostname        = var.domain_name
+  route53_zone_id = aws_route53_zone.main.zone_id
+
+  environment = "production"
+
+  cluster_id   = aws_ecs_cluster.prod.id
+  cluster_name = aws_ecs_cluster.prod.name
+
+  vpc_id     = module.vpc.id
+  subnet_ids = module.vpc.public_subnet_ids
+
+  lb_dns               = module.alb.dns
+  lb_zone_id           = module.alb.zone_id
+  lb_security_group_id = module.alb.security_group_id
+
+  lb_listener_arn = module.alb.https_listener_arn
+
+  ecr_repo_url = aws_ecr_repository.main_prod.repository_url
+  ecr_repo_arn = aws_ecr_repository.main_prod.arn
+
+  secrets_manager_arn = var.api_secrets_manager_prod_arn
+
+  github_user   = var.github_user
+  github_repo   = var.github_repo
   github_branch = "master"
   github_token  = var.github_token
 
@@ -149,37 +222,22 @@ module "service_api_prod" {
   postgres_database_url = module.postgres_main_prod.database_url
 }
 
-module "service_house_prod" {
-  source = "./services/house"
+module "cloudfront_nft" {
+  source = "./modules/cloudfront"
 
-  region = var.region
+  name = "filebase-nft-media"
 
-  hostname    = "fest.so"
   environment = "production"
 
-  cluster_id   = aws_ecs_cluster.production.id
-  cluster_name = aws_ecs_cluster.production.name
-
-  vpc_id     = module.vpc.id
-  subnet_ids = module.vpc.public_subnet_ids
-
-  lb_dns               = module.alb.dns
-  lb_zone_id           = module.alb.zone_id
-  lb_listener_arn      = module.alb.https_listener_arn
-  lb_security_group_id = module.alb.security_group_id
+  hostname  = var.domain_name
+  subdomain = "nft"
 
   route53_zone_id = aws_route53_zone.main.zone_id
 
-  ecr_repo_url = aws_ecr_repository.main.repository_url
-  ecr_repo_arn = aws_ecr_repository.main.arn
+  origin_host = var.nft_media_origin_name
+  origin_path = var.nft_media_origin_path
 
-  secrets_manager_arn = var.house_secrets_manager_arn
-
-  github_branch = "master"
-  github_token  = var.github_token
-
-  instance_count = 1
-
-  postgres_database_url = module.postgres_main_prod.database_url
-  redis_url             = module.redis_house_prod.redis_url
+  providers = {
+    aws = aws.virginia
+  }
 }
