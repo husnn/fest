@@ -1,7 +1,7 @@
 import Postgres, {
   WaitlistRepository,
   defaultConfig as postgresConfig
-} from '@fanbase/postgres';
+} from '@fest/postgres';
 
 import { MailService } from './MailService';
 import { appConfig } from './config';

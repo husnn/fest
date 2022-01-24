@@ -1,4 +1,4 @@
-import { InviteDTO, InviteType } from '@fanbase/shared';
+import { InviteDTO, InviteType } from '@fest/shared';
 import React, { useEffect, useState } from 'react';
 
 import { ApiClient } from '../modules/api';

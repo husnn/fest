@@ -1,4 +1,4 @@
-import { PostRepository as IPostRepository, Post } from '@fanbase/core';
+import { PostRepository as IPostRepository, Post } from '@fest/core';
 
 import PostSchema from '../schemas/PostSchema';
 import Repository from './Repository';

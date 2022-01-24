@@ -9,13 +9,13 @@ import {
   GetTokenTrades,
   TokenRepository,
   WithdrawMarketEarnings
-} from '@fanbase/core';
+} from '@fest/core';
 import {
   TokenListingRepository,
   TokenOfferRepository,
   TokenTradeRepository,
   WalletRepository
-} from '@fanbase/postgres';
+} from '@fest/postgres';
 import {
   CancelTokenListingResponse,
   Currency,
@@ -23,7 +23,7 @@ import {
   GetTokenMarketSummaryResponse,
   GetTokenTradesForUserResponse,
   WithdrawMarketEarningsResponse
-} from '@fanbase/shared';
+} from '@fest/shared';
 
 import { HttpError, HttpResponse, ValidationError } from '../http';
 

@@ -1,4 +1,4 @@
-import { BalanceClass, Currency } from '@fanbase/shared';
+import { BalanceClass, Currency } from '@fest/shared';
 
 export type CurrencyBalance = {
   currency: Currency;

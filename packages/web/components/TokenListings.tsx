@@ -1,6 +1,6 @@
 import { Button, Link } from '../ui';
 import React, { useEffect, useState } from 'react';
-import { TokenListingDTO, TokenListingStatus } from '@fanbase/shared';
+import { TokenListingDTO, TokenListingStatus } from '@fest/shared';
 import { getDisplayName, getProfileUrl } from '../utils';
 
 import BuyTokenListing from './BuyTokenListing';

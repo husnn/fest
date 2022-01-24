@@ -1,7 +1,7 @@
-import { Currency, ProtocolConfig, TokenStandard } from '@fanbase/shared';
+import { Currency, ProtocolConfig, TokenStandard } from '@fest/shared';
 
-import { EthereumService } from '@fanbase/core';
-import contracts from '@fanbase/eth-contracts';
+import { EthereumService } from '@fest/core';
+import contracts from '@fest/eth-contracts';
 
 export const getTokenStandard = async (contract): Promise<TokenStandard> => {
   const tests = [

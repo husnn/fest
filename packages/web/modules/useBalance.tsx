@@ -1,7 +1,7 @@
 import Decimal from 'decimal.js';
 import React, { useState } from 'react';
 
-import { Balance, BalanceType } from '@fanbase/shared';
+import { Balance, BalanceType } from '@fest/shared';
 
 type Amount = string | number | Decimal;
 

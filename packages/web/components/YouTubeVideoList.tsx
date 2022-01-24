@@ -2,7 +2,7 @@ import moment from 'moment';
 import React from 'react';
 
 import styled from '@emotion/styled';
-import { YouTubeVideo } from '@fanbase/shared';
+import { YouTubeVideo } from '@fest/shared';
 
 import useYouTubeVideos from '../modules/youtube/useYouTubeVideos';
 import styles from '../styles/YouTubeVideoList.module.scss';

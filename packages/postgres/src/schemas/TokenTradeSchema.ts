@@ -1,5 +1,5 @@
 import { EntitySchema } from 'typeorm';
-import { TokenTrade } from '@fanbase/core';
+import { TokenTrade } from '@fest/core';
 
 const TokenTradeSchema = new EntitySchema<TokenTrade>({
   name: 'token_trade',

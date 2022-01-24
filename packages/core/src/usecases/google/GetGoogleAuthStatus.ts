@@ -1,4 +1,4 @@
-import { OAuthProvider } from '@fanbase/shared';
+import { OAuthProvider } from '@fest/shared';
 
 import UseCase from '../../base/UseCase';
 import OAuthRepository from '../../repositories/OAuthRepository';
@@ -21,14 +21,14 @@ export class GetGoogleAuthStatus extends UseCase<
   private oAuthRepository: OAuthRepository;
   private googleService: GoogleService;
 
-  constructor (oAuthRepository: OAuthRepository, googleService: GoogleService) {
+  constructor(oAuthRepository: OAuthRepository, googleService: GoogleService) {
     super();
 
     this.oAuthRepository = oAuthRepository;
     this.googleService = googleService;
   }
 
-  async exec (
+  async exec(
     data: GetGoogleAuthStatusInput
   ): Promise<Result<GetGoogleAuthStatusOutput>> {
     let linked = false;

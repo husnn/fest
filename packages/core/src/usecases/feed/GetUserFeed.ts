@@ -5,7 +5,7 @@ import {
 } from '../../repositories';
 import { decodeCursor, encodeCursor } from '../../utils/cursor';
 
-import { PostDTO } from '@fanbase/shared';
+import { PostDTO } from '@fest/shared';
 import Result from '../../Result';
 import UseCase from '../../base/UseCase';
 

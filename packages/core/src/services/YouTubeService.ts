@@ -1,4 +1,4 @@
-import { YouTubeVideo } from '@fanbase/shared';
+import { YouTubeVideo } from '@fest/shared';
 
 import { YouTubeChannel } from '../entities';
 import { Result } from '../Result';

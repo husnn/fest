@@ -21,7 +21,7 @@ export default function Home() {
   return (
     <div className="full-width">
       <Head>
-        <title>Fanbase</title>
+        <title>Fest</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className={styles.main}>
@@ -135,13 +135,13 @@ export default function Home() {
               className={styles.subheadingDescription}
               style={{ opacity: 0.3 }}
             >
-              Fanbase is...
+              Fest is...
             </h3>
             <h2 className={styles.sectionTitle} style={{ marginTop: 5 }}>
               A home for your community
             </h2>
             <p className={styles.description}>
-              Build a loyal fanbase that supports you no-matter-what.
+              Build a loyal fest that supports you no-matter-what.
             </p>
           </span>
           <Link href="/login">
@@ -153,7 +153,7 @@ export default function Home() {
       </div>
       <div className={styles.footer}>
         <div className={styles.footerWrapper}>
-          <p style={{ textAlign: 'left' }}>&copy; {currentYear} Fanbase</p>
+          <p style={{ textAlign: 'left' }}>&copy; {currentYear} Fest</p>
         </div>
       </div>
     </div>

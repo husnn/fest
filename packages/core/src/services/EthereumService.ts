@@ -1,7 +1,7 @@
-import { EthereumTx, Price, TokenFee } from '@fanbase/shared';
+import { EthereumTx, Price, TokenFee } from '@fest/shared';
 
 import { Result } from '../Result';
-import { Wallet } from '@fanbase/core';
+import { Wallet } from '@fest/core';
 
 export type ERC20Info = {
   name: string;

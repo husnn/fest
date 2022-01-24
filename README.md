@@ -1,8 +1,8 @@
-# Fanbase
+# Fest
 
 ### Deploy Ganache
 
-Set a different `GANACHE_NETWORK` in env variables for each development machine to avoid overriding the network config in the build artifact (as it's commited to version control).
+Set a different `GANACHE_NETWORK` in env variables for each development machine to avoid overriding the network config in the build artifact (as it's committed to version control).
 
 Run `scripts/deploy_ganache.sh` from root dir to start the Ganache instance and deploy contracts. It will also install Ganache, Truffle and any other dependencies specified in the contracts dir _package.json_.
 

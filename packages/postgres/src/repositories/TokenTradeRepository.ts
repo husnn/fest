@@ -1,7 +1,7 @@
 import {
   TokenTrade,
   TokenTradeRepository as ITokenTradeRepository
-} from '@fanbase/core';
+} from '@fest/core';
 
 import TokenTradeSchema from '../schemas/TokenTradeSchema';
 import { Repository } from './Repository';

@@ -1,5 +1,5 @@
 import EventListener from './EventListener';
-import { Protocol } from '@fanbase/shared';
+import { Protocol } from '@fest/shared';
 import { TokenCancelListingJob } from '../../jobs/TokenCancelListing';
 
 export class TokenCancelListingListener extends EventListener<TokenCancelListingJob> {

@@ -1,7 +1,7 @@
-import { InviteRepository as IInviteRepository, Invite } from '@fanbase/core';
+import { InviteRepository as IInviteRepository, Invite } from '@fest/core';
 
 import InviteSchema from '../schemas/InviteSchema';
-import { InviteType } from '@fanbase/shared';
+import { InviteType } from '@fest/shared';
 import Repository from './Repository';
 
 export class InviteRepository

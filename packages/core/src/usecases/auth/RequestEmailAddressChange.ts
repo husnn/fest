@@ -6,7 +6,7 @@ import UseCase from '../../base/UseCase';
 import { User } from '../../entities';
 import { UserRepository } from '../../repositories';
 import { emailChangeLink } from '../../config';
-import { getExpiryDate } from '@fanbase/shared';
+import { getExpiryDate } from '@fest/shared';
 
 export type RequestEmailAddressChangeInput = {
   userId: string;

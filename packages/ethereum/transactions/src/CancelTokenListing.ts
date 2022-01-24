@@ -1,4 +1,4 @@
-import Contracts from '@fanbase/eth-contracts';
+import Contracts from '@fest/eth-contracts';
 import Transaction from './Transaction';
 
 export class CancelTokenListing extends Transaction {

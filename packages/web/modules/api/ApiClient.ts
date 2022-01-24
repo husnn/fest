@@ -90,7 +90,7 @@ import {
   WithdrawMarketEarningsResponse,
   YouTubeVideo,
   isUsername
-} from '@fanbase/shared';
+} from '@fest/shared';
 
 import HttpClient from './HttpClient';
 

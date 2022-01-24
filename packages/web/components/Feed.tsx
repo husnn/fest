@@ -3,7 +3,7 @@ import React, { useEffect, useReducer, useRef, useState } from 'react';
 
 import { ApiClient } from '../modules/api';
 import Post from './Post';
-import { PostDTO } from '@fanbase/shared';
+import { PostDTO } from '@fest/shared';
 import { css } from '@emotion/react';
 import { getHomeUrl } from '../utils';
 import router from 'next/router';

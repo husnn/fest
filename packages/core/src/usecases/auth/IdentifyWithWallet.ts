@@ -1,5 +1,5 @@
-import { AuthCheck, InviteRepository } from '@fanbase/core';
-import { Protocol, WalletType, encryptText } from '@fanbase/shared';
+import { AuthCheck, InviteRepository } from '@fest/core';
+import { Protocol, WalletType, encryptText } from '@fest/shared';
 import { User, Wallet } from '../../entities';
 import { generateUserId, generateWalletId } from '../../utils';
 

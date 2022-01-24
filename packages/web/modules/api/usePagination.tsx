@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { PaginatedResponse } from '@fanbase/shared';
+import { PaginatedResponse } from '@fest/shared';
 
 const usePagination = <U extends unknown>(
   query: (count: number, page: number, args?) => Promise<PaginatedResponse<U>>,

@@ -7,7 +7,7 @@ import {
   TextArea,
   TextInput
 } from '../ui';
-import { CreateTokenSchema, TokenType, YouTubeVideo } from '@fanbase/shared';
+import { CreateTokenSchema, TokenType, YouTubeVideo } from '@fest/shared';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import React, { useState } from 'react';
 import YouTubeVideoList, {

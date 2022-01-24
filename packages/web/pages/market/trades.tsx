@@ -1,4 +1,4 @@
-import { TokenTradeDTO } from '@fanbase/shared';
+import { TokenTradeDTO } from '@fest/shared';
 import React, { useEffect } from 'react';
 import { ApiClient } from '../../modules/api';
 import usePagination from '../../modules/api/usePagination';

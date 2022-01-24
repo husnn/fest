@@ -1,4 +1,4 @@
-import { Protocol } from '@fanbase/shared';
+import { Protocol } from '@fest/shared';
 
 import { TokenTransferJob } from '../../jobs/TokenTransfer';
 import EventListener from './EventListener';

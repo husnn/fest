@@ -1,4 +1,4 @@
-import { Email, MailService as IMailService } from '@fanbase/core';
+import { Email, MailService as IMailService } from '@fest/core';
 import sgMail, { MailDataRequired } from '@sendgrid/mail';
 
 import { mailConfig } from './config';

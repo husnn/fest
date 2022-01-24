@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getAuthToken, getCurrentUser, removeAuth } from './authStorage';
 
-import { CurrentUserDTO } from '@fanbase/shared';
+import { CurrentUserDTO } from '@fest/shared';
 import { useRouter } from 'next/router';
 
 type AuthContextProps = {

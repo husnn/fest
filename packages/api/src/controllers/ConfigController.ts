@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 
-import { EthereumService } from '@fanbase/core';
-import { Config } from '@fanbase/ethereum';
-import { InitConfig, InitResponse } from '@fanbase/shared';
+import { EthereumService } from '@fest/core';
+import { Config } from '@fest/ethereum';
+import { InitConfig, InitResponse } from '@fest/shared';
 
 import { HttpResponse } from '../http';
 

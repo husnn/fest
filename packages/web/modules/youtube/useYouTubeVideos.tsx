@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { YouTubeVideo } from '@fanbase/shared';
+import { YouTubeVideo } from '@fest/shared';
 
 import ApiClient from '../api/ApiClient';
 

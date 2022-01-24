@@ -1,4 +1,4 @@
-import Contracts from '@fanbase/eth-contracts';
+import Contracts from '@fest/eth-contracts';
 import { EventEmitter } from 'stream';
 import { RedisClient } from 'redis';
 import TokenBuyListener from './TokenBuyListener';

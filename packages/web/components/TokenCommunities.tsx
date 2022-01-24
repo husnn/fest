@@ -1,4 +1,4 @@
-import { CommunityDTO } from '@fanbase/shared';
+import { CommunityDTO } from '@fest/shared';
 import React from 'react';
 import styled from '@emotion/styled';
 

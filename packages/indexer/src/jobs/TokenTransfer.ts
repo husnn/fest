@@ -7,8 +7,8 @@ import {
   WalletRepository,
   generateTokenOwnershipId,
   generateWalletId
-} from '@fanbase/core';
-import { Protocol, WalletType } from '@fanbase/shared';
+} from '@fest/core';
+import { Protocol, WalletType } from '@fest/shared';
 
 import Job from './Job';
 

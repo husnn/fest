@@ -9,7 +9,7 @@ import {
 import React, { useEffect, useState } from 'react';
 
 import styled from '@emotion/styled';
-import { Balance, TokenListingDTO, WalletType } from '@fanbase/shared';
+import { Balance, TokenListingDTO, WalletType } from '@fest/shared';
 
 import { ApiClient } from '../modules/api';
 import useAuthentication from '../modules/auth/useAuthentication';

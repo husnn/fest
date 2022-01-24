@@ -1,5 +1,5 @@
 import Community from './Community';
-import { PostMedia } from '@fanbase/shared';
+import { PostMedia } from '@fest/shared';
 import User from './/User';
 
 export class Post {

@@ -1,4 +1,4 @@
-import { CurrentUserDTO } from '@fanbase/shared';
+import { CurrentUserDTO } from '@fest/shared';
 
 const AUTH_TOKEN = 'AUTH_TOKEN';
 const CURRENT_USER = 'CURRENT_USER';

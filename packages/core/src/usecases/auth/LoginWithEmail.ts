@@ -1,4 +1,4 @@
-import { CurrentUserDTO, isExpired } from '@fanbase/shared';
+import { CurrentUserDTO, isExpired } from '@fest/shared';
 
 import { AuthError } from './errors';
 import { Result } from '../../Result';

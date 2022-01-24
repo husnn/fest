@@ -1,9 +1,13 @@
-import { Price } from '@fanbase/shared';
+import { Price } from '@fest/shared';
 
 import UseCase from '../../base/UseCase';
 import OfferReceivedEmail from '../../emails/OfferReceivedEmail';
 import TokenTrade from '../../entities/TokenOffer';
-import { TokenOwnershipRepository, UserRepository, WalletRepository } from '../../repositories';
+import {
+  TokenOwnershipRepository,
+  UserRepository,
+  WalletRepository
+} from '../../repositories';
 import TokenOfferRepository from '../../repositories/TokenOfferRepository';
 import Result from '../../Result';
 import MailService from '../../services/MailService';

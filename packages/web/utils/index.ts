@@ -5,7 +5,7 @@ import {
   TokenOwnershipDTO,
   UserDTO,
   WalletDTO
-} from '@fanbase/shared';
+} from '@fest/shared';
 
 import { NextRouter } from 'next/router';
 import { getConfig } from '../config';

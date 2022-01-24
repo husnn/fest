@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 
-import { CommunityDTO, PostDTO } from '@fanbase/shared';
+import { CommunityDTO, PostDTO } from '@fest/shared';
 import React, { useEffect, useState } from 'react';
 
 import { ApiClient } from '../modules/api';

@@ -1,5 +1,5 @@
 import { Express, NextFunction, Request, Response } from 'express';
-import { MailService, WaitlistRepository } from '@fanbase/core';
+import { MailService, WaitlistRepository } from '@fest/core';
 
 import { AcceptanceEmail } from './AcceptanceEmail';
 import moment from 'moment';

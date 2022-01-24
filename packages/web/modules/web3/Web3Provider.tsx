@@ -1,15 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import Fortmatic from 'fortmatic';
+import { ProtocolConfig, WalletType } from '@fest/shared';
 import React, { useEffect, useRef, useState } from 'react';
+
+import Alertbox from '../../ui/Alertbox';
+import Contracts from '@fest/eth-contracts';
+import Fortmatic from 'fortmatic';
 import Web3 from 'web3';
-
-import Contracts from '@fanbase/eth-contracts';
-import { ProtocolConfig, WalletType } from '@fanbase/shared';
-
 import { fetchInitConfig } from '../../config';
 import { getCurrentUser } from '../auth/authStorage';
 import useAuthentication from '../auth/useAuthentication';
-import Alertbox from '../../ui/Alertbox';
 
 type Wallet = {
   type: WalletType;

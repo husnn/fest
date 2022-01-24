@@ -1,5 +1,5 @@
 import { Button, Link } from '../ui';
-import { CurrentUserDTO, TokenOwnershipDTO } from '@fanbase/shared';
+import { CurrentUserDTO, TokenOwnershipDTO } from '@fest/shared';
 import React, { useEffect } from 'react';
 import { getDisplayName, getProfileUrl } from '../utils';
 
@@ -120,18 +120,16 @@ const TokenHolders = ({
                     >
                       List for sale
                     </Button>
-                  ) : (
-                    // <Button
-                    //   size="small"
-                    //   color="secondary"
-                    //   onClick={() => {
-                    //     // Make and send offer
-                    //   }}
-                    // >
-                    //   Make offer
-                    // </Button>
-                    null
-                  )}
+                  ) : // <Button
+                  //   size="small"
+                  //   color="secondary"
+                  //   onClick={() => {
+                  //     // Make and send offer
+                  //   }}
+                  // >
+                  //   Make offer
+                  // </Button>
+                  null}
                 </React.Fragment>
               )}
             </HolderRow>

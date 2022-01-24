@@ -1,4 +1,4 @@
-import { InviteStatus, InviteType } from '@fanbase/shared';
+import { InviteStatus, InviteType } from '@fest/shared';
 
 import User from './User';
 

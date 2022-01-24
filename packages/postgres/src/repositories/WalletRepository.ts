@@ -1,4 +1,4 @@
-import { WalletRepository as IWalletRepository, Wallet } from '@fanbase/core';
+import { WalletRepository as IWalletRepository, Wallet } from '@fest/core';
 
 import Repository from './Repository';
 import WalletSchema from '../schemas/WalletSchema';

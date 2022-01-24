@@ -1,4 +1,4 @@
-import { CurrentUserDTO, isValidPassword } from '@fanbase/shared';
+import { CurrentUserDTO, isValidPassword } from '@fest/shared';
 import ModalWithSteps, { ModalWithStepsProps } from './ModalWithSteps';
 import React, { useEffect, useRef, useState } from 'react';
 

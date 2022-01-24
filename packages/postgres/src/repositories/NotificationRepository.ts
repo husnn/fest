@@ -1,7 +1,7 @@
 import {
   NotificationRepository as INotificationRepository,
   Notification
-} from '@fanbase/core';
+} from '@fest/core';
 
 import NotificationSchema from '../schemas/NotificationSchema';
 import Repository from './Repository';

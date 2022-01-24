@@ -1,4 +1,4 @@
-import { Price, Protocol, TokenListingStatus } from '@fanbase/shared';
+import { Price, Protocol, TokenListingStatus } from '@fest/shared';
 
 import Token from './Token';
 import User from './User';

@@ -1,7 +1,7 @@
 import { EntitySchema } from 'typeorm';
 
-import { TokenListing } from '@fanbase/core';
-import { Protocol, TokenListingStatus } from '@fanbase/shared';
+import { TokenListing } from '@fest/core';
+import { Protocol, TokenListingStatus } from '@fest/shared';
 
 const TokenListingSchema = new EntitySchema<TokenListing>({
   name: 'token_listing',

@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 
 import ApiClient from '../modules/api/ApiClient';
-import { CommunityDTO } from '@fanbase/shared';
+import { CommunityDTO } from '@fest/shared';
 import React from 'react';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';

@@ -4,7 +4,7 @@ import {
   getRepository
 } from 'typeorm';
 
-import { Repository as IRepository } from '@fanbase/core';
+import { Repository as IRepository } from '@fest/core';
 
 export abstract class Repository<T> implements IRepository<T> {
   protected db: PostgresRepository<T>;

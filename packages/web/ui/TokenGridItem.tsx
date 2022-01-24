@@ -1,7 +1,7 @@
 import { getDisplayName, getImageUrl } from '../utils';
 
 import React from 'react';
-import { TokenDTO } from '@fanbase/shared';
+import { TokenDTO } from '@fest/shared';
 import styled from '@emotion/styled';
 
 const GridItem = styled.div`

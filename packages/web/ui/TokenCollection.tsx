@@ -1,6 +1,6 @@
 import { Button } from './Button';
 import React from 'react';
-import { TokenDTO } from '@fanbase/shared';
+import { TokenDTO } from '@fest/shared';
 import TokenGridItem from './TokenGridItem';
 import styled from '@emotion/styled';
 

@@ -93,7 +93,7 @@
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.0;\n\nimport \"@openzeppelin/contracts/utils/introspection/ERC165.sol\";\n\nabstract contract HasSecondarySaleFees is ERC165 {\n\n    event SecondarySaleFees(uint256 tokenId, address[] recipients, uint[] bps);\n\n    /*\n    * bytes4(keccak256('getFeeBps(uint256)')) == 0x0ebd4c7f\n    * bytes4(keccak256('getFeeRecipients(uint256)')) == 0xb9c4d9fb\n    *\n    * => 0x0ebd4c7f ^ 0xb9c4d9fb == 0xb7799584\n    */\n    bytes4 private constant _INTERFACE_ID_FEES = 0xb7799584;\n    \n    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC165) returns (bool) {\n      return interfaceId == _INTERFACE_ID_FEES\n        || super.supportsInterface(interfaceId);\n    }\n\n    function getFeeRecipients(uint256 id) virtual public view returns (address payable[] memory);\n    function getFeeBps(uint256 id) virtual public view returns (uint[] memory);\n}",
-  "sourcePath": "/Users/husnain/Desktop/other/fanbase/packages/ethereum/contracts/solidity/contracts/HasSecondarySaleFees.sol",
+  "sourcePath": "/Users/husnain/Desktop/other/fest/packages/ethereum/contracts/solidity/contracts/HasSecondarySaleFees.sol",
   "ast": {
     "absolutePath": "project:/contracts/HasSecondarySaleFees.sol",
     "exportedSymbols": {

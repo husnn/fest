@@ -1,6 +1,6 @@
-import { TokenRepository as ITokenRepository, Token } from '@fanbase/core';
+import { TokenRepository as ITokenRepository, Token } from '@fest/core';
 
-import { Protocol } from '@fanbase/shared';
+import { Protocol } from '@fest/shared';
 import Repository from './Repository';
 import TokenSchema from '../schemas/TokenSchema';
 

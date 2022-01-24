@@ -1,9 +1,4 @@
-import {
-  CurrentUserDTO,
-  Protocol,
-  decryptText,
-  isExpired
-} from '@fanbase/shared';
+import { CurrentUserDTO, Protocol, decryptText, isExpired } from '@fest/shared';
 
 import { AuthError } from './errors';
 import { EthereumService } from '../../services';

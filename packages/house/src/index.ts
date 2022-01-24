@@ -4,29 +4,18 @@ import {
   LeaveChannelData,
   MessageDTO,
   SendMessageData
-} from '@fanbase/shared';
+} from '@fest/shared';
 import Postgres, {
   UserRepository,
   defaultConfig as postgresConfig
-} from '@fanbase/postgres';
+} from '@fest/postgres';
 import { Server, Socket } from 'socket.io';
-import { User, verifyCommunityToken } from '@fanbase/core';
+import { User, verifyCommunityToken } from '@fest/core';
 
 import Express from 'express';
 import { createServer } from 'http';
 import redis from 'redis';
 
-// const httpServer = createServer((req, res) => {
-//   const url = new URL(req.url);
-//   console.log(req);
-//   // if (req.method === 'GET') {
-//   //   const path = url.pathname.substr(1);
-//   //   if (path === '/health') {
-//   //     res.writeHead(200);
-//   //     res.end();
-//   //   }
-//   // }
-// });
 const app = Express();
 const httpServer = createServer(app);
 

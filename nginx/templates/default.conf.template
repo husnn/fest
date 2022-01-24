@@ -2,7 +2,7 @@ server {
   listen 80 default_server;
   listen [::]:80 default_server;
 
-  server_name fanbase.test;
+  server_name fest.test;
 
   location / {
     proxy_pass http://web:${WEB_PORT};
@@ -13,7 +13,7 @@ server {
   listen 80;
   listen [::]:80;
 
-  server_name console.fanbase.test;
+  server_name console.fest.test;
 
   location / {
     proxy_pass http://127.0.0.1:4000;
@@ -24,7 +24,7 @@ server {
   listen 4000;
   listen [::]:4000;
 
-  server_name console.fanbase.test;
+  server_name console.fest.test;
 
   location / {
     proxy_pass http://console:${CONSOLE_PORT};
@@ -35,7 +35,7 @@ server {
   listen 80;
   listen [::]:80;
 
-  server_name api.fanbase.test;
+  server_name api.fest.test;
 
   location / {
     proxy_pass http://127.0.0.1:5000;
@@ -46,7 +46,7 @@ server {
   listen 5000;
   listen [::]:5000;
 
-  server_name api.fanbase.test;
+  server_name api.fest.test;
 
   location / {
     proxy_pass http://api:${API_PORT};
@@ -57,7 +57,7 @@ server {
   listen 80;
   listen [::]:80;
 
-  server_name ws.fanbase.test;
+  server_name ws.fest.test;
 
   location / {
     proxy_pass http://127.0.0.1:6000;

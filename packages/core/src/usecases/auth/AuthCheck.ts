@@ -1,5 +1,5 @@
 import { InviteRepository, WaitlistRepository } from '../../repositories';
-import { InviteType, WaitlistEntryType } from '@fanbase/shared';
+import { InviteType, WaitlistEntryType } from '@fest/shared';
 
 import { AuthError } from '../auth/errors';
 import { Invite } from '../../entities';

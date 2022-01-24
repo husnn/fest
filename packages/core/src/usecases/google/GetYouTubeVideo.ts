@@ -1,4 +1,4 @@
-import { YouTubeVideo } from '@fanbase/shared';
+import { YouTubeVideo } from '@fest/shared';
 
 import UseCase from '../../base/UseCase';
 import { Result } from '../../Result';
@@ -15,13 +15,13 @@ export class GetYouTubeVideo extends UseCase<
 > {
   private youTubeService: YouTubeService;
 
-  constructor (youTubeService: YouTubeService) {
+  constructor(youTubeService: YouTubeService) {
     super();
 
     this.youTubeService = youTubeService;
   }
 
-  async exec (
+  async exec(
     data: GetYouTubeVideoInput
   ): Promise<Result<GetYouTubeVideoOutput>> {
     const result = await this.youTubeService.getVideo(data.id);

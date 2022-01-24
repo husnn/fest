@@ -1,6 +1,6 @@
 import { CommunityRepository, UserRepository } from '../../repositories';
 
-import { CommunityDTO } from '@fanbase/shared';
+import { CommunityDTO } from '@fest/shared';
 import Result from '../../Result';
 import UseCase from '../../base/UseCase';
 import { generateCommunityToken } from './generate';

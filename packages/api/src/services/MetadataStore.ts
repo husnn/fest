@@ -1,4 +1,4 @@
-import { IPFSService, Result } from '@fanbase/core';
+import { IPFSService, Result } from '@fest/core';
 import PinataSDK, { PinataClient } from '@pinata/sdk';
 
 export class MetadataStore implements IPFSService {

@@ -1,7 +1,7 @@
 import { EntitySchema } from 'typeorm';
 
-import { OAuth } from '@fanbase/core';
-import { OAuthProvider } from '@fanbase/shared';
+import { OAuth } from '@fest/core';
+import { OAuthProvider } from '@fest/shared';
 
 const OAuthSchema = new EntitySchema<OAuth>({
   name: 'oauth',

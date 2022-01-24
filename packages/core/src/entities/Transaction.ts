@@ -1,4 +1,4 @@
-import { Protocol, TransactionType } from '@fanbase/shared';
+import { Protocol, TransactionType } from '@fest/shared';
 
 export class Transaction {
   readonly id: string;

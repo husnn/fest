@@ -1,6 +1,6 @@
 import { EntitySchema } from 'typeorm';
-import { WaitlistEntry } from '@fanbase/core';
-import { WaitlistEntryType } from '@fanbase/shared';
+import { WaitlistEntry } from '@fest/core';
+import { WaitlistEntryType } from '@fest/shared';
 
 const WaitlistEntrySchema = new EntitySchema<WaitlistEntry>({
   name: 'waitlist_entry',

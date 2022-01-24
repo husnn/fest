@@ -5,11 +5,8 @@ import {
   GetCommunityToken,
   TokenRepository,
   UserRepository
-} from '@fanbase/core';
-import {
-  GetCommunityResponse,
-  GetCommunityTokenResponse
-} from '@fanbase/shared';
+} from '@fest/core';
+import { GetCommunityResponse, GetCommunityTokenResponse } from '@fest/shared';
 import { HttpError, HttpResponse } from '../http';
 import { NextFunction, Request, Response } from 'express';
 

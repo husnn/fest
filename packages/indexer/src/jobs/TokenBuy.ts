@@ -7,8 +7,8 @@ import {
   TokenTrade,
   TokenTradeRepository,
   WalletRepository
-} from '@fanbase/core';
-import { Protocol, TokenListingStatus } from '@fanbase/shared';
+} from '@fest/core';
+import { Protocol, TokenListingStatus } from '@fest/shared';
 
 import Job from './Job';
 

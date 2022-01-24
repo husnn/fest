@@ -4,7 +4,7 @@ import Result from '../../Result';
 import UseCase from '../../base/UseCase';
 import { User } from '../../entities';
 import { UserRepository } from '../../repositories';
-import { getExpiryDate } from '@fanbase/shared';
+import { getExpiryDate } from '@fest/shared';
 import { passwordResetLink } from '../../config';
 
 type RequestPasswordResetInput = {

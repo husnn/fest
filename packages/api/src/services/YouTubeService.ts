@@ -2,10 +2,10 @@ import {
   YouTubeService as IYouTubeService,
   Result,
   YouTubeChannel
-} from '@fanbase/core';
+} from '@fest/core';
 
 import Axios from 'axios';
-import { YouTubeVideo } from '@fanbase/shared';
+import { YouTubeVideo } from '@fest/shared';
 
 export interface YouTubeConfig {
   apiKey: string;

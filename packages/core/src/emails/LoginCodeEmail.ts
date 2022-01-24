@@ -7,7 +7,7 @@ export class LoginCodeEmail extends Email {
   constructor(to: string, code: string) {
     super(to);
 
-    this.subject = 'Login to Fanbase';
+    this.subject = 'Login to Fest';
 
     this.content = `
       Your login code is ${code}

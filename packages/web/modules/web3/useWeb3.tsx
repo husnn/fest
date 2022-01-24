@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-import { EthereumService } from '@fanbase/ethereum';
-import { EthereumTx } from '@fanbase/shared';
+import { EthereumService } from '@fest/ethereum';
+import { EthereumTx } from '@fest/shared';
 
 import { Web3Context } from './Web3Provider';
 

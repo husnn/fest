@@ -180,7 +180,7 @@ const Header: React.FC<HeaderProps> = () => {
     <HeaderContainer>
       <HeaderWrapper>
         <Link href={isAuthenticated ? '/home' : '/'}>
-          <h2 style={{ fontFamily: 'Gilmer' }}>Fanbase</h2>
+          <h2 style={{ fontFamily: 'Gilmer' }}>Fest</h2>
         </Link>
         {links && !singleLink && (
           <HeaderMenu>

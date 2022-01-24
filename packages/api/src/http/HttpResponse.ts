@@ -1,4 +1,4 @@
-import { PaginatedResponse, Response } from '@fanbase/shared';
+import { PaginatedResponse, Response } from '@fest/shared';
 
 import { Response as ExpressResponse } from 'express';
 

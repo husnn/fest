@@ -6,11 +6,11 @@ module "service" {
   cluster_id   = var.cluster_id
   cluster_name = var.cluster_name
 
-  app_name     = "fanbase"
+  app_name     = "fest"
   service_name = "api"
 
-  image_name     = "fanbase"
-  container_name = "fanbase_api"
+  image_name     = "fest"
+  container_name = "fest_api"
   environment    = var.environment
 
   ecr_repo_url = var.ecr_repo_url
@@ -32,8 +32,8 @@ module "service" {
   env_vars = {
     "NODE_ENV"     = var.environment
     "PORT"         = 5000
-    "CLIENT_URL"   = "https://fanbase.lol"
-    "API_URL"      = "https://api.fanbase.lol/v1"
+    "CLIENT_URL"   = "https://fest.so"
+    "API_URL"      = "https://api.fest.so/v1"
     "DATABASE_URL" = var.postgres_database_url
   }
 
@@ -68,7 +68,7 @@ module "service" {
   ecr_repo_arn           = var.ecr_repo_arn
 
   github_username = "husnn"
-  github_repo     = "fanbase"
+  github_repo     = "fest"
   github_branch   = var.github_branch
   github_token    = var.github_token
 }

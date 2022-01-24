@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 
-import { CommunityDTO } from '@fanbase/shared';
+import { CommunityDTO } from '@fest/shared';
 import React from 'react';
 import { css } from '@emotion/react';
 import { getHomeUrl } from '../utils';

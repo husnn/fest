@@ -1,4 +1,4 @@
-import { Protocol } from '@fanbase/shared';
+import { Protocol } from '@fest/shared';
 import Repository from './Repository';
 import { Token } from '../entities';
 

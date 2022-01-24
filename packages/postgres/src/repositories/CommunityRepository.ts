@@ -1,7 +1,7 @@
 import {
   Community,
   CommunityRepository as ICommunityRepository
-} from '@fanbase/core';
+} from '@fest/core';
 import { getManager, getRepository } from 'typeorm';
 
 import CommunitySchema from '../schemas/CommunitySchema';

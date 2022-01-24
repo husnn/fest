@@ -14,7 +14,7 @@ import React, { useEffect, useState } from 'react';
 import { ApiClient } from '../modules/api';
 import Confetti from 'react-confetti';
 import Head from 'next/head';
-import { WaitlistEntryType } from '@fanbase/shared';
+import { WaitlistEntryType } from '@fest/shared';
 import { getProfileUrl } from '../utils';
 import router from 'next/router';
 import styled from '@emotion/styled';
@@ -215,7 +215,7 @@ export const WaitlistPage = () => {
               />
               {hasWallet && (
                 <FormInput
-                  description="Fanbase allows you to use your own wallet if you have one. Otherwise, we'll take care of it for you :)"
+                  description="Fest allows you to use your own wallet if you have one. Otherwise, we'll take care of it for you :)"
                   error={errors.walletAddress}
                 >
                   <TextInput

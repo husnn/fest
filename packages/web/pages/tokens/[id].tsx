@@ -6,7 +6,7 @@ import {
   TokenListingDTO,
   TokenOwnershipDTO,
   WalletType
-} from '@fanbase/shared';
+} from '@fest/shared';
 import React, { useEffect, useState } from 'react';
 import {
   getCommunityUrl,

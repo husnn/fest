@@ -1,6 +1,6 @@
 import { UserRepository, WalletRepository } from '../../repositories';
 
-import { CurrentUserDTO } from '@fanbase/shared';
+import { CurrentUserDTO } from '@fest/shared';
 import { Result } from '../../Result';
 import UseCase from '../../base/UseCase';
 

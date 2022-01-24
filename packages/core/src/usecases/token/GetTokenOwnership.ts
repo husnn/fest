@@ -1,4 +1,4 @@
-import { TokenOwnershipDTO as TokenOwnershipDTO } from '@fanbase/shared';
+import { TokenOwnershipDTO as TokenOwnershipDTO } from '@fest/shared';
 
 import UseCase from '../../base/UseCase';
 import { TokenOwnershipRepository } from '../../repositories';

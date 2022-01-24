@@ -1,8 +1,12 @@
 import Axios from 'axios';
 import qs from 'querystring';
 
-import { GoogleService as IGoogleService, GoogleTokenData, Result } from '@fanbase/core';
-import { getExpiryDate } from '@fanbase/shared';
+import {
+  GoogleService as IGoogleService,
+  GoogleTokenData,
+  Result
+} from '@fest/core';
+import { getExpiryDate } from '@fest/shared';
 
 export interface GoogleConfig {
   clientId: string;
@@ -13,11 +17,11 @@ export interface GoogleConfig {
 class GoogleService implements IGoogleService {
   private config: GoogleConfig;
 
-  constructor (config: GoogleConfig) {
+  constructor(config: GoogleConfig) {
     this.config = config;
   }
 
-  extractTokenData (raw: any): Result<GoogleTokenData> {
+  extractTokenData(raw: any): Result<GoogleTokenData> {
     const {
       access_token: accessToken,
       refresh_token: refreshToken,
@@ -33,7 +37,7 @@ class GoogleService implements IGoogleService {
     return Result.ok(data);
   }
 
-  getOAuthLink (state?: string): Result<string> {
+  getOAuthLink(state?: string): Result<string> {
     const url = `https://accounts.google.com/o/oauth2/v2/auth?${qs.stringify({
       scope: 'https://www.googleapis.com/auth/youtube.readonly',
       access_type: 'offline',
@@ -46,7 +50,7 @@ class GoogleService implements IGoogleService {
     return Result.ok(url);
   }
 
-  async getTokenData (code: string): Promise<Result<GoogleTokenData>> {
+  async getTokenData(code: string): Promise<Result<GoogleTokenData>> {
     const response = await Axios.post('https://oauth2.googleapis.com/token', {
       code,
       client_id: this.config.clientId,
@@ -60,7 +64,7 @@ class GoogleService implements IGoogleService {
     return tokenData.success ? Result.ok(tokenData.data) : Result.fail();
   }
 
-  async refreshTokenData (
+  async refreshTokenData(
     refreshToken: string
   ): Promise<Result<GoogleTokenData>> {
     const response = await Axios.post('https://oauth2.googleapis.com/token', {

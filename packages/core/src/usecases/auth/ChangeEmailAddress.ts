@@ -1,5 +1,5 @@
 import { EthereumService, MailService } from '../../services';
-import { WalletType, isEmailAddress, isExpired } from '@fanbase/shared';
+import { WalletType, isEmailAddress, isExpired } from '@fest/shared';
 
 import { EmailAddressChangeError } from './errors';
 import Result from '../../Result';

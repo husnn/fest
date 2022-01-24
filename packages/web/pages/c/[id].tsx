@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { ApiClient } from '../../modules/api';
-import { CommunityDTO } from '@fanbase/shared';
+import { CommunityDTO } from '@fest/shared';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 

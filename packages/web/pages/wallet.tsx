@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getNativeToken, isProduction } from '../utils';
 
 import { ApiClient } from '../modules/api';
-import { Balance } from '@fanbase/shared';
+import { Balance } from '@fest/shared';
 import BalanceView from '../ui/BalanceView';
 import { Button } from '../ui';
 import { CurrencyBalance } from '../types';

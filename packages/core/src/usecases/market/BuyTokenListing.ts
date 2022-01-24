@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js';
 
-import { decryptText, WalletType } from '@fanbase/shared';
+import { decryptText, WalletType } from '@fest/shared';
 
 import UseCase from '../../base/UseCase';
 import { TokenListingRepository, WalletRepository } from '../../repositories';

@@ -11,11 +11,11 @@ import {
   UserRepository,
   WaitlistRepository,
   WalletRepository
-} from '@fanbase/postgres';
+} from '@fest/postgres';
 import {
   CreateCommunity,
   EthereumService as IEthereumService
-} from '@fanbase/core';
+} from '@fest/core';
 import express, { Application, Router } from 'express';
 import { googleConfig, youTubeConfig } from './config';
 
@@ -23,7 +23,7 @@ import { AppConfig } from './types/AppConfig';
 import AuthController from './controllers/AuthController';
 import CommunityController from './controllers/CommunityController';
 import ConfigController from './controllers/ConfigController';
-import { EthereumService } from '@fanbase/ethereum';
+import { EthereumService } from '@fest/ethereum';
 import FeedController from './controllers/FeedController';
 import GoogleController from './controllers/GoogleController';
 import GoogleService from './services/GoogleService';

@@ -1,6 +1,6 @@
 import { EntitySchema } from 'typeorm';
-import { Message } from '@fanbase/core';
-import { MessageType } from '@fanbase/shared';
+import { Message } from '@fest/core';
+import { MessageType } from '@fest/shared';
 
 const MessageSchema = new EntitySchema<Message>({
   name: 'message',

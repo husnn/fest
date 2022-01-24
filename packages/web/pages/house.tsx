@@ -6,7 +6,7 @@ import {
   MessageDTO,
   MessageType,
   SendMessageData
-} from '@fanbase/shared';
+} from '@fest/shared';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { ApiClient } from '../modules/api';

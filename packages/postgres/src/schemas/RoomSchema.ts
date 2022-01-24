@@ -1,5 +1,5 @@
 import { EntitySchema } from 'typeorm';
-import { Room } from '@fanbase/core';
+import { Room } from '@fest/core';
 
 const RoomSchema = new EntitySchema<Room>({
   name: 'room',

@@ -1,7 +1,7 @@
-import { InviteStatus, InviteType } from '@fanbase/shared';
+import { InviteStatus, InviteType } from '@fest/shared';
 
 import { EntitySchema } from 'typeorm';
-import { Invite } from '@fanbase/core';
+import { Invite } from '@fest/core';
 
 const InviteSchema = new EntitySchema<Invite>({
   name: 'invite',

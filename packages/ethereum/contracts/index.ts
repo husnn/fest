@@ -20,7 +20,7 @@ const interfaces: { [key: string]: ContractBuild } = {
 
 const contractInstances: { [key: string]: any } = {};
 
-export const getAddress = (name: string, network?: number) =>
+const getAddress = (name: string, network?: number) =>
   interfaces[name].networks[
     network.toString() || Object.keys(interfaces[name].networks)[0]
   ]?.address;

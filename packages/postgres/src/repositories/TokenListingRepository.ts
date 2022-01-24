@@ -1,5 +1,8 @@
-import { TokenListing, TokenListingRepository as ITokenListingRepository } from '@fanbase/core';
-import { Protocol, TokenListingStatus } from '@fanbase/shared';
+import {
+  TokenListing,
+  TokenListingRepository as ITokenListingRepository
+} from '@fest/core';
+import { Protocol, TokenListingStatus } from '@fest/shared';
 
 import TokenListingSchema from '../schemas/TokenListingSchema';
 import Repository from './Repository';

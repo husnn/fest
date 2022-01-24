@@ -13,7 +13,7 @@ import {
   TokenRepository,
   UserRepository,
   WalletRepository
-} from '@fanbase/core';
+} from '@fest/core';
 import {
   EditUserResponse,
   EnableCreatorModeResponse,
@@ -23,7 +23,7 @@ import {
   GetUserCommunitiesResponse,
   GetUserResponse,
   UserInfo
-} from '@fanbase/shared';
+} from '@fest/shared';
 import {
   HttpError,
   HttpResponse,

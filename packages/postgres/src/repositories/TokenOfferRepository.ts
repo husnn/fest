@@ -1,4 +1,7 @@
-import { TokenOffer, TokenOfferRepository as ITokenOfferRepository } from '@fanbase/core';
+import {
+  TokenOffer,
+  TokenOfferRepository as ITokenOfferRepository
+} from '@fest/core';
 
 import TokenOfferSchema from '../schemas/TokenOfferSchema';
 import { Repository } from './Repository';

@@ -1,4 +1,4 @@
-import { Community } from '@fanbase/core';
+import { Community } from '@fest/core';
 import { EntitySchema } from 'typeorm';
 
 const CommunitySchema = new EntitySchema<Community>({

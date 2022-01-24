@@ -1,6 +1,6 @@
 import { Community, Room } from '.';
 
-import { MessageType } from '@fanbase/shared';
+import { MessageType } from '@fest/shared';
 
 type MediaResolution = 'small' | 'regular' | 'high';
 

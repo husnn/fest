@@ -5,7 +5,7 @@ import {
   TokenFee,
   TokenMetadata,
   TokenType
-} from '@fanbase/shared';
+} from '@fest/shared';
 
 import { CreateCommunity } from '../../usecases';
 import { GetYouTubeChannel } from '../google/GetYouTubeChannel';

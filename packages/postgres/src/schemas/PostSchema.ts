@@ -1,5 +1,5 @@
 import { EntitySchema } from 'typeorm';
-import { Post } from '@fanbase/core';
+import { Post } from '@fest/core';
 
 const PostSchema = new EntitySchema<Post>({
   name: 'post',

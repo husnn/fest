@@ -6,12 +6,12 @@ import {
   OAuthRepository,
   UnlinkGoogle,
   User
-} from '@fanbase/core';
+} from '@fest/core';
 import {
   GetOAuthLinkResponse,
   OAuthCheckLinkResponse,
   UnlinkOAuthResponse
-} from '@fanbase/shared';
+} from '@fest/shared';
 import { HttpError, HttpResponse } from '../http';
 import { NextFunction, Request, Response } from 'express';
 

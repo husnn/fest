@@ -1,5 +1,5 @@
 import { EntitySchema } from 'typeorm';
-import { User } from '@fanbase/core';
+import { User } from '@fest/core';
 
 const UserSchema = new EntitySchema<User>({
   name: 'user',

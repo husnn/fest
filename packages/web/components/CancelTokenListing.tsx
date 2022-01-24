@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { TokenListingDTO, WalletType } from '@fanbase/shared';
+import { TokenListingDTO, WalletType } from '@fest/shared';
 
 import { ApiClient } from '../modules/api';
 import useAuthentication from '../modules/auth/useAuthentication';

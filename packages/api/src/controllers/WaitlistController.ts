@@ -1,10 +1,10 @@
 import { HttpError, HttpResponse, ValidationError } from '../http';
-import { JoinWaitlist, WaitlistRepository } from '@fanbase/core';
+import { JoinWaitlist, WaitlistRepository } from '@fest/core';
 import {
   JoinWaitlistResponse,
   isEmailAddress,
   isEthereumAddress
-} from '@fanbase/shared';
+} from '@fest/shared';
 import { NextFunction, Request, Response } from 'express';
 
 export class WaitlistController {

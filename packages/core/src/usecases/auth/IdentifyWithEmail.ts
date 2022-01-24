@@ -13,7 +13,7 @@ import UseCase from '../../base/UseCase';
 import { User } from '../../entities';
 import { generateInvitesForNewUser } from '../invites';
 import { generateUserId } from '../../utils';
-import { isValidPassword } from '@fanbase/shared';
+import { isValidPassword } from '@fest/shared';
 
 export interface IdentifyWithEmailInput {
   email: string;

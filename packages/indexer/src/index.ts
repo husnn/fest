@@ -9,7 +9,7 @@ import Postgres, {
   TokenTradeRepository,
   WalletRepository,
   defaultConfig as postgresConfig
-} from '@fanbase/postgres';
+} from '@fest/postgres';
 import TokenBuy, { TokenBuyJob } from './jobs/TokenBuy';
 import TokenCancelListing, {
   TokenCancelListingJob
@@ -23,8 +23,8 @@ import TokenTransfer, { TokenTransferJob } from './jobs/TokenTransfer';
 import { ethConfig, redisConfig } from './config';
 
 import EthereumListener from './events/ethereum/EthereumListener';
-import { EthereumService } from '@fanbase/ethereum';
-import { NotificationService } from '@fanbase/core';
+import { EthereumService } from '@fest/ethereum';
+import { NotificationService } from '@fest/core';
 import Queue from 'bee-queue';
 import Web3 from 'web3';
 import { createServer } from './server';

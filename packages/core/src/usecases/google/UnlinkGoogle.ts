@@ -1,4 +1,4 @@
-import { OAuthProvider } from '@fanbase/shared';
+import { OAuthProvider } from '@fest/shared';
 
 import UseCase from '../../base/UseCase';
 import OAuthRepository from '../../repositories/OAuthRepository';
@@ -15,13 +15,13 @@ export class UnlinkGoogle extends UseCase<
 > {
   private oAuthRepository: OAuthRepository;
 
-  constructor (oAuthRepository: OAuthRepository) {
+  constructor(oAuthRepository: OAuthRepository) {
     super();
 
     this.oAuthRepository = oAuthRepository;
   }
 
-  async exec (data: UnlinkGoogleInput): Promise<Result<UnlinkGoogleOutput>> {
+  async exec(data: UnlinkGoogleInput): Promise<Result<UnlinkGoogleOutput>> {
     const auth = await this.oAuthRepository.findByUser(
       OAuthProvider.GOOGLE,
       data.user

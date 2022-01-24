@@ -1,4 +1,4 @@
-import { UserDTO as UserDTO } from '@fanbase/shared';
+import { UserDTO as UserDTO } from '@fest/shared';
 
 import UseCase from '../../base/UseCase';
 import { User } from '../../entities';

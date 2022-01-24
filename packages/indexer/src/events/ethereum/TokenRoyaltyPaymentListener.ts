@@ -1,6 +1,6 @@
 import EventListener from './EventListener';
 import { TokenRoyaltyPaymentJob } from '../../jobs/TokenRoyaltyPayment';
-import { Protocol } from '@fanbase/shared';
+import { Protocol } from '@fest/shared';
 
 export class TokenRoyaltyPaymentListener extends EventListener<TokenRoyaltyPaymentJob> {
   EVENT_NAME = 'RoyaltyPayment';

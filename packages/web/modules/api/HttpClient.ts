@@ -1,4 +1,4 @@
-import { Request, Response } from '@fanbase/shared';
+import { Request, Response } from '@fest/shared';
 
 export default abstract class HttpClient {
   abstract request<

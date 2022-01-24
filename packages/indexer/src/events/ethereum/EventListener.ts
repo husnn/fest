@@ -1,4 +1,4 @@
-import { waitUntil } from '@fanbase/shared';
+import { waitUntil } from '@fest/shared';
 import { RedisClient } from 'redis';
 import Web3 from 'web3';
 

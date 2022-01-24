@@ -3,11 +3,11 @@ import {
   GetUserFeed,
   PostRepository,
   UserRepository
-} from '@fanbase/core';
+} from '@fest/core';
 import { HttpError, HttpResponse } from '../http';
 import { NextFunction, Request, Response } from 'express';
 
-import { GetFeedResponse } from '@fanbase/shared';
+import { GetFeedResponse } from '@fest/shared';
 
 class FeedController {
   private getUserFeedUseCase: GetUserFeed;

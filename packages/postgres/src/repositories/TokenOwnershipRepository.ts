@@ -1,6 +1,7 @@
 import {
-    TokenOwnership, TokenOwnershipRepository as ITokenOwnershipRepository
-} from '@fanbase/core';
+  TokenOwnership,
+  TokenOwnershipRepository as ITokenOwnershipRepository
+} from '@fest/core';
 
 import TokenOwnershipSchema from '../schemas/TokenOwnershipSchema';
 import Repository from './Repository';

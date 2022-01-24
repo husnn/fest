@@ -1,7 +1,7 @@
 import Result from '../../Result';
 import UseCase from '../../base/UseCase';
 import { WaitlistEntry } from '../../entities/WaitlistEntry';
-import { WaitlistEntryType } from '@fanbase/shared';
+import { WaitlistEntryType } from '@fest/shared';
 import { WaitlistRepository } from '../../repositories';
 
 type JoinWaitlistInput = {

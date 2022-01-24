@@ -4,7 +4,7 @@ import {
   decryptText,
   encryptText,
   randomNumericString
-} from '@fanbase/shared';
+} from '@fest/shared';
 import { TokenRepository, WalletRepository } from '../../repositories';
 
 import { EthereumService } from '../../services';

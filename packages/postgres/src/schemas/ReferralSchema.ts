@@ -1,5 +1,5 @@
 import { EntitySchema } from 'typeorm';
-import { Referral } from '@fanbase/core';
+import { Referral } from '@fest/core';
 
 const ReferralSchema = new EntitySchema<Referral>({
   name: 'referral',

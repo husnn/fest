@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { WalletType, isValidPassword } from '@fanbase/shared';
+import { WalletType, isValidPassword } from '@fest/shared';
 import { getCurrentUser, saveCurrentUser } from '../modules/auth/authStorage';
 
 import { ApiClient } from '../modules/api';

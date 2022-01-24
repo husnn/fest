@@ -1,4 +1,4 @@
-import { UserRepository as IUserRepository, User } from '@fanbase/core';
+import { UserRepository as IUserRepository, User } from '@fest/core';
 
 import Repository from './Repository';
 import UserSchema from '../schemas/UserSchema';

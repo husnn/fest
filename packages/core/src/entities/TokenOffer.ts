@@ -1,4 +1,4 @@
-import { OfferStatus, Price } from '@fanbase/shared';
+import { OfferStatus, Price } from '@fest/shared';
 
 import TokenOwnership from './TokenOwnership';
 import User from './User';

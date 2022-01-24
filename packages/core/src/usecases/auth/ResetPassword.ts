@@ -1,5 +1,5 @@
 import { AuthError, ResetPasswordError } from './errors';
-import { isExpired, isValidPassword } from '@fanbase/shared';
+import { isExpired, isValidPassword } from '@fest/shared';
 
 import { LoginWithEmail } from './LoginWithEmail';
 import { LoginWithEmailOutput } from './LoginWithEmail';

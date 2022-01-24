@@ -1,4 +1,4 @@
-import { GetCommunity } from '@fanbase/core';
+import { GetCommunity } from '@fest/core';
 import Result from '../../Result';
 import UseCase from '../../base/UseCase';
 import { generateCommunityToken } from './generate';

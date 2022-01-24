@@ -1,4 +1,4 @@
-import { getExpiryDate, randomInteger } from '@fanbase/shared';
+import { getExpiryDate, randomInteger } from '@fest/shared';
 
 import Community from './Community';
 import Token from './Token';

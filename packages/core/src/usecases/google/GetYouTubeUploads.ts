@@ -1,4 +1,4 @@
-import { OAuthProvider, YouTubeVideo } from '@fanbase/shared';
+import { OAuthProvider, YouTubeVideo } from '@fest/shared';
 
 import UseCase from '../../base/UseCase';
 import OAuthRepository from '../../repositories/OAuthRepository';
@@ -27,7 +27,7 @@ export class GetYouTubeUploads extends UseCase<
   private googleService: GoogleService;
   private youTubeService: YouTubeService;
 
-  constructor (
+  constructor(
     oAuthRepository: OAuthRepository,
     googleService: GoogleService,
     youTubeService: YouTubeService
@@ -39,7 +39,7 @@ export class GetYouTubeUploads extends UseCase<
     this.youTubeService = youTubeService;
   }
 
-  async exec (
+  async exec(
     data: GetYouTubeUploadsInput
   ): Promise<Result<GetYouTubeUploadsOutput>> {
     const oAuth = await this.oAuthRepository.findByUser(

@@ -2,7 +2,7 @@ import { Button, FormInput, TextArea, TextInput } from '../ui';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import { Global, css } from '@emotion/react';
 import React, { useState } from 'react';
-import { UserInfoSchema, isEmailAddress } from '@fanbase/shared';
+import { UserInfoSchema, isEmailAddress } from '@fest/shared';
 
 import ApiClient from '../modules/api/ApiClient';
 import { GoogleButton } from '../components';
@@ -63,7 +63,7 @@ export default function SettingsPage() {
 
   const { currentUser, setCurrentUser, clearAuth } = useAuthentication(true);
 
-  const [newEmail, setNewEmail] = useState(currentUser?.email);
+  const [newEmail, setNewEmail] = useState(currentUser?.email || '');
   const [emailChangeError, setEmailChangeError] = useState();
   const [emailChangeRequested, setEmailChangeRequested] = useState(false);
 
@@ -146,7 +146,7 @@ export default function SettingsPage() {
                       name="email"
                       placeholder="bruce@wayne.inc"
                       component={TextInput}
-                      value={currentUser.email}
+                      value={currentUser.email || ''}
                       disabled={true}
                     />
                   </FormInput>

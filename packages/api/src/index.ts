@@ -1,8 +1,8 @@
-import Postgres, { defaultConfig as postgresConfig } from '@fanbase/postgres';
+import Postgres, { defaultConfig as postgresConfig } from '@fest/postgres';
 import { appConfig, ethConfig, indexerConfig } from './config';
 
 import App from './App';
-import { EthereumService } from '@fanbase/ethereum';
+import { EthereumService } from '@fest/ethereum';
 import Web3 from 'web3';
 import net from 'net';
 import { setInterval } from 'timers';

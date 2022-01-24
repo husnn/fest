@@ -12,7 +12,7 @@ import {
   MintToken,
   TransferERC20,
   WithdrawMarketEarnings
-} from '@fanbase/eth-transactions';
+} from '@fest/eth-transactions';
 import {
   ERC20Info,
   EthereumService as IEthereumService,
@@ -20,16 +20,16 @@ import {
   TxResult,
   Wallet,
   generateWalletId
-} from '@fanbase/core';
+} from '@fest/core';
 import {
   EthereumTx,
   Price,
   Protocol,
   TokenFee,
   WalletType
-} from '@fanbase/shared';
+} from '@fest/shared';
 
-import Contracts from '@fanbase/eth-contracts';
+import Contracts from '@fest/eth-contracts';
 import Decimal from 'decimal.js';
 import ERC20Abi from './abi/ERC20.json';
 import Web3 from 'web3';

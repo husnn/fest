@@ -2,9 +2,9 @@ import { HttpError, HttpResponse, ValidationError } from '../http';
 import { NextFunction, Request, Response } from 'express';
 
 import ConfigController from './ConfigController';
-import { EthereumService } from '@fanbase/core';
-import { RequestTestFundsResponse } from '@fanbase/shared';
-import { WalletRepository } from '@fanbase/postgres';
+import { EthereumService } from '@fest/core';
+import { RequestTestFundsResponse } from '@fest/shared';
+import { WalletRepository } from '@fest/postgres';
 
 export class InternalController {
   private configController: ConfigController;

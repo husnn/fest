@@ -5,10 +5,10 @@ import {
   NotificationService,
   NotificationTopic,
   WalletRepository
-} from '@fanbase/core';
+} from '@fest/core';
 
 import Job from './Job';
-import { Protocol } from '@fanbase/shared';
+import { Protocol } from '@fest/shared';
 
 export type TokenRoyaltyPaymentJob = {
   protocol: Protocol;

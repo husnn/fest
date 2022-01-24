@@ -1,4 +1,4 @@
-import { CurrentUserDTO, Protocol, isEmailAddress } from '@fanbase/shared';
+import { CurrentUserDTO, Protocol, isEmailAddress } from '@fest/shared';
 import React, { useEffect, useState } from 'react';
 import { saveAuthToken, saveCurrentUser } from '../modules/auth/authStorage';
 
@@ -223,7 +223,7 @@ export default function Login() {
       <Modal
         show={true}
         title="Got an invite?"
-        description="Fanbase is currently invite-only. Enter your code to get early access."
+        description="Fest is currently invite-only. Enter your code to get early access."
         ok="Enter"
         onOkPressed={() => onCodeSubmit(input)}
         okEnabled={true}
@@ -244,7 +244,7 @@ export default function Login() {
   return (
     <Container>
       <Head>
-        <title>Continue to Fanbase</title>
+        <title>Continue to Fest</title>
       </Head>
       <Box>
         {inviteCode && (

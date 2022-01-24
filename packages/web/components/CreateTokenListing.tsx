@@ -2,7 +2,7 @@ import { Button, FormInput, TextInput } from '../ui';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import React, { useEffect, useState } from 'react';
 import ShadowTextInput, { ShadowOption } from '../ui/ShadowTextInput';
-import { TokenDTO, TokenOwnershipDTO, WalletType } from '@fanbase/shared';
+import { TokenDTO, TokenOwnershipDTO, WalletType } from '@fest/shared';
 
 import ApiClient from '../modules/api/ApiClient';
 import styled from '@emotion/styled';
@@ -63,13 +63,17 @@ export const CreateTokenListing = ({
           text: ccy.symbol,
           data: ccy
         };
-      }));
+      })
+    );
   }, [web3.ethereum]);
 
   const listForSale = async (quantity: number, price: number) => {
     let txHash;
 
-    const actualPrice = await web3.ethereum.toERC20Amount(currency.contract, price);
+    const actualPrice = await web3.ethereum.toERC20Amount(
+      currency.contract,
+      price
+    );
 
     if (currentUser.wallet.type == WalletType.INTERNAL) {
       txHash = await ApiClient.instance?.listForSale(token.id, quantity, {

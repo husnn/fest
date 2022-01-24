@@ -1,7 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
 
-import { GetYouTubeUploads, GoogleService, OAuthRepository, YouTubeService } from '@fanbase/core';
-import { GetOwnUploadsResponse } from '@fanbase/shared';
+import {
+  GetYouTubeUploads,
+  GoogleService,
+  OAuthRepository,
+  YouTubeService
+} from '@fest/core';
+import { GetOwnUploadsResponse } from '@fest/shared';
 
 import { HttpError, HttpResponse } from '../http';
 

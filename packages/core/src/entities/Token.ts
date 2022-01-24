@@ -3,7 +3,7 @@ import {
   TokenChainData,
   TokenFee,
   TokenType
-} from '@fanbase/shared';
+} from '@fest/shared';
 
 import Community from './Community';
 import User from './User';

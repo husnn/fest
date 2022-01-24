@@ -3,7 +3,7 @@ import {
   NotificationCategory,
   NotificationPriority,
   NotificationTopic
-} from '@fanbase/core';
+} from '@fest/core';
 
 import { EntitySchema } from 'typeorm';
 

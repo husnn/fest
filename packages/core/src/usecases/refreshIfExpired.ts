@@ -1,4 +1,4 @@
-import { OAuth } from '@fanbase/core';
+import { OAuth } from '@fest/core';
 
 import { Result } from '../Result';
 import GoogleService from '../services/GoogleService';

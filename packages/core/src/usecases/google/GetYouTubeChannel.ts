@@ -1,4 +1,4 @@
-import { OAuthProvider } from '@fanbase/shared';
+import { OAuthProvider } from '@fest/shared';
 
 import UseCase from '../../base/UseCase';
 import { YouTubeChannel } from '../../entities';

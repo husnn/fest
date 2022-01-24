@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { TokenDTO } from '@fanbase/shared';
+import { TokenDTO } from '@fest/shared';
 
 import ApiClient from '../modules/api/ApiClient';
 import usePagination from '../modules/api/usePagination';

@@ -14,7 +14,7 @@ import Web3Provider from '../modules/web3/Web3Provider';
 const axiosClient = new AxiosClient();
 new ApiClient(axiosClient);
 
-function FanbaseApp({ Component, pageProps }: AppProps) {
+function FestApp({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider theme={DefaultTheme}>
       <AuthProvider>
@@ -29,4 +29,4 @@ function FanbaseApp({ Component, pageProps }: AppProps) {
   );
 }
 
-export default FanbaseApp;
+export default FestApp;

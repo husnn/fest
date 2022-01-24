@@ -1,7 +1,7 @@
 import { EntitySchema } from 'typeorm';
 
-import { Wallet } from '@fanbase/core';
-import { Protocol, WalletType } from '@fanbase/shared';
+import { Wallet } from '@fest/core';
+import { Protocol, WalletType } from '@fest/shared';
 
 const WalletSchema = new EntitySchema<Wallet>({
   name: 'wallet',

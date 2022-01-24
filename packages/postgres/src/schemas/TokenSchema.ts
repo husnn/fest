@@ -1,6 +1,6 @@
 import { EntitySchema } from 'typeorm';
-import { Token } from '@fanbase/core';
-import { TokenType } from '@fanbase/shared';
+import { Token } from '@fest/core';
+import { TokenType } from '@fest/shared';
 
 const TokenSchema = new EntitySchema<Token>({
   name: 'token',

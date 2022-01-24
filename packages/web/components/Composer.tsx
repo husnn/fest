@@ -7,7 +7,7 @@ import {
 } from '../utils';
 
 import { Button } from '../ui';
-import { CommunityDTO } from '@fanbase/shared';
+import { CommunityDTO } from '@fest/shared';
 import ContentEditable from 'react-contenteditable';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';

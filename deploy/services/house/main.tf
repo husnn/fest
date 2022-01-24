@@ -6,11 +6,11 @@ module "service" {
   cluster_id   = var.cluster_id
   cluster_name = var.cluster_name
 
-  app_name     = "fanbase"
+  app_name     = "fest"
   service_name = "house"
 
-  image_name     = "fanbase"
-  container_name = "fanbase_house"
+  image_name     = "fest"
+  container_name = "fest_house"
   environment    = var.environment
 
   ecr_repo_url = var.ecr_repo_url
@@ -52,7 +52,7 @@ module "service" {
   ecr_repo_arn           = var.ecr_repo_arn
 
   github_username = "husnn"
-  github_repo     = "fanbase"
+  github_repo     = "fest"
   github_branch   = var.github_branch
   github_token    = var.github_token
 }

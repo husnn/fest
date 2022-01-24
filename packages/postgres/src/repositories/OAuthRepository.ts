@@ -1,5 +1,5 @@
-import { OAuth, OAuthRepository as IOAuthRepository } from '@fanbase/core';
-import { OAuthProvider } from '@fanbase/shared';
+import { OAuth, OAuthRepository as IOAuthRepository } from '@fest/core';
+import { OAuthProvider } from '@fest/shared';
 
 import OAuthSchema from '../schemas/OAuthSchema';
 import Repository from './Repository';

@@ -1,4 +1,4 @@
-import { TokenTradeDTO } from '@fanbase/shared';
+import { TokenTradeDTO } from '@fest/shared';
 import React from 'react';
 import { useBalance } from '../modules/useBalance';
 import Decimal from 'decimal.js';

@@ -1,6 +1,6 @@
 import { Invite, InviteRepository, generateInviteCode } from '..';
 
-import { InviteType } from '@fanbase/shared';
+import { InviteType } from '@fest/shared';
 
 export const generateInvites = (
   inviteRepository: InviteRepository,

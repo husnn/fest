@@ -1,7 +1,7 @@
-import { Post, generatePostId } from '@fanbase/core';
+import { Post, generatePostId } from '@fest/core';
 import { PostRepository, UserRepository } from '../../repositories';
 
-import { PostDTO } from '@fanbase/shared';
+import { PostDTO } from '@fest/shared';
 import { Result } from '../../Result';
 import UseCase from '../../base/UseCase';
 

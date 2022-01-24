@@ -1,7 +1,11 @@
-import { decryptText, Price, WalletType } from '@fanbase/shared';
+import { decryptText, Price, WalletType } from '@fest/shared';
 
 import UseCase from '../../base/UseCase';
-import { TokenOwnershipRepository, TokenRepository, WalletRepository } from '../../repositories';
+import {
+  TokenOwnershipRepository,
+  TokenRepository,
+  WalletRepository
+} from '../../repositories';
 import { Result } from '../../Result';
 import { EthereumService } from '../../services';
 import { ApproveTokenSale } from '../token';

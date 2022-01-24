@@ -1,4 +1,4 @@
-import { InitConfig } from '@fanbase/shared';
+import { InitConfig } from '@fest/shared';
 
 import { ApiClient } from './modules/api';
 

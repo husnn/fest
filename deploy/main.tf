@@ -5,7 +5,7 @@ provider "aws" {
 
 terraform {
   backend "s3" {
-    bucket = "fanbase-terraform-state-53186"
+    bucket = "fest-terraform-state-53186"
     key    = "state"
     region = "eu-west-1"
   }
@@ -119,7 +119,7 @@ module "service_api_prod" {
 
   region = var.region
 
-  hostname        = "fanbase.lol"
+  hostname        = "fest.so"
   route53_zone_id = aws_route53_zone.main.zone_id
 
   environment = "production"
@@ -154,7 +154,7 @@ module "service_house_prod" {
 
   region = var.region
 
-  hostname    = "fanbase.lol"
+  hostname    = "fest.so"
   environment = "production"
 
   cluster_id   = aws_ecs_cluster.production.id

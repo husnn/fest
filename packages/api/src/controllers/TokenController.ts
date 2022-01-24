@@ -20,7 +20,7 @@ import {
   UserRepository,
   WalletRepository,
   YouTubeService
-} from '@fanbase/core';
+} from '@fest/core';
 import {
   ApproveMintResponse,
   ApproveTokenSaleResponse,
@@ -32,7 +32,7 @@ import {
   ListTokenForSaleResponse,
   MintTokenResponse,
   TokenData
-} from '@fanbase/shared';
+} from '@fest/shared';
 import { HttpError, NotFoundError } from '../http';
 import { NextFunction, Request, Response } from 'express';
 

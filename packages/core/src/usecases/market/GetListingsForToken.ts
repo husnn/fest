@@ -1,4 +1,4 @@
-import { TokenListingDTO } from '@fanbase/shared';
+import { TokenListingDTO } from '@fest/shared';
 
 import UseCase from '../../base/UseCase';
 import { TokenListingRepository } from '../../repositories';

@@ -1,7 +1,7 @@
 import {
   ReferralRepository as IReferralRepository,
   Referral
-} from '@fanbase/core';
+} from '@fest/core';
 
 import ReferralSchema from '../schemas/ReferralSchema';
 import Repository from './Repository';

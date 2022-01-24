@@ -1,5 +1,5 @@
 import { Notification } from '../entities';
-import { NotificationDTO } from '@fanbase/shared';
+import { NotificationDTO } from '@fest/shared';
 import { NotificationRepository } from '../repositories';
 
 export enum NotificationPriority {

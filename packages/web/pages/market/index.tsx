@@ -3,7 +3,7 @@ import {
   TokenListingDTO,
   TokenOfferDTO,
   TokenTradeDTO
-} from '@fanbase/shared';
+} from '@fest/shared';
 import { Button, Link } from '../../ui';
 import React, { useEffect, useState } from 'react';
 import { getTokenUrl, reloadInTime } from '../../utils';

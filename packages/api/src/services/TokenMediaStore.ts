@@ -1,6 +1,6 @@
 // import './allow_s3_cors';
 
-import { MediaService, Result } from '@fanbase/core';
+import { MediaService, Result } from '@fest/core';
 import { PutObjectCommand, S3 as S3Client } from '@aws-sdk/client-s3';
 
 import { PassThrough } from 'stream';
@@ -52,7 +52,7 @@ export class TokenMediaStore implements MediaService {
       Bucket: process.env.S3_TOKEN_MEDIA_NAME,
       Key: filePath,
       ContentType: contentType,
-      ContentLength: stream.headers['content-length'],
+      ContentLength: Number(stream.headers['content-length']),
       Body: passThrough,
       ACL: 'public-read'
     });

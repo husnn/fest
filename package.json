@@ -1,40 +1,39 @@
 {
-  "name": "fanbase",
+  "name": "fest",
   "version": "0.0.1",
   "private": true,
   "workspaces": [
     "packages/*"
   ],
-  "packageManager": "yarn@3.1.0",
+  "packageManager": "yarn@3.1.1",
   "scripts": {
     "eslint:check": "eslint --ext .js,.jsx,.ts,.tsx .",
     "eslint:fix": "eslint --fix --ext .js,.jsx,.ts,.tsx .",
     "build": "tsc --build tsconfig.build.json",
     "watch": "yarn build --watch",
-    "web": "yarn workspace @fanbase/web",
-    "api": "yarn workspace @fanbase/api",
-    "indexer": "yarn workspace @fanbase/indexer",
-    "eth-contracts": "yarn workspace @fanbase/eth-contracts",
-    "console": "yarn workspace @fanbase/console",
-    "house": "yarn workspace @fanbase/house"
+    "web": "yarn workspace @fest/web",
+    "api": "yarn workspace @fest/api",
+    "indexer": "yarn workspace @fest/indexer",
+    "eth-contracts": "yarn workspace @fest/eth-contracts",
+    "console": "yarn workspace @fest/console",
+    "house": "yarn workspace @fest/house"
   },
   "devDependencies": {
-    "@types/mjml": "^4.7.0",
-    "@typescript-eslint/eslint-plugin": "^4.26.1",
-    "@typescript-eslint/parser": "^4.26.1",
-    "@yarnpkg/pnpify": "^3.0.0-rc.6",
-    "concurrently": "^6.2.0",
-    "eslint": "^7.28.0",
+    "@typescript-eslint/eslint-plugin": "^5.10.0",
+    "@typescript-eslint/parser": "^5.10.0",
+    "@yarnpkg/pnpify": "^3.1.1-rc.11",
+    "concurrently": "^7.0.0",
+    "eslint": "^8.7.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-standard": "^16.0.3",
-    "eslint-import-resolver-node": "^0.3.4",
-    "eslint-plugin-import": "^2.23.4",
+    "eslint-import-resolver-node": "^0.3.6",
+    "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^5.1.0",
-    "eslint-plugin-react": "latest",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-react": "^7.28.0",
     "kill-port": "^1.6.1",
-    "node-gyp": "^8.2.0",
-    "prettier": "^2.3.1",
-    "typescript": "^4.3.2"
+    "node-gyp": "^8.4.1",
+    "prettier": "^2.5.1",
+    "typescript": "^4.5.5"
   }
 }

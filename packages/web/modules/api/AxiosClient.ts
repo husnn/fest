@@ -1,4 +1,4 @@
-import { Request, Response } from '@fanbase/shared';
+import { Request, Response } from '@fest/shared';
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 
 import HttpClient from './HttpClient';

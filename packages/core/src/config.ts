@@ -1,4 +1,4 @@
-import { WalletType } from '@fanbase/shared';
+import { WalletType } from '@fest/shared';
 
 export const isProduction = process.env.NODE_ENV === 'production';
 

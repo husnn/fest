@@ -2,7 +2,7 @@ import { InviteRepository, UserRepository } from '../../repositories';
 
 import { Invite } from '../../entities';
 import { InviteError } from './errors';
-import { InviteType } from '@fanbase/shared';
+import { InviteType } from '@fest/shared';
 import Result from '../../Result';
 import UseCase from '../../base/UseCase';
 

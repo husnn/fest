@@ -1,6 +1,6 @@
 import Common from '@ethereumjs/common';
 import { Transaction as EthereumTx } from 'ethereumjs-tx';
-import { EthereumTx as IEthereumTx } from '@fanbase/shared';
+import { EthereumTx as IEthereumTx } from '@fest/shared';
 import Web3 from 'web3';
 
 export class Transaction implements IEthereumTx {

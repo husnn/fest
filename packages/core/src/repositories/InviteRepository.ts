@@ -1,5 +1,5 @@
 import Invite from '../entities/Invite';
-import { InviteType } from '@fanbase/shared';
+import { InviteType } from '@fest/shared';
 import Repository from './Repository';
 
 export interface InviteRepository extends Repository<Invite> {

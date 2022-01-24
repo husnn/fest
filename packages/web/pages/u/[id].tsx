@@ -1,6 +1,6 @@
 import { Button, Link } from '../../ui';
 import React, { useEffect, useState } from 'react';
-import { TokenDTO, TokenOwnedDTO, UserDTO } from '@fanbase/shared';
+import { TokenDTO, TokenOwnedDTO, UserDTO } from '@fest/shared';
 import {
   getCommunityUrl,
   getDisplayName,

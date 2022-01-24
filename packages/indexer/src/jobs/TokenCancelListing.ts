@@ -1,7 +1,7 @@
-import { Protocol, TokenListingStatus } from '@fanbase/shared';
+import { Protocol, TokenListingStatus } from '@fest/shared';
 
 import Job from './Job';
-import { TokenListingRepository } from '@fanbase/core';
+import { TokenListingRepository } from '@fest/core';
 
 export type TokenCancelListingJob = {
   protocol: Protocol;

@@ -1,4 +1,4 @@
-import { WaitlistEntryType } from '@fanbase/shared';
+import { WaitlistEntryType } from '@fest/shared';
 
 export class WaitlistEntry {
   readonly id: string;

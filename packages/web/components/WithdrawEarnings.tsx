@@ -1,4 +1,4 @@
-import { WalletType } from '@fanbase/shared';
+import { WalletType } from '@fest/shared';
 import React from 'react';
 import { ApiClient } from '../modules/api';
 

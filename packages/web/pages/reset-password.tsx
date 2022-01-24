@@ -10,7 +10,7 @@ import Head from 'next/head';
 import Modal from '../ui/Modal';
 import { TextInput } from '../ui';
 import { getHomeUrl } from '../utils';
-import { isValidPassword } from '@fanbase/shared';
+import { isValidPassword } from '@fest/shared';
 import useAuthentication from '../modules/auth/useAuthentication';
 import { useHeader } from '../modules/navigation';
 import { useRouter } from 'next/router';

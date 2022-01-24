@@ -1,4 +1,4 @@
-import { encryptText, Protocol, randomNumericString } from '@fanbase/shared';
+import { encryptText, Protocol, randomNumericString } from '@fest/shared';
 
 import UseCase from '../../base/UseCase';
 import { TokenRepository, WalletRepository } from '../../repositories';

@@ -1,6 +1,6 @@
-import { Email, WaitlistEntry } from '@fanbase/core';
+import { Email, WaitlistEntry } from '@fest/core';
 
-import { WaitlistEntryType } from '@fanbase/shared';
+import { WaitlistEntryType } from '@fest/shared';
 import getEmailTemplate from '../getEmailTemplate';
 
 export class AcceptanceEmail extends Email {

@@ -1,7 +1,7 @@
 import { Response as ExpressResponse, NextFunction, Request } from 'express';
 import { HttpError, HttpResponse } from '../http';
 
-import { Response } from '@fanbase/shared';
+import { Response } from '@fest/shared';
 
 export interface ErrorResponse extends Response {
   error: string;

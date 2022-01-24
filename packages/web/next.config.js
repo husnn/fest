@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const withTM = require('next-transpile-modules')([
-  '@fanbase/shared',
-  '@fanbase/eth-contracts',
-  '@fanbase/eth-transactions'
+  '@fest/shared',
+  '@fest/eth-contracts',
+  '@fest/eth-transactions'
 ]);
 
 module.exports = withTM({

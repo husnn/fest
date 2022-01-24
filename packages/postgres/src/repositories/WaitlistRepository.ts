@@ -1,7 +1,7 @@
 import {
   WaitlistRepository as IWaitlistRepository,
   WaitlistEntry
-} from '@fanbase/core';
+} from '@fest/core';
 
 import Repository from './Repository';
 import WaitlistEntrySchema from '../schemas/WaitlistEntrySchema';

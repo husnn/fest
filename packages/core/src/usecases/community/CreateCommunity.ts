@@ -3,7 +3,7 @@ import { CommunityRepository, TokenRepository } from '../../repositories';
 import { Community } from '../../entities';
 import Result from '../../Result';
 import UseCase from '../../base/UseCase';
-import { generateCommunityId } from '@fanbase/core';
+import { generateCommunityId } from '@fest/core';
 
 type CreateCommunityInput = {
   creator: string;

@@ -3,11 +3,11 @@ import {
   MediaService,
   PostRepository,
   UserRepository
-} from '@fanbase/core';
+} from '@fest/core';
 import {
   GetPostMediaUploadURLsResponse,
   PostMediaUploadData
-} from '@fanbase/shared';
+} from '@fest/shared';
 import { HttpError, HttpResponse } from '../http';
 import { NextFunction, Request, Response } from 'express';
 

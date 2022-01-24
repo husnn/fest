@@ -2,13 +2,11 @@ import React, { useState } from 'react';
 
 import styled from '@emotion/styled';
 
-import moreIcon from '../public/images/ic-more.png';
-
 const ButtonGroupTrigger = styled.button`
   width: 40px;
   height: 40px;
   display: inline-block;
-  background-image: url(${moreIcon});
+  background-image: url('images/ic-more.png'});
   background-repeat: no-repeat;
   background-position: center;
   background-size: 16px;

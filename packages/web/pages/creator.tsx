@@ -1,6 +1,6 @@
 import { Button, TextInput } from '../ui';
 import React, { useEffect, useState } from 'react';
-import { WaitlistEntryType, WalletType } from '@fanbase/shared';
+import { WaitlistEntryType, WalletType } from '@fest/shared';
 import { getCurrentUser, saveCurrentUser } from '../modules/auth/authStorage';
 
 import { ApiClient } from '../modules/api';
@@ -131,7 +131,7 @@ export const CreatorPage = () => {
       <Box>
         <Header>
           <h1>Apply to the creator program</h1>
-          <p>Are you a creator looking to build a community on Fanbase?</p>
+          <p>Are you a creator looking to build a community on Fest?</p>
         </Header>
         <CodeInput error={error} onSubmit={(code) => enable(code)} />
         <Actions>

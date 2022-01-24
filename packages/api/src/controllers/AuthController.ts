@@ -18,7 +18,7 @@ import {
   UserRepository,
   WaitlistRepository,
   WalletRepository
-} from '@fanbase/core';
+} from '@fest/core';
 import {
   AuthPrecheckResponse,
   ChangeEmailAddressResponse,
@@ -29,7 +29,7 @@ import {
   RequestPasswordResetResponse,
   ResetPasswordResponse,
   isEmailAddress
-} from '@fanbase/shared';
+} from '@fest/shared';
 import {
   HttpError,
   HttpResponse,

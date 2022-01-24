@@ -1,5 +1,5 @@
-import { EthereumService, WalletRepository } from '@fanbase/core';
-import { decryptText, Protocol } from '@fanbase/shared';
+import { EthereumService, WalletRepository } from '@fest/core';
+import { decryptText, Protocol } from '@fest/shared';
 import UseCase from '../../base/UseCase';
 import Result from '../../Result';
 
