@@ -3,7 +3,6 @@ import { Room } from '@fest/core';
 
 const RoomSchema = new EntitySchema<Room>({
   name: 'room',
-  tableName: 'rooms',
   columns: {
     id: {
       type: 'uuid',

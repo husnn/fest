@@ -1,7 +1,6 @@
 import { EntitySchema } from 'typeorm';
-
+import { OfferStatus } from '@fest/shared';
 import { TokenOffer } from '@fest/core';
-import { Currency, OfferStatus } from '@fest/shared';
 
 const TokenOfferSchema = new EntitySchema<TokenOffer>({
   name: 'token_offer',

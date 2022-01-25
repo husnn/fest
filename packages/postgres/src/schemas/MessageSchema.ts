@@ -4,7 +4,6 @@ import { MessageType } from '@fest/shared';
 
 const MessageSchema = new EntitySchema<Message>({
   name: 'message',
-  tableName: 'messages',
   columns: {
     id: {
       type: 'uuid',
@@ -58,9 +57,9 @@ const MessageSchema = new EntitySchema<Message>({
     rooms: {
       type: 'many-to-many',
       target: 'room',
-      inverseSide: 'messages',
+      inverseSide: 'message',
       joinTable: {
-        name: 'rooms_messages',
+        name: 'message_room',
         joinColumn: {
           name: 'message_id',
           referencedColumnName: 'id'

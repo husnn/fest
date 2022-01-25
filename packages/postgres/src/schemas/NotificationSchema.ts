@@ -9,7 +9,6 @@ import { EntitySchema } from 'typeorm';
 
 const NotificationSchema = new EntitySchema<Notification>({
   name: 'notification',
-  tableName: 'notifications',
   columns: {
     id: {
       type: 'uuid',

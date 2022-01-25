@@ -3,7 +3,6 @@ import { Post } from '@fest/core';
 
 const PostSchema = new EntitySchema<Post>({
   name: 'post',
-  tableName: 'posts',
   columns: {
     id: {
       type: 'text',
