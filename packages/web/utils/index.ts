@@ -77,6 +77,8 @@ export const getImageUrl = (
   },
   override = false
 ) => {
+  if (process.env.NODE_ENV === 'development') return sourceUrl;
+
   let endpoint;
   const baseUrl = process.env.NEXT_PUBLIC_IMAGES_URL;
 

@@ -1,4 +1,4 @@
-// import './allow_s3_cors';
+import './allow_s3_cors';
 
 import { MediaService, Result } from '@fest/core';
 import { PutObjectCommand, S3 as S3Client } from '@aws-sdk/client-s3';
@@ -10,24 +10,24 @@ import mime from 'mime-types';
 import { nanoid } from 'nanoid';
 import path from 'path';
 
-const MEDIA_BASE_PATH = `${process.env.S3_TOKEN_MEDIA_URL}/${process.env.S3_TOKEN_MEDIA_NAME}`;
-
 export class TokenMediaStore implements MediaService {
   private s3: S3Client;
 
   constructor() {
     this.s3 = new S3Client({
-      endpoint: process.env.S3_TOKEN_MEDIA_URL,
-      region: process.env.S3_TOKEN_MEDIA_REGION || 'us-east-1',
+      endpoint: process.env.TOKEN_MEDIA_S3_URL,
+      region: process.env.TOKEN_MEDIA_S3_REGION || 'us-east-1',
       credentials: {
-        accessKeyId: process.env.S3_TOKEN_MEDIA_API_KEY,
-        secretAccessKey: process.env.S3_TOKEN_MEDIA_API_SECRET
+        accessKeyId: process.env.TOKEN_MEDIA_S3_API_KEY,
+        secretAccessKey: process.env.TOKEN_MEDIA_S3_API_SECRET
       }
     });
   }
 
   getFilePath(filename: string, ext: string) {
-    return `media/full/${filename}${ext}`;
+    return `${
+      process.env.NODE_ENV === 'staging' ? 'staging/' : ''
+    }media/original/${filename}${ext}`;
   }
 
   async pipeFrom(
@@ -49,7 +49,7 @@ export class TokenMediaStore implements MediaService {
     const filePath = this.getFilePath(filename || nanoid(), extension);
 
     const command = new PutObjectCommand({
-      Bucket: process.env.S3_TOKEN_MEDIA_NAME,
+      Bucket: process.env.TOKEN_MEDIA_S3_NAME,
       Key: filePath,
       ContentType: contentType,
       ContentLength: Number(stream.headers['content-length']),
@@ -63,7 +63,7 @@ export class TokenMediaStore implements MediaService {
       await this.s3.send(command);
       passThrough.end();
 
-      return Result.ok(`${MEDIA_BASE_PATH}/${filePath}`);
+      return Result.ok(`${process.env.TOKEN_MEDIA_URL}/${filePath}`);
     } catch (err) {
       Result.fail();
     }
@@ -86,7 +86,7 @@ export class TokenMediaStore implements MediaService {
 
     try {
       const command = new PutObjectCommand({
-        Bucket: process.env.S3_TOKEN_MEDIA_NAME,
+        Bucket: process.env.TOKEN_MEDIA_S3_NAME,
         Key: filePath,
         ContentType: filetype,
         ContentLength: filesize,
@@ -103,7 +103,7 @@ export class TokenMediaStore implements MediaService {
     return signedUrl
       ? Result.ok({
           signedUrl,
-          url: `${MEDIA_BASE_PATH}/${filePath}`
+          url: `${process.env.TOKEN_MEDIA_URL}/${filePath}`
         })
       : Result.fail();
   }

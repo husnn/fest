@@ -35,7 +35,7 @@ const Preview = styled.div<{ bg?: string }>`
     #f5f5f5;
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 50%;
+  background-size: ${(props) => (props.bg ? 'cover' : '50%')};
 
   border-radius: 20px;
 

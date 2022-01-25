@@ -10,6 +10,10 @@ export class MetadataStore implements IPFSService {
 
   async saveJson(content): Promise<Result<string>> {
     try {
+      if (process.env.NODE_ENV === 'development') {
+        return Result.ok('dev-ipfs-hash');
+      }
+
       const pin = await this.pinata.pinJSONToIPFS(content, {});
       return Result.ok(pin.IpfsHash);
     } catch (err) {
