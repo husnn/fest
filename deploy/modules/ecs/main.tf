@@ -51,15 +51,19 @@ resource "aws_s3_bucket" "pipeline" {
   force_destroy = true
 }
 
+resource "aws_ecr_repository" "main" {
+  name = local.project_name
+}
+
 module "codebuild" {
   source = "./codebuild"
 
   project_name   = local.project_name
   image_name     = var.image_name
   container_name = var.container_name
-  ecr_repo_url   = var.ecr_repo_url
   s3_bucket_arn  = aws_s3_bucket.pipeline.arn
-  ecr_repo_arn   = var.ecr_repo_arn
+  ecr_repo_arn   = aws_ecr_repository.main.arn
+  ecr_repo_url   = aws_ecr_repository.main.repository_url
 }
 
 module "codepipeline" {
@@ -70,7 +74,7 @@ module "codepipeline" {
   service_name   = aws_ecs_service.main.name
   image_name     = var.image_name
   container_name = var.container_name
-  ecr_repo_url   = var.ecr_repo_url
+  ecr_repo_url   = aws_ecr_repository.main.repository_url
   s3_bucket_arn  = aws_s3_bucket.pipeline.arn
   s3_bucket_name = aws_s3_bucket.pipeline.bucket
 
@@ -94,7 +98,7 @@ resource "aws_ecs_task_definition" "main" {
 
   container_definitions = templatefile("${path.module}/task-definition.json", {
     container_name                  = "${var.app_name}_${var.service_name}"
-    ecr_repo_url                    = var.ecr_repo_url
+    ecr_repo_url                    = aws_ecr_repository.main.repository_url
     tag                             = "latest"
     aws_cloudwatch_log_group_region = var.region
     aws_cloudwatch_log_group_name   = aws_cloudwatch_log_group.main.name

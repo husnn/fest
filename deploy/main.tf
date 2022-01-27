@@ -128,14 +128,6 @@ resource "aws_elasticache_subnet_group" "main" {
 #   allowed_security_group_ids = []
 # }
 
-resource "aws_ecr_repository" "main_staging" {
-  name = "${var.app_name}-staging"
-}
-
-resource "aws_ecr_repository" "main_prod" {
-  name = "${var.app_name}-prod"
-}
-
 resource "aws_ecs_cluster" "staging" {
   name = "staging"
 }
@@ -167,9 +159,6 @@ module "service_api_staging" {
   lb_security_group_id = module.alb.security_group_id
 
   lb_listener_arn = module.alb.https_listener_arn
-
-  ecr_repo_url = aws_ecr_repository.main_staging.repository_url
-  ecr_repo_arn = aws_ecr_repository.main_staging.arn
 
   secrets_manager_arn = var.api_secrets_manager_staging_arn
 
@@ -206,9 +195,6 @@ module "service_api_prod" {
   lb_security_group_id = module.alb.security_group_id
 
   lb_listener_arn = module.alb.https_listener_arn
-
-  ecr_repo_url = aws_ecr_repository.main_prod.repository_url
-  ecr_repo_arn = aws_ecr_repository.main_prod.arn
 
   secrets_manager_arn = var.api_secrets_manager_prod_arn
 

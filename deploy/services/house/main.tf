@@ -13,8 +13,6 @@ module "service" {
   container_name = "${var.app_name}_house"
   environment    = var.environment
 
-  ecr_repo_url = var.ecr_repo_url
-
   hostname = "house.${var.hostname}"
   port     = 6000
 
@@ -49,7 +47,6 @@ module "service" {
   cpu                    = var.cpu
   memory                 = var.memory
   instance_count_desired = var.instance_count
-  ecr_repo_arn           = var.ecr_repo_arn
 
   github_username = var.github_user
   github_repo     = var.github_repo

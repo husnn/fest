@@ -21,9 +21,6 @@ variable "route53_zone_id" {}
 
 variable "postgres_database_url" {}
 
-variable "ecr_repo_url" {}
-variable "ecr_repo_arn" {}
-
 variable "github_user" {}
 variable "github_repo" {}
 variable "github_branch" {}
