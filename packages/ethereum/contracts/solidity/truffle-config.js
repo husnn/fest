@@ -39,9 +39,10 @@ module.exports = {
           process.env.PRIVATE_KEY_MAINNET,
           process.env.PROVIDER_POLYGON_MAINNET
         ),
-      network_id: 80001,
-      gasPrice: 2000000000,
-      confirmations: 2,
+      network_id: 137,
+      gas: 8_000_000,
+      gasPrice: 50_000_000_000,
+      confirmations: 5,
       timeoutBlocks: 200,
       skipDryRun: true
     }
