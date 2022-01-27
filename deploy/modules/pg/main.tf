@@ -54,8 +54,8 @@ resource "aws_db_instance" "main" {
   identifier = "${var.name}-pg-${var.environment}"
 
   engine         = "postgres"
-  engine_version = "11.10"
-  instance_class = "db.t3.micro"
+  engine_version = "12.9"
+  instance_class = "db.t2.micro"
 
   allocated_storage     = 20
   max_allocated_storage = 100
