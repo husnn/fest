@@ -91,7 +91,8 @@ module "postgres_main_staging" {
   subnet_group_name = aws_db_subnet_group.main.name
 
   allowed_security_group_ids = [
-    module.service_api_staging.security_group_id
+    module.service_api_staging.security_group_id,
+    module.service_indexer_staging.security_group_id
   ]
 }
 
@@ -115,18 +116,20 @@ resource "aws_elasticache_subnet_group" "main" {
   subnet_ids = module.vpc.private_subnet_ids
 }
 
-# module "redis_indexer_staging" {
-#   source = "./modules/redis"
+module "redis_main_staging" {
+  source = "./modules/redis"
 
-#   name        = "main"
-#   environment = "staging"
+  name        = "main"
+  environment = "staging"
 
-#   vpc_id = module.vpc.id
+  vpc_id = module.vpc.id
 
-#   subnet_group_name = aws_elasticache_subnet_group.main.name
+  subnet_group_name = aws_elasticache_subnet_group.main.name
 
-#   allowed_security_group_ids = []
-# }
+  allowed_security_group_ids = [
+    module.service_indexer_staging.security_group_id
+  ]
+}
 
 resource "aws_ecs_cluster" "staging" {
   name = "staging"
@@ -206,6 +209,18 @@ module "service_api_prod" {
   instance_count = 1
 
   postgres_database_url = module.postgres_main_prod.database_url
+}
+
+module "service_indexer_staging" {
+  source = "./services/indexer"
+
+  environment = "staging"
+  vpc_id      = module.vpc.id
+  subnet_id   = module.vpc.public_subnet_ids[0]
+
+  ssh_key_name = "indexer-staging-ec2-key"
+
+  secrets_manager_arn = var.api_secrets_manager_staging_arn
 }
 
 module "cloudfront_nft" {

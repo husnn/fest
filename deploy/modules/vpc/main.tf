@@ -1,5 +1,6 @@
 resource "aws_vpc" "main" {
-  cidr_block = "10.0.0.0/16"
+  cidr_block           = "10.0.0.0/16"
+  enable_dns_hostnames = true
 }
 
 resource "aws_subnet" "private" {
@@ -18,6 +19,8 @@ resource "aws_subnet" "public" {
 
   cidr_block        = "10.0.${1 + each.key}.0/24"
   availability_zone = each.value
+
+  map_public_ip_on_launch = true
 }
 
 resource "aws_internet_gateway" "main" {
