@@ -6,7 +6,7 @@ import Postgres, {
 import { MailService } from './MailService';
 import { appConfig } from './config';
 import express from 'express';
-import waitlist from './waitlist/waitlist.controller';
+import waitlist from './controllers/waitlist.controller';
 
 const app = express();
 

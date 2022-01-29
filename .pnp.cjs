@@ -4125,8 +4125,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./packages/emails/",
           "packageDependencies": [
             ["@fest/emails", "workspace:packages/emails"],
+            ["@types/node", "npm:17.0.13"],
             ["handlebars", "npm:4.7.7"],
-            ["mjml", "npm:4.12.0"]
+            ["mjml", "npm:4.12.0"],
+            ["typescript", "patch:typescript@npm%3A4.5.5#~builtin<compat/typescript>::version=4.5.5&hash=493e53"]
           ],
           "linkType": "SOFT",
         }]
@@ -5177,6 +5179,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-node-npm-17.0.10-c0e46c1462-979e83d642.zip/node_modules/@types/node/",
           "packageDependencies": [
             ["@types/node", "npm:17.0.10"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:17.0.13", {
+          "packageLocation": "./.yarn/cache/@types-node-npm-17.0.13-0b4bf052b4-8b87c850c1.zip/node_modules/@types/node/",
+          "packageDependencies": [
+            ["@types/node", "npm:17.0.13"]
           ],
           "linkType": "HARD",
         }]

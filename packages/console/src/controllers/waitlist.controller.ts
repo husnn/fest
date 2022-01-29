@@ -1,7 +1,9 @@
 import { Express, NextFunction, Request, Response } from 'express';
 import { MailService, WaitlistRepository } from '@fest/core';
 
-import { AcceptanceEmail } from './AcceptanceEmail';
+import { AcceptanceEmail } from '@fest/emails';
+import { WaitlistEntryType } from '@fest/shared';
+import { appConfig } from '../config';
 import moment from 'moment';
 
 export default (
@@ -29,7 +31,11 @@ export default (
       entry.isAccepted = true;
       entry.dateAccepted = new Date();
       waitlistRepository.update(entry);
-      const email = new AcceptanceEmail(entry);
+      const email = new AcceptanceEmail(
+        entry.email,
+        `${appConfig.clientUrl}/login`,
+        entry.type == WaitlistEntryType.CREATOR
+      );
       mailService.send(email);
       res.end();
     }
