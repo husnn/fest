@@ -21,19 +21,19 @@ $( echo "$(aws secretsmanager get-secret-value --secret-id $AWS_SECRET_ID --quer
 sudo service docker start
 
 sudo docker run \
+  -e NODE_ENV="$NODE_ENV" \
   -e SECRET="$SECRET" \
   -e REDIS_URL="$REDIS_URL" \
   -e ETH_PROVIDER="$ETH_PROVIDER" \
   -e DATABASE_URL="$DATABASE_URL" \
-  -e NODE_ENV="$NODE_ENV" \
   -p 9000:9000 --restart unless-stopped \
   -idt $ECR_IMAGE_URL yarn indexer serve
 
 sudo docker run \
-  -e SECRET="$SECRET" \
-  -e REDIS_URL="$REDIS_URL" \
-  -e ETH_PROVIDER="$ETH_PROVIDER" \
-  -e DATABASE_URL="$DATABASE_URL" \
   -e NODE_ENV="$NODE_ENV" \
+  -e DATABASE_URL="$DATABASE_URL" \
+  -e CLIENT_URL="$CLIENT_URL" \
+  -e MAIL_FROM_NO_REPLY="$MAIL_FROM_NO_REPLY" \
+  -e SENDGRID_API_KEY="$SENDGRID_API_KEY" \
   -p 4000:4000 --restart unless-stopped \
   -idt $ECR_IMAGE_URL yarn console serve
