@@ -15,6 +15,11 @@ resource "aws_codebuild_project" "main" {
     privileged_mode             = true
 
     environment_variable {
+      name  = "AWS_ACCOUNT_ID"
+      value = var.aws_account_id
+    }
+
+    environment_variable {
       name  = "IMAGE_NAME"
       value = var.image_name
     }

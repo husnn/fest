@@ -1,5 +1,8 @@
+data "aws_caller_identity" "current" {}
+
 locals {
-  project_name = "${var.service_name}-${var.environment}"
+  project_name   = "${var.service_name}-${var.environment}"
+  aws_account_id = data.aws_caller_identity.current.account_id
 }
 
 resource "aws_cloudwatch_log_group" "main" {
@@ -59,6 +62,7 @@ module "codebuild" {
   source = "./codebuild"
 
   project_name   = local.project_name
+  aws_account_id = local.aws_account_id
   image_name     = var.image_name
   container_name = var.container_name
   s3_bucket_arn  = aws_s3_bucket.pipeline.arn
@@ -140,6 +144,10 @@ resource "aws_ecs_service" "main" {
   tags = {
     Environment = var.environment
     Application = var.app_name
+  }
+
+  lifecycle {
+    ignore_changes = [task_definition]
   }
 }
 

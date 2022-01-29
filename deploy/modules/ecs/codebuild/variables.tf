@@ -2,6 +2,10 @@ variable "project_name" {
   type = string
 }
 
+variable "aws_account_id" {
+  type = string
+}
+
 variable "image_name" {
   type = string
 }
