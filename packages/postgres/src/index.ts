@@ -26,7 +26,7 @@ export default {
             username,
             password
           }),
-      synchronize: process.env.NODE_ENV === 'development',
+      synchronize: process.env.NODE_ENV !== 'production',
       entities: entitySchemas,
       ...(uri && {
         ssl: { rejectUnauthorized: false }
