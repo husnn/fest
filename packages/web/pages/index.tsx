@@ -46,11 +46,11 @@ export default function Home() {
           <p className={styles.description}>by those who truly appreciate it</p>
         </span>
         <Link
-          href="https://www.notion.so/Whitepaper-v0-1-1563dc476d2a422e85addaadcb8c1cda"
+          href="https://www.notion.so/Lightpaper-v0-1-1563dc476d2a422e85addaadcb8c1cda"
           target="blank"
         >
           <Button color="normal" style={{ margin: '0 auto' }} size="small">
-            Read whitepaper
+            Read lightpaper
           </Button>
         </Link>
       </div>
@@ -141,7 +141,7 @@ export default function Home() {
               A home for your community
             </h2>
             <p className={styles.description}>
-              Build a loyal fest that supports you no-matter-what.
+              Create your own starting today.
             </p>
           </span>
           <Link href="/login">
