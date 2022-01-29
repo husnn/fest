@@ -1,9 +1,10 @@
-import { encryptText, Protocol, randomNumericString } from '@fest/shared';
-
-import UseCase from '../../base/UseCase';
+import { EthereumService, IPFSService } from '../../services';
+import { Protocol, encryptText, randomNumericString } from '@fest/shared';
 import { TokenRepository, WalletRepository } from '../../repositories';
+
 import { Result } from '../../Result';
-import { EthereumService } from '../../services';
+import UseCase from '../../base/UseCase';
+import { pinToIPFS } from './pinToIPFS';
 
 export interface ApproveMintInput {
   protocol: Protocol;
@@ -16,23 +17,27 @@ export interface ApproveMintOutput {
   expiry: number;
   salt: string;
   signature: string;
+  ipfsHash: string;
 }
 
 export class ApproveMint extends UseCase<ApproveMintInput, ApproveMintOutput> {
   private walletRepository: WalletRepository;
   private tokenRepository: TokenRepository;
   private ethereumService: EthereumService;
+  private ipfsService: IPFSService;
 
   constructor(
     walletRepository: WalletRepository,
     tokenRepository: TokenRepository,
-    ethereumService: EthereumService
+    ethereumService: EthereumService,
+    ipfsService: IPFSService
   ) {
     super();
 
     this.walletRepository = walletRepository;
     this.tokenRepository = tokenRepository;
     this.ethereumService = ethereumService;
+    this.ipfsService = ipfsService;
   }
 
   async exec(data: ApproveMintInput): Promise<Result<ApproveMintOutput>> {
@@ -42,9 +47,15 @@ export class ApproveMint extends UseCase<ApproveMintInput, ApproveMintOutput> {
     );
 
     const token = await this.tokenRepository.get(data.token);
-
-    if (!token) return Result.fail();
+    if (!token || token.minted) return Result.fail();
     if (token.creatorId !== data.user) return Result.fail();
+
+    const pinResult = await pinToIPFS(
+      this.tokenRepository,
+      this.ipfsService,
+      token
+    );
+    if (!pinResult.success) return Result.fail();
 
     const expiry = Math.floor(Date.now() / 1000) + 600; // Expires in 10 minutes
     const salt = randomNumericString(32);
@@ -52,13 +63,19 @@ export class ApproveMint extends UseCase<ApproveMintInput, ApproveMintOutput> {
     const result = await this.ethereumService.signMint(
       wallet.address,
       token.supply,
-      token.metadataUri,
+      pinResult.data.hash,
       expiry,
       salt
     );
 
     const { signature } = result.data;
 
-    return Result.ok({ data: encryptText(token.id), expiry, salt, signature });
+    return Result.ok({
+      data: encryptText(token.id),
+      expiry,
+      salt,
+      signature,
+      ipfsHash: pinResult.data.hash
+    });
   }
 }

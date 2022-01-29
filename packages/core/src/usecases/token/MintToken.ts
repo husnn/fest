@@ -1,13 +1,8 @@
-import {
-  Protocol,
-  WalletType,
-  decryptText,
-  encryptText,
-  randomNumericString
-} from '@fest/shared';
 import { TokenRepository, WalletRepository } from '../../repositories';
 
+import { ApproveMint } from '.';
 import { EthereumService } from '../../services';
+import { Protocol } from '@fest/shared';
 import { Result } from '../../Result';
 import UseCase from '../../base/UseCase';
 
@@ -26,51 +21,50 @@ export class MintToken extends UseCase<MintTokenInput, MintTokenOutput> {
   private tokenRepository: TokenRepository;
   private ethereumService: EthereumService;
 
+  private approveMintUseCase: ApproveMint;
+
   constructor(
     walletRepository: WalletRepository,
     tokenRepository: TokenRepository,
-    ethereumService: EthereumService
+    ethereumService: EthereumService,
+    approveMintUseCase: ApproveMint
   ) {
     super();
 
     this.walletRepository = walletRepository;
     this.tokenRepository = tokenRepository;
     this.ethereumService = ethereumService;
+
+    this.approveMintUseCase = approveMintUseCase;
   }
 
   async exec(data: MintTokenInput): Promise<Result<MintTokenOutput>> {
     const wallet = await this.walletRepository.findByUser(
       data.protocol,
-      data.user,
-      {
-        select: ['privateKey']
-      }
+      data.user
     );
 
-    const token = await this.tokenRepository.get(data.token);
+    const approvalResult = await this.approveMintUseCase.exec(data);
+    if (!approvalResult.success) return Result.fail();
 
-    if (!token) return Result.fail();
-    if (token.creatorId !== data.user) return Result.fail();
-
-    const expiry = Math.floor(Date.now() / 1000) + 600; // Expires in 10 minutes
-    const salt = randomNumericString(32);
-
-    const result = await this.ethereumService.signMint(
-      wallet.address,
-      token.supply,
-      token.metadataUri,
+    const {
+      data: encryptedData,
+      ipfsHash,
+      signature,
       expiry,
       salt
-    );
+    } = approvalResult.data;
 
-    const { signature } = result.data;
+    const token = await this.tokenRepository.get(data.token);
+    if (!token) return Result.fail();
+    if (token.creatorId !== data.user) return Result.fail();
 
     const tx = await this.ethereumService.buildMintTokenProxyTx(
       wallet.address,
       token.supply,
-      token.metadataUri,
+      ipfsHash,
       token.fees,
-      encryptText(token.id),
+      encryptedData,
       expiry,
       salt,
       signature

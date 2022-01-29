@@ -1,11 +1,5 @@
-import { IPFSService, MediaService, YouTubeService } from '../../services';
-import {
-  Percentage,
-  TokenAttributes,
-  TokenFee,
-  TokenMetadata,
-  TokenType
-} from '@fest/shared';
+import { MediaService, YouTubeService } from '../../services';
+import { Percentage, TokenAttributes, TokenFee, TokenType } from '@fest/shared';
 
 import { CreateCommunity } from '../../usecases';
 import { GetYouTubeChannel } from '../google/GetYouTubeChannel';
@@ -33,7 +27,6 @@ export class CreateToken extends UseCase<CreateTokenInput, CreateTokenOutput> {
   private userRepository: UserRepository;
   private tokenRepository: TokenRepository;
   private mediaService: MediaService;
-  private metadataStore: IPFSService;
   private youtubeService: YouTubeService;
   private getYouTubeChannelUseCase: GetYouTubeChannel;
   private createCommunityUseCase: CreateCommunity;
@@ -42,7 +35,6 @@ export class CreateToken extends UseCase<CreateTokenInput, CreateTokenOutput> {
     tokenRepository: TokenRepository,
     userRepository: UserRepository,
     mediaService: MediaService,
-    metadataStore: IPFSService,
     youtubeService: YouTubeService,
     getYouTubeChannelUseCase: GetYouTubeChannel,
     createCommunityUseCase: CreateCommunity
@@ -52,7 +44,6 @@ export class CreateToken extends UseCase<CreateTokenInput, CreateTokenOutput> {
     this.tokenRepository = tokenRepository;
     this.userRepository = userRepository;
     this.mediaService = mediaService;
-    this.metadataStore = metadataStore;
     this.youtubeService = youtubeService;
     this.getYouTubeChannelUseCase = getYouTubeChannelUseCase;
     this.createCommunityUseCase = createCommunityUseCase;
@@ -93,18 +84,6 @@ export class CreateToken extends UseCase<CreateTokenInput, CreateTokenOutput> {
       externalUrl = ytVideo.data.url;
     }
 
-    const metadata: TokenMetadata = {
-      type,
-      name,
-      description,
-      image,
-      external_url: externalUrl,
-      attributes
-    };
-
-    const pinResult = await this.metadataStore.saveJson(metadata);
-    if (!pinResult.success) return Result.fail();
-
     const fees: TokenFee[] = [];
 
     if (royaltyPct && royaltyPct > 0 && royaltyPct <= 100) {
@@ -120,8 +99,8 @@ export class CreateToken extends UseCase<CreateTokenInput, CreateTokenOutput> {
       supply,
       image,
       externalUrl,
-      metadataUri: pinResult.data,
-      fees
+      fees,
+      attributes
     });
 
     token = await this.tokenRepository.create(token);

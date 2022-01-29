@@ -4,16 +4,10 @@ import {
   Protocol,
   TokenDTO,
   TokenListingDTO,
-  TokenOwnershipDTO,
-  WalletType
+  TokenOwnershipDTO
 } from '@fest/shared';
 import React, { useEffect, useState } from 'react';
-import {
-  getCommunityUrl,
-  getDisplayName,
-  getHomeUrl,
-  getProfileUrl
-} from '../../utils';
+import { getDisplayName, getHomeUrl, getProfileUrl } from '../../utils';
 
 import ApiClient from '../../modules/api/ApiClient';
 import CreateTokenListing from '../../components/CreateTokenListing';

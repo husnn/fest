@@ -19,7 +19,8 @@ export class TokenDTO {
 
   image?: string;
 
-  metadataUri: string;
+  mediaUri?: string;
+  metadataUri?: string;
 
   chain?: ChainData;
   minted = false;
@@ -44,6 +45,7 @@ export class TokenDTO {
 
     this.image = props.image;
 
+    this.mediaUri = props.mediaUri;
     this.metadataUri = props.metadataUri;
 
     this.chain = props.chain;

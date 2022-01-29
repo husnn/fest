@@ -309,6 +309,7 @@ export interface ApproveMintResponse extends Response {
   expiry: number;
   salt: string;
   signature: string;
+  ipfsHash: string;
 }
 
 export interface ApproveMintRequest extends Request {

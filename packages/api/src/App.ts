@@ -27,10 +27,10 @@ import { EthereumService } from '@fest/ethereum';
 import FeedController from './controllers/FeedController';
 import GoogleController from './controllers/GoogleController';
 import GoogleService from './services/GoogleService';
+import IPFSService from './services/IPFSService';
 import InternalController from './controllers/InternalController';
 import MailService from './services/MailService';
 import MarketController from './controllers/MarketController';
-import MetadataStore from './services/MetadataStore';
 import PostController from './controllers/PostController';
 import TokenController from './controllers/TokenController';
 import TokenMediaStore from './services/TokenMediaStore';
@@ -76,7 +76,7 @@ class App {
     const ethereumService: IEthereumService = EthereumService.instance;
     const mailService = new MailService();
 
-    const metadataStore = new MetadataStore(
+    const ipfsService = new IPFSService(
       process.env.PINATA_API_KEY,
       process.env.PINATA_API_SECRET
     );
@@ -126,7 +126,7 @@ class App {
     const tokenController = new TokenController(
       tokenRepository,
       mediaStore,
-      metadataStore,
+      ipfsService,
       userRepository,
       walletRepository,
       ethereumService,

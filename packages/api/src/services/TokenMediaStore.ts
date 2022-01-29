@@ -65,8 +65,10 @@ export class TokenMediaStore implements MediaService {
 
       return Result.ok(`${process.env.TOKEN_MEDIA_URL}/${filePath}`);
     } catch (err) {
-      Result.fail();
+      console.log(err);
     }
+
+    return Result.fail('Could not pipe YouTube video thumbnail.');
   }
 
   async getSignedImageUploadUrl(

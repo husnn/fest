@@ -1,5 +1,5 @@
-import { TokenType } from '../enums';
 import TokenAttributes from './TokenAttributes';
+import { TokenType } from '../enums';
 
 export interface TokenMetadata {
   type: TokenType;
@@ -7,6 +7,7 @@ export interface TokenMetadata {
   description?: string;
   image?: string;
   external_url?: string;
+  youtube_url?: string;
   attributes?: TokenAttributes;
 }
 

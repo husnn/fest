@@ -54,7 +54,7 @@ class TokenController {
   constructor(
     tokenRepository: TokenRepository,
     mediaService: MediaService,
-    metadataStore: IPFSService,
+    ipfsService: IPFSService,
     userRepository: UserRepository,
     walletRepository: WalletRepository,
     ethereumService: EthereumService,
@@ -77,7 +77,6 @@ class TokenController {
       tokenRepository,
       userRepository,
       mediaService,
-      metadataStore,
       youtubeService,
       getYouTubeChannelUseCase,
       createCommunityUseCase
@@ -88,13 +87,15 @@ class TokenController {
     this.approveMintUseCase = new ApproveMint(
       walletRepository,
       tokenRepository,
-      ethereumService
+      ethereumService,
+      ipfsService
     );
 
     this.mintTokenUseCase = new MintToken(
       walletRepository,
       tokenRepository,
-      ethereumService
+      ethereumService,
+      this.approveMintUseCase
     );
 
     this.getOwnershipUseCase = new GetTokenOwnership(tokenOwnershipRepository);
@@ -198,13 +199,14 @@ class TokenController {
       token: id
     });
 
-    const { data, expiry, salt, signature } = result.data;
+    const { data, expiry, salt, signature, ipfsHash } = result.data;
 
     return new HttpResponse<ApproveMintResponse>(res, {
       data,
       expiry,
       salt,
-      signature
+      signature,
+      ipfsHash
     });
   }
 

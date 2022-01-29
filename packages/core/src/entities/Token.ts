@@ -30,7 +30,8 @@ export class Token {
   attributes?: TokenAttributes;
   extra?: unknown;
 
-  metadataUri: string;
+  mediaUri?: string;
+  metadataUri?: string;
 
   chain?: TokenChainData;
 
