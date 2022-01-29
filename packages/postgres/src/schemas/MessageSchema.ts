@@ -57,7 +57,7 @@ const MessageSchema = new EntitySchema<Message>({
     rooms: {
       type: 'many-to-many',
       target: 'room',
-      inverseSide: 'message',
+      inverseSide: 'messages',
       joinTable: {
         name: 'message_room',
         joinColumn: {

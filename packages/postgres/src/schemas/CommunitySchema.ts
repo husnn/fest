@@ -28,7 +28,7 @@ const CommunitySchema = new EntitySchema<Community>({
     tokens: {
       type: 'many-to-many',
       target: 'token',
-      inverseSide: 'community',
+      inverseSide: 'communities',
       joinTable: {
         name: 'community_token',
         joinColumn: {
@@ -44,7 +44,7 @@ const CommunitySchema = new EntitySchema<Community>({
     users: {
       type: 'many-to-many',
       target: 'user',
-      inverseSide: 'community',
+      inverseSide: 'communities',
       joinTable: {
         name: 'community_user',
         joinColumn: {
