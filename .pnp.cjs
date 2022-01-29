@@ -35,6 +35,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         "reference": "workspace:packages/core"
       },
       {
+        "name": "@fest/emails",
+        "reference": "workspace:packages/emails"
+      },
+      {
         "name": "@fest/ethereum",
         "reference": "workspace:packages/ethereum"
       },
@@ -73,6 +77,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ["@fest/api", ["workspace:packages/api"]],
       ["@fest/console", ["workspace:packages/console"]],
       ["@fest/core", ["workspace:packages/core"]],
+      ["@fest/emails", ["workspace:packages/emails"]],
       ["@fest/eth-contracts", ["workspace:packages/ethereum/contracts"]],
       ["@fest/eth-transactions", ["workspace:packages/ethereum/transactions"]],
       ["@fest/ethereum", ["workspace:packages/ethereum"]],
@@ -4078,19 +4083,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@fest/console", "workspace:packages/console"],
             ["@fest/core", "workspace:packages/core"],
+            ["@fest/emails", "workspace:packages/emails"],
             ["@fest/postgres", "workspace:packages/postgres"],
             ["@fest/shared", "workspace:packages/shared"],
             ["@sendgrid/mail", "npm:7.6.0"],
             ["@types/express", "npm:4.17.13"],
-            ["@types/mjml", "npm:4.7.0"],
             ["@types/node", "npm:17.0.10"],
             ["@types/pug", "npm:2.0.6"],
             ["@types/web3", "npm:1.2.2"],
             ["axios", "npm:0.25.0"],
             ["dotenv", "npm:14.2.0"],
             ["express", "virtual:a46847910dc1ede8165156a4a1478f9ac157aafbe8f25fe996516500d6818e4242dfd7f7642e43e96a1451b6bd83aff6b5706e53972cbb98355282bafe412d44#npm:4.17.2"],
-            ["handlebars", "npm:4.7.7"],
-            ["mjml", "npm:4.11.0"],
             ["moment", "npm:2.29.1"],
             ["nodemon", "npm:2.0.15"],
             ["pug", "npm:3.0.2"],
@@ -4113,6 +4116,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["jsonwebtoken", "npm:8.5.1"],
             ["nanoid", "npm:3.2.0"],
             ["typescript", "patch:typescript@npm%3A4.5.5#~builtin<compat/typescript>::version=4.5.5&hash=493e53"]
+          ],
+          "linkType": "SOFT",
+        }]
+      ]],
+      ["@fest/emails", [
+        ["workspace:packages/emails", {
+          "packageLocation": "./packages/emails/",
+          "packageDependencies": [
+            ["@fest/emails", "workspace:packages/emails"],
+            ["handlebars", "npm:4.7.7"],
+            ["mjml", "npm:4.12.0"]
           ],
           "linkType": "SOFT",
         }]
@@ -5126,25 +5140,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-mime-types-npm-2.1.1-2f761de0b8-106b5d556a.zip/node_modules/@types/mime-types/",
           "packageDependencies": [
             ["@types/mime-types", "npm:2.1.1"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["@types/mjml", [
-        ["npm:4.7.0", {
-          "packageLocation": "./.yarn/cache/@types-mjml-npm-4.7.0-52cf218486-8a5a12d1cd.zip/node_modules/@types/mjml/",
-          "packageDependencies": [
-            ["@types/mjml", "npm:4.7.0"],
-            ["@types/mjml-core", "npm:4.7.1"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["@types/mjml-core", [
-        ["npm:4.7.1", {
-          "packageLocation": "./.yarn/cache/@types-mjml-core-npm-4.7.1-1854a6c886-690d519daf.zip/node_modules/@types/mjml-core/",
-          "packageDependencies": [
-            ["@types/mjml-core", "npm:4.7.1"]
           ],
           "linkType": "HARD",
         }]
@@ -12187,105 +12182,105 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["mjml", [
-        ["npm:4.11.0", {
-          "packageLocation": "./.yarn/cache/mjml-npm-4.11.0-59e8b31cd0-5c0892e12d.zip/node_modules/mjml/",
+        ["npm:4.12.0", {
+          "packageLocation": "./.yarn/cache/mjml-npm-4.12.0-b9e2bdbeeb-bbc73de645.zip/node_modules/mjml/",
           "packageDependencies": [
-            ["mjml", "npm:4.11.0"],
+            ["mjml", "npm:4.12.0"],
             ["@babel/runtime", "npm:7.16.7"],
-            ["mjml-cli", "npm:4.11.0"],
-            ["mjml-core", "npm:4.11.0"],
-            ["mjml-migrate", "npm:4.11.0"],
-            ["mjml-preset-core", "npm:4.11.0"],
-            ["mjml-validator", "npm:4.11.0"]
+            ["mjml-cli", "npm:4.12.0"],
+            ["mjml-core", "npm:4.12.0"],
+            ["mjml-migrate", "npm:4.12.0"],
+            ["mjml-preset-core", "npm:4.12.0"],
+            ["mjml-validator", "npm:4.12.0"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["mjml-accordion", [
-        ["npm:4.11.0", {
-          "packageLocation": "./.yarn/cache/mjml-accordion-npm-4.11.0-f6961e6499-6218a987cd.zip/node_modules/mjml-accordion/",
+        ["npm:4.12.0", {
+          "packageLocation": "./.yarn/cache/mjml-accordion-npm-4.12.0-4da76c5065-eab3047004.zip/node_modules/mjml-accordion/",
           "packageDependencies": [
-            ["mjml-accordion", "npm:4.11.0"],
+            ["mjml-accordion", "npm:4.12.0"],
             ["@babel/runtime", "npm:7.16.7"],
             ["lodash", "npm:4.17.21"],
-            ["mjml-core", "npm:4.11.0"]
+            ["mjml-core", "npm:4.12.0"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["mjml-body", [
-        ["npm:4.11.0", {
-          "packageLocation": "./.yarn/cache/mjml-body-npm-4.11.0-55e5cee321-6b38fcd5e4.zip/node_modules/mjml-body/",
+        ["npm:4.12.0", {
+          "packageLocation": "./.yarn/cache/mjml-body-npm-4.12.0-2715a69c88-116a43743e.zip/node_modules/mjml-body/",
           "packageDependencies": [
-            ["mjml-body", "npm:4.11.0"],
+            ["mjml-body", "npm:4.12.0"],
             ["@babel/runtime", "npm:7.16.7"],
             ["lodash", "npm:4.17.21"],
-            ["mjml-core", "npm:4.11.0"]
+            ["mjml-core", "npm:4.12.0"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["mjml-button", [
-        ["npm:4.11.0", {
-          "packageLocation": "./.yarn/cache/mjml-button-npm-4.11.0-04a296445e-a2e57293a8.zip/node_modules/mjml-button/",
+        ["npm:4.12.0", {
+          "packageLocation": "./.yarn/cache/mjml-button-npm-4.12.0-bc05fddd49-863910fa0d.zip/node_modules/mjml-button/",
           "packageDependencies": [
-            ["mjml-button", "npm:4.11.0"],
+            ["mjml-button", "npm:4.12.0"],
             ["@babel/runtime", "npm:7.16.7"],
             ["lodash", "npm:4.17.21"],
-            ["mjml-core", "npm:4.11.0"]
+            ["mjml-core", "npm:4.12.0"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["mjml-carousel", [
-        ["npm:4.11.0", {
-          "packageLocation": "./.yarn/cache/mjml-carousel-npm-4.11.0-2205348cb5-3a792db999.zip/node_modules/mjml-carousel/",
+        ["npm:4.12.0", {
+          "packageLocation": "./.yarn/cache/mjml-carousel-npm-4.12.0-f85ee0dcd7-782b7644ad.zip/node_modules/mjml-carousel/",
           "packageDependencies": [
-            ["mjml-carousel", "npm:4.11.0"],
+            ["mjml-carousel", "npm:4.12.0"],
             ["@babel/runtime", "npm:7.16.7"],
             ["lodash", "npm:4.17.21"],
-            ["mjml-core", "npm:4.11.0"]
+            ["mjml-core", "npm:4.12.0"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["mjml-cli", [
-        ["npm:4.11.0", {
-          "packageLocation": "./.yarn/cache/mjml-cli-npm-4.11.0-8cf30a092f-202d2f0716.zip/node_modules/mjml-cli/",
+        ["npm:4.12.0", {
+          "packageLocation": "./.yarn/cache/mjml-cli-npm-4.12.0-93257dee51-0ab8b2e1bd.zip/node_modules/mjml-cli/",
           "packageDependencies": [
-            ["mjml-cli", "npm:4.11.0"],
+            ["mjml-cli", "npm:4.12.0"],
             ["@babel/runtime", "npm:7.16.7"],
             ["chokidar", "npm:3.5.3"],
             ["glob", "npm:7.2.0"],
             ["html-minifier", "npm:4.0.0"],
             ["js-beautify", "npm:1.14.0"],
             ["lodash", "npm:4.17.21"],
-            ["mjml-core", "npm:4.11.0"],
-            ["mjml-migrate", "npm:4.11.0"],
-            ["mjml-parser-xml", "npm:4.11.0"],
-            ["mjml-validator", "npm:4.11.0"],
+            ["mjml-core", "npm:4.12.0"],
+            ["mjml-migrate", "npm:4.12.0"],
+            ["mjml-parser-xml", "npm:4.12.0"],
+            ["mjml-validator", "npm:4.12.0"],
             ["yargs", "npm:16.2.0"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["mjml-column", [
-        ["npm:4.11.0", {
-          "packageLocation": "./.yarn/cache/mjml-column-npm-4.11.0-28431cbb19-0582cee3fc.zip/node_modules/mjml-column/",
+        ["npm:4.12.0", {
+          "packageLocation": "./.yarn/cache/mjml-column-npm-4.12.0-e11aed4380-fd5b7afb5b.zip/node_modules/mjml-column/",
           "packageDependencies": [
-            ["mjml-column", "npm:4.11.0"],
+            ["mjml-column", "npm:4.12.0"],
             ["@babel/runtime", "npm:7.16.7"],
             ["lodash", "npm:4.17.21"],
-            ["mjml-core", "npm:4.11.0"]
+            ["mjml-core", "npm:4.12.0"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["mjml-core", [
-        ["npm:4.11.0", {
-          "packageLocation": "./.yarn/cache/mjml-core-npm-4.11.0-19f27aef17-a22f377dcd.zip/node_modules/mjml-core/",
+        ["npm:4.12.0", {
+          "packageLocation": "./.yarn/cache/mjml-core-npm-4.12.0-698420993e-cebd3548aa.zip/node_modules/mjml-core/",
           "packageDependencies": [
-            ["mjml-core", "npm:4.11.0"],
+            ["mjml-core", "npm:4.12.0"],
             ["@babel/runtime", "npm:7.16.7"],
             ["cheerio", "npm:1.0.0-rc.10"],
             ["detect-node", "npm:2.0.4"],
@@ -12293,189 +12288,189 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["js-beautify", "npm:1.14.0"],
             ["juice", "npm:7.0.0"],
             ["lodash", "npm:4.17.21"],
-            ["mjml-migrate", "npm:4.11.0"],
-            ["mjml-parser-xml", "npm:4.11.0"],
-            ["mjml-validator", "npm:4.11.0"]
+            ["mjml-migrate", "npm:4.12.0"],
+            ["mjml-parser-xml", "npm:4.12.0"],
+            ["mjml-validator", "npm:4.12.0"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["mjml-divider", [
-        ["npm:4.11.0", {
-          "packageLocation": "./.yarn/cache/mjml-divider-npm-4.11.0-1bfaad547b-7a813f9cb7.zip/node_modules/mjml-divider/",
+        ["npm:4.12.0", {
+          "packageLocation": "./.yarn/cache/mjml-divider-npm-4.12.0-4746028c4b-5c8496b045.zip/node_modules/mjml-divider/",
           "packageDependencies": [
-            ["mjml-divider", "npm:4.11.0"],
+            ["mjml-divider", "npm:4.12.0"],
             ["@babel/runtime", "npm:7.16.7"],
             ["lodash", "npm:4.17.21"],
-            ["mjml-core", "npm:4.11.0"]
+            ["mjml-core", "npm:4.12.0"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["mjml-group", [
-        ["npm:4.11.0", {
-          "packageLocation": "./.yarn/cache/mjml-group-npm-4.11.0-b75431668e-b366c67a80.zip/node_modules/mjml-group/",
+        ["npm:4.12.0", {
+          "packageLocation": "./.yarn/cache/mjml-group-npm-4.12.0-d32f6f3dac-c63e807ddc.zip/node_modules/mjml-group/",
           "packageDependencies": [
-            ["mjml-group", "npm:4.11.0"],
+            ["mjml-group", "npm:4.12.0"],
             ["@babel/runtime", "npm:7.16.7"],
             ["lodash", "npm:4.17.21"],
-            ["mjml-core", "npm:4.11.0"]
+            ["mjml-core", "npm:4.12.0"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["mjml-head", [
-        ["npm:4.11.0", {
-          "packageLocation": "./.yarn/cache/mjml-head-npm-4.11.0-fa00219c59-73613351e3.zip/node_modules/mjml-head/",
+        ["npm:4.12.0", {
+          "packageLocation": "./.yarn/cache/mjml-head-npm-4.12.0-abfbee1522-7c9ccd2c6e.zip/node_modules/mjml-head/",
           "packageDependencies": [
-            ["mjml-head", "npm:4.11.0"],
+            ["mjml-head", "npm:4.12.0"],
             ["@babel/runtime", "npm:7.16.7"],
             ["lodash", "npm:4.17.21"],
-            ["mjml-core", "npm:4.11.0"]
+            ["mjml-core", "npm:4.12.0"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["mjml-head-attributes", [
-        ["npm:4.11.0", {
-          "packageLocation": "./.yarn/cache/mjml-head-attributes-npm-4.11.0-f210c5180e-9c48cd6159.zip/node_modules/mjml-head-attributes/",
+        ["npm:4.12.0", {
+          "packageLocation": "./.yarn/cache/mjml-head-attributes-npm-4.12.0-30177f6e14-8552cbda3a.zip/node_modules/mjml-head-attributes/",
           "packageDependencies": [
-            ["mjml-head-attributes", "npm:4.11.0"],
+            ["mjml-head-attributes", "npm:4.12.0"],
             ["@babel/runtime", "npm:7.16.7"],
             ["lodash", "npm:4.17.21"],
-            ["mjml-core", "npm:4.11.0"]
+            ["mjml-core", "npm:4.12.0"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["mjml-head-breakpoint", [
-        ["npm:4.11.0", {
-          "packageLocation": "./.yarn/cache/mjml-head-breakpoint-npm-4.11.0-4f32dd6c49-c4d52bfbd0.zip/node_modules/mjml-head-breakpoint/",
+        ["npm:4.12.0", {
+          "packageLocation": "./.yarn/cache/mjml-head-breakpoint-npm-4.12.0-677dbf9ad5-91c4cbed37.zip/node_modules/mjml-head-breakpoint/",
           "packageDependencies": [
-            ["mjml-head-breakpoint", "npm:4.11.0"],
+            ["mjml-head-breakpoint", "npm:4.12.0"],
             ["@babel/runtime", "npm:7.16.7"],
             ["lodash", "npm:4.17.21"],
-            ["mjml-core", "npm:4.11.0"]
+            ["mjml-core", "npm:4.12.0"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["mjml-head-font", [
-        ["npm:4.11.0", {
-          "packageLocation": "./.yarn/cache/mjml-head-font-npm-4.11.0-8a59b2af23-504a208f39.zip/node_modules/mjml-head-font/",
+        ["npm:4.12.0", {
+          "packageLocation": "./.yarn/cache/mjml-head-font-npm-4.12.0-d6e7df4af9-d20c9f2e04.zip/node_modules/mjml-head-font/",
           "packageDependencies": [
-            ["mjml-head-font", "npm:4.11.0"],
+            ["mjml-head-font", "npm:4.12.0"],
             ["@babel/runtime", "npm:7.16.7"],
             ["lodash", "npm:4.17.21"],
-            ["mjml-core", "npm:4.11.0"]
+            ["mjml-core", "npm:4.12.0"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["mjml-head-html-attributes", [
-        ["npm:4.11.0", {
-          "packageLocation": "./.yarn/cache/mjml-head-html-attributes-npm-4.11.0-7970cd1c3c-19fcba6b6f.zip/node_modules/mjml-head-html-attributes/",
+        ["npm:4.12.0", {
+          "packageLocation": "./.yarn/cache/mjml-head-html-attributes-npm-4.12.0-6753184070-c9504e385e.zip/node_modules/mjml-head-html-attributes/",
           "packageDependencies": [
-            ["mjml-head-html-attributes", "npm:4.11.0"],
+            ["mjml-head-html-attributes", "npm:4.12.0"],
             ["@babel/runtime", "npm:7.16.7"],
             ["lodash", "npm:4.17.21"],
-            ["mjml-core", "npm:4.11.0"]
+            ["mjml-core", "npm:4.12.0"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["mjml-head-preview", [
-        ["npm:4.11.0", {
-          "packageLocation": "./.yarn/cache/mjml-head-preview-npm-4.11.0-d863e7dd63-eb8abe0cfc.zip/node_modules/mjml-head-preview/",
+        ["npm:4.12.0", {
+          "packageLocation": "./.yarn/cache/mjml-head-preview-npm-4.12.0-5b2862ec84-8762e6e044.zip/node_modules/mjml-head-preview/",
           "packageDependencies": [
-            ["mjml-head-preview", "npm:4.11.0"],
+            ["mjml-head-preview", "npm:4.12.0"],
             ["@babel/runtime", "npm:7.16.7"],
             ["lodash", "npm:4.17.21"],
-            ["mjml-core", "npm:4.11.0"]
+            ["mjml-core", "npm:4.12.0"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["mjml-head-style", [
-        ["npm:4.11.0", {
-          "packageLocation": "./.yarn/cache/mjml-head-style-npm-4.11.0-a441e8abd9-2f69330f0a.zip/node_modules/mjml-head-style/",
+        ["npm:4.12.0", {
+          "packageLocation": "./.yarn/cache/mjml-head-style-npm-4.12.0-441ccfdc5d-8b61722b0f.zip/node_modules/mjml-head-style/",
           "packageDependencies": [
-            ["mjml-head-style", "npm:4.11.0"],
+            ["mjml-head-style", "npm:4.12.0"],
             ["@babel/runtime", "npm:7.16.7"],
             ["lodash", "npm:4.17.21"],
-            ["mjml-core", "npm:4.11.0"]
+            ["mjml-core", "npm:4.12.0"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["mjml-head-title", [
-        ["npm:4.11.0", {
-          "packageLocation": "./.yarn/cache/mjml-head-title-npm-4.11.0-81a9624d8c-42e8dbc9d8.zip/node_modules/mjml-head-title/",
+        ["npm:4.12.0", {
+          "packageLocation": "./.yarn/cache/mjml-head-title-npm-4.12.0-bfccdeb6c9-d5b46ee17e.zip/node_modules/mjml-head-title/",
           "packageDependencies": [
-            ["mjml-head-title", "npm:4.11.0"],
+            ["mjml-head-title", "npm:4.12.0"],
             ["@babel/runtime", "npm:7.16.7"],
             ["lodash", "npm:4.17.21"],
-            ["mjml-core", "npm:4.11.0"]
+            ["mjml-core", "npm:4.12.0"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["mjml-hero", [
-        ["npm:4.11.0", {
-          "packageLocation": "./.yarn/cache/mjml-hero-npm-4.11.0-60f5e41bdc-20948cb052.zip/node_modules/mjml-hero/",
+        ["npm:4.12.0", {
+          "packageLocation": "./.yarn/cache/mjml-hero-npm-4.12.0-7b1454f7f6-1624026633.zip/node_modules/mjml-hero/",
           "packageDependencies": [
-            ["mjml-hero", "npm:4.11.0"],
+            ["mjml-hero", "npm:4.12.0"],
             ["@babel/runtime", "npm:7.16.7"],
             ["lodash", "npm:4.17.21"],
-            ["mjml-core", "npm:4.11.0"]
+            ["mjml-core", "npm:4.12.0"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["mjml-image", [
-        ["npm:4.11.0", {
-          "packageLocation": "./.yarn/cache/mjml-image-npm-4.11.0-651f042324-53ed0481db.zip/node_modules/mjml-image/",
+        ["npm:4.12.0", {
+          "packageLocation": "./.yarn/cache/mjml-image-npm-4.12.0-b5c2d94960-7d868482f2.zip/node_modules/mjml-image/",
           "packageDependencies": [
-            ["mjml-image", "npm:4.11.0"],
+            ["mjml-image", "npm:4.12.0"],
             ["@babel/runtime", "npm:7.16.7"],
             ["lodash", "npm:4.17.21"],
-            ["mjml-core", "npm:4.11.0"]
+            ["mjml-core", "npm:4.12.0"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["mjml-migrate", [
-        ["npm:4.11.0", {
-          "packageLocation": "./.yarn/cache/mjml-migrate-npm-4.11.0-9ce1f47bd3-552e9782b5.zip/node_modules/mjml-migrate/",
+        ["npm:4.12.0", {
+          "packageLocation": "./.yarn/cache/mjml-migrate-npm-4.12.0-519485a137-c59185ec95.zip/node_modules/mjml-migrate/",
           "packageDependencies": [
-            ["mjml-migrate", "npm:4.11.0"],
+            ["mjml-migrate", "npm:4.12.0"],
             ["@babel/runtime", "npm:7.16.7"],
             ["js-beautify", "npm:1.14.0"],
             ["lodash", "npm:4.17.21"],
-            ["mjml-core", "npm:4.11.0"],
-            ["mjml-parser-xml", "npm:4.11.0"],
+            ["mjml-core", "npm:4.12.0"],
+            ["mjml-parser-xml", "npm:4.12.0"],
             ["yargs", "npm:16.2.0"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["mjml-navbar", [
-        ["npm:4.11.0", {
-          "packageLocation": "./.yarn/cache/mjml-navbar-npm-4.11.0-e6b55c1eff-ca533e890c.zip/node_modules/mjml-navbar/",
+        ["npm:4.12.0", {
+          "packageLocation": "./.yarn/cache/mjml-navbar-npm-4.12.0-d8ca08b7a9-dfad5b9386.zip/node_modules/mjml-navbar/",
           "packageDependencies": [
-            ["mjml-navbar", "npm:4.11.0"],
+            ["mjml-navbar", "npm:4.12.0"],
             ["@babel/runtime", "npm:7.16.7"],
             ["lodash", "npm:4.17.21"],
-            ["mjml-core", "npm:4.11.0"]
+            ["mjml-core", "npm:4.12.0"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["mjml-parser-xml", [
-        ["npm:4.11.0", {
-          "packageLocation": "./.yarn/cache/mjml-parser-xml-npm-4.11.0-62294ea162-f32ddd6561.zip/node_modules/mjml-parser-xml/",
+        ["npm:4.12.0", {
+          "packageLocation": "./.yarn/cache/mjml-parser-xml-npm-4.12.0-08e2d8fa53-68d4bfd14e.zip/node_modules/mjml-parser-xml/",
           "packageDependencies": [
-            ["mjml-parser-xml", "npm:4.11.0"],
+            ["mjml-parser-xml", "npm:4.12.0"],
             ["@babel/runtime", "npm:7.16.7"],
             ["detect-node", "npm:2.0.4"],
             ["htmlparser2", "npm:4.1.0"],
@@ -12485,131 +12480,131 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["mjml-preset-core", [
-        ["npm:4.11.0", {
-          "packageLocation": "./.yarn/cache/mjml-preset-core-npm-4.11.0-55d62260a9-8517bcc535.zip/node_modules/mjml-preset-core/",
+        ["npm:4.12.0", {
+          "packageLocation": "./.yarn/cache/mjml-preset-core-npm-4.12.0-70b92dedfe-f9e7423c1e.zip/node_modules/mjml-preset-core/",
           "packageDependencies": [
-            ["mjml-preset-core", "npm:4.11.0"],
+            ["mjml-preset-core", "npm:4.12.0"],
             ["@babel/runtime", "npm:7.16.7"],
-            ["mjml-accordion", "npm:4.11.0"],
-            ["mjml-body", "npm:4.11.0"],
-            ["mjml-button", "npm:4.11.0"],
-            ["mjml-carousel", "npm:4.11.0"],
-            ["mjml-column", "npm:4.11.0"],
-            ["mjml-divider", "npm:4.11.0"],
-            ["mjml-group", "npm:4.11.0"],
-            ["mjml-head", "npm:4.11.0"],
-            ["mjml-head-attributes", "npm:4.11.0"],
-            ["mjml-head-breakpoint", "npm:4.11.0"],
-            ["mjml-head-font", "npm:4.11.0"],
-            ["mjml-head-html-attributes", "npm:4.11.0"],
-            ["mjml-head-preview", "npm:4.11.0"],
-            ["mjml-head-style", "npm:4.11.0"],
-            ["mjml-head-title", "npm:4.11.0"],
-            ["mjml-hero", "npm:4.11.0"],
-            ["mjml-image", "npm:4.11.0"],
-            ["mjml-navbar", "npm:4.11.0"],
-            ["mjml-raw", "npm:4.11.0"],
-            ["mjml-section", "npm:4.11.0"],
-            ["mjml-social", "npm:4.11.0"],
-            ["mjml-spacer", "npm:4.11.0"],
-            ["mjml-table", "npm:4.11.0"],
-            ["mjml-text", "npm:4.11.0"],
-            ["mjml-wrapper", "npm:4.11.0"]
+            ["mjml-accordion", "npm:4.12.0"],
+            ["mjml-body", "npm:4.12.0"],
+            ["mjml-button", "npm:4.12.0"],
+            ["mjml-carousel", "npm:4.12.0"],
+            ["mjml-column", "npm:4.12.0"],
+            ["mjml-divider", "npm:4.12.0"],
+            ["mjml-group", "npm:4.12.0"],
+            ["mjml-head", "npm:4.12.0"],
+            ["mjml-head-attributes", "npm:4.12.0"],
+            ["mjml-head-breakpoint", "npm:4.12.0"],
+            ["mjml-head-font", "npm:4.12.0"],
+            ["mjml-head-html-attributes", "npm:4.12.0"],
+            ["mjml-head-preview", "npm:4.12.0"],
+            ["mjml-head-style", "npm:4.12.0"],
+            ["mjml-head-title", "npm:4.12.0"],
+            ["mjml-hero", "npm:4.12.0"],
+            ["mjml-image", "npm:4.12.0"],
+            ["mjml-navbar", "npm:4.12.0"],
+            ["mjml-raw", "npm:4.12.0"],
+            ["mjml-section", "npm:4.12.0"],
+            ["mjml-social", "npm:4.12.0"],
+            ["mjml-spacer", "npm:4.12.0"],
+            ["mjml-table", "npm:4.12.0"],
+            ["mjml-text", "npm:4.12.0"],
+            ["mjml-wrapper", "npm:4.12.0"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["mjml-raw", [
-        ["npm:4.11.0", {
-          "packageLocation": "./.yarn/cache/mjml-raw-npm-4.11.0-98f5fbc855-be5375a681.zip/node_modules/mjml-raw/",
+        ["npm:4.12.0", {
+          "packageLocation": "./.yarn/cache/mjml-raw-npm-4.12.0-a3c56f763e-a73323d858.zip/node_modules/mjml-raw/",
           "packageDependencies": [
-            ["mjml-raw", "npm:4.11.0"],
+            ["mjml-raw", "npm:4.12.0"],
             ["@babel/runtime", "npm:7.16.7"],
             ["lodash", "npm:4.17.21"],
-            ["mjml-core", "npm:4.11.0"]
+            ["mjml-core", "npm:4.12.0"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["mjml-section", [
-        ["npm:4.11.0", {
-          "packageLocation": "./.yarn/cache/mjml-section-npm-4.11.0-750d7e21b4-a50e5b10b2.zip/node_modules/mjml-section/",
+        ["npm:4.12.0", {
+          "packageLocation": "./.yarn/cache/mjml-section-npm-4.12.0-6702773c38-94b805c515.zip/node_modules/mjml-section/",
           "packageDependencies": [
-            ["mjml-section", "npm:4.11.0"],
+            ["mjml-section", "npm:4.12.0"],
             ["@babel/runtime", "npm:7.16.7"],
             ["lodash", "npm:4.17.21"],
-            ["mjml-core", "npm:4.11.0"]
+            ["mjml-core", "npm:4.12.0"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["mjml-social", [
-        ["npm:4.11.0", {
-          "packageLocation": "./.yarn/cache/mjml-social-npm-4.11.0-c808c36b2e-09ba55af8c.zip/node_modules/mjml-social/",
+        ["npm:4.12.0", {
+          "packageLocation": "./.yarn/cache/mjml-social-npm-4.12.0-1da40563a6-df1bc09830.zip/node_modules/mjml-social/",
           "packageDependencies": [
-            ["mjml-social", "npm:4.11.0"],
+            ["mjml-social", "npm:4.12.0"],
             ["@babel/runtime", "npm:7.16.7"],
             ["lodash", "npm:4.17.21"],
-            ["mjml-core", "npm:4.11.0"]
+            ["mjml-core", "npm:4.12.0"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["mjml-spacer", [
-        ["npm:4.11.0", {
-          "packageLocation": "./.yarn/cache/mjml-spacer-npm-4.11.0-ddd3b9f430-a3b7773343.zip/node_modules/mjml-spacer/",
+        ["npm:4.12.0", {
+          "packageLocation": "./.yarn/cache/mjml-spacer-npm-4.12.0-6c7175b4f1-daf6299824.zip/node_modules/mjml-spacer/",
           "packageDependencies": [
-            ["mjml-spacer", "npm:4.11.0"],
+            ["mjml-spacer", "npm:4.12.0"],
             ["@babel/runtime", "npm:7.16.7"],
             ["lodash", "npm:4.17.21"],
-            ["mjml-core", "npm:4.11.0"]
+            ["mjml-core", "npm:4.12.0"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["mjml-table", [
-        ["npm:4.11.0", {
-          "packageLocation": "./.yarn/cache/mjml-table-npm-4.11.0-c6d4336e0a-b1db3677c4.zip/node_modules/mjml-table/",
+        ["npm:4.12.0", {
+          "packageLocation": "./.yarn/cache/mjml-table-npm-4.12.0-bc7a16d552-482202cec2.zip/node_modules/mjml-table/",
           "packageDependencies": [
-            ["mjml-table", "npm:4.11.0"],
+            ["mjml-table", "npm:4.12.0"],
             ["@babel/runtime", "npm:7.16.7"],
             ["lodash", "npm:4.17.21"],
-            ["mjml-core", "npm:4.11.0"]
+            ["mjml-core", "npm:4.12.0"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["mjml-text", [
-        ["npm:4.11.0", {
-          "packageLocation": "./.yarn/cache/mjml-text-npm-4.11.0-bb1120575b-beeecd2b3b.zip/node_modules/mjml-text/",
+        ["npm:4.12.0", {
+          "packageLocation": "./.yarn/cache/mjml-text-npm-4.12.0-662ceef3f7-916a85825e.zip/node_modules/mjml-text/",
           "packageDependencies": [
-            ["mjml-text", "npm:4.11.0"],
+            ["mjml-text", "npm:4.12.0"],
             ["@babel/runtime", "npm:7.16.7"],
             ["lodash", "npm:4.17.21"],
-            ["mjml-core", "npm:4.11.0"]
+            ["mjml-core", "npm:4.12.0"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["mjml-validator", [
-        ["npm:4.11.0", {
-          "packageLocation": "./.yarn/cache/mjml-validator-npm-4.11.0-f8a0a66e95-f886616040.zip/node_modules/mjml-validator/",
+        ["npm:4.12.0", {
+          "packageLocation": "./.yarn/cache/mjml-validator-npm-4.12.0-629ee025cf-10f4f743e8.zip/node_modules/mjml-validator/",
           "packageDependencies": [
-            ["mjml-validator", "npm:4.11.0"],
+            ["mjml-validator", "npm:4.12.0"],
             ["@babel/runtime", "npm:7.16.7"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["mjml-wrapper", [
-        ["npm:4.11.0", {
-          "packageLocation": "./.yarn/cache/mjml-wrapper-npm-4.11.0-cdfff9700a-ad20c3be40.zip/node_modules/mjml-wrapper/",
+        ["npm:4.12.0", {
+          "packageLocation": "./.yarn/cache/mjml-wrapper-npm-4.12.0-26e69038dd-d36fbd5490.zip/node_modules/mjml-wrapper/",
           "packageDependencies": [
-            ["mjml-wrapper", "npm:4.11.0"],
+            ["mjml-wrapper", "npm:4.12.0"],
             ["@babel/runtime", "npm:7.16.7"],
             ["lodash", "npm:4.17.21"],
-            ["mjml-core", "npm:4.11.0"],
-            ["mjml-section", "npm:4.11.0"]
+            ["mjml-core", "npm:4.12.0"],
+            ["mjml-section", "npm:4.12.0"]
           ],
           "linkType": "HARD",
         }]

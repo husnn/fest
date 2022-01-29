@@ -1,7 +1,8 @@
 import { Email, WaitlistEntry } from '@fest/core';
 
 import { WaitlistEntryType } from '@fest/shared';
-import getEmailTemplate from '../getEmailTemplate';
+import { appConfig } from '../config';
+import { getTemplate } from '@fest/emails';
 
 export class AcceptanceEmail extends Email {
   subject = "Congratulations! You're officially in 🎉😎";
@@ -9,8 +10,8 @@ export class AcceptanceEmail extends Email {
 
   constructor(entry: WaitlistEntry) {
     super(entry.email);
-    this.content = getEmailTemplate('acceptance-email', {
-      loginUrl: `${process.env.CLIENT_URL}/login`,
+    this.content = getTemplate('acceptance-email', {
+      loginUrl: `${appConfig.clientUrl}/login`,
       isCreator: entry.type == WaitlistEntryType.CREATOR
     });
   }

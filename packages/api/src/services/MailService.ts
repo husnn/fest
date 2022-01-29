@@ -13,8 +13,11 @@ class MailService implements IMailService {
     }
 
     const msg: MailDataRequired = {
+      from: {
+        name: 'Fest',
+        email: mailConfig.from.noreply
+      },
       to: email.to,
-      from: mailConfig.from.noreply,
       subject: email.subject,
       html: email.content
     };

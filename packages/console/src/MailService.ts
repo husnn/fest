@@ -3,13 +3,16 @@ import sgMail, { MailDataRequired } from '@sendgrid/mail';
 
 import { mailConfig } from './config';
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+sgMail.setApiKey(mailConfig.sendgrid.apiKey);
 
 export class MailService implements IMailService {
   send(email: Email) {
     const msg: MailDataRequired = {
+      from: {
+        name: 'Fest',
+        email: mailConfig.from.noreply
+      },
       to: email.to,
-      from: mailConfig.from.noreply,
       subject: email.subject,
       html: email.content
     };

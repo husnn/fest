@@ -6,14 +6,11 @@
   "scripts": {
     "dev": "nodemon -r dotenv/config dist/index.js",
     "build": "tsc --build tsconfig.json",
-    "mjml2html": "node scripts/mjml2html",
-    "postbuild": "yarn mjml2html",
     "start": "node dist/index.js",
     "serve": "yarn build && yarn start"
   },
   "devDependencies": {
     "@types/express": "^4.17.13",
-    "@types/mjml": "^4.7.0",
     "@types/node": "^17.0.10",
     "@types/pug": "^2.0.6",
     "@types/web3": "^1.2.2",
@@ -23,13 +20,12 @@
   },
   "dependencies": {
     "@fest/core": "workspace:^",
+    "@fest/emails": "workspace:^",
     "@fest/postgres": "workspace:^",
     "@fest/shared": "workspace:^",
     "@sendgrid/mail": "^7.6.0",
     "axios": "^0.25.0",
     "express": "^4.17.2",
-    "handlebars": "^4.7.7",
-    "mjml": "^4.11.0",
     "moment": "^2.29.1",
     "pug": "^3.0.2"
   }
