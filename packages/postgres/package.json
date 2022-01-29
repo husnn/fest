@@ -4,7 +4,10 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "build": "tsc --build --clean tsconfig.json",
+    "db:gen": "yarn build && typeorm migration:generate -n",
+    "db:migrate": "yarn build && typeorm migration:run",
+    "db:rollback": "typeorm migration:revert",
+    "build": "tsc --build tsconfig.json",
     "start": "node dist/index.js"
   },
   "devDependencies": {
