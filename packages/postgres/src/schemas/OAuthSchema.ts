@@ -1,5 +1,4 @@
 import { EntitySchema } from 'typeorm';
-
 import { OAuth } from '@fest/core';
 import { OAuthProvider } from '@fest/shared';
 
@@ -13,8 +12,7 @@ const OAuthSchema = new EntitySchema<OAuth>({
     },
     userId: {
       type: 'text',
-      name: 'user_id',
-      nullable: true
+      name: 'user_id'
     },
     provider: {
       type: 'enum',
