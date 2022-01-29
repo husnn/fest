@@ -42,6 +42,10 @@ export class GetUserFeed extends UseCase<GetUserFeedInput, GetUserFeedOutput> {
       100,
       1
     );
+    if (communityQuery.total < 1)
+      return Result.ok({
+        posts: []
+      });
 
     const posts = await this.postRepository.getForCommunities(
       communityQuery.communities.map((c) => c.id),
