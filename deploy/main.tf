@@ -144,7 +144,8 @@ module "s3_media" {
 
   name = "media.${var.domain_name}"
   allowed_origins = [
-    var.domain_name
+    "https://${var.domain_name}",
+    "https://staging.${var.domain_name}"
   ]
 }
 
@@ -184,7 +185,6 @@ module "service_api_staging" {
   postgres_database_url = module.postgres_main_staging.database_url
 
   media_s3_name = module.s3_media.name
-  media_s3_url = module.s3_media.url
 }
 
 module "service_api_prod" {
@@ -223,7 +223,6 @@ module "service_api_prod" {
   postgres_database_url = module.postgres_main_prod.database_url
 
   media_s3_name = module.s3_media.name
-  media_s3_url = module.s3_media.url
 }
 
 module "service_indexer_staging" {
@@ -242,7 +241,7 @@ module "cloudfront_media" {
   source = "./modules/cloudfront"
 
   environment = "production"
-  
+
   name = module.s3_media.name
 
   hostname  = var.domain_name
@@ -250,7 +249,7 @@ module "cloudfront_media" {
 
   route53_zone_id = aws_route53_zone.main.zone_id
 
-  origin_host = module.s3_media.url_regional
+  origin_host = module.s3_media.regional_domain_name
 
   providers = {
     aws = aws.virginia

@@ -1,14 +1,15 @@
 resource "aws_iam_policy" "media_s3" {
-  name   = "api-${var.environment}-media-s3-policy"
+  name   = "${var.media_s3_name}-api-${var.environment}-s3-policy"
   policy = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Sid": "",
       "Effect": "Allow",
       "Action": [
-        "s3:PutObject"
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:PutObjectAcl"
       ],
       "Resource": [
         "arn:aws:s3:::${var.media_s3_name}",
@@ -21,7 +22,7 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "media_s3_policy" {
-  role       = module.service.exec_role_name
+  role       = module.service.task_role_name
   policy_arn = aws_iam_policy.media_s3.arn
 }
 
@@ -62,7 +63,7 @@ module "service" {
     "DATABASE_URL"    = var.postgres_database_url
     "MEDIA_S3_NAME"   = var.media_s3_name
     "MEDIA_S3_REGION" = var.region
-    "MEDIA_S3_URL"    = var.media_s3_url
+    "MEDIA_S3_URL"    = "https://s3.${var.region}.amazonaws.com/${var.media_s3_name}"
   }
 
   secrets_manager_arn = var.secrets_manager_arn

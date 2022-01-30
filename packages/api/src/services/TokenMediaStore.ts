@@ -3,6 +3,7 @@ import { PutObjectCommand, S3 as S3Client } from '@aws-sdk/client-s3';
 
 import { PassThrough } from 'stream';
 import axios from 'axios';
+import { fromContainerMetadata } from '@aws-sdk/credential-providers';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import mime from 'mime-types';
 import { nanoid } from 'nanoid';
@@ -13,6 +14,9 @@ export class TokenMediaStore implements MediaService {
 
   constructor() {
     this.s3 = new S3Client({
+      ...(process.env.ECS_CONTAINER_METADATA_URI_V4 && {
+        credentials: fromContainerMetadata()
+      }),
       region: process.env.MEDIA_S3_REGION || 'us-east-1'
     });
   }

@@ -49,7 +49,3 @@ variable "instance_count" {
 variable "media_s3_name" {
   type = string
 }
-
-variable "media_s3_url" {
-  type = string
-}

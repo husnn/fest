@@ -95,6 +95,7 @@ module "codepipeline" {
 resource "aws_ecs_task_definition" "main" {
   family                   = "${var.app_name}-${local.project_name}"
   network_mode             = "awsvpc"
+  task_role_arn            = aws_iam_role.task.arn
   execution_role_arn       = aws_iam_role.task_execution.arn
   cpu                      = var.cpu
   memory                   = var.memory
