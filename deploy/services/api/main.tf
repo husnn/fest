@@ -63,7 +63,7 @@ module "service" {
     "DATABASE_URL"    = var.postgres_database_url
     "MEDIA_S3_NAME"   = var.media_s3_name
     "MEDIA_S3_REGION" = var.region
-    "MEDIA_S3_URL"    = "https://s3.${var.region}.amazonaws.com/${var.media_s3_name}"
+    "MEDIA_S3_URL"    = "https://${var.media_s3_name}.s3.amazonaws.com"
   }
 
   secrets_manager_arn = var.secrets_manager_arn

@@ -22,9 +22,7 @@ export class TokenMediaStore implements MediaService {
   }
 
   getFilePath(filename: string, ext: string) {
-    return `${
-      process.env.NODE_ENV === 'staging' ? 'staging/' : ''
-    }tokens/full/${filename}${ext}`;
+    return `tokens/full/${filename}${ext}`;
   }
 
   async pipeFrom(

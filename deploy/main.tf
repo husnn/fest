@@ -139,12 +139,20 @@ resource "aws_ecs_cluster" "prod" {
   name = "prod"
 }
 
-module "s3_media" {
+module "s3_media_prod" {
   source = "./modules/s3"
 
-  name = "media.${var.domain_name}"
+  name = "${var.app_name}-media-prod"
   allowed_origins = [
-    "https://${var.domain_name}",
+    "https://${var.domain_name}"
+  ]
+}
+
+module "s3_media_staging" {
+  source = "./modules/s3"
+
+  name = "${var.app_name}-media-staging"
+  allowed_origins = [
     "https://staging.${var.domain_name}"
   ]
 }
@@ -184,7 +192,7 @@ module "service_api_staging" {
 
   postgres_database_url = module.postgres_main_staging.database_url
 
-  media_s3_name = module.s3_media.name
+  media_s3_name = module.s3_media_staging.name
 }
 
 module "service_api_prod" {
@@ -222,7 +230,7 @@ module "service_api_prod" {
 
   postgres_database_url = module.postgres_main_prod.database_url
 
-  media_s3_name = module.s3_media.name
+  media_s3_name = module.s3_media_prod.name
 }
 
 module "service_indexer_staging" {
@@ -242,14 +250,14 @@ module "cloudfront_media" {
 
   environment = "production"
 
-  name = module.s3_media.name
+  name = module.s3_media_prod.name
 
   hostname  = var.domain_name
   subdomain = "media"
 
   route53_zone_id = aws_route53_zone.main.zone_id
 
-  origin_host = module.s3_media.regional_domain_name
+  origin_host = module.s3_media_prod.regional_domain_name
 
   providers = {
     aws = aws.virginia
