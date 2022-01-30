@@ -1,5 +1,3 @@
-import './allow_s3_cors';
-
 import { MediaService, Result } from '@fest/core';
 import { PutObjectCommand, S3 as S3Client } from '@aws-sdk/client-s3';
 
@@ -15,19 +13,14 @@ export class TokenMediaStore implements MediaService {
 
   constructor() {
     this.s3 = new S3Client({
-      endpoint: process.env.TOKEN_MEDIA_S3_URL,
-      region: process.env.TOKEN_MEDIA_S3_REGION || 'us-east-1',
-      credentials: {
-        accessKeyId: process.env.TOKEN_MEDIA_S3_API_KEY,
-        secretAccessKey: process.env.TOKEN_MEDIA_S3_API_SECRET
-      }
+      region: process.env.MEDIA_S3_REGION || 'us-east-1'
     });
   }
 
   getFilePath(filename: string, ext: string) {
     return `${
       process.env.NODE_ENV === 'staging' ? 'staging/' : ''
-    }media/original/${filename}${ext}`;
+    }tokens/full/${filename}${ext}`;
   }
 
   async pipeFrom(
@@ -49,7 +42,7 @@ export class TokenMediaStore implements MediaService {
     const filePath = this.getFilePath(filename || nanoid(), extension);
 
     const command = new PutObjectCommand({
-      Bucket: process.env.TOKEN_MEDIA_S3_NAME,
+      Bucket: process.env.MEDIA_S3_NAME,
       Key: filePath,
       ContentType: contentType,
       ContentLength: Number(stream.headers['content-length']),
@@ -63,7 +56,7 @@ export class TokenMediaStore implements MediaService {
       await this.s3.send(command);
       passThrough.end();
 
-      return Result.ok(`${process.env.TOKEN_MEDIA_URL}/${filePath}`);
+      return Result.ok(`${process.env.MEDIA_S3_URL}/${filePath}`);
     } catch (err) {
       console.log(err);
     }
@@ -88,7 +81,7 @@ export class TokenMediaStore implements MediaService {
 
     try {
       const command = new PutObjectCommand({
-        Bucket: process.env.TOKEN_MEDIA_S3_NAME,
+        Bucket: process.env.MEDIA_S3_NAME,
         Key: filePath,
         ContentType: filetype,
         ContentLength: filesize,
@@ -105,7 +98,7 @@ export class TokenMediaStore implements MediaService {
     return signedUrl
       ? Result.ok({
           signedUrl,
-          url: `${process.env.TOKEN_MEDIA_URL}/${filePath}`
+          url: `${process.env.MEDIA_S3_URL}/${filePath}`
         })
       : Result.fail();
   }

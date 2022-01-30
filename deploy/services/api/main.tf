@@ -1,3 +1,30 @@
+resource "aws_iam_policy" "media_s3" {
+  name   = "api-${var.environment}-media-s3-policy"
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "",
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject"
+      ],
+      "Resource": [
+        "arn:aws:s3:::${var.media_s3_name}",
+        "arn:aws:s3:::${var.media_s3_name}/*"
+      ]
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "media_s3_policy" {
+  role       = module.service.exec_role_name
+  policy_arn = aws_iam_policy.media_s3.arn
+}
+
 module "service" {
   source = "../../modules/ecs"
 
@@ -28,11 +55,14 @@ module "service" {
   route53_zone_id = var.route53_zone_id
 
   env_vars = {
-    "NODE_ENV"     = var.environment
-    "PORT"         = 5000
-    "CLIENT_URL"   = "https://${var.hostname}"
-    "API_URL"      = "https://api.${var.hostname}/v1"
-    "DATABASE_URL" = var.postgres_database_url
+    "NODE_ENV"        = var.environment
+    "PORT"            = 5000
+    "CLIENT_URL"      = "https://${var.hostname}"
+    "API_URL"         = "https://api.${var.hostname}/v1"
+    "DATABASE_URL"    = var.postgres_database_url
+    "MEDIA_S3_NAME"   = var.media_s3_name
+    "MEDIA_S3_REGION" = var.region
+    "MEDIA_S3_URL"    = var.media_s3_url
   }
 
   secrets_manager_arn = var.secrets_manager_arn
@@ -47,11 +77,6 @@ module "service" {
     "ETH_WALLET_PK",
     "MAIL_FROM_NO_REPLY",
     "SENDGRID_API_KEY",
-    "TOKEN_MEDIA_URL",
-    "TOKEN_MEDIA_S3_NAME",
-    "TOKEN_MEDIA_S3_URL",
-    "TOKEN_MEDIA_S3_API_KEY",
-    "TOKEN_MEDIA_S3_API_SECRET",
     "PINATA_API_KEY",
     "PINATA_API_SECRET",
     "GOOGLE_CLIENT_ID",

@@ -139,6 +139,15 @@ resource "aws_ecs_cluster" "prod" {
   name = "prod"
 }
 
+module "s3_media" {
+  source = "./modules/s3"
+
+  name = "media.${var.domain_name}"
+  allowed_origins = [
+    var.domain_name
+  ]
+}
+
 module "service_api_staging" {
   source = "./services/api"
 
@@ -173,6 +182,9 @@ module "service_api_staging" {
   instance_count = 1
 
   postgres_database_url = module.postgres_main_staging.database_url
+
+  media_s3_name = module.s3_media.name
+  media_s3_url = module.s3_media.url
 }
 
 module "service_api_prod" {
@@ -209,6 +221,9 @@ module "service_api_prod" {
   instance_count = 1
 
   postgres_database_url = module.postgres_main_prod.database_url
+
+  media_s3_name = module.s3_media.name
+  media_s3_url = module.s3_media.url
 }
 
 module "service_indexer_staging" {
@@ -223,20 +238,19 @@ module "service_indexer_staging" {
   secrets_manager_arn = var.api_secrets_manager_staging_arn
 }
 
-module "cloudfront_nft" {
+module "cloudfront_media" {
   source = "./modules/cloudfront"
 
-  name = "filebase-nft-media"
-
   environment = "production"
+  
+  name = module.s3_media.name
 
   hostname  = var.domain_name
-  subdomain = "nft"
+  subdomain = "media"
 
   route53_zone_id = aws_route53_zone.main.zone_id
 
-  origin_host = var.nft_media_origin_name
-  origin_path = var.nft_media_origin_path
+  origin_host = module.s3_media.url_regional
 
   providers = {
     aws = aws.virginia

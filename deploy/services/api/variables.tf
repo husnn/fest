@@ -45,3 +45,11 @@ variable "instance_count" {
   type    = number
   default = 2
 }
+
+variable "media_s3_name" {
+  type = string
+}
+
+variable "media_s3_url" {
+  type = string
+}

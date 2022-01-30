@@ -52,12 +52,3 @@ variable "api_secrets_manager_staging_arn" {
 variable "api_secrets_manager_prod_arn" {
   type = string
 }
-
-variable "nft_media_origin_name" {
-  type = string
-}
-
-variable "nft_media_origin_path" {
-  type    = string
-  default = ""
-}
