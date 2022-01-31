@@ -210,7 +210,7 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
             resolve();
           }
         });
-      }, 5000);
+      }, 10_000);
     });
   };
 
