@@ -17,4 +17,5 @@ RUN apk add --update --no-cache \
     yarn \
   && npm install --global node-gyp
 
-RUN yarn install --inline-builds
+RUN yarn install --inline-builds \
+  && yarn build
