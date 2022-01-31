@@ -1,5 +1,5 @@
 import { MediaService, YouTubeService } from '../../services';
-import { Percentage, TokenAttributes, TokenFee, TokenType } from '@fest/shared';
+import { Percentage, TokenFee, TokenType } from '@fest/shared';
 
 import { CreateCommunity } from '../../usecases';
 import { GetYouTubeChannel } from '../google/GetYouTubeChannel';
@@ -19,7 +19,9 @@ export interface CreateTokenInput {
   image?: string;
   supply: number;
   royaltyPct?: number;
-  attributes?: TokenAttributes;
+  attributes?: {
+    [name: string]: string;
+  };
 }
 export type CreateTokenOutput = string;
 

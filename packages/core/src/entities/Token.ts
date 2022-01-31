@@ -1,9 +1,4 @@
-import {
-  TokenAttributes,
-  TokenChainData,
-  TokenFee,
-  TokenType
-} from '@fest/shared';
+import { TokenChainData, TokenFee, TokenType } from '@fest/shared';
 
 import Community from './Community';
 import User from './User';
@@ -27,7 +22,9 @@ export class Token {
 
   fees?: TokenFee[];
 
-  attributes?: TokenAttributes;
+  attributes?: {
+    [name: string]: string;
+  };
   extra?: unknown;
 
   mediaUri?: string;

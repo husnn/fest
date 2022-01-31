@@ -29,11 +29,19 @@ export const pinToIPFS = async (
     const metadata: TokenMetadata = {
       type: Token.getTypeName(type),
       name,
-      description,
-      attributes
+      ...(description && { description })
     };
 
     if (mediaUri) metadata.image = mediaUri;
+
+    if (attributes) {
+      metadata.attributes = Object.entries(attributes).map(([key, value]) => {
+        return {
+          trait_type: key,
+          value
+        };
+      });
+    }
 
     if (externalUrl) {
       if (type === TokenType.YT_VIDEO) {

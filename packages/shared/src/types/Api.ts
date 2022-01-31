@@ -13,10 +13,9 @@ import {
   TokenTradeDTO,
   UserDTO
 } from '../dto';
-import { Protocol, WaitlistEntryType } from '../enums';
+import { Protocol, TokenType, WaitlistEntryType } from '../enums';
 
 import { ProtocolConfig } from './';
-import TokenMetadata from './TokenMetadata';
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT';
 
@@ -333,10 +332,17 @@ export interface GetTokenResponse extends Response {
 
 export interface GetTokenRequest extends Request {}
 
-export interface TokenData extends TokenMetadata {
+export interface TokenData {
+  type: TokenType;
   resource?: string;
+  name: string;
+  description?: string;
+  image?: string;
   supply: number;
   royaltyPct: number;
+  attributes?: {
+    [name: string]: string;
+  };
 }
 
 export interface CreateTokenResponse extends Response {

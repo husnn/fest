@@ -8,7 +8,7 @@ export * from './PostMedia';
 export * from './Price';
 export * from './ProtocolConfig';
 export * from './Socket';
-export * from './TokenAttributes';
+export * from './TokenAttribute';
 export * from './TokenChainData';
 export * from './TokenFee';
 export * from './TokenMetadata';

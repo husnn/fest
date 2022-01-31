@@ -1,4 +1,4 @@
-import TokenAttributes from './TokenAttributes';
+import TokenAttribute from './TokenAttribute';
 
 export interface TokenMetadata {
   type: string;
@@ -7,7 +7,7 @@ export interface TokenMetadata {
   image?: string;
   external_url?: string;
   youtube_url?: string;
-  attributes?: TokenAttributes;
+  attributes?: TokenAttribute[];
 }
 
 export default TokenMetadata;
