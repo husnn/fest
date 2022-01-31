@@ -42,6 +42,15 @@ export class Token {
   constructor(data?: Partial<Token>) {
     Object.assign(this, data);
   }
+
+  static getTypeName(type: TokenType): string {
+    switch (type) {
+      case TokenType.YT_VIDEO:
+        return 'YouTube video';
+    }
+
+    return 'Basic';
+  }
 }
 
 export default Token;

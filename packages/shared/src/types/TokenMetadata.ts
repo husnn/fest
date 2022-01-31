@@ -1,8 +1,7 @@
 import TokenAttributes from './TokenAttributes';
-import { TokenType } from '../enums';
 
 export interface TokenMetadata {
-  type: TokenType;
+  type: string;
   name: string;
   description?: string;
   image?: string;

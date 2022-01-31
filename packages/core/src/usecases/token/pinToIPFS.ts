@@ -12,7 +12,7 @@ export const pinToIPFS = async (
 ): Promise<Result<PinData>> => {
   let modified = false;
 
-  if (!token.mediaUri) {
+  if (token.image && !token.mediaUri) {
     const pinResult = await ipfs.pipeFrom(token.image);
     if (!pinResult.success) return Result.fail('Could not pipe image to IPFS.');
 
@@ -27,17 +27,20 @@ export const pinToIPFS = async (
       token;
 
     const metadata: TokenMetadata = {
-      type,
+      type: Token.getTypeName(type),
       name,
       description,
-      image: mediaUri,
       attributes
     };
 
-    if (type === TokenType.YT_VIDEO) {
-      metadata.youtube_url = externalUrl;
-    } else {
-      metadata.external_url = externalUrl;
+    if (mediaUri) metadata.image = mediaUri;
+
+    if (externalUrl) {
+      if (type === TokenType.YT_VIDEO) {
+        metadata.youtube_url = externalUrl;
+      } else {
+        metadata.external_url = externalUrl;
+      }
     }
 
     metadataPinResult = await ipfs.saveJson(metadata);
