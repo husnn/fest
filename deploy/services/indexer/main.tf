@@ -1,3 +1,37 @@
+module "redis" {
+  source = "../../modules/redis"
+
+  name        = "indexer"
+  environment = var.environment
+
+  vpc_id = var.vpc_id
+
+  subnet_group_name = var.elasticache_group_name
+
+  allowed_security_group_ids = [
+    module.main.security_group_id
+  ]
+}
+
+data "aws_secretsmanager_secret_version" "main" {
+  secret_id = var.secrets_manager_arn
+}
+
+locals {
+  secrets = jsondecode(data.aws_secretsmanager_secret_version.main.secret_string)
+}
+
+resource "aws_secretsmanager_secret_version" "main" {
+  secret_id = var.secrets_manager_arn
+  secret_string = jsonencode({
+    NODE_ENV     = var.environment
+    SECRET       = lookup(local.secrets, "SECRET", null)
+    ETH_PROVIDER = lookup(local.secrets, "ETH_PROVIDER", null)
+    DATABASE_URL = var.database_url
+    REDIS_URL    = module.redis.url
+  })
+}
+
 module "main" {
   source = "../../modules/ec2"
 
@@ -7,8 +41,9 @@ module "main" {
   vpc_id    = var.vpc_id
   subnet_id = var.subnet_id
 
-  port         = 4000
-  
+  instance_type = var.environment != "production" ? "t2.nano" : "t2.micro"
+  port          = 4000
+
   ssh_key_name = var.ssh_key_name
 }
 

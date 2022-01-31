@@ -44,7 +44,7 @@ resource "aws_iam_instance_profile" "main" {
 
 resource "aws_instance" "main" {
   ami           = "ami-01efa4023f0f3a042"
-  instance_type = "t2.micro"
+  instance_type = var.instance_type
 
   subnet_id                   = var.subnet_id
   vpc_security_group_ids      = [aws_security_group.main.id]
@@ -58,5 +58,9 @@ resource "aws_instance" "main" {
     volume_type           = "gp2"
     volume_size           = 10
     delete_on_termination = true
+  }
+
+  tags = {
+    Name = local.project_name
   }
 }

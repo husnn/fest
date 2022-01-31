@@ -107,27 +107,8 @@ module "postgres_main_prod" {
   subnet_group_name = aws_db_subnet_group.main.name
 
   allowed_security_group_ids = [
-    module.service_api_prod.security_group_id
-  ]
-}
-
-resource "aws_elasticache_subnet_group" "main" {
-  name       = "elasticache-subnet-group"
-  subnet_ids = module.vpc.private_subnet_ids
-}
-
-module "redis_main_staging" {
-  source = "./modules/redis"
-
-  name        = "main"
-  environment = "staging"
-
-  vpc_id = module.vpc.id
-
-  subnet_group_name = aws_elasticache_subnet_group.main.name
-
-  allowed_security_group_ids = [
-    module.service_indexer_staging.security_group_id
+    module.service_api_prod.security_group_id,
+    module.service_indexer_prod.security_group_id
   ]
 }
 
@@ -155,6 +136,26 @@ module "s3_media_staging" {
   allowed_origins = [
     "https://staging.${var.domain_name}"
   ]
+}
+
+
+module "cloudfront_media" {
+  source = "./modules/cloudfront"
+
+  environment = "production"
+
+  name = module.s3_media_prod.name
+
+  hostname  = var.domain_name
+  subdomain = "media"
+
+  route53_zone_id = aws_route53_zone.main.zone_id
+
+  origin_host = module.s3_media_prod.regional_domain_name
+
+  providers = {
+    aws = aws.virginia
+  }
 }
 
 module "service_api_staging" {
@@ -233,33 +234,35 @@ module "service_api_prod" {
   media_s3_name = module.s3_media_prod.name
 }
 
+resource "aws_elasticache_subnet_group" "main" {
+  name       = "elasticache-subnet-group"
+  subnet_ids = module.vpc.private_subnet_ids
+}
+
 module "service_indexer_staging" {
   source = "./services/indexer"
 
-  environment = "staging"
-  vpc_id      = module.vpc.id
-  subnet_id   = module.vpc.public_subnet_ids[0]
+  environment            = "staging"
+  vpc_id                 = module.vpc.id
+  subnet_id              = module.vpc.public_subnet_ids[0]
+  elasticache_group_name = aws_elasticache_subnet_group.main.name
 
   ssh_key_name = "indexer-staging-ec2-key"
 
-  secrets_manager_arn = var.api_secrets_manager_staging_arn
+  database_url        = module.postgres_main_staging.database_url
+  secrets_manager_arn = var.indexer_secrets_manager_staging_arn
 }
 
-module "cloudfront_media" {
-  source = "./modules/cloudfront"
+module "service_indexer_prod" {
+  source = "./services/indexer"
 
-  environment = "production"
+  environment            = "production"
+  vpc_id                 = module.vpc.id
+  subnet_id              = module.vpc.public_subnet_ids[0]
+  elasticache_group_name = aws_elasticache_subnet_group.main.name
 
-  name = module.s3_media_prod.name
+  ssh_key_name = "indexer-prod-ec2-key"
 
-  hostname  = var.domain_name
-  subdomain = "media"
-
-  route53_zone_id = aws_route53_zone.main.zone_id
-
-  origin_host = module.s3_media_prod.regional_domain_name
-
-  providers = {
-    aws = aws.virginia
-  }
+  database_url        = module.postgres_main_prod.database_url
+  secrets_manager_arn = var.indexer_secrets_manager_prod_arn
 }

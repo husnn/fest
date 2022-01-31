@@ -1,4 +1,4 @@
-output "redis_url" {
+output "url" {
   value     = local.redis_url
   sensitive = true
 }

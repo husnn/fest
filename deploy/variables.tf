@@ -52,3 +52,11 @@ variable "api_secrets_manager_staging_arn" {
 variable "api_secrets_manager_prod_arn" {
   type = string
 }
+
+variable "indexer_secrets_manager_staging_arn" {
+  type = string
+}
+
+variable "indexer_secrets_manager_prod_arn" {
+  type = string
+}
