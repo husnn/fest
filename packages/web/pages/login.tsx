@@ -50,8 +50,14 @@ export default function Login() {
     setAuthenticated(true);
   };
 
+  const [connectingWallet, setConnectingWallet] = useState(false);
+
   const loginWithWallet = async () => {
+    setConnectingWallet(true);
+
     const wallet = await activate();
+    setConnectingWallet(false);
+
     if (!wallet) return;
 
     setError(null);
@@ -74,7 +80,7 @@ export default function Login() {
         wallet
       );
 
-      const { token, user } = await ApiClient.instance?.loginWithWallet(
+      const { token, user } = await ApiClient.getInstance().loginWithWallet(
         Protocol.ETHEREUM,
         identificationData.code,
         signature
@@ -288,7 +294,11 @@ export default function Login() {
           Or if you&apos;re a crypto-maniac
         </p>
 
-        <Button color="secondary" onClick={loginWithWallet}>
+        <Button
+          color="secondary"
+          onClick={loginWithWallet}
+          loading={connectingWallet}
+        >
           Continue with wallet
         </Button>
 
