@@ -74,20 +74,16 @@ export const getImageUrl = (
     maxHeight?: number;
     fit?: 'crop';
     blur?: number;
-  },
-  override = false
+  }
 ) => {
   if (process.env.NODE_ENV === 'development') return sourceUrl;
 
-  let endpoint;
-  const baseUrl = process.env.NEXT_PUBLIC_IMAGES_URL;
+  let baseUrl;
 
-  if (!override) {
-    const el = document.createElement('a');
-    el.href = sourceUrl;
+  const el = document.createElement('a');
+  el.href = sourceUrl;
 
-    endpoint = el.pathname.split('/').pop();
-  }
+  baseUrl = process.env.NEXT_PUBLIC_IMAGES_URL || el.hostname;
 
   const p = params
     ? {
@@ -106,14 +102,11 @@ export const getImageUrl = (
     qs = Object.keys(p)
       .map((key) => `${key}=${p[key]}`)
       .join('&');
+
+    baseUrl = process.env.NEXT_PUBLIC_IMGIX_URL || baseUrl;
   }
 
-  const url =
-    baseUrl && !override
-      ? `${baseUrl}/${endpoint || sourceUrl}${qs ? '?' + qs : ''}`
-      : sourceUrl;
-
-  return url;
+  return `${baseUrl}${el.pathname}${qs ? '?' + qs : ''}`;
 };
 
 export const reloadInTime = (router: NextRouter, seconds: number) => {

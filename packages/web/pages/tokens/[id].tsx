@@ -7,7 +7,12 @@ import {
   TokenOwnershipDTO
 } from '@fest/shared';
 import React, { useEffect, useState } from 'react';
-import { getDisplayName, getHomeUrl, getProfileUrl } from '../../utils';
+import {
+  getDisplayName,
+  getHomeUrl,
+  getImageUrl,
+  getProfileUrl
+} from '../../utils';
 
 import ApiClient from '../../modules/api/ApiClient';
 import CreateTokenListing from '../../components/CreateTokenListing';
@@ -295,7 +300,9 @@ export default function TokenPage() {
             </TokenHeading>
 
             <PreviewContainer>
-              <img src={token.image || '/images/token-sample-1.jpg'} />
+              <img
+                src={getImageUrl(token.image) || '/images/token-sample-1.jpg'}
+              />
             </PreviewContainer>
 
             <TokenCreatorCard>
