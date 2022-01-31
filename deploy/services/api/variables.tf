@@ -33,12 +33,12 @@ variable "secrets_manager_arn" {
 
 variable "cpu" {
   type    = number
-  default = 1024
+  default = 512
 }
 
 variable "memory" {
   type    = number
-  default = 2048
+  default = 1024
 }
 
 variable "instance_count" {
