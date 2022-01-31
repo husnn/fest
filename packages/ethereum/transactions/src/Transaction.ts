@@ -21,7 +21,7 @@ export class Transaction implements IEthereumTx {
     chainId?: number,
     nonce?: number,
     gasLimit = 200000,
-    gasPrice = 20
+    gasPrice = 50
   ): this {
     const tx = {
       from: Web3.utils.toChecksumAddress(from),
