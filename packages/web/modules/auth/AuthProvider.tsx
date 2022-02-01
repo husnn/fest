@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { getAuthToken, getCurrentUser, removeAuth } from './authStorage';
+import {
+  getAuthExpiry,
+  getAuthToken,
+  getCurrentUser,
+  removeAuth
+} from './authStorage';
 
 import { CurrentUserDTO } from '@fest/shared';
 import { useRouter } from 'next/router';
@@ -34,6 +39,10 @@ export const AuthProvider: React.FC = ({
 
     setAuthenticated(isAuthenticated);
     setCurrentUser(user);
+
+    if (getAuthExpiry() <= new Date()) {
+      clearAuth();
+    }
   }, []);
 
   useEffect(() => {

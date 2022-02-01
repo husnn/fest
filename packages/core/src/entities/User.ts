@@ -4,12 +4,7 @@ import Community from './Community';
 import Token from './Token';
 import Wallet from './Wallet';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-
-type JwtPayload = {
-  userId: string;
-  email?: string;
-};
+import jwt, { JwtPayload } from 'jsonwebtoken';
 
 export class User {
   readonly id: string;
@@ -56,7 +51,10 @@ export class User {
   }
 
   static fromJwt(token: string, secret?: string) {
-    return jwt.verify(token, secret || process.env.JWT_SECRET) as JwtPayload;
+    return jwt.verify(token, secret || process.env.JWT_SECRET) as {
+      userId: string;
+      email?: string;
+    };
   }
 
   static fromEmailChangeJwt(token: string) {
@@ -71,6 +69,10 @@ export class User {
     return jwt.sign({ userId: user.id }, secret || process.env.JWT_SECRET, {
       expiresIn: expiry || process.env.JWT_EXPIRY
     });
+  }
+
+  static getExpiryDate(token: string): number {
+    return (jwt.decode(token) as JwtPayload).exp;
   }
 
   static generateEmailChangeJwt(

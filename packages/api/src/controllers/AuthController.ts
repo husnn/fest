@@ -253,10 +253,11 @@ class AuthController {
         }
       }
 
-      const { token, user } = result.data;
+      const { token, expiry, user } = result.data;
 
       return new HttpResponse<LoginResponse>(res, {
         token,
+        expiry,
         user
       });
     } catch (err) {
@@ -274,10 +275,11 @@ class AuthController {
         signature
       });
 
-      const { token, user } = result.data;
+      const { token, expiry, user } = result.data;
 
       return new HttpResponse<LoginResponse>(res, {
         token,
+        expiry,
         user
       });
     } catch (err) {

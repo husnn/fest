@@ -570,6 +570,7 @@ export interface AuthPrecheckRequest extends Request {
 
 export interface LoginResponse extends Response {
   token: string;
+  expiry: number;
   user: CurrentUserDTO;
 }
 

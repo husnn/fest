@@ -17,6 +17,7 @@ export interface LoginWithWalletInput {
 
 export interface LoginWithWalletOuput {
   token: string;
+  expiry: number;
   user: CurrentUserDTO;
 }
 
@@ -76,8 +77,11 @@ export class LoginWithWallet extends UseCase<
 
     this.userRepository.update(user);
 
+    const token = User.generateJwt(user);
+
     return Result.ok({
-      token: User.generateJwt(user),
+      token,
+      expiry: User.getExpiryDate(token),
       user: userDTO
     });
   }

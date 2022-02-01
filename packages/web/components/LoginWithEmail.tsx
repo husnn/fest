@@ -18,7 +18,7 @@ type LoginWithEmailProps = {
   email: string;
   newUser?: boolean;
   inviteCode?: string;
-  onLogin: (token: string, user: CurrentUserDTO) => void;
+  onLogin: (token: string, expiry: number, user: CurrentUserDTO) => void;
   onPasswordReset: () => void;
 };
 
@@ -63,13 +63,10 @@ const LoginWithEmail: React.FC<LoginWithEmailProps & ModalWithStepsProps> = ({
     setOkEnabled(false);
 
     try {
-      const { token, user } = await ApiClient.instance?.loginWithEmail(
-        email,
-        password,
-        code
-      );
+      const { token, expiry, user } =
+        await ApiClient.getInstance().loginWithEmail(email, password, code);
 
-      onLogin(token, user);
+      onLogin(token, expiry, user);
       close();
     } catch (err) {
       setStepIndex(0);
