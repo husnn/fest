@@ -9,7 +9,7 @@ import mime from 'mime-types';
 import { nanoid } from 'nanoid';
 import path from 'path';
 
-export class TokenMediaStore implements MediaService {
+export class MediaStore implements MediaService {
   private s3: S3Client;
 
   constructor() {
@@ -21,11 +21,8 @@ export class TokenMediaStore implements MediaService {
     });
   }
 
-  getFilePath(filename: string, ext: string) {
-    return `tokens/full/${filename}${ext}`;
-  }
-
   async pipeFrom(
+    basePath: string,
     url: string,
     filename?: string,
     ext?: string
@@ -37,11 +34,11 @@ export class TokenMediaStore implements MediaService {
     const passThrough = new PassThrough();
 
     const contentType = stream.headers['content-type'];
-    const extension = ext ? ext : mime.extension(contentType);
 
+    const extension = ext ? ext : mime.extension(contentType);
     if (!extension) return Result.fail('Could not get file extension.');
 
-    const filePath = this.getFilePath(filename || nanoid(), extension);
+    const filePath = `${basePath}/${filename || nanoid(32)}${extension}`;
 
     const command = new PutObjectCommand({
       Bucket: process.env.MEDIA_S3_NAME,
@@ -63,10 +60,11 @@ export class TokenMediaStore implements MediaService {
       console.log(err);
     }
 
-    return Result.fail('Could not pipe YouTube video thumbnail.');
+    return Result.fail('Could not pipe media.');
   }
 
   async getSignedImageUploadUrl(
+    basePath: string,
     filename: string,
     filetype: string,
     filesize: number
@@ -79,7 +77,7 @@ export class TokenMediaStore implements MediaService {
     let signedUrl: string;
 
     const ext = path.extname(filename);
-    const filePath = this.getFilePath(nanoid(), ext);
+    const filePath = `${basePath}/${nanoid(32)}${ext}`;
 
     try {
       const command = new PutObjectCommand({
@@ -106,4 +104,4 @@ export class TokenMediaStore implements MediaService {
   }
 }
 
-export default TokenMediaStore;
+export default MediaStore;

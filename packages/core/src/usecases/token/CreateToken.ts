@@ -78,6 +78,7 @@ export class CreateToken extends UseCase<CreateTokenInput, CreateTokenOutput> {
       if (ytChannel.data.id != ytVideo.data.channelId) return Result.fail();
 
       const imageResult = await this.mediaService.pipeFrom(
+        MediaService.basePath.tokens,
         ytVideo.data.thumbnail
       );
       if (!imageResult.success) return Result.fail('Could not get thumbnail.');

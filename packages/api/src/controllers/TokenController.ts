@@ -317,6 +317,7 @@ class TokenController {
   ) {
     try {
       const result = await this.mediaService.getSignedImageUploadUrl(
+        MediaService.basePath.tokens,
         req.query.filename as string,
         req.query.filetype as string,
         Number(req.query.filesize)

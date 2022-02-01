@@ -33,7 +33,7 @@ import MailService from './services/MailService';
 import MarketController from './controllers/MarketController';
 import PostController from './controllers/PostController';
 import TokenController from './controllers/TokenController';
-import TokenMediaStore from './services/TokenMediaStore';
+import MediaStore from './services/MediaStore';
 import UserController from './controllers/UserController';
 import WaitlistController from './controllers/WaitlistController';
 import YouTubeController from './controllers/YouTubeController';
@@ -116,7 +116,7 @@ class App {
       youTubeService
     );
 
-    const mediaStore = new TokenMediaStore();
+    const mediaStore = new MediaStore();
 
     const createCommunityUseCase = new CreateCommunity(
       tokenRepository,

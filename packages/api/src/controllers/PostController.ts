@@ -36,6 +36,7 @@ class PostController {
 
       for (const media of data) {
         const result = await this.mediaService.getSignedImageUploadUrl(
+          MediaService.basePath.posts,
           media.name,
           media.type,
           media.size
