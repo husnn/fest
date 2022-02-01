@@ -25,7 +25,7 @@ export const GoogleButton: React.FC<GoogleButtonProps> = ({
         }
       }}
     >
-      {isLinked ? 'Unlink Channel' : 'Link with Google'}
+      {isLinked ? 'Unlink channel' : 'Link with Google'}
     </Button>
   );
 };

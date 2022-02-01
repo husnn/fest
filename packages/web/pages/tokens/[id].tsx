@@ -4,7 +4,8 @@ import {
   Protocol,
   TokenDTO,
   TokenListingDTO,
-  TokenOwnershipDTO
+  TokenOwnershipDTO,
+  TokenType
 } from '@fest/shared';
 import React, { useEffect, useState } from 'react';
 import {
@@ -19,7 +20,6 @@ import CreateTokenListing from '../../components/CreateTokenListing';
 import Head from 'next/head';
 import Modal from '../../ui/Modal';
 import SpinnerSvg from '../../public/images/spinner.svg';
-import TokenCommunities from '../../components/TokenCommunities';
 import TokenHolders from '../../components/TokenHolders';
 import TokenListings from '../../components/TokenListings';
 import { css } from '@emotion/react';
@@ -29,6 +29,7 @@ import useAuthentication from '../../modules/auth/useAuthentication';
 import usePagination from '../../modules/api/usePagination';
 import { useRouter } from 'next/router';
 import useWeb3 from '../../modules/web3/useWeb3';
+import TokenAttributes from '../../ui/TokenAttributes';
 
 const TokenContainer = styled.div`
   width: 100%;
@@ -36,14 +37,14 @@ const TokenContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 20px;
+  gap: 30px;
 
   > div {
     flex-grow: 1;
   }
 
   > * + * {
-    margin-top: 20px;
+    margin-top: 30px;
   }
 `;
 
@@ -53,18 +54,25 @@ const TokenMain = styled.div`
   flex-basis: 50%;
 
   > * + * {
-    margin-top: 20px;
+    margin-top: 30px;
   }
 `;
 
 const TokenHeading = styled.div`
+  .exclusive {
+    font-weight: 700;
+    background: linear-gradient(to right, #30cfd0 0%, #330867 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
   > * + * {
     margin-top: 5px;
   }
 `;
 
 const TokenCreatorCard = styled.div`
-  margin-top: 20px;
+  margin-top: 30px;
   padding: 10px 0;
   display: flex;
   align-items: center;
@@ -100,28 +108,35 @@ const TokenActions = styled.div`
 
 const PreviewContainer = styled.div`
   width: 100%;
-  height: auto;
+  background-color: #fafafa;
   display: flex;
+  align-items: center;
   justify-content: center;
   overflow: hidden;
+  border-radius: 20px;
 
   img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: 100% 100%;
+    max-width: 100%;
+    max-height: 500px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     border-radius: 10px;
   }
 `;
 
 const Section = ({
   title,
-  children
+  children,
+  noPadding = false,
+  noBackground = false
 }: {
   title?: string;
+  noPadding?: boolean;
+  noBackground?: boolean;
   children: React.ReactElement;
 }) => {
-  const SectionHeading = styled.h2`
+  const SectionHeading = styled.h3`
     margin-bottom: 20px;
   `;
 
@@ -129,13 +144,13 @@ const Section = ({
     <div
       css={css`
         height: fit-content;
-        background-color: #fafafa;
-        padding: 30px 20px;
+        background-color: ${noBackground ? 'none' : '#fafafa'};
+        padding: ${noPadding ? '0' : '30px 20px'};
         white-space: pre-wrap;
         border-radius: 30px;
 
         @media screen and (min-width: 500px) {
-          padding: 50px 30px;
+          padding: ${noPadding ? '0' : '50px 30px'};
         }
       `}
     >
@@ -250,6 +265,8 @@ export default function TokenPage() {
     );
   };
 
+  const isExclusive = token?.supply == 1;
+
   return (
     <div className="container boxed wider">
       <Head>
@@ -290,19 +307,61 @@ export default function TokenPage() {
           <TokenMain>
             <TokenHeading>
               <h1>{token?.name}</h1>
-              <h3>
-                {token?.supply}{' '}
-                <span style={{ fontWeight: 'normal', fontSize: '11pt' }}>
-                  in total
-                </span>
+              <h3
+                {...(isExclusive && {
+                  className: 'exclusive'
+                })}
+              >
+                {isExclusive ? (
+                  'Exclusive'
+                ) : (
+                  <React.Fragment>
+                    {token?.supply}
+                    <span style={{ fontWeight: 'normal', fontSize: '11pt' }}>
+                      {' '}
+                      in total
+                    </span>
+                  </React.Fragment>
+                )}
               </h3>
-              {/* {ownership && <p>Owned: {ownership?.quantity}</p>} */}
             </TokenHeading>
 
+            {token.type == TokenType.YT_VIDEO && (
+              <Section noPadding noBackground>
+                <Link
+                  target="_blank"
+                  href={token.youtubeUrl}
+                  css={css`
+                    width: fit-content;
+                    // margin: 0 10px 0 0;
+                    padding: 10px 20px;
+                    color: #0a0a0a;
+                    background-color: #fafafa;
+                    display: flex;
+                    align-items: center;
+                    border-radius: 10px;
+
+                    p {
+                      margin-top: 3px;
+                    }
+
+                    > * + * {
+                      margin-left: 10px;
+                    }
+                  `}
+                >
+                  <img src="/images/ic-youtube.png" width={20} />
+                  <p>YouTube Video</p>
+                </Link>
+              </Section>
+            )}
+
             <PreviewContainer>
-              <img
-                src={getImageUrl(token.image) || '/images/token-sample-1.jpg'}
-              />
+              {token.image ? (
+                <img src={getImageUrl(token.image)} />
+              ) : (
+                <img src={'/images/ic-token.svg'} width={200} />
+              )}
             </PreviewContainer>
 
             <TokenCreatorCard>
@@ -314,6 +373,19 @@ export default function TokenPage() {
                 <p className="small">{token.creator.bio}</p>
               </div>
             </TokenCreatorCard>
+
+            {token?.minted && (
+              <TokenActions>
+                <Button
+                  color="secondary"
+                  onClick={() => router.push(getHomeUrl(token.communities[0]))}
+                >
+                  Go to community feed
+                </Button>
+              </TokenActions>
+            )}
+
+            {token.attributes && <TokenAttributes attrs={token.attributes} />}
 
             {token.description && (
               <Section title="Description">
@@ -335,14 +407,14 @@ export default function TokenPage() {
               </TokenActions>
             )}
 
-            {token.communities && token.communities.length > 0 && (
-              <Section title="Communities">
+            {/* {token.communities && token.communities.length > 0 && (
+              <Section title='Communities'>
                 <TokenCommunities
                   communities={token.communities}
                   onSelected={(community) => router.push(getHomeUrl(community))}
                 />
               </Section>
-            )}
+            )} */}
 
             {listings && listings.length > 0 && (
               <Section title="Market listings">
@@ -356,7 +428,7 @@ export default function TokenPage() {
             )}
           </TokenMain>
           {token.minted && (
-            <Section title="Holders">
+            <Section title="Owners">
               <TokenHolders
                 token={token.id}
                 selected={ownership}

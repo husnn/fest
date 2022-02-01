@@ -12,29 +12,34 @@ export const useYouTubeVideos = () => {
 
   const [isInitialLoad, setIsInitialLoad] = useState(true);
 
+  const [error, setError] = useState<string>();
+
   useEffect(() => {
     setIsInitialLoad(false);
     loadVideos();
   }, []);
 
-  const loadVideos = async () => {
+  const loadVideos = () => {
     if (!isInitialLoad && !nextPage) return;
 
-    const uploads = await ApiClient.instance?.getYouTubeUploads(
-      playlist,
-      nextPage
-    );
-
-    setVideos([...videos, ...uploads.videos]);
-
-    setPlaylist(uploads.playlist);
-    setNextPage(uploads.nextPage);
+    return ApiClient.getInstance()
+      .getYouTubeUploads(playlist, nextPage)
+      .then((res) => {
+        setVideos([...videos, ...res.videos]);
+        setPlaylist(res.playlist);
+        setNextPage(res.nextPage);
+      })
+      .catch((err) => {
+        setError(err);
+        console.log(err);
+      });
   };
 
   return {
     moreAvailable: !isInitialLoad && nextPage,
     videos,
-    loadVideos
+    loadVideos,
+    error
   };
 };
 

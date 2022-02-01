@@ -80,10 +80,6 @@ const Media = ({ content }: { content: PostMedia[] }) => {
             &:not(:first-of-type) {
               margin-left: 20px;
             }
-
-            @media screen and (max-width: 500px) {
-              height: 250px;
-            }
           `}
           key={i}
           src={getImageUrl(m.sourceUrl, { width: 500 })}
@@ -130,12 +126,12 @@ const Post = ({
       css={css`
         width: 500px;
         padding: 10px;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
         display: flex;
         flex-direction: column;
         white-space: pre-wrap;
         background-color: #fafafa;
-        border-radius: 20px;
+        border-radius: 10px;
 
         > div {
           padding: 10px;

@@ -2,9 +2,12 @@ import ChainData from '../types/TokenChainData';
 import { CommunityDTO } from '.';
 import { TokenFee } from '../types';
 import { UserDTO } from './UserDTO';
+import { TokenType } from '..';
 
 export class TokenDTO {
   id: string;
+
+  type: TokenType;
 
   dateCreated: Date;
 
@@ -22,6 +25,13 @@ export class TokenDTO {
   mediaUri?: string;
   metadataUri?: string;
 
+  attributes?: {
+    [name: string]: string;
+  };
+
+  externalUrl?: string;
+  youtubeUrl?: string;
+
   chain?: ChainData;
   minted = false;
 
@@ -29,6 +39,7 @@ export class TokenDTO {
 
   constructor(props: TokenDTO) {
     this.id = props.id;
+    this.type = props.type;
     this.dateCreated = props.dateCreated;
 
     this.creatorId = props.creatorId;
@@ -47,6 +58,10 @@ export class TokenDTO {
 
     this.mediaUri = props.mediaUri;
     this.metadataUri = props.metadataUri;
+
+    this.attributes = props.attributes;
+
+    if (props.type == TokenType.YT_VIDEO) this.youtubeUrl = props.externalUrl;
 
     this.chain = props.chain;
     this.minted = props.minted;

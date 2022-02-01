@@ -43,6 +43,8 @@ const Preview = styled.div<{ bg?: string }>`
     width: 100%;
     height: 100%;
     object-fit: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     border-radius: 20px;
   }
 `;
@@ -117,8 +119,11 @@ const TokenGridItem = ({
         )}
       </Preview>
       <TokenInfo>
-        <p className={`small ${isExclusive ? ' exclusive' : ''}`}>
-          {isExclusive ? 'Exclusive' : `1 / ${token.supply}`}
+        <p
+          className={`small ${isExclusive ? ' exclusive' : ''}`}
+          style={{ opacity: isExclusive ? 1 : '0.5' }}
+        >
+          {isExclusive ? 'Exclusive' : `${token.supply} in total`}
         </p>
         <h4>{token.name}</h4>
         {/* <p className="small">{token.description}</p> */}

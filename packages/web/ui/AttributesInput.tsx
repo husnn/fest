@@ -35,6 +35,9 @@ export const AttributesInput: React.FC<AttributesInputProps> = ({
 
   const [attributes, setAttributes] = useState<Attribute[]>([getEmptyAttr()]);
 
+  const capitalise = (str: string) =>
+    str.charAt(0).toUpperCase() + str.slice(1);
+
   useEffect(() => {
     const attrs = attributes.filter(
       (item) =>
@@ -57,7 +60,9 @@ export const AttributesInput: React.FC<AttributesInputProps> = ({
   const removeLastAttrIfShould = (value: string, index: number) => {
     if (value.length < 1) {
       const lastIndex = attributes.length - 1;
-      if (index < lastIndex && attributes[lastIndex].key.length < 1) { attributes.pop(); }
+      if (index < lastIndex && attributes[lastIndex].key.length < 1) {
+        attributes.pop();
+      }
       setAttributes([...attributes]);
     }
   };
@@ -67,11 +72,12 @@ export const AttributesInput: React.FC<AttributesInputProps> = ({
       {attributes.map((attr: Attribute, index: number) => (
         <AttributeInputRow key={index}>
           <TextInput
-            placeholder="Name"
+            placeholder="Colour, rarity, etc."
+            value={attr.key}
             onChange={(e) => {
               const value = e.target.value;
 
-              attributes[index].key = value;
+              attributes[index].key = capitalise(value);
               setAttributes([...attributes]);
 
               removeLastAttrIfShould(value, index);
@@ -79,14 +85,17 @@ export const AttributesInput: React.FC<AttributesInputProps> = ({
           />
           <TextInput
             placeholder="Value"
+            value={attr.value}
             onChange={(e) => {
               const value = e.target.value;
 
-              attributes[index].value = value;
+              attributes[index].value = capitalise(value);
               setAttributes([...attributes]);
 
               if (value.length > 0) {
-                if (attr.key.length > 0 && index == attributes.length - 1) { addAttr(); }
+                if (attr.key.length > 0 && index == attributes.length - 1) {
+                  addAttr();
+                }
               } else {
                 removeLastAttrIfShould(value, index);
               }

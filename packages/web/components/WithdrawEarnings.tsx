@@ -1,4 +1,5 @@
 import { WalletType } from '@fest/shared';
+import Decimal from 'decimal.js';
 import React from 'react';
 import { ApiClient } from '../modules/api';
 
@@ -45,6 +46,7 @@ export const WithdrawEarnings = ({
       onFinished={() => {
         onDone();
       }}
+      okEnabled={balance.balance.amount.greaterThan(new Decimal(0))}
     >
       <p>
         Withdraw amount: {balance.currency.symbol}{' '}

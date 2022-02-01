@@ -15,8 +15,11 @@ import { getCurrentUser } from '../modules/auth/authStorage';
 import useAuthentication from '../modules/auth/useAuthentication';
 import usePagination from '../modules/api/usePagination';
 import { useRouter } from 'next/router';
+import { useHeader } from '../modules/navigation';
 
 const HomePage = () => {
+  useHeader();
+
   const router = useRouter();
 
   const { c } = router.query;
@@ -131,17 +134,19 @@ const HomePage = () => {
           }}
         />
       </Modal>
-      <Button
-        css={css`
-          position: fixed;
-          bottom: 5%;
-          right: 8%;
-        `}
-        color="primary"
-        onClick={() => (!creatingPost ? setCreatingPost(true) : null)}
-      >
-        Create post
-      </Button>
+      {communities?.length > 0 && (
+        <Button
+          css={css`
+            position: fixed;
+            bottom: 5%;
+            right: 8%;
+          `}
+          color="primary"
+          onClick={() => (!creatingPost ? setCreatingPost(true) : null)}
+        >
+          Create post
+        </Button>
+      )}
     </div>
   );
 };

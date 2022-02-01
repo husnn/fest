@@ -6,7 +6,7 @@ import { YouTubeVideo } from '@fest/shared';
 
 import useYouTubeVideos from '../modules/youtube/useYouTubeVideos';
 import styles from '../styles/YouTubeVideoList.module.scss';
-import { Button } from '../ui';
+import { Button, Link } from '../ui';
 
 type YouTubeVideoRowProps = {
   video: YouTubeVideo;
@@ -20,7 +20,7 @@ const YouTubeVideoRowContainer = styled.div<{
   padding: 15px 20px;
   background-color: ${(props) => (props.selected ? '#f5f5f5' : '#fff')};
   display: grid;
-  grid-template-columns: 2fr 4fr;
+  grid-template-columns: 100px 1fr;
   align-items: center;
   border-bottom: 1px solid #eee;
   border-radius: 20px;
@@ -28,7 +28,7 @@ const YouTubeVideoRowContainer = styled.div<{
   box-sizing: padding-box;
 
   > * + * {
-    margin-left: 20px;
+    margin-left: 15px;
   }
 
   &:hover {
@@ -44,8 +44,6 @@ const YouTubeVideoRowThumbnail = styled.div`
 `;
 
 const YouTubeVideoRowDetails = styled.div`
-  word-break: break-word;
-
   .yt-video-row__date {
     margin-bottom: 5px;
     font-size: 9pt;
@@ -99,9 +97,9 @@ type YouTubeVideoListProps = {
 const YouTubeVideoList: React.FC<YouTubeVideoListProps> = ({
   onSelected
 }: YouTubeVideoListProps) => {
-  const { videos, loadVideos, moreAvailable } = useYouTubeVideos();
+  const { videos, loadVideos, moreAvailable, error } = useYouTubeVideos();
 
-  return (
+  return !error ? (
     <div className={styles.videoList}>
       <div className="yt-videos">
         {videos?.map((video: YouTubeVideo, index: number) => (
@@ -126,6 +124,17 @@ const YouTubeVideoList: React.FC<YouTubeVideoListProps> = ({
           Load more
         </Button>
       )}
+    </div>
+  ) : (
+    <div>
+      <p>There was a problem getting your videos.</p>
+      <p>Is your channel connected?</p>
+
+      <Link href="/settings">
+        <Button style={{ margin: '20px 0 0' }} color="normal" size="small">
+          Go to settings
+        </Button>
+      </Link>
     </div>
   );
 };

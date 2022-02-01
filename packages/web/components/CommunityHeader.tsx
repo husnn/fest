@@ -10,8 +10,10 @@ export const CommunityHeader = ({ community }: { community: CommunityDTO }) => {
   return (
     <div
       css={css`
+        position: fixed;
         width: 100%;
         background-color: #f5f5f5;
+        z-index: 10;
       `}
     >
       <div

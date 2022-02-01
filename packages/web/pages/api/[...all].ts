@@ -12,5 +12,7 @@ export default (req: NextApiRequest, res: NextApiResponse) =>
             replaceStr: ''
           }
         ]
+      }).catch((err) => {
+        console.log(err);
       })
     : res.status(404).send(null);

@@ -43,7 +43,7 @@ export class Token {
   static getTypeName(type: TokenType): string {
     switch (type) {
       case TokenType.YT_VIDEO:
-        return 'YouTube video';
+        return 'YouTube Video';
     }
 
     return 'Basic';

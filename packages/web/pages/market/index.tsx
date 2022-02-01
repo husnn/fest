@@ -199,7 +199,7 @@ export default function MarketPage() {
           balances={marketBalances}
           onSelect={(balance: CurrencyBalance) => updateEarnings(balance)}
         >
-          {marketBalances && (
+          {marketBalances?.length > 0 && (
             <Button size="small" onClick={() => setWithdrawing(true)}>
               Withdraw
             </Button>
