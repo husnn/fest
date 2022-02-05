@@ -23,8 +23,8 @@ struct Listing {
   uint256 available;
   address currency;
   uint256 price;
-  uint256 maxPurchasable;
   uint256 expiry;
+  uint256 maxPerBuyer;
   ListingStatus status;
 }
 
@@ -86,8 +86,8 @@ contract MarketV1 is AccessControl {
     uint256 quantity,
     address currency,
     uint256 price,
-    uint256 maxPurchasable,
-    uint256 expiry
+    uint256 expiry,
+    uint256 maxPerBuyer
   );
 
   event Trade(
@@ -159,10 +159,10 @@ contract MarketV1 is AccessControl {
 
     // If there is a per-wallet quantity limit,
     // ensure it hasn't already been met.
-    if (listing.maxPurchasable > 0) {
+    if (listing.maxPerBuyer > 0) {
       require(
         _listingPurchasesForBuyer[listingId][msg.sender] + quantity <=
-          listing.maxPurchasable,
+          listing.maxPerBuyer,
         'Quantity exceeds maximum allowed per buyer.'
       );
     }
@@ -324,8 +324,8 @@ contract MarketV1 is AccessControl {
     uint256 quantity,
     address currency,
     uint256 price,
-    uint256 maxPurchasable,
     uint256 expiry,
+    uint256 maxPerBuyer,
     Approval calldata approval
   ) public {
     require(
@@ -393,8 +393,8 @@ contract MarketV1 is AccessControl {
       quantity,
       currency,
       price,
-      maxPurchasable,
       expiry,
+      maxPerBuyer,
       ListingStatus.Active
     );
 
@@ -408,8 +408,8 @@ contract MarketV1 is AccessControl {
       quantity,
       currency,
       price,
-      maxPurchasable,
-      expiry
+      expiry,
+      maxPerBuyer
     );
   }
 

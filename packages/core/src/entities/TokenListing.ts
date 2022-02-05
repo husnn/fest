@@ -21,9 +21,9 @@ export class TokenListing {
 
   price: Price;
 
-  maxPurchasable?: number;
-
   expiry?: Date;
+
+  maxPerBuyer?: number;
 
   chain: {
     contract: string;

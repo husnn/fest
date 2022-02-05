@@ -328,8 +328,8 @@ export class EthereumService implements IEthereumService {
       quantity,
       currency: price.currency,
       price: price.amount,
-      maxPurchasable: 0,
       expiry: 0,
+      maxPerBuyer: 0,
       approval: {
         expiry,
         salt,

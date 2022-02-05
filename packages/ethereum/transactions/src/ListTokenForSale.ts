@@ -10,8 +10,8 @@ export class ListTokenForSale extends Transaction {
       quantity: number;
       currency: string;
       price: string;
-      maxPurchasable: number;
       expiry: number;
+      maxPerBuyer: number;
       approval: {
         expiry: number;
         salt: string;
@@ -30,8 +30,8 @@ export class ListTokenForSale extends Transaction {
         data.quantity,
         data.currency,
         data.price,
-        data.maxPurchasable,
         data.expiry,
+        data.maxPerBuyer,
         data.approval
       )
       .encodeABI();

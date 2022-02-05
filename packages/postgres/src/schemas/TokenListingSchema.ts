@@ -39,12 +39,12 @@ const TokenListingSchema = new EntitySchema<TokenListing>({
     price: {
       type: 'jsonb'
     },
-    maxPurchasable: {
-      type: 'integer',
-      nullable: true
-    },
     expiry: {
       type: 'timestamp',
+      nullable: true
+    },
+    maxPerBuyer: {
+      type: 'integer',
       nullable: true
     },
     chain: {

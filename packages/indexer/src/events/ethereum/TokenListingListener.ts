@@ -16,8 +16,8 @@ export class TokenListingListener extends EventListener<TokenListForSaleJob> {
       quantity,
       currency,
       price,
-      maxPurchasable,
-      expiry
+      expiry,
+      maxPerBuyer
     } = returnValues;
 
     const job: TokenListForSaleJob = {
@@ -31,8 +31,8 @@ export class TokenListingListener extends EventListener<TokenListForSaleJob> {
       quantity,
       currency,
       priceAmount: price,
-      maxPurchasable,
-      expiry
+      expiry,
+      maxPerBuyer
     };
 
     return job;

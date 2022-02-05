@@ -20,8 +20,8 @@ export type TokenListForSaleJob = {
   quantity: number;
   currency: string;
   priceAmount: string;
-  maxPurchasable: number;
   expiry: number;
+  maxPerBuyer: number;
 };
 
 export default class TokenListForSale extends Job<TokenListForSaleJob> {
@@ -67,12 +67,12 @@ export default class TokenListForSale extends Job<TokenListForSaleJob> {
         status: TokenListingStatus.Active
       });
 
-      if (this.props.maxPurchasable > 0)
-        trade.maxPurchasable = this.props.maxPurchasable;
-
       if (this.props.expiry > 0) {
         trade.expiry = new Date(this.props.expiry * 1000);
       }
+
+      if (this.props.maxPerBuyer > 0)
+        trade.maxPerBuyer = this.props.maxPerBuyer;
 
       await listingRepository.create(trade);
     } catch (err) {
