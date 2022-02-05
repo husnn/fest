@@ -28,7 +28,7 @@ module.exports = {
           process.env.PROVIDER_POLYGON_MUMBAI
         ),
       network_id: 80001,
-      gasPrice: 2000000000,
+      gasPrice: 2_000_000_000,
       confirmations: 2,
       timeoutBlocks: 200,
       skipDryRun: true
