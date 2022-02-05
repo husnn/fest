@@ -24,6 +24,7 @@ struct Listing {
   address currency;
   uint256 price;
   uint256 maxPurchasable;
+  uint256 expiry;
   ListingStatus status;
 }
 
@@ -36,6 +37,12 @@ struct TokenOrder {
   address token;
   uint256 id;
   uint256 quantity;
+}
+
+struct Approval {
+  uint256 expiry;
+  uint256 salt;
+  bytes signature;
 }
 
 contract MarketV1 is AccessControl {
@@ -79,7 +86,8 @@ contract MarketV1 is AccessControl {
     uint256 quantity,
     address currency,
     uint256 price,
-    uint256 maxPurchasable
+    uint256 maxPurchasable,
+    uint256 expiry
   );
 
   event Trade(
@@ -137,6 +145,20 @@ contract MarketV1 is AccessControl {
   function buy(uint256 listingId, uint256 quantity) public {
     Listing memory listing = _listings[listingId];
 
+    // Require listing is still active
+    require(listing.status == ListingStatus.Active, 'Listing is not active.');
+
+    // Require quantity does not exceed supply
+    require(quantity <= listing.available, 'Not enough tokens for sale.');
+
+    // If listing has an expiry date,
+    // ensure it hasn't already expired.
+    if (listing.expiry > 0) {
+      require(listing.expiry > block.timestamp, 'Listing has expired.');
+    }
+
+    // If there is a per-wallet quantity limit,
+    // ensure it hasn't already been met.
     if (listing.maxPurchasable > 0) {
       require(
         _listingPurchasesForBuyer[listingId][msg.sender] + quantity <=
@@ -145,27 +167,15 @@ contract MarketV1 is AccessControl {
       );
     }
 
-    // Require listing is still open
-    require(listing.status == ListingStatus.Active, 'Listing is not open.');
-
-    // Check quantity
-    require(quantity <= listing.available, 'Not enough tokens for sale.');
-
-    // Require buyer to be different from seller
-    require(msg.sender != listing.seller, 'Seller cannot be buyer.');
-
-    // Calculate prices
     uint256 subtotal = listing.price * quantity;
-
-    IERC20 currency = IERC20(listing.currency);
-
     (uint256 sellerFee, uint256 buyerFee) = calculateMarketFees(subtotal);
 
-    uint256 allowance = currency.allowance(msg.sender, address(this));
-    require(allowance >= subtotal + buyerFee, 'Allowance is too low.');
-
     // Deposit currency for escrow
-    currency.transferFrom(msg.sender, address(this), subtotal + buyerFee);
+    IERC20(listing.currency).transferFrom(
+      msg.sender,
+      address(this),
+      subtotal + buyerFee
+    );
 
     exchange(
       listing.seller,
@@ -287,7 +297,8 @@ contract MarketV1 is AccessControl {
     address currency,
     uint256 price,
     uint256 expiry,
-    uint256 salt
+    uint256 approvalExpiry,
+    uint256 approvalSalt
   ) public view returns (bytes32) {
     return
       keccak256(
@@ -300,7 +311,8 @@ contract MarketV1 is AccessControl {
           currency,
           price,
           expiry,
-          salt
+          approvalExpiry,
+          approvalSalt
         )
       );
   }
@@ -314,18 +326,29 @@ contract MarketV1 is AccessControl {
     uint256 price,
     uint256 maxPurchasable,
     uint256 expiry,
-    uint256 salt,
-    bytes calldata signature
+    Approval calldata approval
   ) public {
-    require(price >= minTokenPrice, 'Price is too low.');
-    require(price <= maxTokenPrice, 'Price is too high.');
-    require(quantity <= maxListingQuantity, 'Quantity exceeds maximum.');
+    require(
+      price >= minTokenPrice &&
+        price <= maxTokenPrice &&
+        quantity <= maxListingQuantity,
+      'Price or quantity falls outside allowed range.'
+    );
 
-    require(_approvedTokens[token], 'Token contract is not allowed.');
-    require(_approvedCurrencies[currency], 'Currency is not allowed.');
+    if (expiry > 0) {
+      require(
+        block.timestamp < expiry,
+        'Listing expiry needs to be in the future.'
+      );
+    }
+
+    require(
+      _approvedTokens[token] && _approvedCurrencies[currency],
+      'Token or currency contract is not approved.'
+    );
 
     if (!hasRole(ADMIN_ROLE, msg.sender)) {
-      require(expiry > block.timestamp, 'Approval expired.');
+      require(approval.expiry > block.timestamp, 'Approval expired.');
 
       bytes32 saleHash = getSaleAuthorizationHash(
         seller,
@@ -335,13 +358,14 @@ contract MarketV1 is AccessControl {
         currency,
         price,
         expiry,
-        salt
+        approval.expiry,
+        approval.salt
       );
 
       require(!_approvalsExhausted[saleHash], 'Approval exhausted.');
 
       address recoveredAddress = saleHash.toEthSignedMessageHash().recover(
-        signature
+        approval.signature
       );
 
       require(
@@ -370,6 +394,7 @@ contract MarketV1 is AccessControl {
       currency,
       price,
       maxPurchasable,
+      expiry,
       ListingStatus.Active
     );
 
@@ -383,7 +408,8 @@ contract MarketV1 is AccessControl {
       quantity,
       currency,
       price,
-      maxPurchasable
+      maxPurchasable,
+      expiry
     );
   }
 

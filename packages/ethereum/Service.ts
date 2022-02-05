@@ -329,9 +329,12 @@ export class EthereumService implements IEthereumService {
       currency: price.currency,
       price: price.amount,
       maxPurchasable: 0,
-      expiry,
-      salt,
-      signature
+      expiry: 0,
+      approval: {
+        expiry,
+        salt,
+        signature
+      }
     };
 
     return new ListTokenForSale(txData).build(
@@ -401,6 +404,7 @@ export class EthereumService implements IEthereumService {
         quantity,
         price.currency,
         price.amount,
+        0,
         expiry,
         salt
       )

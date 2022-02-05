@@ -12,8 +12,11 @@ export class ListTokenForSale extends Transaction {
       price: string;
       maxPurchasable: number;
       expiry: number;
-      salt: string;
-      signature: string;
+      approval: {
+        expiry: number;
+        salt: string;
+        signature: string;
+      };
     },
     contractAddress?: string
   ) {
@@ -29,8 +32,7 @@ export class ListTokenForSale extends Transaction {
         data.price,
         data.maxPurchasable,
         data.expiry,
-        data.salt,
-        data.signature
+        data.approval
       )
       .encodeABI();
 

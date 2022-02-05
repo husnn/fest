@@ -81,6 +81,7 @@ contract('MarketV1', async (accounts) => {
         quantity,
         currency,
         price,
+        0,
         expiry,
         salt
       );
@@ -105,9 +106,12 @@ contract('MarketV1', async (accounts) => {
         currency,
         price,
         0,
-        expiry,
-        salt,
-        signature,
+        0,
+        {
+          expiry,
+          salt,
+          signature
+        },
         {
           from: accounts[2]
         }
@@ -115,7 +119,7 @@ contract('MarketV1', async (accounts) => {
 
     it('prevent listing unapproved token', async () => {
       await MarketContract.setTokensApproval([Token.address], false);
-      await expectRevert(list(), 'Token contract is not allowed.');
+      await expectRevert(list(), 'Token or currency contract is not approved.');
     });
 
     it('approve token', async () => {
@@ -124,7 +128,7 @@ contract('MarketV1', async (accounts) => {
 
     it('prevent listing with unapproved currency', async () => {
       await MarketContract.setCurrenciesApproval([Fest.address], false);
-      await expectRevert(list(), 'Currency is not allowed.');
+      await expectRevert(list(), 'Token or currency contract is not approved.');
     });
 
     it('approve currency', async () => {
@@ -166,7 +170,7 @@ contract('MarketV1', async (accounts) => {
     it('prevent buying if currency balance too low', async () => {
       await expectRevert(
         MarketContract.buy(listingId, quantity),
-        'Allowance is too low.'
+        'ERC20: transfer amount exceeds allowance.'
       );
     });
 
@@ -199,7 +203,7 @@ contract('MarketV1', async (accounts) => {
     it('prevent buying closed listing', async () => {
       await expectRevert(
         MarketContract.buy(listingId, quantity),
-        'Listing is not open.'
+        'Listing is not active.'
       );
     });
 
@@ -242,6 +246,7 @@ contract('MarketV1', async (accounts) => {
           quantityForSale,
           currency,
           price,
+          0,
           expiry,
           salt
         );
@@ -260,9 +265,12 @@ contract('MarketV1', async (accounts) => {
           currency,
           price,
           0,
-          expiry,
-          salt,
-          signature,
+          0,
+          {
+            expiry,
+            salt,
+            signature
+          },
           {
             from: accounts[2]
           }

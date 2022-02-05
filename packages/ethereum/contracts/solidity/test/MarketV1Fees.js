@@ -92,6 +92,7 @@ contract('MarketV1', async (accounts) => {
         quantity,
         currency,
         price,
+        0,
         expiry,
         salt
       );
@@ -131,9 +132,12 @@ contract('MarketV1', async (accounts) => {
         currency,
         price,
         0,
-        expiry,
-        salt,
-        signature,
+        0,
+        {
+          expiry,
+          salt,
+          signature
+        },
         {
           from: seller
         }
