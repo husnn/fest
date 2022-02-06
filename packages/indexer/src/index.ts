@@ -33,6 +33,7 @@ import redis from 'redis';
 const redisClient = redis.createClient(redisConfig.url);
 
 const config: Queue.QueueSettings = {
+  prefix: 'service:indexer:event-queue',
   redis: redisClient
 };
 

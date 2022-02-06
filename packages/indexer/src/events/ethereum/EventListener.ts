@@ -88,9 +88,9 @@ export abstract class EventListener<T extends JobData> {
   }
 
   getLastBlockKey(): string {
-    return `ETH:EVENTS:${this.EVENT_NAME.toUpperCase()}:lastBlock:${
+    return `service:indexer:events:eth:${
       this.contractAddress
-    }`;
+    }:${this.EVENT_NAME.toUpperCase()}:last-block`;
   }
 
   updateLastBlock(blockNumber: number): void {
