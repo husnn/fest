@@ -1,18 +1,3 @@
-module "redis" {
-  source = "../../modules/redis"
-
-  name        = "indexer"
-  environment = var.environment
-
-  vpc_id = var.vpc_id
-
-  subnet_group_name = var.elasticache_group_name
-
-  allowed_security_group_ids = [
-    module.main.security_group_id
-  ]
-}
-
 data "aws_secretsmanager_secret_version" "main" {
   secret_id = var.secrets_manager_arn
 }
@@ -28,7 +13,7 @@ resource "aws_secretsmanager_secret_version" "main" {
     SECRET       = lookup(local.secrets, "SECRET", null)
     ETH_PROVIDER = lookup(local.secrets, "ETH_PROVIDER", null)
     DATABASE_URL = var.database_url
-    REDIS_URL    = module.redis.url
+    REDIS_URL    = var.redis_url
   })
 }
 

@@ -158,6 +158,43 @@ module "cloudfront_media" {
   }
 }
 
+resource "aws_elasticache_subnet_group" "main" {
+  name       = "elasticache-subnet-group"
+  subnet_ids = module.vpc.private_subnet_ids
+}
+
+module "redis_main_staging" {
+  source = "./modules/redis"
+
+  name        = "main"
+  environment = "staging"
+
+  vpc_id = module.vpc.id
+
+  subnet_group_name = aws_elasticache_subnet_group.main.name
+
+  allowed_security_group_ids = [
+    module.service_api_staging.security_group_id,
+    module.service_indexer_staging.security_group_id
+  ]
+}
+
+module "redis_main_prod" {
+  source = "./modules/redis"
+
+  name        = "main"
+  environment = "production"
+
+  vpc_id = module.vpc.id
+
+  subnet_group_name = aws_elasticache_subnet_group.main.name
+
+  allowed_security_group_ids = [
+    module.service_api_prod.security_group_id,
+    module.service_indexer_prod.security_group_id
+  ]
+}
+
 module "service_api_staging" {
   source = "./services/api"
 
@@ -192,6 +229,7 @@ module "service_api_staging" {
   instance_count = 1
 
   postgres_database_url = module.postgres_main_staging.database_url
+  redis_url             = module.redis_main_staging.url
 
   media_s3_name = module.s3_media_staging.name
 }
@@ -230,39 +268,35 @@ module "service_api_prod" {
   instance_count = 1
 
   postgres_database_url = module.postgres_main_prod.database_url
+  redis_url             = module.redis_main_prod.url
 
   media_s3_name = module.s3_media_prod.name
-}
-
-resource "aws_elasticache_subnet_group" "main" {
-  name       = "elasticache-subnet-group"
-  subnet_ids = module.vpc.private_subnet_ids
 }
 
 module "service_indexer_staging" {
   source = "./services/indexer"
 
-  environment            = "staging"
-  vpc_id                 = module.vpc.id
-  subnet_id              = module.vpc.public_subnet_ids[0]
-  elasticache_group_name = aws_elasticache_subnet_group.main.name
+  environment = "staging"
+  vpc_id      = module.vpc.id
+  subnet_id   = module.vpc.public_subnet_ids[0]
 
   ssh_key_name = "indexer-staging-ec2-key"
 
   database_url        = module.postgres_main_staging.database_url
+  redis_url           = module.redis_main_staging.url
   secrets_manager_arn = var.indexer_secrets_manager_staging_arn
 }
 
 module "service_indexer_prod" {
   source = "./services/indexer"
 
-  environment            = "production"
-  vpc_id                 = module.vpc.id
-  subnet_id              = module.vpc.public_subnet_ids[0]
-  elasticache_group_name = aws_elasticache_subnet_group.main.name
+  environment = "production"
+  vpc_id      = module.vpc.id
+  subnet_id   = module.vpc.public_subnet_ids[0]
 
   ssh_key_name = "indexer-prod-ec2-key"
 
   database_url        = module.postgres_main_prod.database_url
+  redis_url           = module.redis_main_prod.url
   secrets_manager_arn = var.indexer_secrets_manager_prod_arn
 }

@@ -61,6 +61,7 @@ module "service" {
     "CLIENT_URL"      = "https://${var.hostname}"
     "API_URL"         = "https://api.${var.hostname}/v1"
     "DATABASE_URL"    = var.postgres_database_url
+    "REDIS_URL"       = var.redis_url
     "MEDIA_S3_NAME"   = var.media_s3_name
     "MEDIA_S3_REGION" = var.region
     "MEDIA_S3_URL"    = "https://${var.media_s3_name}.s3.amazonaws.com"

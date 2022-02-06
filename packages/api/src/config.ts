@@ -17,6 +17,10 @@ const getApiUrl = () =>
   process.env.API_URL ||
   `http://localhost:${[appConfig.port]}/${appConfig.apiVersion}`;
 
+const redisConfig = {
+  url: process.env.REDIS_URL || 'redis://localhost:6379'
+};
+
 const indexerConfig = {
   host: process.env.INDEXER_HOST || '0.0.0.0',
   port: parseInt(process.env.INDEXER_PORT) || 9000
@@ -49,6 +53,7 @@ const youTubeConfig: YouTubeConfig = {
 export {
   appConfig,
   getApiUrl,
+  redisConfig,
   indexerConfig,
   ethConfig,
   mailConfig,

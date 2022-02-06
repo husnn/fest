@@ -20,6 +20,7 @@ variable "subnet_ids" {}
 variable "route53_zone_id" {}
 
 variable "postgres_database_url" {}
+variable "redis_url" {}
 
 variable "github_user" {}
 variable "github_repo" {}
