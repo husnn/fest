@@ -1,14 +1,15 @@
 import { NextFunction, Request, Response, Router } from 'express';
-
 import TokenController from '../controllers/TokenController';
 import authMiddleware from '../middleware/authMiddleware';
 import pagination from '../middleware/pagination';
+import { getRateLimiter } from '../middleware/rateLimiting';
 
 export default function init(tokenController: TokenController): Router {
   const router = Router();
 
   router.get(
     '/image-upload-url',
+    getRateLimiter('tokenMediaUpload', { max: 5, windowInMins: 10 }),
     (req: Request, res: Response, next: NextFunction) => {
       tokenController.getSignedTokenMediaUploadUrl(req, res, next);
     }
@@ -16,6 +17,7 @@ export default function init(tokenController: TokenController): Router {
 
   router.put(
     '/',
+    getRateLimiter('createToken', { max: 5, windowInMins: 10 }),
     authMiddleware,
     (req: Request, res: Response, next: NextFunction) =>
       tokenController.createToken(req, res, next)

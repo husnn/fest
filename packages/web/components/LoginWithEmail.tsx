@@ -70,7 +70,7 @@ const LoginWithEmail: React.FC<LoginWithEmailProps & ModalWithStepsProps> = ({
       close();
     } catch (err) {
       setStepIndex(0);
-      setError('Incorrect password or code. Try again.');
+      setError(err.message);
       setOkEnabled(true);
     }
   };

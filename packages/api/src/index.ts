@@ -1,12 +1,13 @@
-import Postgres, { defaultConfig as postgresConfig } from '@fest/postgres';
-import { appConfig, ethConfig, indexerConfig } from './config';
-
-import App from './App';
 import { EthereumService } from '@fest/ethereum';
-import Web3 from 'web3';
+import Postgres, { defaultConfig as postgresConfig } from '@fest/postgres';
 import net from 'net';
+import { createClient } from 'redis';
 import { setInterval } from 'timers';
+import Web3 from 'web3';
+import App from './App';
+import { appConfig, ethConfig, indexerConfig, redisConfig } from './config';
 import { setupLogger } from './logger';
+import { initRateLimiters } from './middleware/rateLimiting';
 
 const web3 = new Web3(ethConfig.provider);
 
@@ -56,6 +57,11 @@ const connectToIndexer = () => {
   if (process.env.BYPASS_INDEXER_CONNECTION !== 'true') {
     connectToIndexer();
   }
+
+  const redisClient = createClient({ url: redisConfig.url });
+  await redisClient.connect();
+
+  initRateLimiters(redisClient);
 
   setupLogger('api');
 

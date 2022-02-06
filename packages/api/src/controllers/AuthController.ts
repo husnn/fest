@@ -24,19 +24,19 @@ import {
   ChangeEmailAddressResponse,
   IdentifyWithEmailResponse,
   IdentifyWithWalletResponse,
+  isEmailAddress,
   LoginResponse,
   RequestEmailAddressChangeResponse,
   RequestPasswordResetResponse,
-  ResetPasswordResponse,
-  isEmailAddress
+  ResetPasswordResponse
 } from '@fest/shared';
+import { NextFunction, Request, Response } from 'express';
 import {
   HttpError,
   HttpResponse,
   NotFoundError,
   ValidationError
 } from '../http';
-import { NextFunction, Request, Response } from 'express';
 
 class AuthController {
   private doAuthPrecheckUseCase: AuthPrecheck;
@@ -245,6 +245,8 @@ class AuthController {
 
       if (!result.success) {
         switch (result.error) {
+          case AuthError.PASSWORD_INCORRECT:
+            throw new ValidationError('Incorrect email or password.');
           case AuthError.CODE_EXPIRED:
           case AuthError.CODE_INCORRECT:
             throw new ValidationError('Incorrect or expired code.');

@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response, Router } from 'express';
-
 import AuthController from '../controllers/AuthController';
 import authMiddleware from '../middleware/authMiddleware';
+import { getRateLimiter } from '../middleware/rateLimiting';
 
 export default function init(authController: AuthController) {
   const router = Router();
@@ -12,6 +12,7 @@ export default function init(authController: AuthController) {
 
   router.post(
     '/identify/email',
+    getRateLimiter('identify', { max: 5, windowInMins: 1 }),
     (req: Request, res: Response, next: NextFunction) =>
       authController.identifyWithEmail(req, res, next)
   );
@@ -24,6 +25,7 @@ export default function init(authController: AuthController) {
 
   router.post(
     '/login/email',
+    getRateLimiter('login', { max: 5, windowInMins: 1 }),
     (req: Request, res: Response, next: NextFunction) =>
       authController.loginWithEmail(req, res, next)
   );

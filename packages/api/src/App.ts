@@ -1,4 +1,9 @@
 import {
+  CreateCommunity,
+  EthereumService as IEthereumService
+} from '@fest/core';
+import { EthereumService } from '@fest/ethereum';
+import {
   CommunityRepository,
   InviteRepository,
   OAuthRepository,
@@ -12,35 +17,30 @@ import {
   WaitlistRepository,
   WalletRepository
 } from '@fest/postgres';
-import {
-  CreateCommunity,
-  EthereumService as IEthereumService
-} from '@fest/core';
+import cors from 'cors';
 import express, { Application, Router } from 'express';
 import { googleConfig, youTubeConfig } from './config';
-
-import { AppConfig } from './types/AppConfig';
 import AuthController from './controllers/AuthController';
 import CommunityController from './controllers/CommunityController';
 import ConfigController from './controllers/ConfigController';
-import { EthereumService } from '@fest/ethereum';
 import FeedController from './controllers/FeedController';
 import GoogleController from './controllers/GoogleController';
-import GoogleService from './services/GoogleService';
-import IPFSService from './services/IPFSService';
 import InternalController from './controllers/InternalController';
-import MailService from './services/MailService';
 import MarketController from './controllers/MarketController';
 import PostController from './controllers/PostController';
 import TokenController from './controllers/TokenController';
-import MediaStore from './services/MediaStore';
 import UserController from './controllers/UserController';
 import WaitlistController from './controllers/WaitlistController';
 import YouTubeController from './controllers/YouTubeController';
-import YouTubeService from './services/YouTubeService';
-import cors from 'cors';
 import errorHandler from './middleware/errorHandler';
+import { getRateLimiter } from './middleware/rateLimiting';
 import initRoutes from './routes';
+import GoogleService from './services/GoogleService';
+import IPFSService from './services/IPFSService';
+import MailService from './services/MailService';
+import MediaStore from './services/MediaStore';
+import YouTubeService from './services/YouTubeService';
+import { AppConfig } from './types/AppConfig';
 
 class App {
   app: Application;
@@ -190,6 +190,8 @@ class App {
       feedController,
       postController
     );
+
+    app.use(getRateLimiter());
 
     app.use('/v1', router);
 
