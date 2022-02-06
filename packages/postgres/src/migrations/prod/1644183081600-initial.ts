@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class initial1643471745646 implements MigrationInterface {
-  name = 'initial1643471745646';
+export class initial1644183081600 implements MigrationInterface {
+  name = 'initial1644183081600';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
@@ -62,7 +62,7 @@ export class initial1643471745646 implements MigrationInterface {
       `CREATE TYPE "public"."token_listing_status_enum" AS ENUM('ACTIVE', 'SOLD', 'CANCELLED')`
     );
     await queryRunner.query(
-      `CREATE TABLE "token_listing" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "date_created" TIMESTAMP NOT NULL DEFAULT now(), "protocol" "public"."token_listing_protocol_enum" NOT NULL, "seller_id" text NOT NULL, "token_id" text NOT NULL, "quantity" integer NOT NULL DEFAULT '0', "available" integer NOT NULL DEFAULT '0', "price" jsonb NOT NULL, "chain" jsonb NOT NULL, "status" "public"."token_listing_status_enum" NOT NULL, CONSTRAINT "PK_55f087f4d7715c66f2bc2058d37" PRIMARY KEY ("id"))`
+      `CREATE TABLE "token_listing" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "date_created" TIMESTAMP NOT NULL DEFAULT now(), "protocol" "public"."token_listing_protocol_enum" NOT NULL, "seller_id" text NOT NULL, "token_id" text NOT NULL, "quantity" integer NOT NULL DEFAULT '0', "available" integer NOT NULL DEFAULT '0', "price" jsonb NOT NULL, "expiry" TIMESTAMP, "maxPerBuyer" integer, "chain" jsonb NOT NULL, "status" "public"."token_listing_status_enum" NOT NULL, CONSTRAINT "PK_55f087f4d7715c66f2bc2058d37" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
       `CREATE TYPE "public"."token_offer_status_enum" AS ENUM('SENT', 'WITHDRAWN', 'ACCEPTED', 'DECLINED')`
@@ -80,13 +80,13 @@ export class initial1643471745646 implements MigrationInterface {
       `CREATE TYPE "public"."token_type_enum" AS ENUM('BASIC', 'YT_VIDEO')`
     );
     await queryRunner.query(
-      `CREATE TABLE "token" ("id" text NOT NULL, "date_created" TIMESTAMP NOT NULL DEFAULT now(), "creator_id" text, "type" "public"."token_type_enum" NOT NULL DEFAULT 'BASIC', "name" text NOT NULL, "description" text, "supply" integer NOT NULL DEFAULT '0', "image" text, "externalUrl" text, "fees" jsonb, "attributes" text, "extra" text, "metadataUri" text NOT NULL, "chain" jsonb, "minted" boolean NOT NULL DEFAULT false, CONSTRAINT "PK_82fae97f905930df5d62a702fc9" PRIMARY KEY ("id"))`
+      `CREATE TABLE "token" ("id" text NOT NULL, "date_created" TIMESTAMP NOT NULL DEFAULT now(), "creator_id" text, "type" "public"."token_type_enum" NOT NULL DEFAULT 'BASIC', "name" text NOT NULL, "description" text, "supply" integer NOT NULL DEFAULT '0', "image" text, "externalUrl" text, "fees" jsonb, "attributes" text, "extra" text, "mediaUri" text, "metadataUri" text, "chain" jsonb, "minted" boolean NOT NULL DEFAULT false, CONSTRAINT "PK_82fae97f905930df5d62a702fc9" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
       `CREATE TABLE "token_trade" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "date_created" TIMESTAMP NOT NULL DEFAULT now(), "seller_id" text NOT NULL, "buyer_id" text NOT NULL, "token_listing_id" uuid NOT NULL, "quantity" integer NOT NULL DEFAULT '1', CONSTRAINT "PK_fca9adf66dd0fd04eb16e084926" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "user" ("id" text NOT NULL, "email" text, "password" text, "username" text, "name" text, "bio" text, "login_code" text, "email_change_token" text, "password_reset_token" text, "wallet_id" text, "is_creator" boolean NOT NULL DEFAULT false, "lastLogin" TIMESTAMP, CONSTRAINT "UQ_e12875dfb3b1d92d7d7c5377e22" UNIQUE ("email"), CONSTRAINT "UQ_78a916df40e02a9deb1c4b75edb" UNIQUE ("username"), CONSTRAINT "REL_b453ec3d9d579f6b9699be98be" UNIQUE ("wallet_id"), CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))`
+      `CREATE TABLE "user" ("id" text NOT NULL, "email" text, "password" text, "username" text, "name" text, "bio" text, "login_code" text, "email_change_token" text, "password_reset_token" text, "wallet_id" text, "is_creator" boolean NOT NULL DEFAULT false, "last_login_ip" text, "last_login" TIMESTAMP, CONSTRAINT "UQ_e12875dfb3b1d92d7d7c5377e22" UNIQUE ("email"), CONSTRAINT "UQ_78a916df40e02a9deb1c4b75edb" UNIQUE ("username"), CONSTRAINT "REL_b453ec3d9d579f6b9699be98be" UNIQUE ("wallet_id"), CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
       `CREATE TYPE "public"."waitlist_entry_type_enum" AS ENUM('NORMAL', 'CREATOR')`
