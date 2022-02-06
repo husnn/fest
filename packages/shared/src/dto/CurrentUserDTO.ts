@@ -8,7 +8,7 @@ export class CurrentUserDTO {
   bio?: string;
   wallet: WalletDTO;
   isCreator: boolean;
-  lastLogin: Date;
+  lastLogin?: Date;
   isFirstLogin?: boolean;
 
   constructor(props: CurrentUserDTO) {

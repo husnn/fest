@@ -1,18 +1,18 @@
-import { CurrentUserDTO, Protocol, decryptText, isExpired } from '@fest/shared';
-
-import { AuthError } from './errors';
-import { EthereumService } from '../../services';
-import { Result } from '../../Result';
+import { CurrentUserDTO, decryptText, isExpired, Protocol } from '@fest/shared';
 import UseCase from '../../base/UseCase';
 import { User } from '../../entities';
 import UserRepository from '../../repositories/UserRepository';
 import WalletRepository from '../../repositories/WalletRepository';
+import { Result } from '../../Result';
+import { EthereumService } from '../../services';
+import { AuthError } from './errors';
 import { msgToSign } from './IdentifyWithWallet';
 
 export interface LoginWithWalletInput {
   protocol: Protocol;
   code: string;
   signature: string;
+  ip: string;
 }
 
 export interface LoginWithWalletOuput {
@@ -73,6 +73,7 @@ export class LoginWithWallet extends UseCase<
     const userDTO = new CurrentUserDTO(user);
 
     user.loginCode.expiry = new Date();
+    user.lastLoginIP = data.ip;
     user.lastLogin = new Date();
 
     this.userRepository.update(user);

@@ -1,5 +1,5 @@
-import { EntitySchema } from 'typeorm';
 import { User } from '@fest/core';
+import { EntitySchema } from 'typeorm';
 
 const UserSchema = new EntitySchema<User>({
   name: 'user',
@@ -64,8 +64,14 @@ const UserSchema = new EntitySchema<User>({
       name: 'is_creator',
       default: false
     },
+    lastLoginIP: {
+      type: 'text',
+      name: 'last_login_ip',
+      nullable: true
+    },
     lastLogin: {
       type: 'timestamp',
+      name: 'last_login',
       nullable: true
     }
   },

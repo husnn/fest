@@ -1,16 +1,15 @@
-import { AuthError, ResetPasswordError } from './errors';
 import { isExpired, isValidPassword } from '@fest/shared';
-
-import { LoginWithEmail } from './LoginWithEmail';
-import { LoginWithEmailOutput } from './LoginWithEmail';
-import Result from '../../Result';
 import UseCase from '../../base/UseCase';
 import { User } from '../../entities';
 import { UserRepository } from '../../repositories';
+import Result from '../../Result';
+import { AuthError, ResetPasswordError } from './errors';
+import { LoginWithEmail, LoginWithEmailOutput } from './LoginWithEmail';
 
 type ResetPasswordInput = {
   token: string;
   password: string;
+  ip: string;
 };
 
 type ResetPasswordOutput = LoginWithEmailOutput;
@@ -55,7 +54,8 @@ export class ResetPassword extends UseCase<
     return this.loginWithEmailUseCase.exec({
       email: user.email,
       password: data.password,
-      code: user.loginCode.value
+      code: user.loginCode.value,
+      ip: data.ip
     });
   }
 }

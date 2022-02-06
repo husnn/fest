@@ -1,14 +1,13 @@
 import { getExpiryDate, randomInteger } from '@fest/shared';
-
+import bcrypt from 'bcryptjs';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import Community from './Community';
 import Token from './Token';
 import Wallet from './Wallet';
-import bcrypt from 'bcryptjs';
-import jwt, { JwtPayload } from 'jsonwebtoken';
 
 export class User {
   readonly id: string;
-
+  dateCreated: Date;
   email: string;
   password: string;
   phone: string;
@@ -33,7 +32,8 @@ export class User {
     expiry: Date;
   };
   isCreator: boolean;
-  lastLogin: Date;
+  lastLoginIP?: string;
+  lastLogin?: Date;
   communities: Community[];
 
   constructor(data?: Partial<User>) {

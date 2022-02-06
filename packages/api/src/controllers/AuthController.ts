@@ -181,7 +181,11 @@ class AuthController {
       if (!token || !password)
         throw new ValidationError('Missing token or password.');
 
-      const result = await this.resetPasswordUseCase.exec({ token, password });
+      const result = await this.resetPasswordUseCase.exec({
+        token,
+        password,
+        ip: req.ip
+      });
       if (!result.success) {
         switch (result.error) {
           case ResetPasswordError.INVALID_TOKEN:
@@ -240,7 +244,8 @@ class AuthController {
       const result = await this.loginWithEmailUseCase.exec({
         email,
         password,
-        code
+        code,
+        ip: req.ip
       });
 
       if (!result.success) {
@@ -274,7 +279,8 @@ class AuthController {
       const result = await this.loginWithWalletUseCase.exec({
         protocol,
         code,
-        signature
+        signature,
+        ip: req.ip
       });
 
       const { token, expiry, user } = result.data;

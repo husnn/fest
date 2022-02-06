@@ -1,16 +1,16 @@
 import { CurrentUserDTO, isExpired } from '@fest/shared';
-
-import { AuthError } from './errors';
-import { Result } from '../../Result';
 import UseCase from '../../base/UseCase';
+import { isProduction } from '../../config';
 import { User } from '../../entities';
 import UserRepository from '../../repositories/UserRepository';
-import { isProduction } from '../../config';
+import { Result } from '../../Result';
+import { AuthError } from './errors';
 
 export interface LoginWithEmailInput {
   email: string;
   password: string;
   code: string;
+  ip: string;
 }
 
 export interface LoginWithEmailOutput {
@@ -55,6 +55,7 @@ export class LoginWithEmail extends UseCase<
     const userDTO = new CurrentUserDTO(user);
 
     user.loginCode.expiry = new Date();
+    user.lastLoginIP = data.ip;
     user.lastLogin = new Date();
 
     this.userRepository.update(user);
