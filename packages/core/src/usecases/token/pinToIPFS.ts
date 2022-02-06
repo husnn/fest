@@ -1,9 +1,8 @@
-import { IPFSService, PinData } from '../../services';
 import { TokenMetadata, TokenType } from '@fest/shared';
-
-import Result from '../../Result';
 import { Token } from '../../entities';
 import { TokenRepository } from '../../repositories';
+import Result from '../../Result';
+import { IPFSService, PinData } from '../../services';
 
 export const pinToIPFS = async (
   repo: TokenRepository,
@@ -34,7 +33,7 @@ export const pinToIPFS = async (
 
     if (mediaUri) metadata.image = mediaUri;
 
-    if (attributes) {
+    if (attributes && Object.keys(attributes).length > 0) {
       metadata.attributes = Object.entries(attributes).map(([key, value]) => {
         return {
           trait_type: key,
