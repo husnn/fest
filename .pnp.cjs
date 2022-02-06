@@ -4950,7 +4950,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["next-http-proxy-middleware", "npm:1.2.1"],
             ["next-transpile-modules", "npm:7.3.0"],
             ["react", "npm:17.0.2"],
-            ["react-code-input", "virtual:f32071e2bfc54d473c2f0f6b40dde2b07e2ff26c76fa2953efced1336c18a6073f75e162696ba205ee7502532446b01b8b4f431e13eca91a549a04ae84ffd8f5#npm:3.10.1"],
             ["react-confetti", "virtual:f32071e2bfc54d473c2f0f6b40dde2b07e2ff26c76fa2953efced1336c18a6073f75e162696ba205ee7502532446b01b8b4f431e13eca91a549a04ae84ffd8f5#npm:6.0.1"],
             ["react-contenteditable", "virtual:f32071e2bfc54d473c2f0f6b40dde2b07e2ff26c76fa2953efced1336c18a6073f75e162696ba205ee7502532446b01b8b4f431e13eca91a549a04ae84ffd8f5#npm:3.3.6"],
             ["react-device-detect", "virtual:f32071e2bfc54d473c2f0f6b40dde2b07e2ff26c76fa2953efced1336c18a6073f75e162696ba205ee7502532446b01b8b4f431e13eca91a549a04ae84ffd8f5#npm:2.1.2"],
@@ -7824,13 +7823,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/classnames-npm-2.2.6-98e9901cf4-09a4fda780.zip/node_modules/classnames/",
           "packageDependencies": [
             ["classnames", "npm:2.2.6"]
-          ],
-          "linkType": "HARD",
-        }],
-        ["npm:2.3.1", {
-          "packageLocation": "./.yarn/cache/classnames-npm-2.3.1-f2ae0a8d3c-14db8889d5.zip/node_modules/classnames/",
-          "packageDependencies": [
-            ["classnames", "npm:2.3.1"]
           ],
           "linkType": "HARD",
         }]
@@ -15254,33 +15246,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react", "npm:17.0.2"],
             ["loose-envify", "npm:1.4.0"],
             ["object-assign", "npm:4.1.1"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["react-code-input", [
-        ["npm:3.10.1", {
-          "packageLocation": "./.yarn/cache/react-code-input-npm-3.10.1-736a46376c-8cca36dd58.zip/node_modules/react-code-input/",
-          "packageDependencies": [
-            ["react-code-input", "npm:3.10.1"]
-          ],
-          "linkType": "SOFT",
-        }],
-        ["virtual:f32071e2bfc54d473c2f0f6b40dde2b07e2ff26c76fa2953efced1336c18a6073f75e162696ba205ee7502532446b01b8b4f431e13eca91a549a04ae84ffd8f5#npm:3.10.1", {
-          "packageLocation": "./.yarn/__virtual__/react-code-input-virtual-7733537cdd/0/cache/react-code-input-npm-3.10.1-736a46376c-8cca36dd58.zip/node_modules/react-code-input/",
-          "packageDependencies": [
-            ["react-code-input", "virtual:f32071e2bfc54d473c2f0f6b40dde2b07e2ff26c76fa2953efced1336c18a6073f75e162696ba205ee7502532446b01b8b4f431e13eca91a549a04ae84ffd8f5#npm:3.10.1"],
-            ["@types/react", "npm:17.0.38"],
-            ["@types/react-dom", "npm:17.0.11"],
-            ["classnames", "npm:2.3.1"],
-            ["react", "npm:17.0.2"],
-            ["react-dom", "virtual:f32071e2bfc54d473c2f0f6b40dde2b07e2ff26c76fa2953efced1336c18a6073f75e162696ba205ee7502532446b01b8b4f431e13eca91a549a04ae84ffd8f5#npm:17.0.2"]
-          ],
-          "packagePeers": [
-            "@types/react-dom",
-            "@types/react",
-            "react-dom",
-            "react"
           ],
           "linkType": "HARD",
         }]

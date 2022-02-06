@@ -2,7 +2,7 @@ import React, { createRef, useRef, useState } from 'react';
 
 import styled from '@emotion/styled';
 
-import { colors, corners } from '../styles/constants';
+import { corners } from '../styles/constants';
 
 type DigitInputProps = {
   length?: number;
@@ -12,15 +12,9 @@ type DigitInputProps = {
 
 const DigitInputForm = styled.div`
   width: 100%;
-  padding: 15px;
-  background-color: ${colors.blueLightest};
-  border: 1px solid #ccc;
-  border-radius: ${corners.sm};
 
   display: flex;
   flex-direction: row;
-  // justify-content: space-around;
-  // gap: 30px;
 
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {
@@ -30,17 +24,17 @@ const DigitInputForm = styled.div`
 `;
 
 const DigitInputBox = styled.input`
-  max-width: 40px;
-  height: 35px;
-  margin: 5px;
+  max-width: 35px;
+  height: 40px;
+  margin-left: 5px;
+  padding: 0 !important;
   color: #555;
   font-weight: bold;
-  font-size: 14pt;
+  font-size: 11pt;
   text-align: center;
   border: 0;
   outline: none;
   border-radius: ${corners.xs};
-  box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
 `;
 
 const DigitInput: React.FC<DigitInputProps> = ({
@@ -60,7 +54,7 @@ const DigitInput: React.FC<DigitInputProps> = ({
 
     if (value) {
       newCode = code.concat(value);
-      focusIndex += 1;
+      focusIndex += value.length;
     } else {
       newCode = code.slice(0, -1);
       focusIndex -= 1;
@@ -87,11 +81,15 @@ const DigitInput: React.FC<DigitInputProps> = ({
           key={i}
           maxLength={1}
           ref={inputRefs.current[i]}
+          value={code[i]}
           inputMode="numeric"
           autoComplete="off"
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            handleInput(e.target.value, i)
+            e.target.value.length > 0 ? handleInput(e.target.value, i) : null
           }
+          onKeyDown={(e) => {
+            if (e.key === 'Backspace') handleInput(null, i);
+          }}
           autoFocus={i == 0}
         />
       ))}
