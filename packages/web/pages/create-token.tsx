@@ -171,7 +171,6 @@ export default function CreateTokenPage() {
                   setYouTubeVideo(video);
 
                   setFieldValue('name', video.title, true);
-                  setFieldValue('description', video.description);
                   setFieldValue('resource', video.id);
 
                   setTimeout(() => setFieldTouched('name', true));

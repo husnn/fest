@@ -81,7 +81,7 @@ const Balance = styled.div`
 `;
 
 const BalanceActions = styled.div`
-  width: 200px;
+  width: 180px;
   margin-top: 20px;
   display: flex;
   flex-direction: row;

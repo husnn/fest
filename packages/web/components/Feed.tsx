@@ -122,9 +122,9 @@ const Feed = ({
             }
           `}
         >
-          Join some communities to see
+          Join some communities
           <br />
-          more stuff here.
+          to see stuff here.
         </p>
       </div>
     )
