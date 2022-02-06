@@ -81,7 +81,7 @@ const DigitInput: React.FC<DigitInputProps> = ({
           key={i}
           maxLength={1}
           ref={inputRefs.current[i]}
-          value={code[i]}
+          value={code.length > i ? code[i] : ''}
           inputMode="numeric"
           autoComplete="off"
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>

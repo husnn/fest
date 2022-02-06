@@ -1,5 +1,5 @@
 import { CurrentUserDTO, Protocol, isEmailAddress } from '@fest/shared';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   saveAuthExpiry,
   saveAuthToken,
@@ -169,50 +169,51 @@ export default function Login() {
   `;
 
   const EmailInput = ({
-    initialEmail,
     onSubmit
   }: {
-    initialEmail: string;
     onSubmit: (
       email: string,
       check: { exists: boolean; needsInvite?: boolean }
     ) => void;
   }) => {
-    const [email, setEmail] = useState(initialEmail || '');
+    const email = useRef<string>('');
 
-    const [enabled, setEnabled] = useState(!!isEmailAddress(initialEmail));
+    const [enabled, setEnabled] = useState(false);
 
     const doPrecheck = async (email: string) => {
       setEnabled(false);
 
-      const check = await ApiClient.getInstance().doAuthPrecheck(email);
-      onSubmit(email, check);
-
-      setEnabled(true);
+      ApiClient.getInstance()
+        .doAuthPrecheck(email)
+        .then((res) => {
+          onSubmit(email, res);
+        })
+        .catch((err) => {
+          console.log(err);
+          setEnabled(true);
+        });
     };
 
     return (
-      <EmailForm>
+      <EmailForm
+        onSubmit={(e) => {
+          e.preventDefault();
+          doPrecheck(email.current);
+        }}
+      >
         <h2>Hey, friend 👋🏼</h2>
         <p className="small">
           Enter your email address to sign up or log into your existing account.
         </p>
         <TextInput
           placeholder="bruce@wayne.inc"
-          value={email}
           onChange={(e) => {
-            const v = e.target.value;
-            setEmail(v);
-
-            setEnabled(!!isEmailAddress(v));
+            email.current = e.target.value;
+            setEnabled(!!isEmailAddress(email.current));
           }}
         />
 
-        <Button
-          color="primary"
-          disabled={!enabled}
-          onClick={() => doPrecheck(email)}
-        >
+        <Button type="submit" color="primary" disabled={!enabled}>
           Continue with email
         </Button>
       </EmailForm>
@@ -282,7 +283,6 @@ export default function Login() {
         )}
 
         <EmailInput
-          initialEmail={email}
           onSubmit={(email: string, check) => {
             setEmail(email);
             setNewUser(!check.exists);
