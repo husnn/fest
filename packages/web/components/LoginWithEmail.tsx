@@ -3,7 +3,7 @@ import ModalWithSteps, { ModalWithStepsProps } from './ModalWithSteps';
 import React, { useEffect, useRef, useState } from 'react';
 
 import ApiClient from '../modules/api/ApiClient';
-import DigitInput from '../ui/DigitInput';
+import ReactCodeInput from 'react-code-input';
 import { Link } from '../ui';
 import TextInput from '../ui/TextInput';
 import styled from '@emotion/styled';
@@ -71,6 +71,7 @@ const LoginWithEmail: React.FC<LoginWithEmailProps & ModalWithStepsProps> = ({
     } catch (err) {
       setStepIndex(0);
       setError('Incorrect password or code. Try again.');
+      setOkEnabled(true);
     }
   };
 
@@ -153,10 +154,22 @@ const LoginWithEmail: React.FC<LoginWithEmailProps & ModalWithStepsProps> = ({
         </form>
       )}
       {stepIndex == 1 && (
-        <DigitInput
-          length={6}
-          onEnter={(code: string) => {
-            login(code);
+        <ReactCodeInput
+          name="authCode"
+          inputMode="numeric"
+          type="password"
+          filterChars={['0-9']}
+          fields={6}
+          inputStyle={{
+            width: 35,
+            height: 35,
+            marginLeft: 5,
+            padding: '2px',
+            fontSize: '16pt',
+            textAlign: 'center'
+          }}
+          onChange={(value) => {
+            if (value.length == 6) login(value);
           }}
         />
       )}
