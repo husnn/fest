@@ -5,6 +5,7 @@ import { InviteError } from './errors';
 import { InviteType } from '@fest/shared';
 import Result from '../../Result';
 import UseCase from '../../base/UseCase';
+import { upgradeInvitesToCreator } from '../invites';
 
 type EnableCreatorModeInput = {
   user: string;
@@ -46,6 +47,7 @@ export class EnableCreatorMode extends UseCase<
     if (user.isCreator) return Result.fail(InviteError.USER_INELIGIBLE);
 
     user.isCreator = true;
+    upgradeInvitesToCreator(this.inviteRepository, user.id);
 
     await this.inviteRepository.update(Invite.use(invite));
     await this.userRepository.update(user);

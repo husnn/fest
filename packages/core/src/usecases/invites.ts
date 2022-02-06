@@ -39,3 +39,17 @@ export const generateInvitesForNewUser = (
   }
   generateInvites(inviteRepository, user, InviteType.BASIC, 3);
 };
+
+export const upgradeInvitesToCreator = (
+  inviteRepository: InviteRepository,
+  user: string
+) => {
+  inviteRepository.findByOwner(user).then((res) => {
+    res.invites.forEach((invite) => {
+      invite.type = InviteType.CREATOR;
+      inviteRepository.update(invite);
+    });
+  });
+
+  generateInvites(inviteRepository, user, InviteType.FAN, 1, 1000);
+};
