@@ -3,6 +3,7 @@ import UseCase from '../../base/UseCase';
 import { WaitlistEntry } from '../../entities/WaitlistEntry';
 import { WaitlistEntryType } from '@fest/shared';
 import { WaitlistRepository } from '../../repositories';
+import { WaitlistError } from './errors';
 
 type JoinWaitlistInput = {
   type: WaitlistEntryType;
@@ -54,7 +55,7 @@ export class JoinWaitlist extends UseCase<
         updated = true;
       }
 
-      if (!updated) return Result.fail();
+      if (!updated) return Result.fail(WaitlistError.ENTRY_EXISTS);
 
       entry = await this.waitlistRepository.update(entry);
     } else {

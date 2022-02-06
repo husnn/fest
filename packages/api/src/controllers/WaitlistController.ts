@@ -1,5 +1,5 @@
 import { HttpError, HttpResponse, ValidationError } from '../http';
-import { JoinWaitlist, WaitlistRepository } from '@fest/core';
+import { JoinWaitlist, WaitlistRepository, WaitlistError } from '@fest/core';
 import {
   JoinWaitlistResponse,
   isEmailAddress,
@@ -36,7 +36,11 @@ export class WaitlistController {
         social: socialMedia
       });
 
-      if (!result.success) throw new HttpError('Could not join waitlist.');
+      if (!result.success) {
+        if (result.error == WaitlistError.ENTRY_EXISTS)
+          throw new HttpError('You`re already on our waitlist.');
+        throw new HttpError('Could not join waitlist.');
+      }
 
       return new HttpResponse<JoinWaitlistResponse>(res);
     } catch (err) {
