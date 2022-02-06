@@ -23,7 +23,7 @@ export default function Login() {
   useHeader([]);
 
   const router = useRouter();
-  const { requestSignature, activate } = useWeb3();
+  const { web3, requestSignature, activate } = useWeb3();
 
   const { isAuthenticated, setAuthenticated, currentUser, setCurrentUser } =
     useAuthentication();
@@ -303,7 +303,7 @@ export default function Login() {
         <Button
           color="secondary"
           onClick={loginWithWallet}
-          loading={connectingWallet}
+          loading={!web3 || connectingWallet}
         >
           Continue with wallet
         </Button>
