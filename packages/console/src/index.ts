@@ -1,6 +1,8 @@
 import Postgres, {
   WaitlistRepository,
-  defaultConfig as postgresConfig
+  defaultConfig as postgresConfig,
+  UserRepository,
+  InviteRepository
 } from '@fest/postgres';
 
 import { MailService } from './MailService';
@@ -18,9 +20,18 @@ const { protocol, host, port } = appConfig;
 
   app.set('view engine', 'pug');
 
+  const userRepository = new UserRepository();
+  const inviteRepository = new InviteRepository();
   const waitlistRepository = new WaitlistRepository();
   const mailService = new MailService();
-  waitlist(app, waitlistRepository, mailService);
+
+  waitlist(
+    app,
+    userRepository,
+    inviteRepository,
+    waitlistRepository,
+    mailService
+  );
 
   app
     .listen(port, host, () => {

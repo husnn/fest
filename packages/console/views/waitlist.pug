@@ -24,8 +24,12 @@ html
     ul
       each val in entries
         li.entry(class=val.isAccepted && "accepted")
-          p= moment(val.entryDate).fromNow()
+          if val.type == "CREATOR"
+            p Creator
+          p Applied #{moment(val.entryDate).fromNow()}
           if val.isAccepted
             p Accepted #{moment(val.dateAccepted).fromNow()}
-          p= val.email 
+          p= val.email
+          if val.socialMedia
+            p Social media: #{val.socialMedia}
           a.accept(href="#", data=val.id)= "Accept entry"

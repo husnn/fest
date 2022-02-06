@@ -42,6 +42,7 @@ export class JoinWaitlist extends UseCase<
         data.type === WaitlistEntryType.CREATOR
       ) {
         entry.type = data.type;
+        entry.isAccepted = false;
         updated = true;
       }
 
