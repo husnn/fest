@@ -53,6 +53,8 @@ export class CreateToken extends UseCase<CreateTokenInput, CreateTokenOutput> {
 
   async exec(data: CreateTokenInput): Promise<Result<CreateTokenOutput>> {
     const user = await this.userRepository.get(data.user);
+    if (!user) return Result.fail('User not found.');
+    if (!user.isCreator) return Result.fail('User is not a creator.');
 
     const type = data.type || TokenType.BASIC;
 
