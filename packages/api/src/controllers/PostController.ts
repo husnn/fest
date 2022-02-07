@@ -8,8 +8,8 @@ import {
   GetPostMediaUploadURLsResponse,
   PostMediaUploadData
 } from '@fest/shared';
-import { HttpError, HttpResponse } from '../http';
 import { NextFunction, Request, Response } from 'express';
+import { HttpError, HttpResponse } from '../http';
 
 class PostController {
   private createPostUseCase: CreatePost;
@@ -59,7 +59,8 @@ class PostController {
   async create(req: Request, res: Response, next: NextFunction) {
     try {
       const { text, media, community } = req.body;
-      if (!text && !media) throw new HttpError('Missing post content.');
+      if (!text && media?.length < 1)
+        throw new HttpError('Missing post content.');
       if (!community) throw new HttpError('Missing community ID.');
 
       const result = await this.createPostUseCase.exec({

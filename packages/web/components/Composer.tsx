@@ -47,6 +47,10 @@ const CommunitySelector = ({
     <Button
       size="smaller"
       color="normal"
+      css={css`
+        overflow: hidden;
+        text-overflow: ellipsis;
+      `}
       onClick={() => {
         const currentIndex = communities.findIndex(
           (c) => c.id === selected?.id
@@ -60,7 +64,7 @@ const CommunitySelector = ({
         setPreferredCommunity(communities[nextIndex]);
       }}
     >
-      {selected?.name && truncateText(selected.name, 15)}
+      {selected?.name && truncateText(selected.name, 18)}
     </Button>
   );
 };
@@ -72,10 +76,11 @@ const Box = styled.div`
 const InputArea = styled.div`
   display: flex;
   flex-direction: column;
+  padding: 20px 10px 0;
   border-radius: 5px;
 
   @media screen and (min-width: 500px) {
-    padding: 0 15px;
+    padding: 20px 15px 0;
   }
 `;
 
@@ -184,6 +189,8 @@ const Composer = ({
   mediaFileRef.current = mediaFiles;
 
   const submit = () => {
+    if (textRef.current.length < 1 && mediaFileRef.current.length < 1) return;
+
     onSubmit(textRef.current, mediaFileRef.current, postCommunity.current.id);
     setHtml('');
   };
