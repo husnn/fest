@@ -14,7 +14,6 @@ import {
   UserDTO
 } from '../dto';
 import { Protocol, TokenType, WaitlistEntryType } from '../enums';
-
 import { ProtocolConfig } from './';
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT';
@@ -115,6 +114,12 @@ export interface GetFeedRequest extends Request {
 /**
  * Posts
  */
+
+export interface DeletePostResponse extends Response {}
+export interface DeletePostRequest extends Request {
+  method: 'POST';
+  authentication: 'required';
+}
 
 export interface PostMediaUploadData {
   name: string;

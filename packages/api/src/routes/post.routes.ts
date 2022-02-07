@@ -15,6 +15,13 @@ export default function init(postController: PostController): Router {
   );
 
   router.post(
+    '/:id/delete',
+    authMiddleware,
+    (req: Request, res: Response, next: NextFunction) =>
+      postController.delete(req, res, next)
+  );
+
+  router.post(
     '/media-upload-urls',
     getRateLimiter('postMediaUpload', { max: 10, windowInMins: 1 }),
     (req: Request, res: Response, next: NextFunction) => {

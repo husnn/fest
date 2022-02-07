@@ -16,6 +16,8 @@ import {
   CreatePostResponse,
   CreateTokenRequest,
   CreateTokenResponse,
+  DeletePostRequest,
+  DeletePostResponse,
   EditUserRequest,
   EditUserResponse,
   EnableCreatorModeRequest,
@@ -44,10 +46,10 @@ import {
   GetTokenOwnershipsResponse,
   GetTokenRequest,
   GetTokenResponse,
-  GetTokenTradesForUserRequest,
-  GetTokenTradesForUserResponse,
   GetTokensCreatedResponse,
   GetTokensOwnedResponse,
+  GetTokenTradesForUserRequest,
+  GetTokenTradesForUserResponse,
   GetUserByIdRequest,
   GetUserByUsernameRequest,
   GetUserCommunitiesResponse,
@@ -57,6 +59,7 @@ import {
   IdentifyWithWalletRequest,
   IdentifyWithWalletResponse,
   InitResponse,
+  isUsername,
   JoinWaitlistRequest,
   JoinWaitlistResponse,
   ListTokenForSaleRequest,
@@ -79,8 +82,8 @@ import {
   RequestTestFundsResponse,
   ResetPasswordRequest,
   ResetPasswordResponse,
-  TokenDTO,
   TokenData,
+  TokenDTO,
   TokenOwnershipDTO,
   UnlinkOAuthRequest,
   UnlinkOAuthResponse,
@@ -88,10 +91,8 @@ import {
   WaitlistEntryType,
   WithdrawMarketEarningsRequest,
   WithdrawMarketEarningsResponse,
-  YouTubeVideo,
-  isUsername
+  YouTubeVideo
 } from '@fest/shared';
-
 import HttpClient from './HttpClient';
 
 export class ApiClient {
@@ -129,6 +130,14 @@ export class ApiClient {
   }
 
   // Posts
+
+  async deletePost(id: string): Promise<DeletePostResponse> {
+    return this.client.request<DeletePostResponse, DeletePostRequest>({
+      method: 'POST',
+      authentication: 'required',
+      endpoint: `/posts/${id}/delete`
+    });
+  }
 
   async getPostMediaUploadURLs(
     media: PostMediaUploadData[]

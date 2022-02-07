@@ -23,7 +23,9 @@ const Feed = ({
     ApiClient.getInstance()
       .getFeed(cursor)
       .then((res) => {
-        setPosts((posts) => [...(posts || []), ...res.body]);
+        const allPosts = [...(posts || []), ...res.body];
+        setPosts(allPosts);
+        setPostLength(allPosts.length);
         setCursor(res.cursor);
       })
       .catch((err) => console.log(err));
@@ -40,14 +42,25 @@ const Feed = ({
   useEffect(() => {
     if (!newPost) return;
     setPosts((posts) => [newPost, ...(posts || [])]);
+    setPostLength(postLength + 1);
   }, [newPost]);
+
+  const [contextMenuPostID, setContextMenuPostID] = useState<string>();
+
+  useEffect(() => {
+    const handleClick = () => setContextMenuPostID(null);
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, []);
+
+  const [postLength, setPostLength] = useState(0);
 
   return posts ? (
     <InfiniteScroll
       css={css`
         padding: ${community ? '60px 10px 20px' : '20px 10px'};
       `}
-      dataLength={posts.length}
+      dataLength={postLength}
       next={fetchPosts}
       hasMore={!!cursor}
       loader={<h4>Loading...</h4>}
@@ -62,16 +75,23 @@ const Feed = ({
         </p>
       }
     >
-      {posts.map((p) => {
+      {posts.map((p, i) => {
         if (community && p.communityId !== community) return null;
         return (
           <Post
             key={p.id}
             data={p}
+            showContextMenu={contextMenuPostID === p.id}
+            onShowContextMenu={() => setContextMenuPostID(p.id)}
             hideCommunity={!!community}
             onCommunitySelect={(c) =>
               router.push(getHomeUrl(c), undefined, { shallow: true })
             }
+            onDelete={() => {
+              posts.splice(i, 1);
+              setPosts(posts);
+              setPostLength(posts.length);
+            }}
           />
         );
       })}

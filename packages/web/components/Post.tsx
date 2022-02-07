@@ -1,9 +1,8 @@
 /** @jsxImportSource @emotion/react */
-
 import 'react-image-lightbox/style.css';
 
 import { CommunityDTO, PostDTO, PostMedia } from '@fest/shared';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { getDisplayName, getImageUrl, getProfileUrl } from '../utils';
 
 import Lightbox from 'react-image-lightbox';
@@ -11,6 +10,10 @@ import { css } from '@emotion/react';
 import moment from 'moment';
 import router from 'next/router';
 import styled from '@emotion/styled';
+import MoreIcon from '../public/images/ic-more.svg';
+import { Link } from '../ui';
+import Modal from '../ui/Modal';
+import { ApiClient } from '../modules/api';
 
 const CommunityInformation = styled.div`
   display: flex;
@@ -33,13 +36,10 @@ const CommunityInformation = styled.div`
 `;
 
 const Top = styled.div`
+  width: 100%;
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  cursor: pointer;
-
-  > * + * {
-    margin-left: 15px;
-  }
 `;
 
 const Metadata = styled.div`
@@ -112,16 +112,58 @@ const Media = ({ content }: { content: PostMedia[] }) => {
   );
 };
 
+const DropdownButton = ({
+  children,
+  onClick
+}: {
+  children: React.ReactNode;
+  onClick: () => void;
+}) => {
+  return (
+    <Link
+      onClick={() => onClick()}
+      thinner
+      css={css`
+        width: 100%;
+        padding: 10px 15px;
+        display: flex;
+        align-items: center;
+        border-radius: 10px;
+
+        &:hover {
+          background-color: #f5f5f5;
+        }
+      `}
+    >
+      {children}
+    </Link>
+  );
+};
+
 const Post = React.memo(
   ({
     data,
+    showContextMenu,
+    onShowContextMenu,
     hideCommunity,
-    onCommunitySelect
+    onCommunitySelect,
+    onDelete
   }: {
     data: PostDTO;
+    showContextMenu?: boolean;
+    onShowContextMenu?: () => void;
     hideCommunity?: boolean;
     onCommunitySelect: (community: CommunityDTO) => void;
+    onDelete: (id: string) => void;
   }) => {
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [deleting, setDeleting] = useState(false);
+    const [deleteModalShowing, setDeleteModalShowing] = useState(false);
+
+    useEffect(() => {
+      setTimeout(() => setDropdownOpen(showContextMenu), 100);
+    }, [showContextMenu]);
+
     return (
       <div
         css={css`
@@ -160,23 +202,96 @@ const Post = React.memo(
             <p className="small">{data.community?.name}</p>
           </CommunityInformation>
         )}
-        <Top onClick={() => router.push(getProfileUrl(data.user))}>
+        <Top>
           <div
             css={css`
-              width: 40px;
-              height: 40px;
+              display: flex;
+              align-items: center;
+              cursor: pointer;
+
+              > * + * {
+                margin-left: 15px;
+              }
             `}
-            className="avatar"
-          />
-          <Metadata>
-            <p>{getDisplayName(data.user)}</p>
-            <p className="smaller" style={{ opacity: 0.7 }}>
-              {moment(data.dateCreated).fromNow()}
-            </p>
-          </Metadata>
+          >
+            <div
+              css={css`
+                width: 40px;
+                height: 40px;
+              `}
+              className="avatar"
+            />
+            <Metadata onClick={() => router.push(getProfileUrl(data.user))}>
+              <p>{getDisplayName(data.user)}</p>
+              <p className="smaller" style={{ opacity: 0.7 }}>
+                {moment(data.dateCreated).fromNow()}
+              </p>
+            </Metadata>
+          </div>
+          <div
+            css={css`
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+            `}
+          >
+            <MoreIcon
+              fill="#7a7a7a"
+              height={15}
+              css={css`
+                cursor: pointer;
+              `}
+              onClick={() => {
+                setDropdownOpen(!dropdownOpen);
+                onShowContextMenu();
+              }}
+            />
+            {dropdownOpen && (
+              <div
+                css={css`
+                  width: 180px;
+                  min-height: 20px;
+                  padding: 10px 5px;
+                  background-color: #fefefe;
+                  position: absolute;
+                  margin: 25px 50px 0 0;
+                  box-shadow: 3px 3px 20px 2px rgba(0, 0, 0, 0.05);
+                  border-radius: 10px;
+                `}
+              >
+                <DropdownButton onClick={() => setDeleteModalShowing(true)}>
+                  Delete
+                </DropdownButton>
+              </div>
+            )}
+          </div>
         </Top>
         {data.text && <Text>{data.text}</Text>}
         {data.media?.length > 0 && <Media content={data.media} />}
+        {deleteModalShowing && (
+          <Modal
+            show={deleteModalShowing}
+            title="Are you sure?"
+            description="This post will be deleted."
+            ok="Confirm"
+            okEnabled={!deleting}
+            onOkPressed={() => {
+              setDeleting(true);
+
+              ApiClient.getInstance()
+                .deletePost(data.id)
+                .then(() => {
+                  setDeleteModalShowing(false);
+                  onDelete(data.id);
+                })
+                .catch((err) => {
+                  console.log(err);
+                  setDeleting(false);
+                });
+            }}
+            requestClose={() => setDeleteModalShowing(false)}
+          />
+        )}
       </div>
     );
   }

@@ -110,6 +110,7 @@ const ModalTitleBlock = styled.div`
 `;
 
 const ModalActions = styled.div`
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -200,15 +201,17 @@ const Modal: React.FC<ModalProps> = ({
                   )}
                 </ModalHead>
               )}
-              <ModalBody>
-                {children}
-                {error && (
-                  <AuthError
-                    dangerouslySetInnerHTML={{ __html: error }}
-                    className="smaller"
-                  />
-                )}
-              </ModalBody>
+              {children && (
+                <ModalBody>
+                  {children}
+                  {error && (
+                    <AuthError
+                      dangerouslySetInnerHTML={{ __html: error }}
+                      className="smaller"
+                    />
+                  )}
+                </ModalBody>
+              )}
               {(ok || cancel) && (
                 <ModalActions>
                   {ok && (

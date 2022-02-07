@@ -1,5 +1,6 @@
 import {
   CreatePost,
+  DeletePost,
   MediaService,
   PostRepository,
   UserRepository
@@ -9,10 +10,11 @@ import {
   PostMediaUploadData
 } from '@fest/shared';
 import { NextFunction, Request, Response } from 'express';
-import { HttpError, HttpResponse } from '../http';
+import { HttpError, HttpResponse, ValidationError } from '../http';
 
 class PostController {
   private createPostUseCase: CreatePost;
+  private deletePostUseCase: DeletePost;
 
   private mediaService: MediaService;
 
@@ -22,7 +24,25 @@ class PostController {
     mediaService: MediaService
   ) {
     this.createPostUseCase = new CreatePost(userRepository, postRepository);
+    this.deletePostUseCase = new DeletePost(postRepository);
     this.mediaService = mediaService;
+  }
+
+  async delete(req: Request, res: Response, next: NextFunction) {
+    try {
+      const postId = req.params.id;
+      if (!postId) throw new ValidationError('Missing post id.');
+
+      const result = await this.deletePostUseCase.exec({
+        userId: req.user,
+        postId
+      });
+      if (!result.success) throw new HttpError('Could not delete post.');
+
+      return new HttpResponse(res);
+    } catch (err) {
+      next(err);
+    }
   }
 
   async getMediaUploadURLs(req: Request, res: Response, next: NextFunction) {
