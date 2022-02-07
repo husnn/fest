@@ -1,4 +1,6 @@
+/** @jsxImportSource @emotion/react */
 import { Button, Link } from '../ui';
+import { css } from '@emotion/react';
 import React, { useEffect } from 'react';
 
 import Fade from 'react-reveal/Fade';
@@ -55,6 +57,34 @@ export default function Home() {
         </Link>
       </div>
       <div className={styles.section}>
+        <div
+          className={`${styles.splitSection} ${styles.nonReversing}`}
+          style={{ margin: '20px 0 50px' }}
+        >
+          <Fade>
+            <h1>Features</h1>
+          </Fade>
+          <Fade big bottom>
+            <div
+              className={styles.featureBlock}
+              css={css`
+                width: 500px;
+              `}
+            >
+              <ul>
+                <li>
+                  <h3>Zero crypto knowledge required</h3>
+                </li>
+                <li>
+                  <h3>Free minting and transactions*</h3>
+                </li>
+                <li>
+                  <h3>No crypto knowledge required</h3>
+                </li>
+              </ul>
+            </div>
+          </Fade>
+        </div>
         <h2 className={styles.sectionTitleLeft}>Connect with your top fans</h2>
         <div className={styles.splitSection} style={{ marginTop: 20 }}>
           <Fade big bottom>
@@ -71,18 +101,18 @@ export default function Home() {
                 You could turn your first YouTube video into a verified NFT and
                 auction it.
               </p>
+              <span>
+                <p style={{ display: 'block', marginTop: 20, opacity: '0.7' }}>
+                  Earn lifetime royalties on each sale
+                </p>
+                <div style={{ display: 'flex', gap: 30, opacity: '0.3' }}>
+                  <h2 className={styles.sectionTitle}>+10%</h2>
+                  <h2 className={styles.sectionTitle}>+20%</h2>
+                  <h2 className={styles.sectionTitle}>+30%</h2>
+                </div>
+              </span>
             </div>
           </Fade>
-          {/* <span>
-            <p style={{ display: 'block', marginTop: 20, opacity: '0.7' }}>
-              Earn lifetime royalties on each sale
-            </p>
-            <div style={{ display: 'flex', gap: 30, opacity: '0.3' }}>
-              <h2 className={styles.sectionTitle}>+10%</h2>
-              <h2 className={styles.sectionTitle}>+20%</h2>
-              <h2 className={styles.sectionTitle}>+30%</h2>
-            </div>
-          </span> */}
         </div>
         <div className={styles.splitSection} style={{ marginTop: 30 }}>
           <Fade bottom cascade>
@@ -106,6 +136,30 @@ export default function Home() {
           </Fade>
         </div>
       </div>
+      <Fade big bottom>
+        <div
+          className={styles.featureBlock}
+          css={css`
+            width: 500px;
+          `}
+        >
+          <h1>Roadmap</h1>
+          <ul>
+            <li>
+              <h3>
+                Shopify integration to limit exclusive merch drops to NFT
+                holders
+              </h3>
+            </li>
+            <li>
+              <h3>Adsense revenue share from YouTube videos</h3>
+            </li>
+            <li>
+              <h3>Discord bot that restricts server to token holders</h3>
+            </li>
+          </ul>
+        </div>
+      </Fade>
       <div
         className={`${styles.section} ${styles.fullWidth}`}
         style={{ background: '#000D20' }}
