@@ -2,7 +2,7 @@
 import 'react-image-lightbox/style.css';
 
 import { CommunityDTO, PostDTO, PostMedia } from '@fest/shared';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getDisplayName, getImageUrl, getProfileUrl } from '../utils';
 
 import Lightbox from 'react-image-lightbox';
