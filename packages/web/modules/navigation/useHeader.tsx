@@ -25,12 +25,12 @@ export const useHeader = (toShow?: string[], toHide?: string[]) => {
       route: '/create-token',
       visible: !!currentUser && currentUser.isCreator
     },
-    {
-      id: 'creator-program',
-      title: 'Become a creator',
-      route: '/creator',
-      visible: !!currentUser && !currentUser.isCreator
-    },
+    // {
+    //   id: 'creator-program',
+    //   title: 'Become a creator',
+    //   route: '/creator',
+    //   visible: !!currentUser && !currentUser.isCreator
+    // },
     {
       id: 'market',
       title: 'Market',
