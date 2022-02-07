@@ -112,70 +112,74 @@ const Media = ({ content }: { content: PostMedia[] }) => {
   );
 };
 
-const Post = ({
-  data,
-  hideCommunity,
-  onCommunitySelect
-}: {
-  data: PostDTO;
-  hideCommunity?: boolean;
-  onCommunitySelect: (community: CommunityDTO) => void;
-}) => {
-  return (
-    <div
-      css={css`
-        width: 500px;
-        padding: 10px;
-        margin-bottom: 10px;
-        display: flex;
-        flex-direction: column;
-        white-space: pre-wrap;
-        background-color: #fafafa;
-        border-radius: 10px;
-
-        > div {
-          padding: 10px;
-        }
-
-        > * + * {
-          margin-top: 5px;
-        }
-
-        @media screen and (max-width: 720px) {
+const Post = React.memo(
+  ({
+    data,
+    hideCommunity,
+    onCommunitySelect
+  }: {
+    data: PostDTO;
+    hideCommunity?: boolean;
+    onCommunitySelect: (community: CommunityDTO) => void;
+  }) => {
+    return (
+      <div
+        css={css`
           width: 500px;
-        }
+          padding: 10px;
+          margin-bottom: 10px;
+          display: flex;
+          flex-direction: column;
+          white-space: pre-wrap;
+          background-color: #fafafa;
+          border-radius: 10px;
 
-        @media screen and (max-width: 500px) {
-          width: 100%;
-          padding: 0 5px 10px;
-        }
-      `}
-    >
-      {!hideCommunity && (
-        <CommunityInformation onClick={() => onCommunitySelect(data.community)}>
-          <img src="/images/ic-circle.png" />
-          <p className="small">{data.community?.name}</p>
-        </CommunityInformation>
-      )}
-      <Top onClick={() => router.push(getProfileUrl(data.user))}>
-        <div
-          css={css`
-            width: 40px;
-            height: 40px;
-          `}
-          className="avatar"
-        />
-        <Metadata>
-          <p>{getDisplayName(data.user)}</p>
-          <p className="smaller" style={{ opacity: 0.7 }}>
-            {moment(data.dateCreated).fromNow()}
-          </p>
-        </Metadata>
-      </Top>
-      {data.text && <Text>{data.text}</Text>}
-      {data.media?.length > 0 && <Media content={data.media} />}
-    </div>
-  );
-};
+          > div {
+            padding: 10px;
+          }
+
+          > * + * {
+            margin-top: 5px;
+          }
+
+          @media screen and (max-width: 720px) {
+            width: 500px;
+          }
+
+          @media screen and (max-width: 500px) {
+            width: 100%;
+            padding: 0 5px 10px;
+          }
+        `}
+      >
+        {!hideCommunity && (
+          <CommunityInformation
+            onClick={() => onCommunitySelect(data.community)}
+          >
+            <img src="/images/ic-circle.png" />
+            <p className="small">{data.community?.name}</p>
+          </CommunityInformation>
+        )}
+        <Top onClick={() => router.push(getProfileUrl(data.user))}>
+          <div
+            css={css`
+              width: 40px;
+              height: 40px;
+            `}
+            className="avatar"
+          />
+          <Metadata>
+            <p>{getDisplayName(data.user)}</p>
+            <p className="smaller" style={{ opacity: 0.7 }}>
+              {moment(data.dateCreated).fromNow()}
+            </p>
+          </Metadata>
+        </Top>
+        {data.text && <Text>{data.text}</Text>}
+        {data.media?.length > 0 && <Media content={data.media} />}
+      </div>
+    );
+  }
+);
 
 export default Post;

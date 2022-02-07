@@ -1,13 +1,12 @@
+import { PostDTO } from '@fest/shared';
+import UseCase from '../../base/UseCase';
 import {
   CommunityRepository,
   PostRepository,
   UserRepository
 } from '../../repositories';
-import { decodeCursor, encodeCursor } from '../../utils/cursor';
-
-import { PostDTO } from '@fest/shared';
 import Result from '../../Result';
-import UseCase from '../../base/UseCase';
+import { decodeCursor, encodeCursor } from '../../utils/cursor';
 
 type GetUserFeedInput = {
   userId: string;
@@ -50,7 +49,7 @@ export class GetUserFeed extends UseCase<GetUserFeedInput, GetUserFeedOutput> {
     const posts = await this.postRepository.getForCommunities(
       communityQuery.communities.map((c) => c.id),
       data.cursor ? new Date(decodeCursor(data.cursor)) : new Date(),
-      10
+      20
     );
 
     return Result.ok({

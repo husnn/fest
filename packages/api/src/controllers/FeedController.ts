@@ -4,10 +4,9 @@ import {
   PostRepository,
   UserRepository
 } from '@fest/core';
-import { HttpError, HttpResponse } from '../http';
-import { NextFunction, Request, Response } from 'express';
-
 import { GetFeedResponse } from '@fest/shared';
+import { NextFunction, Request, Response } from 'express';
+import { HttpError, HttpResponse } from '../http';
 
 class FeedController {
   private getUserFeedUseCase: GetUserFeed;
