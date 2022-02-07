@@ -1,12 +1,12 @@
-import ChangeEmail from '../../emails/ChangeEmail';
-import { EmailAddressChangeError } from './errors';
-import { MailService } from '../../services';
-import Result from '../../Result';
+import { getExpiryDate } from '@fest/shared';
 import UseCase from '../../base/UseCase';
+import { emailChangeLink } from '../../config';
+import ChangeEmail from '../../emails/ChangeEmail';
 import { User } from '../../entities';
 import { UserRepository } from '../../repositories';
-import { emailChangeLink } from '../../config';
-import { getExpiryDate } from '@fest/shared';
+import Result from '../../Result';
+import { MailService } from '../../services';
+import { EmailAddressChangeError } from './errors';
 
 export type RequestEmailAddressChangeInput = {
   userId: string;
@@ -56,10 +56,7 @@ export class RequestEmailAddressChange extends UseCase<
     await this.userRepository.update(user);
 
     this.mailService.send(
-      new ChangeEmail(
-        user.email,
-        emailChangeLink(jwt, user.wallet.type, expiry)
-      )
+      new ChangeEmail(newEmail, emailChangeLink(jwt, user.wallet.type, expiry))
     );
 
     return Result.ok();
