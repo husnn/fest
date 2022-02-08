@@ -50,6 +50,7 @@ const TokenContainer = styled.div`
 
 const TokenMain = styled.div`
   width: 100%;
+  min-width: 300px;
   max-width: 700px;
   flex-basis: 50%;
 
@@ -333,7 +334,6 @@ export default function TokenPage() {
                   href={token.youtubeUrl}
                   css={css`
                     width: fit-content;
-                    // margin: 0 10px 0 0;
                     padding: 10px 20px;
                     color: #0a0a0a;
                     background-color: #fafafa;
@@ -356,7 +356,9 @@ export default function TokenPage() {
               </Section>
             )}
 
-            <PreviewContainer>
+            <PreviewContainer
+              style={{ padding: !token.image ? '50px 25px' : 0 }}
+            >
               {token.image ? (
                 <img src={getImageUrl(token.image)} />
               ) : (

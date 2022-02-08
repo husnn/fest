@@ -175,6 +175,7 @@ const Post = React.memo(
           white-space: pre-wrap;
           background-color: #fafafa;
           border-radius: 10px;
+          overflow: hidden;
 
           > div {
             padding: 10px;
@@ -230,9 +231,11 @@ const Post = React.memo(
           </div>
           <div
             css={css`
+              width: 180px;
               display: flex;
               flex-direction: column;
-              align-items: center;
+              align-items: flex-end;
+              overflow: hidden;
             `}
           >
             <MoreIcon
@@ -249,12 +252,12 @@ const Post = React.memo(
             {dropdownOpen && (
               <div
                 css={css`
-                  width: 180px;
+                  width: 150px;
                   min-height: 20px;
                   padding: 10px 5px;
                   background-color: #fefefe;
                   position: absolute;
-                  margin: 25px 50px 0 0;
+                  margin: 25px -10px 0 0;
                   box-shadow: 3px 3px 20px 2px rgba(0, 0, 0, 0.05);
                   border-radius: 10px;
                 `}

@@ -64,46 +64,54 @@ const Feed = ({
 
   return posts ? (
     postLength > 0 ? (
-      <InfiniteScroll
+      <div
         css={css`
-          padding: ${community ? '60px 10px 20px' : '20px 10px'};
+          @media screen and (max-width: 500px) {
+            width: 100%;
+          }
         `}
-        dataLength={postLength}
-        next={fetchPosts}
-        hasMore={!!cursor}
-        loader={<h4>Loading...</h4>}
-        endMessage={
-          <p
-            css={css`
-              text-align: center;
-              padding: 20px 0;
-            `}
-          >
-            <b>You&apos;ve reached the end :)</b>
-          </p>
-        }
       >
-        {posts.map((p, i) => {
-          if (community && p.communityId !== community) return null;
-          return (
-            <Post
-              key={p.id}
-              data={p}
-              showContextMenu={contextMenuPostID === p.id}
-              onShowContextMenu={() => setContextMenuPostID(p.id)}
-              hideCommunity={!!community}
-              onCommunitySelect={(c) =>
-                router.push(getHomeUrl(c), undefined, { shallow: true })
-              }
-              onDelete={() => {
-                posts.splice(i, 1);
-                setPosts(posts);
-                setPostLength(postLength - 1);
-              }}
-            />
-          );
-        })}
-      </InfiniteScroll>
+        <InfiniteScroll
+          css={css`
+            padding: ${community ? '60px 10px 20px' : '20px 10px'};
+          `}
+          dataLength={postLength}
+          next={fetchPosts}
+          hasMore={!!cursor}
+          loader={<h4>Loading...</h4>}
+          endMessage={
+            <p
+              css={css`
+                text-align: center;
+                padding: 20px 0;
+              `}
+            >
+              <b>You&apos;ve reached the end :)</b>
+            </p>
+          }
+        >
+          {posts.map((p, i) => {
+            if (community && p.communityId !== community) return null;
+            return (
+              <Post
+                key={p.id}
+                data={p}
+                showContextMenu={contextMenuPostID === p.id}
+                onShowContextMenu={() => setContextMenuPostID(p.id)}
+                hideCommunity={!!community}
+                onCommunitySelect={(c) =>
+                  router.push(getHomeUrl(c), undefined, { shallow: true })
+                }
+                onDelete={() => {
+                  posts.splice(i, 1);
+                  setPosts(posts);
+                  setPostLength(postLength - 1);
+                }}
+              />
+            );
+          })}
+        </InfiniteScroll>
+      </div>
     ) : (
       <div
         css={css`
