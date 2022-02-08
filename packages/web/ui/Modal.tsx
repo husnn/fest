@@ -21,6 +21,7 @@ export type ModalProps = {
   ok?: string;
   okEnabled?: boolean;
   hasSteps?: boolean;
+  style?: React.CSSProperties;
   onBackPressed?: () => void;
   onOkPressed?: () => void;
   requestClose?: () => void;
@@ -147,6 +148,7 @@ const Modal: React.FC<ModalProps> = ({
   ok,
   okEnabled,
   hasSteps,
+  style,
   onOkPressed,
   requestClose
 }: ModalProps) => {
@@ -172,7 +174,11 @@ const Modal: React.FC<ModalProps> = ({
       </CSSTransition>
 
       <CSSTransition in={!closing} timeout={500} classNames="modal" appear>
-        <ModalContainer id="modal__content" zeroPadding={zeroPadding}>
+        <ModalContainer
+          id="modal__content"
+          zeroPadding={zeroPadding}
+          style={style}
+        >
           <CSSTransition
             in={inProp}
             timeout={300}
