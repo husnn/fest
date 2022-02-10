@@ -1,10 +1,8 @@
-import { HttpError, HttpResponse, ValidationError } from '../http';
-import { NextFunction, Request, Response } from 'express';
-
-import ConfigController from './ConfigController';
-import { EthereumService } from '@fest/core';
-import { RequestTestFundsResponse } from '@fest/shared';
 import { WalletRepository } from '@fest/postgres';
+import { EthereumService, RequestTestFundsResponse } from '@fest/shared';
+import { NextFunction, Request, Response } from 'express';
+import { HttpError, HttpResponse, ValidationError } from '../http';
+import ConfigController from './ConfigController';
 
 export class InternalController {
   private configController: ConfigController;

@@ -4,7 +4,6 @@ import {
   CommunityRepository,
   CreateCommunity,
   CreateToken,
-  EthereumService,
   GetToken,
   GetTokenOwnership,
   GetTokenOwnerships,
@@ -25,6 +24,7 @@ import {
   ApproveMintResponse,
   ApproveTokenSaleResponse,
   CreateTokenResponse,
+  EthereumService,
   GetSignedTokenImageUploadUrlResponse,
   GetTokenOwnershipResponse,
   GetTokenOwnershipsResponse,
@@ -33,9 +33,8 @@ import {
   MintTokenResponse,
   TokenData
 } from '@fest/shared';
-import { HttpError, NotFoundError } from '../http';
 import { NextFunction, Request, Response } from 'express';
-
+import { HttpError, NotFoundError } from '../http';
 import HttpResponse from '../http/HttpResponse';
 
 class TokenController {

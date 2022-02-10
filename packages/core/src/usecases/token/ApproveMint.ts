@@ -1,9 +1,13 @@
-import { EthereumService, IPFSService } from '../../services';
-import { Protocol, encryptText, randomNumericString } from '@fest/shared';
-import { TokenRepository, WalletRepository } from '../../repositories';
-
-import { Result } from '../../Result';
+import {
+  encryptText,
+  EthereumService,
+  Protocol,
+  randomNumericString
+} from '@fest/shared';
 import UseCase from '../../base/UseCase';
+import { TokenRepository, WalletRepository } from '../../repositories';
+import { Result } from '../../Result';
+import { IPFSService } from '../../services';
 import { pinToIPFS } from './pinToIPFS';
 
 export interface ApproveMintInput {

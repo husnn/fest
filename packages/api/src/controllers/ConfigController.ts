@@ -1,9 +1,6 @@
-import { Request, Response } from 'express';
-
-import { EthereumService } from '@fest/core';
 import { Config } from '@fest/ethereum';
-import { InitConfig, InitResponse } from '@fest/shared';
-
+import { EthereumService, InitConfig, InitResponse } from '@fest/shared';
+import { Request, Response } from 'express';
 import { HttpResponse } from '../http';
 
 const EXPIRATION_SECS = 300; // 5 mins

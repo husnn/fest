@@ -1,5 +1,5 @@
-import { EthereumService, WalletRepository } from '@fest/core';
-import { decryptText, Protocol } from '@fest/shared';
+import { WalletRepository } from '@fest/core';
+import { decryptText, EthereumService, Protocol } from '@fest/shared';
 import UseCase from '../../base/UseCase';
 import Result from '../../Result';
 

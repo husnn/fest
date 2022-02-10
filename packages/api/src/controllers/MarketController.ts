@@ -1,9 +1,6 @@
-import { NextFunction, Request, Response } from 'express';
-
 import {
   BuyTokenListing,
   CancelTokenListing,
-  EthereumService,
   GetListingsForToken,
   GetTokenMarketSummary,
   GetTokenTrades,
@@ -18,13 +15,13 @@ import {
 } from '@fest/postgres';
 import {
   CancelTokenListingResponse,
-  Currency,
+  EthereumService,
   GetListingsForTokenResponse,
   GetTokenMarketSummaryResponse,
   GetTokenTradesForUserResponse,
   WithdrawMarketEarningsResponse
 } from '@fest/shared';
-
+import { NextFunction, Request, Response } from 'express';
 import { HttpError, HttpResponse, ValidationError } from '../http';
 
 export class MarketController {

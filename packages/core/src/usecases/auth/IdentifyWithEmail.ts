@@ -1,19 +1,23 @@
-import { EthereumService, MailService } from '../../services';
+import {
+  EthereumService,
+  isValidPassword,
+  Protocol,
+  WalletType
+} from '@fest/shared';
+import UseCase from '../../base/UseCase';
+import { LoginCodeEmail } from '../../emails';
+import { User, Wallet } from '../../entities';
 import {
   InviteRepository,
   UserRepository,
   WalletRepository
 } from '../../repositories';
-
+import { Result } from '../../Result';
+import { MailService } from '../../services';
+import { generateUserId, generateWalletId } from '../../utils';
+import { generateInvitesForNewUser } from '../invites';
 import { AuthCheck } from './AuthCheck';
 import { AuthError } from './errors';
-import { LoginCodeEmail } from '../../emails';
-import { Result } from '../../Result';
-import UseCase from '../../base/UseCase';
-import { User } from '../../entities';
-import { generateInvitesForNewUser } from '../invites';
-import { generateUserId } from '../../utils';
-import { isValidPassword } from '@fest/shared';
 
 export interface IdentifyWithEmailInput {
   email: string;
@@ -89,8 +93,15 @@ export class IdentifyWithEmail extends UseCase<
 
       user = await this.userRepository.create(user);
 
-      let wallet = await this.ethereumService.generateWallet();
-      wallet.ownerId = user.id;
+      const walletData = await this.ethereumService.generateWallet();
+
+      let wallet = new Wallet({
+        id: generateWalletId()(),
+        type: WalletType.INTERNAL,
+        protocol: Protocol.ETHEREUM,
+        ownerId: user.id,
+        ...walletData
+      });
 
       wallet = await this.walletRepository.create(wallet);
 

@@ -1,5 +1,4 @@
-import { decryptText, Price, WalletType } from '@fest/shared';
-
+import { decryptText, EthereumService, WalletType } from '@fest/shared';
 import UseCase from '../../base/UseCase';
 import {
   TokenOwnershipRepository,
@@ -7,7 +6,6 @@ import {
   WalletRepository
 } from '../../repositories';
 import { Result } from '../../Result';
-import { EthereumService } from '../../services';
 import { ApproveTokenSale } from '../token';
 
 type ListTokenForSaleInput = {

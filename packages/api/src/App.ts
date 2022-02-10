@@ -1,7 +1,4 @@
-import {
-  CreateCommunity,
-  EthereumService as IEthereumService
-} from '@fest/core';
+import { CreateCommunity } from '@fest/core';
 import { EthereumService } from '@fest/ethereum';
 import {
   CommunityRepository,
@@ -75,7 +72,7 @@ class App {
     const communityRepository = new CommunityRepository();
     const postRepository = new PostRepository();
 
-    const ethereumService: IEthereumService = EthereumService.instance;
+    const ethereumService: EthereumService = EthereumService.instance;
     const mailService = new MailService();
 
     const ipfsService = new IPFSService(

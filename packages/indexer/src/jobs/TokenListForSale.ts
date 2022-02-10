@@ -1,11 +1,10 @@
 import {
-  EthereumService,
   TokenListing,
   TokenListingRepository,
   TokenRepository,
   WalletRepository
 } from '@fest/core';
-import { TokenListingStatus } from '@fest/shared';
+import { EthereumService, TokenListingStatus } from '@fest/shared';
 import Job from './Job';
 import JobData from './JobData';
 

@@ -1,7 +1,5 @@
 import { EthereumTx, Price, TokenFee } from '@fest/shared';
-
-import { Result } from '../Result';
-import { Wallet } from '@fest/core';
+import Result from '../Result';
 
 export type ERC20Info = {
   name: string;
@@ -155,5 +153,10 @@ export interface EthereumService {
     address: string;
   }>;
 
-  generateWallet(): Promise<Wallet>;
+  generateWallet(): Promise<{
+    address: string;
+    publicKey: string;
+    privateKey: string;
+    seed: string;
+  }>;
 }

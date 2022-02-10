@@ -1,7 +1,10 @@
-import { Currency, ProtocolConfig, TokenStandard } from '@fest/shared';
-
-import { EthereumService } from '@fest/core';
 import contracts from '@fest/eth-contracts';
+import {
+  Currency,
+  EthereumService,
+  ProtocolConfig,
+  TokenStandard
+} from '@fest/shared';
 
 export const getTokenStandard = async (contract): Promise<TokenStandard> => {
   const tests = [

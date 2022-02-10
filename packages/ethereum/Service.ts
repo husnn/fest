@@ -1,12 +1,4 @@
 /* eslint-disable */
-import {
-  ERC20Info,
-  EthereumService as IEthereumService,
-  generateWalletId,
-  Result,
-  TxResult,
-  Wallet
-} from '@fest/core';
 import Contracts from '@fest/eth-contracts';
 import {
   ApproveSpender,
@@ -20,11 +12,13 @@ import {
   WithdrawMarketEarnings
 } from '@fest/eth-transactions';
 import {
+  ERC20Info,
+  EthereumService as IEthereumService,
   EthereumTx,
   Price,
-  Protocol,
+  Result,
   TokenFee,
-  WalletType
+  TxResult
 } from '@fest/shared';
 import * as BIP39 from 'bip39';
 import Decimal from 'decimal.js';
@@ -563,7 +557,12 @@ export class EthereumService implements IEthereumService {
     return Result.ok({ address });
   }
 
-  async generateWallet(): Promise<Wallet> {
+  async generateWallet(): Promise<{
+    address: string;
+    publicKey: string;
+    privateKey: string;
+    seed: string;
+  }> {
     const mnemonic = BIP39.generateMnemonic();
 
     const seed = await BIP39.mnemonicToSeed(mnemonic);
@@ -573,14 +572,11 @@ export class EthereumService implements IEthereumService {
       .derivePath("m/44'/60'/0'/0")
       .getWallet();
 
-    return new Wallet({
-      id: generateWalletId()(),
-      type: WalletType.INTERNAL,
-      protocol: Protocol.ETHEREUM,
+    return {
       address: wallet.getAddressString(),
       publicKey: wallet.getPublicKey().toString('hex'),
       privateKey: wallet.getPrivateKey().toString('hex'),
       seed: mnemonic
-    });
+    };
   }
 }

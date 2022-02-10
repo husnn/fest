@@ -1,10 +1,15 @@
-import { CurrentUserDTO, decryptText, isExpired, Protocol } from '@fest/shared';
+import {
+  CurrentUserDTO,
+  decryptText,
+  EthereumService,
+  isExpired,
+  Protocol
+} from '@fest/shared';
 import UseCase from '../../base/UseCase';
 import { User } from '../../entities';
 import UserRepository from '../../repositories/UserRepository';
 import WalletRepository from '../../repositories/WalletRepository';
 import { Result } from '../../Result';
-import { EthereumService } from '../../services';
 import { AuthError } from './errors';
 import { msgToSign } from './IdentifyWithWallet';
 
@@ -67,8 +72,6 @@ export class LoginWithWallet extends UseCase<
     if (isExpired(expiry)) {
       return Result.fail(AuthError.CODE_EXPIRED);
     }
-
-    // user.wallet = wallet;
 
     const userDTO = new CurrentUserDTO(user);
 

@@ -4,7 +4,6 @@ import {
   AuthPrecheck,
   ChangeEmailAddress,
   EmailAddressChangeError,
-  EthereumService,
   IdentifyWithEmail,
   IdentifyWithWallet,
   InviteRepository,
@@ -22,6 +21,7 @@ import {
 import {
   AuthPrecheckResponse,
   ChangeEmailAddressResponse,
+  EthereumService,
   IdentifyWithEmailResponse,
   IdentifyWithWalletResponse,
   isEmailAddress,

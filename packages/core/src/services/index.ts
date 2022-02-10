@@ -1,4 +1,3 @@
-export * from './EthereumService';
 export * from './GoogleService';
 export * from './IPFSService';
 export * from './MailService';

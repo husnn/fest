@@ -4829,7 +4829,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./packages/ethereum/",
           "packageDependencies": [
             ["@fest/ethereum", "workspace:packages/ethereum"],
-            ["@fest/core", "workspace:packages/core"],
             ["@fest/eth-contracts", "workspace:packages/ethereum/contracts"],
             ["@fest/eth-transactions", "workspace:packages/ethereum/transactions"],
             ["@fest/shared", "workspace:packages/shared"],
