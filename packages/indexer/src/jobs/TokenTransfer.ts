@@ -1,25 +1,24 @@
 import {
   CommunityRepository,
+  generateTokenOwnershipId,
+  generateWalletId,
   TokenOwnership,
   TokenOwnershipRepository,
   TokenRepository,
   Wallet,
-  WalletRepository,
-  generateTokenOwnershipId,
-  generateWalletId
+  WalletRepository
 } from '@fest/core';
-import { Protocol, WalletType } from '@fest/shared';
-
+import { WalletType } from '@fest/shared';
 import Job from './Job';
+import JobData from './JobData';
 
-export type TokenTransferJob = {
-  protocol: Protocol;
+export interface TokenTransferJob extends JobData {
   contract: string;
   from: string;
   to: string;
   id: string;
   quantity: number;
-};
+}
 
 export default class TokenTransfer extends Job<TokenTransferJob> {
   constructor(props: TokenTransferJob) {

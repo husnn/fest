@@ -8,18 +8,16 @@ import {
   TokenTradeRepository,
   WalletRepository
 } from '@fest/core';
-import { Protocol, TokenListingStatus } from '@fest/shared';
-
+import { TokenListingStatus } from '@fest/shared';
 import Job from './Job';
+import JobData from './JobData';
 
-export type TokenBuyJob = {
-  protocol: Protocol;
-  tx: string;
+export interface TokenBuyJob extends JobData {
   contract: string;
   listingId: string;
   buyer: string;
   quantity: number;
-};
+}
 
 export default class TokenBuy extends Job<TokenBuyJob> {
   constructor(props: TokenBuyJob) {

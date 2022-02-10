@@ -1,5 +1,6 @@
 export * from './CommunityRepository';
 export * from './InviteRepository';
+export * from './MerlinPaymentRepository';
 export * from './MessageRepository';
 export * from './NotificationRepository';
 export * from './OAuthRepository';
@@ -12,6 +13,7 @@ export * from './TokenOfferRepository';
 export * from './TokenOwnershipRepository';
 export * from './TokenRepository';
 export * from './TokenTradeRepository';
+export * from './TransactionRepository';
 export * from './UserRepository';
 export * from './WaitlistRepository';
 export * from './WalletRepository';

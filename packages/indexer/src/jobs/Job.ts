@@ -1,7 +1,9 @@
-export default abstract class Job<JobData> {
-  props: JobData;
+import JobData from './JobData';
 
-  constructor(props: JobData) {
+export default abstract class Job<T extends JobData> {
+  props: T;
+
+  constructor(props: T) {
     this.props = props;
   }
 

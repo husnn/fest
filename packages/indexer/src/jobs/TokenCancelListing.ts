@@ -1,14 +1,13 @@
-import { Protocol, TokenListingStatus } from '@fest/shared';
-
-import Job from './Job';
 import { TokenListingRepository } from '@fest/core';
+import { TokenListingStatus } from '@fest/shared';
+import Job from './Job';
+import JobData from './JobData';
 
-export type TokenCancelListingJob = {
-  protocol: Protocol;
+export interface TokenCancelListingJob extends JobData {
   contract: string;
   listingId: string;
   canceller: string;
-};
+}
 
 export default class TokenCancelListing extends Job<TokenCancelListingJob> {
   constructor(props: TokenCancelListingJob) {

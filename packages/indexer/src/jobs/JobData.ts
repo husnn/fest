@@ -1,4 +1,9 @@
-// eslint-disable-next-line
-export interface JobData {}
+import { Protocol } from '@fest/shared';
+
+export interface JobData {
+  protocol: Protocol;
+  networkId: number;
+  txHash: string;
+}
 
 export default JobData;

@@ -1,8 +1,13 @@
 /* eslint-disable */
-
-import * as BIP39 from 'bip39';
-import * as sigUtil from 'eth-sig-util';
-
+import {
+  ERC20Info,
+  EthereumService as IEthereumService,
+  generateWalletId,
+  Result,
+  TxResult,
+  Wallet
+} from '@fest/core';
+import Contracts from '@fest/eth-contracts';
 import {
   ApproveSpender,
   ApproveTokenMarket,
@@ -10,17 +15,10 @@ import {
   CancelTokenListing,
   ListTokenForSale,
   MintToken,
+  Transaction,
   TransferERC20,
   WithdrawMarketEarnings
 } from '@fest/eth-transactions';
-import {
-  ERC20Info,
-  EthereumService as IEthereumService,
-  Result,
-  TxResult,
-  Wallet,
-  generateWalletId
-} from '@fest/core';
 import {
   EthereumTx,
   Price,
@@ -28,12 +26,12 @@ import {
   TokenFee,
   WalletType
 } from '@fest/shared';
-
-import Contracts from '@fest/eth-contracts';
+import * as BIP39 from 'bip39';
 import Decimal from 'decimal.js';
-import ERC20Abi from './abi/ERC20.json';
-import Web3 from 'web3';
+import * as sigUtil from 'eth-sig-util';
 import { hdkey } from 'ethereumjs-wallet';
+import Web3 from 'web3';
+import ERC20Abi from './abi/ERC20.json';
 
 export class EthereumService implements IEthereumService {
   static instance: EthereumService;
@@ -77,6 +75,20 @@ export class EthereumService implements IEthereumService {
 
   getOfferHash() {
     throw new Error('Method not implemented.');
+  }
+
+  async sendNativeToken(to: string, amount: string): Promise<TxResult> {
+    const from = process.env.ETH_WALLET_ADDRESS;
+
+    const nonce = await this.web3.eth.getTransactionCount(from, 'pending');
+
+    return this.signAndSendTx(
+      new Transaction(to).build(from, this.networkId, this.chainId, nonce, {
+        gasLimit: 21000,
+        value: Web3.utils.toHex(amount)
+      }),
+      process.env.ETH_WALLET_PK
+    );
   }
 
   async getERC20Balance(
@@ -172,7 +184,7 @@ export class EthereumService implements IEthereumService {
       networkId,
       chainId,
       nonce,
-      385000
+      { gasLimit: 385000 }
     );
   }
 
@@ -214,7 +226,7 @@ export class EthereumService implements IEthereumService {
       networkId,
       chainId,
       nonce,
-      385000
+      { gasLimit: 385000 }
     );
   }
 
@@ -237,7 +249,7 @@ export class EthereumService implements IEthereumService {
       currency,
       recipientAddress,
       amount
-    ).build(walletAddress, networkId, chainId, nonce, 385000);
+    ).build(walletAddress, networkId, chainId, nonce, { gasLimit: 385000 });
   }
 
   async buildApproveERC20SpenderTx(
@@ -259,7 +271,7 @@ export class EthereumService implements IEthereumService {
       erc20Address,
       spenderAddress,
       amount
-    ).build(walletAddress, networkId, chainId, nonce, 385000);
+    ).build(walletAddress, networkId, chainId, nonce, { gasLimit: 385000 });
   }
 
   async getApprovedSpenderERC20Amount(
@@ -296,7 +308,7 @@ export class EthereumService implements IEthereumService {
       networkId,
       chainId,
       nonce,
-      385000
+      { gasLimit: 385000 }
     );
   }
 
@@ -342,7 +354,7 @@ export class EthereumService implements IEthereumService {
       networkId,
       chainId,
       nonce,
-      385000
+      { gasLimit: 385000 }
     );
   }
 
@@ -449,7 +461,7 @@ export class EthereumService implements IEthereumService {
       networkId,
       chainId,
       nonce,
-      365000
+      { gasLimit: 385000 }
     );
   }
 
@@ -487,7 +499,7 @@ export class EthereumService implements IEthereumService {
       networkId,
       chainId,
       nonce,
-      365000
+      { gasLimit: 385000 }
     );
   }
 

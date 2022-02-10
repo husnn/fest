@@ -1,13 +1,13 @@
 import Contracts from '@fest/eth-contracts';
-import { EventEmitter } from 'stream';
 import { RedisClient } from 'redis';
+import { EventEmitter } from 'stream';
+import Web3 from 'web3';
 import TokenBuyListener from './TokenBuyListener';
 import TokenCancelListingListener from './TokenCancelListingListener';
 import TokenListingListener from './TokenListingListener';
 import TokenMintListener from './TokenMintListener';
 import TokenRoyaltyPaymentListener from './TokenRoyaltyPaymentListener';
 import TokenTransferListener from './TokenTransferListener';
-import Web3 from 'web3';
 
 export default class EthereumListener extends EventEmitter {
   constructor(web3: Web3, redis: RedisClient) {
@@ -19,33 +19,49 @@ export default class EthereumListener extends EventEmitter {
       const tokenContract = Contracts.get('Token');
       const marketContract = Contracts.get('Market');
 
-      new TokenMintListener(web3, redis, tokenContract).listen((job) => {
-        this.emit('token-mint', job);
-      });
+      const networkId = await web3.eth.net.getId();
 
-      new TokenTransferListener(web3, redis, tokenContract).listen((job) => {
-        this.emit('token-transfer', job);
-      });
-
-      new TokenListingListener(web3, redis, marketContract).listen((job) => {
-        this.emit('market-list', job);
-      });
-
-      new TokenCancelListingListener(web3, redis, marketContract).listen(
+      new TokenMintListener(web3, networkId, redis, tokenContract).listen(
         (job) => {
-          this.emit('market-cancel', job);
+          this.emit('token-mint', job);
         }
       );
 
-      new TokenBuyListener(web3, redis, marketContract).listen((job) => {
-        this.emit('market-trade', job);
-      });
-
-      new TokenRoyaltyPaymentListener(web3, redis, marketContract).listen(
+      new TokenTransferListener(web3, networkId, redis, tokenContract).listen(
         (job) => {
-          this.emit('market-royalty-payment', job);
+          this.emit('token-transfer', job);
         }
       );
+
+      new TokenListingListener(web3, networkId, redis, marketContract).listen(
+        (job) => {
+          this.emit('market-list', job);
+        }
+      );
+
+      new TokenCancelListingListener(
+        web3,
+        networkId,
+        redis,
+        marketContract
+      ).listen((job) => {
+        this.emit('market-cancel', job);
+      });
+
+      new TokenBuyListener(web3, networkId, redis, marketContract).listen(
+        (job) => {
+          this.emit('market-trade', job);
+        }
+      );
+
+      new TokenRoyaltyPaymentListener(
+        web3,
+        networkId,
+        redis,
+        marketContract
+      ).listen((job) => {
+        this.emit('market-royalty-payment', job);
+      });
     });
   }
 }

@@ -11,4 +11,3 @@ export * from './Transaction';
 export * from './TransferERC20';
 export * from './TransferToken';
 export * from './WithdrawMarketEarnings';
-export * from './WithdrawMarketEarnings';

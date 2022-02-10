@@ -1,6 +1,6 @@
-import EventListener from './EventListener';
 import { Protocol } from '@fest/shared';
 import { TokenListForSaleJob } from '../../jobs/TokenListForSale';
+import EventListener from './EventListener';
 
 export class TokenListingListener extends EventListener<TokenListForSaleJob> {
   EVENT_NAME = 'ListForSale';
@@ -22,7 +22,8 @@ export class TokenListingListener extends EventListener<TokenListForSaleJob> {
 
     const job: TokenListForSaleJob = {
       protocol: Protocol.ETHEREUM,
-      tx: transactionHash,
+      networkId: this.networkId,
+      txHash: transactionHash,
       contract: address,
       id: listingId,
       seller,

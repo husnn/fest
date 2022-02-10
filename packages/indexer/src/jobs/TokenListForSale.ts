@@ -5,13 +5,11 @@ import {
   TokenRepository,
   WalletRepository
 } from '@fest/core';
-import { Protocol, TokenListingStatus } from '@fest/shared';
-
+import { TokenListingStatus } from '@fest/shared';
 import Job from './Job';
+import JobData from './JobData';
 
-export type TokenListForSaleJob = {
-  protocol: Protocol;
-  tx: string;
+export interface TokenListForSaleJob extends JobData {
   contract: string;
   id: string;
   seller: string;
@@ -22,7 +20,7 @@ export type TokenListForSaleJob = {
   priceAmount: string;
   expiry: number;
   maxPerBuyer: number;
-};
+}
 
 export default class TokenListForSale extends Job<TokenListForSaleJob> {
   constructor(props: TokenListForSaleJob) {
@@ -62,7 +60,7 @@ export default class TokenListForSale extends Job<TokenListForSaleJob> {
         chain: {
           contract: this.props.contract,
           id: this.props.id,
-          tx: this.props.tx
+          tx: this.props.txHash
         },
         status: TokenListingStatus.Active
       });

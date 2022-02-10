@@ -1,5 +1,6 @@
 export * from './Community';
 export * from './Invite';
+export * from './MerlinPayment';
 export * from './Message';
 export * from './Notification';
 export * from './OAuth';

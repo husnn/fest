@@ -7,7 +7,7 @@ export interface TokenChainData {
   symbol: string;
   id: string;
   creator: string;
-  transaction: string;
+  txHash: string;
 }
 
 export default TokenChainData;

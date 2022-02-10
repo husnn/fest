@@ -1,6 +1,6 @@
 import Common from '@ethereumjs/common';
-import { Transaction as EthereumTx } from 'ethereumjs-tx';
 import { EthereumTx as IEthereumTx } from '@fest/shared';
+import { Transaction as EthereumTx } from 'ethereumjs-tx';
 import Web3 from 'web3';
 
 export class Transaction implements IEthereumTx {
@@ -10,7 +10,7 @@ export class Transaction implements IEthereumTx {
   txData: any;
   tx: EthereumTx;
 
-  constructor(address: string, data: any) {
+  constructor(address?: string, data?: any) {
     this.address = address;
     this.data = data;
   }
@@ -20,16 +20,18 @@ export class Transaction implements IEthereumTx {
     networkId?: number,
     chainId?: number,
     nonce?: number,
-    gasLimit = 200000,
-    gasPrice = 50
+    opts?: { gasLimit?: number; gasPrice?: number; value?: string }
   ): this {
     const tx = {
       from: Web3.utils.toChecksumAddress(from),
       to: Web3.utils.toChecksumAddress(this.address),
-      gasPrice: Web3.utils.toHex(Web3.utils.toWei(gasPrice.toString(), 'Gwei')),
-      gasLimit: Web3.utils.toHex(gasLimit),
+      gasLimit: Web3.utils.toHex(opts?.gasLimit || 200000),
+      gasPrice: Web3.utils.toHex(
+        Web3.utils.toWei((opts?.gasPrice || 50).toString(), 'Gwei')
+      ),
       nonce: Web3.utils.toHex(nonce),
-      data: this.data
+      ...(this.data && { data: this.data }),
+      ...(opts?.value && { value: opts.value })
     };
 
     const common = Common.forCustomChain(

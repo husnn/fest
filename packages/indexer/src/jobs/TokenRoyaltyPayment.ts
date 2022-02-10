@@ -6,20 +6,17 @@ import {
   NotificationTopic,
   WalletRepository
 } from '@fest/core';
-
 import Job from './Job';
-import { Protocol } from '@fest/shared';
+import JobData from './JobData';
 
-export type TokenRoyaltyPaymentJob = {
-  protocol: Protocol;
-  tx: string;
+export interface TokenRoyaltyPaymentJob extends JobData {
   contract: string;
   token: string;
   tokenId: string;
   beneficiary: string;
   currency: string;
   amount: string;
-};
+}
 
 export class TokenRoyaltyPayment extends Job<TokenRoyaltyPaymentJob> {
   constructor(props: TokenRoyaltyPaymentJob) {

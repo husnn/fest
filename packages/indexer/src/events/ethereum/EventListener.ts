@@ -1,29 +1,33 @@
 import { waitUntil } from '@fest/shared';
 import { RedisClient } from 'redis';
 import Web3 from 'web3';
-
 import JobData from '../../jobs/JobData';
 
 export abstract class EventListener<T extends JobData> {
   abstract EVENT_NAME: string;
+
   POLLING_INTERVAL = 10000;
   MAX_BLOCKS = 1000;
 
   private web3: Web3;
   private redis: RedisClient;
 
+  networkId: number;
+
   private contract;
   private contractAddress: string;
 
-  constructor(web3: Web3, redis: RedisClient, contract: any) {
+  constructor(web3: Web3, networkId: number, redis: RedisClient, contract) {
     this.web3 = web3;
     this.redis = redis;
+
+    this.networkId = networkId;
 
     this.contract = contract;
     this.contractAddress = contract.options.address;
   }
 
-  abstract prepareJob(event: any): T;
+  abstract prepareJob(event): T;
 
   async checkForEvents(lastBlock: number, callback): Promise<void> {
     const latestBlock = await this.web3.eth.getBlockNumber();

@@ -10,6 +10,5 @@ export * from './ResourceType';
 export * from './TokenListingStatus';
 export * from './TokenStandard';
 export * from './TokenType';
-export * from './TransactionType';
 export * from './WaitlistEntryType';
 export * from './WalletType';

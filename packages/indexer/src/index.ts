@@ -1,15 +1,22 @@
 require('dotenv').config(); // eslint-disable-line
 
+import { NotificationService } from '@fest/core';
+import { EthereumService } from '@fest/ethereum';
 import Postgres, {
   CommunityRepository,
+  defaultConfig as postgresConfig,
   NotificationRepository,
   TokenListingRepository,
   TokenOwnershipRepository,
   TokenRepository,
   TokenTradeRepository,
-  WalletRepository,
-  defaultConfig as postgresConfig
+  WalletRepository
 } from '@fest/postgres';
+import Queue from 'bee-queue';
+import redis from 'redis';
+import Web3 from 'web3';
+import { ethConfig, redisConfig } from './config';
+import EthereumListener from './events/ethereum/EthereumListener';
 import TokenBuy, { TokenBuyJob } from './jobs/TokenBuy';
 import TokenCancelListing, {
   TokenCancelListingJob
@@ -20,15 +27,7 @@ import TokenRoyaltyPayment, {
   TokenRoyaltyPaymentJob
 } from './jobs/TokenRoyaltyPayment';
 import TokenTransfer, { TokenTransferJob } from './jobs/TokenTransfer';
-import { ethConfig, redisConfig } from './config';
-
-import EthereumListener from './events/ethereum/EthereumListener';
-import { EthereumService } from '@fest/ethereum';
-import { NotificationService } from '@fest/core';
-import Queue from 'bee-queue';
-import Web3 from 'web3';
 import { createServer } from './server';
-import redis from 'redis';
 
 const redisClient = redis.createClient(redisConfig.url);
 

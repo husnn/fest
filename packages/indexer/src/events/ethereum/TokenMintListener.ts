@@ -1,5 +1,4 @@
 import { Protocol } from '@fest/shared';
-
 import { TokenMintJob } from '../../jobs/TokenMint';
 import EventListener from './EventListener';
 
@@ -11,7 +10,8 @@ export class TokenMintListener extends EventListener<TokenMintJob> {
 
     const job: TokenMintJob = {
       protocol: Protocol.ETHEREUM,
-      tx: transactionHash,
+      networkId: this.networkId,
+      txHash: transactionHash,
       contract: address,
       id: returnValues.id,
       creator: returnValues.token.creator,

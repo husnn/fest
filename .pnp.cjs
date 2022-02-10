@@ -51,6 +51,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         "reference": "workspace:packages/indexer"
       },
       {
+        "name": "@fest/merlin",
+        "reference": "workspace:packages/merlin"
+      },
+      {
         "name": "@fest/postgres",
         "reference": "workspace:packages/postgres"
       },
@@ -83,6 +87,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ["@fest/ethereum", ["workspace:packages/ethereum"]],
       ["@fest/house", ["workspace:packages/house"]],
       ["@fest/indexer", ["workspace:packages/indexer"]],
+      ["@fest/merlin", ["workspace:packages/merlin"]],
       ["@fest/postgres", ["workspace:packages/postgres"]],
       ["@fest/shared", ["workspace:packages/shared"]],
       ["@fest/web", ["workspace:packages/web"]],
@@ -4890,6 +4895,26 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "SOFT",
         }]
       ]],
+      ["@fest/merlin", [
+        ["workspace:packages/merlin", {
+          "packageLocation": "./packages/merlin/",
+          "packageDependencies": [
+            ["@fest/merlin", "workspace:packages/merlin"],
+            ["@fest/core", "workspace:packages/core"],
+            ["@fest/ethereum", "workspace:packages/ethereum"],
+            ["@fest/postgres", "workspace:packages/postgres"],
+            ["@fest/shared", "workspace:packages/shared"],
+            ["@types/node", "npm:17.0.10"],
+            ["@types/node-schedule", "npm:1.3.2"],
+            ["dotenv", "npm:14.2.0"],
+            ["node-schedule", "npm:2.1.0"],
+            ["nodemon", "npm:2.0.15"],
+            ["typescript", "patch:typescript@npm%3A4.5.5#~builtin<compat/typescript>::version=4.5.5&hash=493e53"],
+            ["web3", "npm:1.7.0"]
+          ],
+          "linkType": "SOFT",
+        }]
+      ]],
       ["@fest/postgres", [
         ["workspace:packages/postgres", {
           "packageLocation": "./packages/postgres/",
@@ -5928,6 +5953,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-node-npm-17.0.13-0b4bf052b4-8b87c850c1.zip/node_modules/@types/node/",
           "packageDependencies": [
             ["@types/node", "npm:17.0.13"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/node-schedule", [
+        ["npm:1.3.2", {
+          "packageLocation": "./.yarn/cache/@types-node-schedule-npm-1.3.2-7b6359abf3-6fbe54106d.zip/node_modules/@types/node-schedule/",
+          "packageDependencies": [
+            ["@types/node-schedule", "npm:1.3.2"],
+            ["@types/node", "npm:17.0.10"]
           ],
           "linkType": "HARD",
         }]
@@ -8439,6 +8474,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["ripemd160", "npm:2.0.2"],
             ["safe-buffer", "npm:5.2.1"],
             ["sha.js", "npm:2.4.11"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["cron-parser", [
+        ["npm:3.5.0", {
+          "packageLocation": "./.yarn/cache/cron-parser-npm-3.5.0-6fc3846be8-80096ac1c3.zip/node_modules/cron-parser/",
+          "packageDependencies": [
+            ["cron-parser", "npm:3.5.0"],
+            ["is-nan", "npm:1.3.2"],
+            ["luxon", "npm:1.28.0"]
           ],
           "linkType": "HARD",
         }]
@@ -12576,6 +12622,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["long-timeout", [
+        ["npm:0.1.1", {
+          "packageLocation": "./.yarn/cache/long-timeout-npm-0.1.1-229e1d81ad-48668e5362.zip/node_modules/long-timeout/",
+          "packageDependencies": [
+            ["long-timeout", "npm:0.1.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["loose-envify", [
         ["npm:1.4.0", {
           "packageLocation": "./.yarn/cache/loose-envify-npm-1.4.0-6307b72ccf-6517e24e0c.zip/node_modules/loose-envify/",
@@ -12626,6 +12681,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["lru-cache", "npm:6.0.0"],
             ["yallist", "npm:4.0.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["luxon", [
+        ["npm:1.28.0", {
+          "packageLocation": "./.yarn/cache/luxon-npm-1.28.0-51c0607a71-5250cb9f13.zip/node_modules/luxon/",
+          "packageDependencies": [
+            ["luxon", "npm:1.28.0"]
           ],
           "linkType": "HARD",
         }]
@@ -13883,6 +13947,18 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/node-releases-npm-2.0.1-77b8e327f7-b20dd8d4bc.zip/node_modules/node-releases/",
           "packageDependencies": [
             ["node-releases", "npm:2.0.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["node-schedule", [
+        ["npm:2.1.0", {
+          "packageLocation": "./.yarn/cache/node-schedule-npm-2.1.0-eda30fe9eb-e457e76e63.zip/node_modules/node-schedule/",
+          "packageDependencies": [
+            ["node-schedule", "npm:2.1.0"],
+            ["cron-parser", "npm:3.5.0"],
+            ["long-timeout", "npm:0.1.1"],
+            ["sorted-array-functions", "npm:1.3.0"]
           ],
           "linkType": "HARD",
         }]
@@ -16590,6 +16666,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["agent-base", "npm:6.0.2"],
             ["debug", "virtual:bd5ac53f2a4d13161e4becd2185852df3b4231ea7460becce6b80faf113589c84e6d5a7592f2b45846dcda321b203d871f080c12cd9638e02938ccdf6bfbd6ee#npm:4.3.3"],
             ["socks", "npm:2.6.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["sorted-array-functions", [
+        ["npm:1.3.0", {
+          "packageLocation": "./.yarn/cache/sorted-array-functions-npm-1.3.0-19f7959640-673fd39ca3.zip/node_modules/sorted-array-functions/",
+          "packageDependencies": [
+            ["sorted-array-functions", "npm:1.3.0"]
           ],
           "linkType": "HARD",
         }]

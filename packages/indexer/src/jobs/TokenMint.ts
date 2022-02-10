@@ -1,24 +1,22 @@
 import {
   CommunityRepository,
+  generateTokenOwnershipId,
   TokenOwnership,
   TokenOwnershipRepository,
   TokenRepository,
-  WalletRepository,
-  generateTokenOwnershipId
+  WalletRepository
 } from '@fest/core';
-import { Protocol, decryptText } from '@fest/shared';
-
+import { decryptText } from '@fest/shared';
 import Job from './Job';
+import JobData from './JobData';
 
-export type TokenMintJob = {
-  protocol: Protocol;
-  tx: string;
+export interface TokenMintJob extends JobData {
   contract: string;
   id: string;
   creator: string;
   supply: number;
   data: string;
-};
+}
 
 export default class TokenMint extends Job<TokenMintJob> {
   constructor(props: TokenMintJob) {
@@ -46,7 +44,7 @@ export default class TokenMint extends Job<TokenMintJob> {
         symbol: 'CRT',
         id: this.props.id,
         creator: this.props.creator,
-        transaction: this.props.tx
+        txHash: this.props.txHash
       };
 
       token.minted = true;

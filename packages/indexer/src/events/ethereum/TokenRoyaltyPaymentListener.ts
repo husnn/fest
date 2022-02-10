@@ -1,6 +1,6 @@
-import EventListener from './EventListener';
-import { TokenRoyaltyPaymentJob } from '../../jobs/TokenRoyaltyPayment';
 import { Protocol } from '@fest/shared';
+import { TokenRoyaltyPaymentJob } from '../../jobs/TokenRoyaltyPayment';
+import EventListener from './EventListener';
 
 export class TokenRoyaltyPaymentListener extends EventListener<TokenRoyaltyPaymentJob> {
   EVENT_NAME = 'RoyaltyPayment';
@@ -12,7 +12,8 @@ export class TokenRoyaltyPaymentListener extends EventListener<TokenRoyaltyPayme
 
     const job: TokenRoyaltyPaymentJob = {
       protocol: Protocol.ETHEREUM,
-      tx: transactionHash,
+      networkId: this.networkId,
+      txHash: transactionHash,
       contract: address,
       token,
       tokenId,
