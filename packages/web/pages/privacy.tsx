@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
+import Head from 'next/head';
 import React from 'react';
 
 export const PrivacyPage = () => {
@@ -24,6 +25,9 @@ export const PrivacyPage = () => {
         }
       `}
     >
+      <Head>
+        <title>Privacy Policy</title>
+      </Head>
       <h1>Privacy Policy</h1>
       <p>Last updated: February 07, 2022</p>
       <br />
@@ -178,29 +182,19 @@ export const PrivacyPage = () => {
         visit our Service or when You access the Service by or through a mobile
         device.
       </p>
-      <h3>Information from Third-Party Social Media Services</h3>
+      <h3>Information from Third-Party Services</h3>
       <p>
-        The Company allows You to create an account and log in to use the
-        Service through the following Third-party Social Media Services:
-      </p>
-      <ul>
-        <li>Google</li>
-        <li>Facebook</li>
-        <li>Twitter</li>
-      </ul>
-      <p>
-        If You decide to register through or otherwise grant us access to a
-        Third-Party Social Media Service, We may collect Personal data that is
-        already associated with Your Third-Party Social Media Service&apos;s
-        account, such as Your name, Your email address, Your activities or Your
-        contact list associated with that account.
-      </p>
-      <p>
-        You may also have the option of sharing additional information with the
-        Company through Your Third-Party Social Media Service&apos;s account. If
-        You choose to provide such information and Personal Data, during
-        registration or otherwise, You are giving the Company permission to use,
-        share, and store it in a manner consistent with this Privacy Policy.
+        The Company allows You to link Your account to a Google account. If You
+        decide to grant Us access to Your Google account, We may obtain details
+        associated with Your YouTube channel, such as:
+        <ul>
+          <li>The name of Your channel</li>
+          <li>Number of uploads</li>
+          <li>List of uploaded videos</li>
+        </ul>
+        This information will be used to verify Your ownership of a video and
+        allow You to perform operations such as creating tokens associated with
+        it.
       </p>
       <h3>Tracking Technologies and Cookies</h3>
       <p>

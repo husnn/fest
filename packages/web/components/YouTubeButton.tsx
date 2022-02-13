@@ -2,20 +2,23 @@ import Button from '../ui/Button';
 import React from 'react';
 import useGoogleAuth from '../modules/youtube/useGoogleAuth';
 
-type GoogleButtonProps = {
+type YouTubeButtonProps = {
   linked?: boolean;
   onLinkReceived?: (link: string) => void;
 };
 
-export const GoogleButton: React.FC<GoogleButtonProps> = ({
+export const YouTubeButton: React.FC<YouTubeButtonProps> = ({
   onLinkReceived
-}: GoogleButtonProps) => {
+}: YouTubeButtonProps) => {
   const { isLinked, getLink, unlink } = useGoogleAuth();
 
   return (
     <Button
       size="small"
-      color={isLinked ? 'normal' : 'secondary'}
+      style={{
+        display: 'flex',
+        alignItems: 'center'
+      }}
       onClick={async () => {
         if (!isLinked) {
           const link = await getLink();
@@ -25,7 +28,12 @@ export const GoogleButton: React.FC<GoogleButtonProps> = ({
         }
       }}
     >
-      {isLinked ? 'Unlink channel' : 'Link with Google'}
+      <img
+        src="/images/ic-youtube-circle.png"
+        width={20}
+        style={{ marginRight: 10 }}
+      />
+      {isLinked ? 'Unlink channel' : 'Sign in with YouTube'}
     </Button>
   );
 };

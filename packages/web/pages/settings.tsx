@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { UserInfoSchema, isEmailAddress } from '@fest/shared';
 
 import ApiClient from '../modules/api/ApiClient';
-import { GoogleButton } from '../components';
+import { YouTubeButton } from '../components';
 import Head from 'next/head';
 import { fontSize } from '../styles/constants';
 import { getProfileUrl } from '../utils';
@@ -266,10 +266,10 @@ export default function SettingsPage() {
 
           <SettingsBlock>
             <BlockHeader>
-              <h2>Connect to YouTube</h2>
+              <h2>Link YouTube channel</h2>
               <p>Sign in to turn your videos into tokens.</p>
             </BlockHeader>
-            <GoogleButton
+            <YouTubeButton
               onLinkReceived={(link: string) => {
                 router.push(link);
               }}

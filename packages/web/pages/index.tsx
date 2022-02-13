@@ -153,7 +153,8 @@ export default function Home() {
       </div>
       <div className={styles.footer}>
         <div className={styles.footerWrapper}>
-          <p style={{ textAlign: 'left' }}>&copy; {currentYear} Fest</p>
+          <p>&copy; {currentYear} Fest</p>
+          <Link href="/privacy">Privacy Policy</Link>
         </div>
       </div>
     </div>
