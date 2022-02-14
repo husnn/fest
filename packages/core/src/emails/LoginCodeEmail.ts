@@ -9,9 +9,7 @@ export class LoginCodeEmail extends Email {
 
     this.subject = 'Login to Fest';
 
-    this.content = `
-      Your login code is ${code}
-    `;
+    this.content = `Your login code is ${code}`;
   }
 }
 

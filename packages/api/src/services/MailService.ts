@@ -1,30 +1,46 @@
+import { SendEmailCommand, SESClient } from '@aws-sdk/client-ses';
+import { fromContainerMetadata } from '@aws-sdk/credential-providers';
 import { Email, MailService as IMailService } from '@fest/core';
-import sgMail, { MailDataRequired } from '@sendgrid/mail';
-
 import { mailConfig } from '../config';
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-
 class MailService implements IMailService {
+  private ses: SESClient;
+
+  constructor() {
+    this.ses = new SESClient({
+      ...(process.env.ECS_CONTAINER_METADATA_URI_V4 && {
+        credentials: fromContainerMetadata()
+      }),
+      region: process.env.MEDIA_S3_REGION || 'us-east-1'
+    });
+  }
+
   send(email: Email) {
     if (process.env.NODE_ENV !== 'production') {
       console.log(email.content);
       return;
     }
 
-    const msg: MailDataRequired = {
-      from: {
-        name: 'Fest',
-        email: mailConfig.from.noreply
+    const command = new SendEmailCommand({
+      Destination: {
+        ToAddresses: [email.to]
       },
-      to: email.to,
-      subject: email.subject,
-      html: email.content
-    };
-
-    sgMail.send(msg).catch((err: string) => {
-      console.log(err);
+      Message: {
+        Body: {
+          Text: {
+            Charset: 'UTF-8',
+            Data: email.content
+          }
+        },
+        Subject: {
+          Charset: 'UTF-8',
+          Data: email.subject
+        }
+      },
+      Source: `Fest <${mailConfig.from.noreply}>`
     });
+
+    this.ses.send(command).catch((err) => console.log(err));
   }
 }
 
