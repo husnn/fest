@@ -5,7 +5,7 @@ import Modal, { ModalProps } from './Modal';
 type Alertbox = ModalProps;
 
 export const Alertbox = (props: Alertbox) => {
-  return <Modal {...props} style={{ paddingBottom: 50 }} />;
+  return <Modal {...props}>{props.children}</Modal>;
 };
 
 export default Alertbox;

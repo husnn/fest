@@ -9,6 +9,7 @@ import Web3 from 'web3';
 import { fetchInitConfig } from '../../config';
 import { getCurrentUser } from '../auth/authStorage';
 import useAuthentication from '../auth/useAuthentication';
+import { Button } from '../../ui';
 
 type Wallet = {
   type: WalletType;
@@ -110,7 +111,7 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
 
         setIsMetaMask(true);
 
-        provider.on('chainChanged', function (id: number) {
+        provider.on('chainChanged', function () {
           window.location.reload();
         });
       } else {
@@ -214,6 +215,90 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
     });
   };
 
+  const getNetworkParams = (
+    chainId: number
+  ): {
+    chainId: number;
+    chainName: string;
+    rpcUrls?: string[];
+    blockExplorerUrls?: string[];
+    nativeCurrency?: {
+      name: string;
+      symbol: string;
+      decimals: number;
+    };
+  } => {
+    switch (chainId) {
+      case 1:
+        return {
+          chainId,
+          chainName: 'Mainnet'
+        };
+      case 3:
+        return {
+          chainId,
+          chainName: 'Ropsten'
+        };
+      case 137:
+        return {
+          chainId,
+          chainName: 'Polygon Mainnet',
+          rpcUrls: ['https://polygon-rpc.com/'],
+          blockExplorerUrls: ['https://polygonscan.com/'],
+          nativeCurrency: {
+            name: 'Polygon',
+            symbol: 'MATIC',
+            decimals: 18
+          }
+        };
+      case 80001:
+        return {
+          chainId,
+          chainName: 'Polygon Mumbai',
+          rpcUrls: ['https://rpc-mumbai.maticvigil.com/'],
+          blockExplorerUrls: ['https://mumbai.polygonscan.com/'],
+          nativeCurrency: {
+            name: 'Polygon',
+            symbol: 'MATIC',
+            decimals: 18
+          }
+        };
+      default:
+        return {
+          chainId,
+          chainName: chainId?.toString()
+        };
+    }
+  };
+
+  const addNetwork = (chainId: number) => {
+    const params = getNetworkParams(chainId);
+    window.ethereum.request({
+      method: 'wallet_addEthereumChain',
+      params: [
+        {
+          ...params,
+          chainId: `0x${chainId.toString(16)}`
+        }
+      ]
+    });
+  };
+
+  const switchNetwork = (chainId: number) => {
+    window.ethereum
+      .request({
+        method: 'wallet_switchEthereumChain',
+        params: [
+          {
+            chainId: `0x${chainId.toString(16)}`
+          }
+        ]
+      })
+      .catch((err) => {
+        if (err.code == 4902) addNetwork(chainId);
+      });
+  };
+
   return (
     <Web3Context.Provider
       value={{
@@ -230,8 +315,22 @@ export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
       <Alertbox
         show={isWrongNetwork}
         title="You're on the wrong network."
-        description={`Switch your MetaMask network to ${config?.chainId}.`}
-      />
+        description={`Switch your MetaMask network to ${
+          getNetworkParams(config?.chainId).chainName
+        }.`}
+        style={{ paddingBottom: isMetaMask ? 30 : 50 }}
+      >
+        {isMetaMask && (
+          <Button
+            size="small"
+            color="secondary"
+            onClick={() => switchNetwork(config?.chainId)}
+          >
+            Switch network
+          </Button>
+        )}
+      </Alertbox>
+
       {children}
     </Web3Context.Provider>
   );
