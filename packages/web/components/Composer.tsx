@@ -76,11 +76,11 @@ const Box = styled.div`
 const InputArea = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 20px 10px 0;
+  padding: 10px 10px 0;
   border-radius: 5px;
 
   @media screen and (min-width: 500px) {
-    padding: 20px 15px 0;
+    padding: 10px 15px 0;
   }
 `;
 
@@ -165,35 +165,12 @@ const Composer = ({
   communities: CommunityDTO[];
   onSubmit: (text: string, media: File[], communityId: string) => void;
 }) => {
-  const elRef = useRef<HTMLElement>();
-
-  const [html, setHtml] = useState<string>('');
-  const textRef = useRef<string>('');
-
   const postCommunity = useRef<CommunityDTO>();
-
-  const stripHtml = (html: string) => {
-    const tmp = document.createElement('DIV');
-    tmp.innerHTML = html;
-    return tmp.textContent || tmp.innerText || '';
-  };
-
-  useEffect(() => {
-    elRef.current.focus();
-    textRef.current = stripHtml(html).trim();
-  }, [html]);
 
   const [mediaFiles, setMediaFiles] = useState<File[]>([]);
   const mediaFileRef = useRef<File[]>();
 
   mediaFileRef.current = mediaFiles;
-
-  const submit = () => {
-    if (textRef.current.length < 1 && mediaFileRef.current.length < 1) return;
-
-    onSubmit(textRef.current, mediaFileRef.current, postCommunity.current.id);
-    setHtml('');
-  };
 
   const fileInputRef = useRef<HTMLInputElement>();
 
@@ -211,29 +188,61 @@ const Composer = ({
     setMediaFiles([...updated]);
   };
 
+  const TextInput = React.memo(() => {
+    const elRef = useRef<HTMLElement>();
+
+    const [html, setHtml] = useState<string>('');
+    const textRef = useRef<string>('');
+
+    const stripHtml = (html: string) => {
+      const tmp = document.createElement('DIV');
+      tmp.innerHTML = html;
+      return tmp.textContent || tmp.innerText || '';
+    };
+
+    useEffect(() => {
+      elRef.current.focus();
+    }, []);
+
+    useEffect(() => {
+      textRef.current = stripHtml(html).trim();
+    }, [html]);
+
+    const submit = () => {
+      if (textRef.current.length < 1 && mediaFileRef.current.length < 1) return;
+
+      onSubmit(textRef.current, mediaFileRef.current, postCommunity.current.id);
+      setHtml('');
+    };
+
+    return (
+      <ContentEditable
+        innerRef={elRef}
+        placeholder="Start by typing something..."
+        html={html}
+        onChange={(e) => setHtml(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key == 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            submit();
+          }
+        }}
+        css={css`
+          max-height: 100px;
+          padding: 20px;
+          font-size: 16px;
+          outline: none;
+          white-space: pre-wrap;
+          overflow-y: auto;
+        `}
+      />
+    );
+  });
+
   return (
     <Box>
       <InputArea>
-        <ContentEditable
-          innerRef={elRef}
-          placeholder="Start by typing something..."
-          html={html}
-          onChange={(e) => setHtml(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key == 'Enter' && !e.shiftKey) {
-              e.preventDefault();
-              submit();
-            }
-          }}
-          css={css`
-            max-height: 100px;
-            padding: 20px;
-            font-size: 16px;
-            outline: none;
-            white-space: pre-wrap;
-            overflow-y: auto;
-          `}
-        />
+        <TextInput />
         {mediaFiles.length > 0 && (
           <Actions>
             <MediaPreview
@@ -266,7 +275,10 @@ const Composer = ({
               communities={communities}
               onSelect={(c) => (postCommunity.current = c)}
             />
-            <img src="/images/ic-post-send.png" onClick={() => submit()} />
+            {/* <img
+              src="/images/ic-post-send.png"
+              onClick={() => null}
+            /> */}
           </ActionSide>
         </Actions>
       </InputArea>
