@@ -14,13 +14,13 @@ import Web3Provider from '../modules/web3/Web3Provider';
 const axiosClient = new AxiosClient();
 new ApiClient(axiosClient);
 
-function FestApp({ Component, pageProps }: AppProps) {
+function FestApp({ Component, pageProps, router }: AppProps) {
   return (
     <ThemeProvider theme={DefaultTheme}>
       <AuthProvider>
         <Web3Provider>
           <HeaderProvider>
-            <Header />
+            {router.pathname !== '/landing' && <Header />}
             <Component {...pageProps} />
           </HeaderProvider>
         </Web3Provider>
