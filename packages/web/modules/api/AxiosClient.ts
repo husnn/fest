@@ -1,8 +1,8 @@
 import { Request, Response } from '@fest/shared';
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
-
-import HttpClient from './HttpClient';
+import { isDevelopment } from '../../utils';
 import { getAuthToken } from '../auth/authStorage';
+import HttpClient from './HttpClient';
 
 export default class AxiosClient extends HttpClient {
   private axios: AxiosInstance;
@@ -10,11 +10,12 @@ export default class AxiosClient extends HttpClient {
   constructor() {
     super();
     this.axios = axios.create({
-      baseURL:
-        process.env.NODE_ENV === 'production'
-          ? process.env.NEXT_PUBLIC_API_URL
-          : '/api'
+      baseURL: !isDevelopment ? process.env.NEXT_PUBLIC_API_URL : '/api'
     });
+  }
+
+  get instance() {
+    return this.axios;
   }
 
   async request<U extends Response | null = Response>(

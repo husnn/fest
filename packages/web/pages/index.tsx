@@ -3,6 +3,7 @@ import React from 'react';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 import { Button, Link } from '../ui';
+import Head from 'next/head';
 
 const Header = styled.div`
   width: 90%;
@@ -249,9 +250,9 @@ const HomePageV1 = () => {
         overflow: hidden;
       `}
     >
-      <head>
+      <Head>
         <title>Fest</title>
-      </head>
+      </Head>
       <Header>
         <div>🎉</div>
         <div>
