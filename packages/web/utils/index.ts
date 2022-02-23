@@ -6,13 +6,19 @@ import {
   UserDTO,
   WalletDTO
 } from '@fest/shared';
-
 import { NextRouter } from 'next/router';
 import { getConfig } from '../config';
 import { getCurrentUser } from '../modules/auth/authStorage';
 
 export const isProduction =
   (process.env.NEXT_PUBLIC_VERCEL_ENV || process.env.NODE_ENV) === 'production';
+
+export const isStaging =
+  (process.env.NEXT_PUBLIC_VERCEL_ENV || process.env.NODE_ENV) === 'staging';
+
+export const isDevelopment =
+  (process.env.NEXT_PUBLIC_VERCEL_ENV || process.env.NODE_ENV) ===
+  'development';
 
 export const getTokenUrl = (token?: TokenDTO, id?: string): string =>
   `/tokens/${token ? token.id : id}`;

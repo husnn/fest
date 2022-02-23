@@ -3,7 +3,6 @@ import React from 'react';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 import { Button, Link } from '../ui';
-import head from 'next/head';
 
 const Header = styled.div`
   width: 90%;
