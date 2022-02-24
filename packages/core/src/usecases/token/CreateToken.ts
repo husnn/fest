@@ -1,14 +1,13 @@
-import { MediaService, YouTubeService } from '../../services';
 import { Percentage, TokenFee, TokenType } from '@fest/shared';
-
-import { CreateCommunity } from '../../usecases';
-import { GetYouTubeChannel } from '../google/GetYouTubeChannel';
-import { Result } from '../../Result';
+import UseCase from '../../base/UseCase';
 import { Token } from '../../entities';
 import { TokenRepository } from '../../repositories';
-import UseCase from '../../base/UseCase';
 import UserRepository from '../../repositories/UserRepository';
+import { Result } from '../../Result';
+import { MediaService, YouTubeService } from '../../services';
+import { CreateCommunity } from '../../usecases';
 import { generateTokenId } from '../../utils';
+import { GetYouTubeChannel } from '../google/GetYouTubeChannel';
 
 export interface CreateTokenInput {
   user: string;
@@ -105,7 +104,7 @@ export class CreateToken extends UseCase<CreateTokenInput, CreateTokenOutput> {
       image,
       externalUrl,
       fees,
-      attributes
+      ...(attributes && Object.keys(attributes).length > 0 && { attributes })
     });
 
     token = await this.tokenRepository.create(token);
