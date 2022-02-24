@@ -320,7 +320,7 @@ const HomePage = () => {
         </Link>
         <SocialIcons
           css={css`
-            background-color: #090e1f;
+            // background-color: #090e1f;
             margin-top: 120px;
           `}
         >
