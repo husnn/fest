@@ -186,7 +186,7 @@ export const WaitlistPage = () => {
                   name="socialMedia"
                   value={values.socialMedia}
                   onChange={handleChange}
-                  placeholder="twitter.com/absolute-geezer"
+                  placeholder="twitter.com/festdao"
                 />
               </FormInput>
             )}
