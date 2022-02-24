@@ -1,5 +1,4 @@
 import Decimal from 'decimal.js';
-
 import { Currency } from './Currency';
 
 export type BalanceType = {
@@ -51,8 +50,7 @@ export const Balance = (
       ? decimalOptions?.decimals || 18
       : (!isNaN(decimalOptions) && decimalOptions) || 18;
 
-  const dp =
-    (typeof decimalOptions === 'object' && decimalOptions?.decimals) || 3;
+  const dp = (typeof decimalOptions === 'object' && decimalOptions?.dp) || 3;
 
   return new BalanceClass(amount, decimals, dp);
 };

@@ -26,6 +26,12 @@ export interface EthereumService {
 
   getEtherBalance(walletAddress: string): Promise<string>;
 
+  buildSendEtherTx(
+    from: string,
+    to: string,
+    amount: string
+  ): Promise<EthereumTx>;
+
   buildWithdrawMarketEarningsTx(
     walletAddress: string,
     currencyContract: string,

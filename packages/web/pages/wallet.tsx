@@ -34,7 +34,7 @@ export const WalletPage = () => {
   };
 
   const addFunds = async () => {
-    if (!isProduction && selectedCurrencyBalance.currency.symbol === 'FEST') {
+    if (!isProduction) {
       setAddingFunds(true);
       try {
         const result = await ApiClient.getInstance().requestTestFunds(

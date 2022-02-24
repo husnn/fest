@@ -1,6 +1,11 @@
 import { WalletRepository } from '@fest/postgres';
-import { EthereumService, RequestTestFundsResponse } from '@fest/shared';
+import {
+  EthereumService,
+  EthereumTx,
+  RequestTestFundsResponse
+} from '@fest/shared';
 import { NextFunction, Request, Response } from 'express';
+import { isProduction } from '../config';
 import { HttpError, HttpResponse, ValidationError } from '../http';
 import ConfigController from './ConfigController';
 
@@ -20,29 +25,57 @@ export class InternalController {
   }
   async requestTestFunds(req: Request, res: Response, next: NextFunction) {
     try {
+      if (isProduction)
+        throw new HttpError('Operation not allowed in production.');
+
       const { protocol, currencyContract } = req.body;
-      if (!protocol || !currencyContract) throw new ValidationError();
+      if (!protocol) throw new ValidationError();
 
-      const config = await this.configController.get();
-
-      const currency = config.protocols['ETHEREUM'].currencies.find(
-        (item) => item.contract == currencyContract
-      );
-      if (!currency) throw new HttpError('Currency not supported.');
-
+      let tx: EthereumTx;
       const wallet = await this.walletRepository.findByUser(protocol, req.user);
 
-      const amountToSend = await this.ethereumService.toERC20Amount(
-        currencyContract,
-        10
-      );
+      if (currencyContract && currencyContract !== '0x0') {
+        const config = await this.configController.get();
 
-      const tx = await this.ethereumService.buildTransferERC20Tx(
-        currencyContract,
-        process.env.ETH_WALLET_ADDRESS,
-        wallet.address,
-        amountToSend
-      );
+        const currency = config.protocols['ETHEREUM'].currencies.find(
+          (item) => item.contract == currencyContract
+        );
+        if (!currency) throw new HttpError('Currency not supported.');
+
+        const amountToSend = await this.ethereumService.toERC20Amount(
+          currencyContract,
+          10
+        );
+
+        tx = await this.ethereumService.buildTransferERC20Tx(
+          currencyContract,
+          process.env.ETH_WALLET_ADDRESS,
+          wallet.address,
+          amountToSend
+        );
+      } else {
+        let amountToSend: string;
+
+        switch (this.ethereumService.chainId) {
+          case 80001:
+            amountToSend = '0.1';
+            break;
+          case 1337:
+            amountToSend = '1';
+            break;
+          case 3:
+            amountToSend = '0.05';
+            break;
+          default:
+            amountToSend = '0.01';
+        }
+
+        tx = await this.ethereumService.buildSendEtherTx(
+          process.env.ETH_WALLET_ADDRESS,
+          wallet.address,
+          amountToSend
+        );
+      }
 
       const result = await this.ethereumService.signAndSendTx(
         tx,

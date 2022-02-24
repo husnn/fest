@@ -71,20 +71,6 @@ export class EthereumService implements IEthereumService {
     throw new Error('Method not implemented.');
   }
 
-  async sendNativeToken(to: string, amount: string): Promise<TxResult> {
-    const from = process.env.ETH_WALLET_ADDRESS;
-
-    const nonce = await this.web3.eth.getTransactionCount(from, 'pending');
-
-    return this.signAndSendTx(
-      new Transaction(to).build(from, this.networkId, this.chainId, nonce, {
-        gasLimit: 21000,
-        value: Web3.utils.toHex(amount)
-      }),
-      process.env.ETH_WALLET_PK
-    );
-  }
-
   async getERC20Balance(
     erc20Address: string,
     walletAddress: string
@@ -155,6 +141,25 @@ export class EthereumService implements IEthereumService {
 
   async getEtherBalance(walletAddress: string): Promise<string> {
     return this.web3.eth.getBalance(walletAddress);
+  }
+
+  async buildSendEtherTx(
+    from: string,
+    to: string,
+    amount: string
+  ): Promise<EthereumTx> {
+    const nonce = await this.web3.eth.getTransactionCount(from, 'pending');
+
+    return new Transaction(to).build(
+      from,
+      this.networkId,
+      this.chainId,
+      nonce,
+      {
+        gasLimit: 21000,
+        value: Web3.utils.toHex(Web3.utils.toWei(amount, 'ether'))
+      }
+    );
   }
 
   async buildWithdrawMarketEarningsTx(
