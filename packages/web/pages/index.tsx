@@ -1,9 +1,11 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 import { Button, Link } from '../ui';
 import Head from 'next/head';
+import { getCurrentUser } from '../modules/auth/authStorage';
+import Router from 'next/router';
 
 const Header = styled.div`
   width: 90%;
@@ -239,7 +241,11 @@ const CircularGradient = styled.div`
   z-index: 0;
 `;
 
-const HomePageV1 = () => {
+const HomePage = () => {
+  useEffect(() => {
+    if (getCurrentUser()) Router.push('/home');
+  }, []);
+
   return (
     <div
       className="container"
@@ -463,4 +469,4 @@ const HomePageV1 = () => {
   );
 };
 
-export default HomePageV1;
+export default HomePage;
