@@ -14,6 +14,7 @@ import MoreIcon from '../public/images/ic-more.svg';
 import { Link } from '../ui';
 import Modal from '../ui/Modal';
 import { ApiClient } from '../modules/api';
+import useAuthentication from '../modules/auth/useAuthentication';
 
 const CommunityInformation = styled.div`
   display: flex;
@@ -160,6 +161,8 @@ const Post = React.memo(
     const [deleting, setDeleting] = useState(false);
     const [deleteModalShowing, setDeleteModalShowing] = useState(false);
 
+    const { currentUser } = useAuthentication();
+
     useEffect(() => {
       setTimeout(() => setDropdownOpen(showContextMenu), 100);
     }, [showContextMenu]);
@@ -229,45 +232,47 @@ const Post = React.memo(
               </p>
             </Metadata>
           </div>
-          <div
-            css={css`
-              width: 180px;
-              display: flex;
-              flex-direction: column;
-              align-items: flex-end;
-              overflow: hidden;
-            `}
-          >
-            <MoreIcon
-              fill="#7a7a7a"
-              height={15}
+          {data.userId == currentUser?.id && (
+            <div
               css={css`
-                cursor: pointer;
+                width: 180px;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+                overflow: hidden;
               `}
-              onClick={() => {
-                setDropdownOpen(!dropdownOpen);
-                onShowContextMenu();
-              }}
-            />
-            {dropdownOpen && (
-              <div
+            >
+              <MoreIcon
+                fill="#7a7a7a"
+                height={15}
                 css={css`
-                  width: 150px;
-                  min-height: 20px;
-                  padding: 10px 5px;
-                  background-color: #fefefe;
-                  position: absolute;
-                  margin: 25px -10px 0 0;
-                  box-shadow: 3px 3px 20px 2px rgba(0, 0, 0, 0.05);
-                  border-radius: 10px;
+                  cursor: pointer;
                 `}
-              >
-                <DropdownButton onClick={() => setDeleteModalShowing(true)}>
-                  Delete
-                </DropdownButton>
-              </div>
-            )}
-          </div>
+                onClick={() => {
+                  setDropdownOpen(!dropdownOpen);
+                  onShowContextMenu();
+                }}
+              />
+              {dropdownOpen && (
+                <div
+                  css={css`
+                    width: 150px;
+                    min-height: 20px;
+                    padding: 10px 5px;
+                    background-color: #fefefe;
+                    position: absolute;
+                    margin: 25px -10px 0 0;
+                    box-shadow: 3px 3px 20px 2px rgba(0, 0, 0, 0.05);
+                    border-radius: 10px;
+                  `}
+                >
+                  <DropdownButton onClick={() => setDeleteModalShowing(true)}>
+                    Delete
+                  </DropdownButton>
+                </div>
+              )}
+            </div>
+          )}
         </Top>
         {data.text && <Text>{data.text}</Text>}
         {data.media?.length > 0 && <Media content={data.media} />}
