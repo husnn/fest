@@ -1,11 +1,10 @@
-import { InviteRepository, WaitlistRepository } from '../../repositories';
 import { InviteType, WaitlistEntryType } from '@fest/shared';
-
-import { AuthError } from '../auth/errors';
-import { Invite } from '../../entities';
-import Result from '../../Result';
 import UseCase from '../../base/UseCase';
-import { isInviteOnly } from '../../config';
+import { isInviteOnly, isProduction } from '../../config';
+import { Invite } from '../../entities';
+import { InviteRepository, WaitlistRepository } from '../../repositories';
+import Result from '../../Result';
+import { AuthError } from '../auth/errors';
 
 type AuthCheckInput = {
   email?: string;
@@ -34,7 +33,7 @@ export class AuthCheck extends UseCase<AuthCheckInput, AuthCheckOutput> {
 
   async exec(data: AuthCheckInput): Promise<Result<AuthCheckOutput>> {
     let invite: Invite;
-    let isCreator = false;
+    let isCreator = !isProduction;
 
     if (isInviteOnly) {
       const entry = await this.waitlistRepository.findByEmailOrWallet(
