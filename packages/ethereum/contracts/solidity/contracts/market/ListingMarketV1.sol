@@ -67,15 +67,11 @@ contract ListingMarketV1 is MarketV1 {
   uint256 private _listingId = 0;
   mapping(uint256 => Listing) private _listings;
 
-  // Buyer -> Listing ID -> Quantity purchased
   mapping(address => mapping(uint256 => uint256))
     private _purchases;
 
   constructor(IMarketWallet wallet) MarketV1(wallet) {}
 
-  /**
-   * @notice
-   */
   function buy(uint256 listingId, uint256 quantity)
     external
     whenNotPaused

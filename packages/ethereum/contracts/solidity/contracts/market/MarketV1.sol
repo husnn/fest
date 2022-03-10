@@ -19,6 +19,9 @@ abstract contract MarketV1 is Ownable, Pausable {
     bytes signature;
   }
 
+  /**
+   * @dev Emitted upon the exchange of assets.
+   */
   event Trade(
     uint256 sourceId,
     address indexed token,
@@ -30,6 +33,9 @@ abstract contract MarketV1 is Ownable, Pausable {
     uint256 quantity
   );
 
+  /**
+   * @dev Emitted when token royalties are allocated.
+   */
   event RoyaltyPayment(
     address indexed token,
     uint256 tokenId,
@@ -43,6 +49,11 @@ abstract contract MarketV1 is Ownable, Pausable {
     uint256 actual
   );
 
+  /**
+   * @notice Revert if token contract is not approved,
+   * and not any token can be used for trading.
+   * @param token Token contract address.
+   */
   modifier tokenAllowed(address token) {
     require(
       tokenApproved(token) || allowAllTokens,
@@ -51,6 +62,11 @@ abstract contract MarketV1 is Ownable, Pausable {
     _;
   }
 
+  /**
+   * @notice Revert if currency contract is not approved,
+   * and not any currency can be used for trading.
+   * @param currency Currency contract address.
+   */
   modifier currencyAllowed(address currency) {
     require(
       currencyApproved(currency) || allowAllCurrencies,
@@ -64,33 +80,46 @@ abstract contract MarketV1 is Ownable, Pausable {
 
   uint256 public constant hundredPct = 10_000;
 
+  // Basis pecentage point to charge the buyer on a trade.
   uint256 public buyerFeePct = 500;
+  // Basis pecentage point to charge the seller on a trade.
   uint256 public sellerFeePct = 500;
 
-  IMarketWallet internal _activeWallet;
-  address private _feeBeneficiary;
+  // Whether any token contract can be traded.
+  bool public allowAllTokens = false;
+  // Whether any currency contract can be used for trading.
+  bool public allowAllCurrencies = false;
 
-  mapping(uint256 => IMarketWallet) private _holdingWallet;
-
+  // Token contract => Whether it's approved for trading.
   mapping(address => bool) private _approvedTokens;
+  // Currency contract => Whether it's approved for trading.
   mapping(address => bool) private _approvedCurrencies;
 
-  bool public allowAllTokens = false;
-  bool public allowAllCurrencies = false;
+  // Market wallet to use for new token holdings.
+  IMarketWallet internal _activeWallet;
+  // Recipient of market fees.
+  address private _feeBeneficiary;
+
+  // As we can upgrade the active market wallet contract, we need to
+  // keep track of which contract to request a specific token from.
+  //
+  // Holding ID => Address of market wallet holding the corresponding token.
+  mapping(uint256 => IMarketWallet) private _holdingWallet;
+
+  // Wallet => (Currency => Earning amount)
+  mapping(address => mapping(address => uint256))
+    private _balances;
 
   constructor(IMarketWallet wallet) {
     _activeWallet = wallet;
     _feeBeneficiary = msg.sender;
   }
 
-  mapping(address => mapping(address => uint256))
-    private _balances;
-
   /**
-   * @notice View own balance of a given currency.
+   * @notice Get the earned amount in a given currency.
    * @param owner Wallet address to enquire about.
    * @param currency ERC20 token address in which the balance has been earned.
-   * @return The ERC20 amount available.
+   * @return _ ERC20 amount available.
    */
   function balance(address owner, address currency)
     external
@@ -100,6 +129,12 @@ abstract contract MarketV1 is Ownable, Pausable {
     return _balances[owner][currency];
   }
 
+  /**
+   * @notice Calculate fees charged for a given order amount.
+   * @param subtotal Amount to calculate the fee for.
+   * @return buyerFee Fee amount charged to buyer.
+   * @return sellerFee Fee amount charged to seller.
+   */
   function marketFees(uint256 subtotal)
     public
     view
@@ -109,6 +144,11 @@ abstract contract MarketV1 is Ownable, Pausable {
     sellerFee = (subtotal * sellerFeePct) / hundredPct;
   }
 
+  /**
+   * @notice Check whether a token is approved for trading.
+   * @param token Token contract address.
+   * @return _ Boolean indicating whether token is approved.
+   */
   function tokenApproved(address token)
     public
     view
@@ -117,6 +157,11 @@ abstract contract MarketV1 is Ownable, Pausable {
     return _approvedTokens[token];
   }
 
+  /**
+   * @notice Check whether a currency can be used for trading.
+   * @param currency Currency contract address.
+   * @return _ Boolean indicating whether currency is approved.
+   */
   function currencyApproved(address currency)
     public
     view
@@ -125,6 +170,14 @@ abstract contract MarketV1 is Ownable, Pausable {
     return _approvedCurrencies[currency];
   }
 
+  /**
+   * @dev Deposit token into escrow.
+   * @param from Owner of the token.
+   * @param token Token contract address.
+   * @param tokenId ID of the token.
+   * @param quantity Number of tokens to transfer (for standards like EIP-1155).
+   * @param holdingId Unique ID of the holding.
+   */
   function _depositFrom(
     address from,
     address token,
@@ -138,6 +191,14 @@ abstract contract MarketV1 is Ownable, Pausable {
     _activeWallet.take(token, tokenId, from, quantity);
   }
 
+  /**
+   * @dev Transfer token out of escrow.
+   * @param to Receiving wallet.
+   * @param token Token contract address.
+   * @param tokenId ID of the token.
+   * @param quantity Number of tokens to transfer (for standards like EIP-1155).
+   * @param holdingId ID of the holding.
+   */
   function _transferTo(
     address to,
     address token,
@@ -154,7 +215,12 @@ abstract contract MarketV1 is Ownable, Pausable {
   }
 
   /**
-   * @dev
+   * @dev Perform trade:
+    1. Take payment from buyer
+    2. Transfer token to them 
+    3. Pay any royalties
+    4. Subtract market fees
+    5. Allocate net amount to seller
    */
   function _trade(
     uint256 sourceId,
@@ -205,7 +271,7 @@ abstract contract MarketV1 is Ownable, Pausable {
   }
 
   /**
-   * @notice Check whether a token has royalties, and pay them if it does.
+   * @dev Check whether a token has any royalties, and allocate them in case it does.
    * @param token Address of the token contract containing royalty information.
    * @param tokenId Token ID for which to check royalties.
    * @param currency Contract address of the ERC20 token to make the payment in.
@@ -268,6 +334,11 @@ abstract contract MarketV1 is Ownable, Pausable {
     IERC20(currency).transfer(msg.sender, amount);
   }
 
+  /**
+   * @notice Set whether a list of tokens can be traded.
+   * @param tokens Addresses of token contracts.
+   * @param isApproved Boolean indicating whether to approve/disapprove.
+   */
   function setTokenApproval(
     address[] calldata tokens,
     bool isApproved
@@ -277,6 +348,11 @@ abstract contract MarketV1 is Ownable, Pausable {
     }
   }
 
+  /**
+   * @notice Set whether a list of currencies can be used for trading.
+   * @param currencies Addresses of currency contracts.
+   * @param isApproved Boolean indicating whether to approve/disapprove.
+   */
   function setCurrencyApproval(
     address[] calldata currencies,
     bool isApproved
@@ -286,16 +362,28 @@ abstract contract MarketV1 is Ownable, Pausable {
     }
   }
 
+  /**
+   * @notice Set fee percentage to charge the buyer on a trade.
+   * @param pct Percentage basis point to charge.
+   */
   function setBuyerFeePct(uint256 pct) external onlyOwner {
     require(pct <= hundredPct);
     buyerFeePct = pct;
   }
 
+  /**
+   * @notice Set fee percentage to charge the seller on a trade.
+   * @param pct Percentage basis point to charge.
+   */
   function setSellerFeePct(uint256 pct) external onlyOwner {
     require(pct <= hundredPct);
     sellerFeePct = pct;
   }
 
+  /**
+   * @notice Set the recipient of market fees.
+   * @param beneficiary Receiving wallet address.
+   */
   function setFeeBeneficiary(address beneficiary)
     external
     onlyOwner
@@ -303,6 +391,11 @@ abstract contract MarketV1 is Ownable, Pausable {
     _feeBeneficiary = beneficiary;
   }
 
+  /**
+   * @notice Set whether the trading of a token contract
+   * is allowed regardless of its approval status.
+   * @param allowed Boolean indicating whether to allow/disallow.
+   */
   function setAllTokenAllowed(bool allowed)
     external
     onlyOwner
@@ -310,6 +403,11 @@ abstract contract MarketV1 is Ownable, Pausable {
     allowAllTokens = allowed;
   }
 
+  /**
+   * @notice Set whether a currency contract can be used
+   * regardless of its approval status.
+   * @param allowed Boolean indicating whether to allow/disallow.
+   */
   function setAllCurrenciesAllowed(bool allowed)
     external
     onlyOwner
@@ -317,6 +415,10 @@ abstract contract MarketV1 is Ownable, Pausable {
     allowAllCurrencies = allowed;
   }
 
+  /**
+   * @notice Update the wallet contract address.
+   * @param wallet Wallet contract address.
+   */
   function upgradeWallet(address wallet)
     external
     onlyOwner
@@ -324,6 +426,10 @@ abstract contract MarketV1 is Ownable, Pausable {
     _activeWallet = IMarketWallet(wallet);
   }
 
+  /**
+   * @notice Set whether certain transactions can be executed.
+   * @param paused Boolean indicating whether to pause/unpause.
+   */
   function setPaused(bool paused) external onlyOwner {
     if (paused) {
       _pause();
