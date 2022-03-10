@@ -5,7 +5,6 @@ import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 
 import "./IMarketWallet.sol";
 import "./MarketV1.sol";
-import "../errors.sol";
 import "../interfaces/IERC2981.sol";
 
 contract ListingMarketV1 is MarketV1 {
@@ -227,7 +226,7 @@ contract ListingMarketV1 is MarketV1 {
 
     if (
       recoveredAddress == address(0) ||
-      owner() != recoveredAddress
+      !hasRole(ADMIN_ROLE, recoveredAddress)
     ) {
       revert InvalidSignature();
     }

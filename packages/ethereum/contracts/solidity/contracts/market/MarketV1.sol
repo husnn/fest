@@ -1,16 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import "@openzeppelin/contracts/utils/introspection/IERC165.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 import "./IMarketWallet.sol";
+import "../errors.sol";
 import "../interfaces/IERC2981.sol";
 
-abstract contract MarketV1 is Ownable, Pausable {
+abstract contract MarketV1 is AccessControl, Pausable {
   using ECDSA for bytes32;
 
   struct Approval {
@@ -49,32 +50,6 @@ abstract contract MarketV1 is Ownable, Pausable {
     uint256 actual
   );
 
-  /**
-   * @notice Revert if token contract is not approved,
-   * and not any token can be used for trading.
-   * @param token Token contract address.
-   */
-  modifier tokenAllowed(address token) {
-    require(
-      tokenApproved(token) || allowAllTokens,
-      "Token contract not allowed."
-    );
-    _;
-  }
-
-  /**
-   * @notice Revert if currency contract is not approved,
-   * and not any currency can be used for trading.
-   * @param currency Currency contract address.
-   */
-  modifier currencyAllowed(address currency) {
-    require(
-      currencyApproved(currency) || allowAllCurrencies,
-      "Currency contract not allowed."
-    );
-    _;
-  }
-
   string public constant name = "Fest NFT Market";
   string public constant version = "1.0";
 
@@ -110,9 +85,57 @@ abstract contract MarketV1 is Ownable, Pausable {
   mapping(address => mapping(address => uint256))
     private _balances;
 
+  bytes32 internal constant ADMIN_ROLE =
+    keccak256("ADMIN_ROLE");
+
   constructor(IMarketWallet wallet) {
+    _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
+
+    _setupRole(ADMIN_ROLE, msg.sender);
+    _setRoleAdmin(ADMIN_ROLE, DEFAULT_ADMIN_ROLE);
+
     _activeWallet = wallet;
     _feeBeneficiary = msg.sender;
+  }
+
+  modifier onlySuperAdmin() {
+    if (!hasRole(DEFAULT_ADMIN_ROLE, msg.sender)) {
+      revert Unauthorized();
+    }
+    _;
+  }
+
+  modifier onlyAdmin() {
+    if (!hasRole(ADMIN_ROLE, msg.sender)) {
+      revert Unauthorized();
+    }
+    _;
+  }
+
+  /**
+   * @notice Revert if token contract is not approved,
+   * and not any token can be used for trading.
+   * @param token Token contract address.
+   */
+  modifier tokenAllowed(address token) {
+    require(
+      tokenApproved(token) || allowAllTokens,
+      "Token contract not allowed."
+    );
+    _;
+  }
+
+  /**
+   * @notice Revert if currency contract is not approved,
+   * and not any currency can be used for trading.
+   * @param currency Currency contract address.
+   */
+  modifier currencyAllowed(address currency) {
+    require(
+      currencyApproved(currency) || allowAllCurrencies,
+      "Currency contract not allowed."
+    );
+    _;
   }
 
   /**
@@ -342,7 +365,7 @@ abstract contract MarketV1 is Ownable, Pausable {
   function setTokenApproval(
     address[] calldata tokens,
     bool isApproved
-  ) external onlyOwner {
+  ) external onlyAdmin {
     for (uint256 i = 0; i < tokens.length; i++) {
       _approvedTokens[tokens[i]] = isApproved;
     }
@@ -356,7 +379,7 @@ abstract contract MarketV1 is Ownable, Pausable {
   function setCurrencyApproval(
     address[] calldata currencies,
     bool isApproved
-  ) external onlyOwner {
+  ) external onlyAdmin {
     for (uint256 i = 0; i < currencies.length; i++) {
       _approvedCurrencies[currencies[i]] = isApproved;
     }
@@ -366,7 +389,10 @@ abstract contract MarketV1 is Ownable, Pausable {
    * @notice Set fee percentage to charge the buyer on a trade.
    * @param pct Percentage basis point to charge.
    */
-  function setBuyerFeePct(uint256 pct) external onlyOwner {
+  function setBuyerFeePct(uint256 pct)
+    external
+    onlySuperAdmin
+  {
     require(pct <= hundredPct);
     buyerFeePct = pct;
   }
@@ -375,7 +401,10 @@ abstract contract MarketV1 is Ownable, Pausable {
    * @notice Set fee percentage to charge the seller on a trade.
    * @param pct Percentage basis point to charge.
    */
-  function setSellerFeePct(uint256 pct) external onlyOwner {
+  function setSellerFeePct(uint256 pct)
+    external
+    onlySuperAdmin
+  {
     require(pct <= hundredPct);
     sellerFeePct = pct;
   }
@@ -386,7 +415,7 @@ abstract contract MarketV1 is Ownable, Pausable {
    */
   function setFeeBeneficiary(address beneficiary)
     external
-    onlyOwner
+    onlySuperAdmin
   {
     _feeBeneficiary = beneficiary;
   }
@@ -398,7 +427,7 @@ abstract contract MarketV1 is Ownable, Pausable {
    */
   function setAllTokenAllowed(bool allowed)
     external
-    onlyOwner
+    onlySuperAdmin
   {
     allowAllTokens = allowed;
   }
@@ -410,7 +439,7 @@ abstract contract MarketV1 is Ownable, Pausable {
    */
   function setAllCurrenciesAllowed(bool allowed)
     external
-    onlyOwner
+    onlySuperAdmin
   {
     allowAllCurrencies = allowed;
   }
@@ -421,7 +450,7 @@ abstract contract MarketV1 is Ownable, Pausable {
    */
   function upgradeWallet(address wallet)
     external
-    onlyOwner
+    onlySuperAdmin
   {
     _activeWallet = IMarketWallet(wallet);
   }
@@ -430,7 +459,7 @@ abstract contract MarketV1 is Ownable, Pausable {
    * @notice Set whether certain transactions can be executed.
    * @param paused Boolean indicating whether to pause/unpause.
    */
-  function setPaused(bool paused) external onlyOwner {
+  function setPaused(bool paused) external onlySuperAdmin {
     if (paused) {
       _pause();
     } else {
