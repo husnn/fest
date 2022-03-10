@@ -138,7 +138,6 @@ module "s3_media_staging" {
   ]
 }
 
-
 module "cloudfront_media" {
   source = "./modules/cloudfront"
 
@@ -226,6 +225,8 @@ module "service_api_staging" {
   github_branch = "staging"
   github_token  = var.github_token
 
+  cpu            = 256
+  memory         = 512
   instance_count = 1
 
   postgres_database_url = module.postgres_main_staging.database_url
@@ -265,6 +266,8 @@ module "service_api_prod" {
   github_branch = "master"
   github_token  = var.github_token
 
+  cpu            = 256
+  memory         = 512
   instance_count = 1
 
   postgres_database_url = module.postgres_main_prod.database_url
