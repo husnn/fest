@@ -272,7 +272,10 @@ contract ListingMarketV1 is MarketV1 {
       revert ListingInactive({ id: listingId });
     }
 
-    if (msg.sender != listing.seller) {
+    if (
+      msg.sender != listing.seller &&
+      !hasRole(ADMIN_ROLE, msg.sender)
+    ) {
       revert Unauthorized();
     }
 
