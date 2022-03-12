@@ -3,7 +3,6 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 
-import "./IMarketWallet.sol";
 import "./MarketV1.sol";
 import "../interfaces/IERC2981.sol";
 
@@ -70,7 +69,7 @@ contract ListingMarketV1 is MarketV1 {
   mapping(address => mapping(uint256 => uint256))
     private _purchases;
 
-  constructor(IMarketWallet wallet) MarketV1(wallet) {}
+  constructor() {}
 
   function buy(uint256 listingId, uint256 quantity)
     external
@@ -186,19 +185,12 @@ contract ListingMarketV1 is MarketV1 {
     require(quantity > 0);
     require(price >= hundredPct);
 
-    // TODO: Maybe move this check to wallet,
-    // and return quantity from give/take functions.
-    quantity = _activeWallet.maxAssetQuantity(
-      token,
-      quantity
-    );
-
-    _depositFrom(
+    _transfer(
       seller,
+      address(this),
       token,
       tokenId,
-      quantity,
-      _listingId
+      quantity
     );
 
     if (approval.expiry <= block.timestamp) {
@@ -285,12 +277,12 @@ contract ListingMarketV1 is MarketV1 {
 
     listing.status = ListingStatus.Cancelled;
 
-    _transferTo(
+    _transfer(
+      address(this),
       listing.seller,
       listing.token,
       listing.tokenId,
-      listing.available,
-      listingId
+      listing.available
     );
 
     emit Cancel(

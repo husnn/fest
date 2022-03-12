@@ -6,8 +6,9 @@ import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import "@openzeppelin/contracts/utils/introspection/IERC165.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
 
-import "./IMarketWallet.sol";
 import "../errors.sol";
 import "../interfaces/IERC2981.sol";
 
@@ -20,11 +21,6 @@ abstract contract MarketV1 is AccessControl, Pausable {
     bytes signature;
   }
 
-  struct Fees {
-    uint256 buyerPct;
-    uint256 sellerPct;
-  }
-
   struct TokenTrade {
     address seller;
     address buyer;
@@ -33,6 +29,11 @@ abstract contract MarketV1 is AccessControl, Pausable {
     uint256 quantity;
     address currency;
     uint256 price;
+  }
+
+  struct Fees {
+    uint256 buyerPct;
+    uint256 sellerPct;
   }
 
   /**
@@ -79,16 +80,10 @@ abstract contract MarketV1 is AccessControl, Pausable {
 
   uint256 public constant hundredPct = 10_000;
 
-  // Market wallet to use for new token holdings.
-  IMarketWallet internal _activeWallet;
+  bytes internal constant EMPTY = "";
+
   // Recipient of market fees.
   address private _feeBeneficiary;
-
-  // As we can upgrade the active market wallet contract, we need to
-  // keep track of which contract to request a specific token from.
-  //
-  // Holding ID => Address of market wallet holding the corresponding token.
-  mapping(uint256 => IMarketWallet) private _holdingWallet;
 
   // Wallet => (Currency => Earning amount)
   mapping(address => mapping(address => uint256))
@@ -97,13 +92,12 @@ abstract contract MarketV1 is AccessControl, Pausable {
   bytes32 internal constant ADMIN_ROLE =
     keccak256("ADMIN_ROLE");
 
-  constructor(IMarketWallet wallet) {
+  constructor() {
     _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
 
     _setupRole(ADMIN_ROLE, msg.sender);
     _setRoleAdmin(ADMIN_ROLE, DEFAULT_ADMIN_ROLE);
 
-    _activeWallet = wallet;
     _feeBeneficiary = msg.sender;
   }
 
@@ -136,47 +130,39 @@ abstract contract MarketV1 is AccessControl, Pausable {
   }
 
   /**
-   * @dev Deposit token into escrow.
-   * @param from Owner of the token.
-   * @param token Token contract address.
-   * @param tokenId ID of the token.
-   * @param quantity Number of tokens to transfer (for standards like EIP-1155).
-   * @param holdingId Unique ID of the holding.
+   * @dev Transfer ownership of an ERC721/ERC1155 token.
+   * @param from Currenct token owner.
+   * @param to New token owner.
+   * @param token ERC721/ERC1155 contract address.
+   * @param id ID of the token to transfer ownership of.
+   * @param quantity Number of tokens to transfer. Needs to be 1 for ERC721.
    */
-  function _depositFrom(
+  function _transfer(
     address from,
-    address token,
-    uint256 tokenId,
-    uint256 quantity,
-    uint256 holdingId
-  ) internal {
-    _holdingWallet[holdingId] = IMarketWallet(
-      _activeWallet
-    );
-    _activeWallet.take(from, token, tokenId, quantity);
-  }
-
-  /**
-   * @dev Transfer token out of escrow.
-   * @param to Receiving wallet.
-   * @param token Token contract address.
-   * @param tokenId ID of the token.
-   * @param quantity Number of tokens to transfer (for standards like EIP-1155).
-   * @param holdingId ID of the holding.
-   */
-  function _transferTo(
     address to,
     address token,
-    uint256 tokenId,
-    uint256 quantity,
-    uint256 holdingId
+    uint256 id,
+    uint256 quantity
   ) internal {
-    _holdingWallet[holdingId].give(
-      to,
-      token,
-      tokenId,
-      quantity
-    );
+    if (
+      IERC165(token).supportsInterface(
+        type(IERC1155).interfaceId
+      )
+    ) {
+      IERC1155(token).safeTransferFrom(
+        from,
+        to,
+        id,
+        quantity,
+        EMPTY
+      );
+    } else {
+      require(
+        quantity == 1,
+        "Quantity needs to be equal to one."
+      );
+      IERC721(token).safeTransferFrom(from, to, id);
+    }
   }
 
   /**
@@ -229,12 +215,12 @@ abstract contract MarketV1 is AccessControl, Pausable {
       amount
     );
 
-    _transferTo(
+    _transfer(
+      address(this),
       trade.buyer,
       trade.token,
       trade.tokenId,
-      trade.quantity,
-      tradeId
+      trade.quantity
     );
 
     sellerPay -=
@@ -339,17 +325,6 @@ abstract contract MarketV1 is AccessControl, Pausable {
     onlySuperAdmin
   {
     _feeBeneficiary = beneficiary;
-  }
-
-  /**
-   * @notice Update the wallet contract address.
-   * @param wallet Wallet contract address.
-   */
-  function upgradeWallet(address wallet)
-    external
-    onlySuperAdmin
-  {
-    _activeWallet = IMarketWallet(wallet);
   }
 
   /**
