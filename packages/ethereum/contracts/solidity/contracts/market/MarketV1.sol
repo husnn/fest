@@ -226,8 +226,6 @@ abstract contract MarketV1 is
     uint256 buyerFee;
     uint256 sellerFee;
 
-    uint256 total;
-
     if (sellerPay > 0) {
       buyerFee = _calculateFee(sellerPay, fees.buyerPct);
       sellerFee = _calculateFee(sellerPay, fees.sellerPct);
@@ -237,7 +235,7 @@ abstract contract MarketV1 is
       IERC20(trade.currency).transferFrom(
         trade.buyer,
         address(this),
-        total
+        trade.amount
       );
 
       sellerPay -=
