@@ -223,14 +223,11 @@ abstract contract MarketV1 is
   ) internal {
     uint256 sellerPay = trade.amount;
 
-    uint256 buyerFee;
-    uint256 sellerFee;
-
     if (sellerPay > 0) {
-      buyerFee = _calculateFee(sellerPay, fees.buyerPct);
-      sellerFee = _calculateFee(sellerPay, fees.sellerPct);
-
-      trade.amount += buyerFee;
+      trade.amount += _calculateFee(
+        sellerPay,
+        fees.buyerPct
+      );
 
       IERC20(trade.currency).transferFrom(
         trade.buyer,
@@ -238,14 +235,13 @@ abstract contract MarketV1 is
         trade.amount
       );
 
-      sellerPay -=
-        maybePayRoyalties(
-          trade.token,
-          trade.tokenId,
-          trade.currency,
-          sellerPay
-        ) -
-        sellerFee;
+      sellerPay -= _calculateFee(sellerPay, fees.sellerPct);
+      sellerPay -= maybePayRoyalties(
+        trade.token,
+        trade.tokenId,
+        trade.currency,
+        sellerPay
+      );
 
       _balances[trade.seller][trade.currency] += sellerPay;
 
@@ -281,14 +277,14 @@ abstract contract MarketV1 is
    * @param token Address of the token contract containing royalty information.
    * @param tokenId Token ID for which to check royalties.
    * @param currency Contract address of the ERC20 token to make the payment in.
-   * @param saleAmount Amount to base the royalty calculation on.
+   * @param amount Amount to base the royalty calculation on.
    * @return Amount of royalty payment.
    */
   function maybePayRoyalties(
     address token,
     uint256 tokenId,
     address currency,
-    uint256 saleAmount
+    uint256 amount
   ) internal returns (uint256) {
     // Check token contract supports the EIP-2981 standard.
     bool success = IERC165(token).supportsInterface(
@@ -296,23 +292,27 @@ abstract contract MarketV1 is
     );
     if (!success) return 0;
 
-    (address receiver, uint256 amount) = IERC2981(token)
-      .royaltyInfo(tokenId, saleAmount);
+    (address receiver, uint256 royalty) = IERC2981(token)
+      .royaltyInfo(tokenId, amount);
 
-    if (amount > 0) {
+    if (royalty > 0) {
+      if (royalty > amount) {
+        royalty = amount;
+      }
+
       // Pay owed royalties to recipient.
-      _balances[receiver][currency] += amount;
+      _balances[receiver][currency] += royalty;
 
       emit RoyaltyPayment(
         token,
         tokenId,
         receiver,
         currency,
-        amount
+        royalty
       );
     }
 
-    return amount;
+    return royalty;
   }
 
   /**
