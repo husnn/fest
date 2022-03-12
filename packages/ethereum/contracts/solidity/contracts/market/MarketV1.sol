@@ -166,22 +166,27 @@ abstract contract MarketV1 is AccessControl, Pausable {
   }
 
   /**
-   * @notice Calculate buyer and seller fees charged for a trade.
-   * @param subtotal Amount to calculate the fee for.
-   * @param fees Percentages used for the calculation.
-   * @return buyerFee Fee amount charged to buyer.
-   * @return sellerFee Fee amount charged to seller.
+   * @notice Calculate the fee amount to be charged on a trade.
+   * @param amount Trade amount to base calculation on.
+   * @param pct Fee percentage.
+   * @return fee Fee amount.
    */
-  function _calculateFeeAmounts(
-    uint256 subtotal,
-    Fees memory fees
-  )
+  function _calculateFee(uint256 amount, uint256 pct)
     private
     pure
-    returns (uint256 buyerFee, uint256 sellerFee)
+    returns (uint256 fee)
   {
-    buyerFee = (subtotal * fees.buyerPct) / hundredPct;
-    sellerFee = (subtotal * fees.sellerPct) / hundredPct;
+    // Don't charge a fee on free trades,
+    // or if the fee percentage is zero.
+    if (amount > 0 && pct > 0) {
+      uint256 ff = amount * pct;
+
+      if (ff < hundredPct) {
+        fee = 1;
+      } else {
+        fee = ff / hundredPct;
+      }
+    }
   }
 
   /**
@@ -202,18 +207,34 @@ abstract contract MarketV1 is AccessControl, Pausable {
   ) internal {
     uint256 sellerPay = trade.price * trade.quantity;
 
-    (
-      uint256 buyerFee,
-      uint256 sellerFee
-    ) = _calculateFeeAmounts(sellerPay, fees);
+    uint256 buyerFee;
+    uint256 sellerFee;
 
-    uint256 amount = sellerPay + buyerFee;
+    uint256 total;
 
-    IERC20(trade.currency).transferFrom(
-      trade.buyer,
-      address(this),
-      amount
-    );
+    if (sellerPay > 0) {
+      buyerFee = _calculateFee(sellerPay, fees.buyerPct);
+      sellerFee = _calculateFee(sellerPay, fees.sellerPct);
+
+      total = sellerPay + buyerFee;
+
+      IERC20(trade.currency).transferFrom(
+        trade.buyer,
+        address(this),
+        total
+      );
+
+      sellerPay -=
+        maybePayRoyalties(
+          trade.token,
+          trade.tokenId,
+          trade.currency,
+          sellerPay
+        ) -
+        sellerFee;
+
+      _balances[trade.seller][trade.currency] += sellerPay;
+    }
 
     _transfer(
       address(this),
@@ -222,17 +243,6 @@ abstract contract MarketV1 is AccessControl, Pausable {
       trade.tokenId,
       trade.quantity
     );
-
-    sellerPay -=
-      maybePayRoyalties(
-        trade.token,
-        trade.tokenId,
-        trade.currency,
-        sellerPay
-      ) -
-      sellerFee;
-
-    _balances[trade.seller][trade.currency] += sellerPay;
 
     emit SalePayment(
       trade.seller,
@@ -248,7 +258,7 @@ abstract contract MarketV1 is AccessControl, Pausable {
       trade.tokenId,
       trade.quantity,
       trade.currency,
-      amount
+      total
     );
   }
 

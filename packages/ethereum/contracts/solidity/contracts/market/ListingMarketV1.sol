@@ -182,8 +182,17 @@ contract ListingMarketV1 is MarketV1 {
     Fees memory fees,
     Approval calldata approval
   ) external whenNotPaused {
-    require(quantity > 0);
-    require(price >= hundredPct);
+    require(
+      quantity > 0,
+      "Quantity needs to be at least one."
+    );
+
+    if (expiry > 0) {
+      require(
+        block.timestamp < expiry,
+        "Expiry needs to be in the future."
+      );
+    }
 
     _transfer(
       seller,
