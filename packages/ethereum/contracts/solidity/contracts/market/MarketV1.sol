@@ -223,11 +223,14 @@ abstract contract MarketV1 is
   ) internal {
     uint256 sellerPay = trade.amount;
 
+    uint256 buyerFee;
+    uint256 sellerFee;
+
     if (sellerPay > 0) {
-      trade.amount += _calculateFee(
-        sellerPay,
-        fees.buyerPct
-      );
+      buyerFee = _calculateFee(sellerPay, fees.buyerPct);
+      sellerFee = _calculateFee(sellerPay, fees.sellerPct);
+
+      trade.amount += buyerFee;
 
       IERC20(trade.currency).transferFrom(
         trade.buyer,
@@ -235,7 +238,7 @@ abstract contract MarketV1 is
         trade.amount
       );
 
-      sellerPay -= _calculateFee(sellerPay, fees.sellerPct);
+      sellerPay -= sellerFee;
       sellerPay -= maybePayRoyalties(
         trade.token,
         trade.tokenId,
@@ -244,6 +247,9 @@ abstract contract MarketV1 is
       );
 
       _balances[trade.seller][trade.currency] += sellerPay;
+      _balances[_feeBeneficiary][trade.currency] +=
+        buyerFee +
+        sellerFee;
 
       emit SalePayment(
         trade.seller,
