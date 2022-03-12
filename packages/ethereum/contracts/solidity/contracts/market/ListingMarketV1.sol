@@ -171,15 +171,15 @@ contract ListingMarketV1 is MarketV1 {
   }
 
   function listForSale(
+    address seller,
     address token,
     uint256 tokenId,
-    address seller,
+    uint256 quantity,
     address currency,
     uint256 price,
-    uint256 quantity,
+    Fees memory fees,
     uint256 maxPerBuyer,
     uint256 expiry,
-    Fees memory fees,
     Approval calldata approval
   ) external whenNotPaused {
     require(
