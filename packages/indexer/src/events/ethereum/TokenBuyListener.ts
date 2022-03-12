@@ -8,14 +8,14 @@ export class TokenBuyListener extends EventListener<TokenBuyJob> {
   prepareJob(event: any): TokenBuyJob {
     const { transactionHash, address, returnValues } = event;
 
-    const { listingId, buyer, quantity } = returnValues;
+    const { tradeId, buyer, quantity } = returnValues;
 
     const job: TokenBuyJob = {
       protocol: Protocol.ETHEREUM,
       networkId: this.networkId,
       txHash: transactionHash,
       contract: address,
-      listingId,
+      tradeId,
       buyer,
       quantity
     };

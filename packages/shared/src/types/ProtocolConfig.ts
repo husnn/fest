@@ -1,3 +1,4 @@
+import { MarketFees } from '..';
 import { TokenStandard } from '../enums/TokenStandard';
 import { Currency } from './Currency';
 
@@ -16,18 +17,9 @@ export interface ProtocolConfig {
 
   market: {
     contract: string;
-    wallet: string;
     defaultCurrency: Currency;
     currenciesSupported: Currency[];
-    fees: {
-      buy: string;
-      sell: string;
-    };
-    limits: {
-      maxPrice: string;
-      minPrice: string;
-      maxQuantity: string;
-    };
+    fees: MarketFees;
     percentageScale: string;
   };
 

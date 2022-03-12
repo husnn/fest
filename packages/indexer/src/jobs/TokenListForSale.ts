@@ -17,8 +17,8 @@ export interface TokenListForSaleJob extends JobData {
   quantity: number;
   currency: string;
   priceAmount: string;
-  expiry: number;
   maxPerBuyer: number;
+  expiry: number;
 }
 
 export default class TokenListForSale extends Job<TokenListForSaleJob> {

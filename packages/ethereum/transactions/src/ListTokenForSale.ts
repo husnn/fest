@@ -1,20 +1,22 @@
 import Contracts from '@fest/eth-contracts';
+import { MarketFees } from '@fest/shared';
 import Transaction from './Transaction';
 
 export class ListTokenForSale extends Transaction {
   constructor(
     data: {
       seller: string;
-      tokenContract: string;
+      token: string;
       tokenId: string;
       quantity: number;
       currency: string;
       price: string;
-      expiry: number;
+      fees: MarketFees;
       maxPerBuyer: number;
+      expiry: number;
       approval: {
+        nonce: string;
         expiry: number;
-        salt: string;
         signature: string;
       };
     },
@@ -25,13 +27,14 @@ export class ListTokenForSale extends Transaction {
     const txData = contract.methods
       .listForSale(
         data.seller,
-        data.tokenContract,
+        data.token,
         data.tokenId,
         data.quantity,
         data.currency,
         data.price,
-        data.expiry,
+        data.fees,
         data.maxPerBuyer,
+        data.expiry,
         data.approval
       )
       .encodeABI();

@@ -1,6 +1,6 @@
-import { EntitySchema } from 'typeorm';
 import { Token } from '@fest/core';
 import { TokenType } from '@fest/shared';
+import { EntitySchema } from 'typeorm';
 
 const TokenSchema = new EntitySchema<Token>({
   name: 'token',
@@ -43,9 +43,10 @@ const TokenSchema = new EntitySchema<Token>({
       type: 'text',
       nullable: true
     },
-    fees: {
-      type: 'jsonb',
-      nullable: true
+    royaltyPct: {
+      type: 'integer',
+      name: 'royalty_pct',
+      default: 0
     },
     attributes: {
       type: 'simple-json',

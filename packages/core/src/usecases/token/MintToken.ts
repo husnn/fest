@@ -46,11 +46,11 @@ export class MintToken extends UseCase<MintTokenInput, MintTokenOutput> {
     if (!approvalResult.success) return Result.fail();
 
     const {
-      data: encryptedData,
-      ipfsHash,
+      data: approvalData,
+      ipfsUri,
       signature,
       expiry,
-      salt
+      nonce
     } = approvalResult.data;
 
     const token = await this.tokenRepository.get(data.token);
@@ -60,11 +60,11 @@ export class MintToken extends UseCase<MintTokenInput, MintTokenOutput> {
     const tx = await this.ethereumService.buildMintTokenProxyTx(
       wallet.address,
       token.supply,
-      ipfsHash,
-      token.fees,
-      encryptedData,
+      ipfsUri,
+      token.royaltyPct,
+      approvalData,
+      nonce,
       expiry,
-      salt,
       signature
     );
 

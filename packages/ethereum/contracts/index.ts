@@ -1,8 +1,7 @@
-import Fest from './build/Fest.json';
-import Market from './build/OfferMarketV1.json';
-import MarketWallet from './build/MarketWalletV1.json';
-import Token from './build/TokenV1.json';
 import Web3 from 'web3';
+import Fest from './build/Fest.json';
+import Market from './build/ListingMarketV1.json';
+import Token from './build/TokenV1.json';
 import currencies from './currencies';
 
 type ContractBuild = {
@@ -14,7 +13,6 @@ type ContractBuild = {
 const interfaces: { [key: string]: ContractBuild } = {
   Token,
   Market,
-  MarketWallet,
   Fest
 };
 

@@ -1,9 +1,4 @@
-import {
-  encryptText,
-  EthereumService,
-  Protocol,
-  randomNumericString
-} from '@fest/shared';
+import { EthereumService, Protocol, randomNumericString } from '@fest/shared';
 import UseCase from '../../base/UseCase';
 import { TokenRepository, WalletRepository } from '../../repositories';
 import { Result } from '../../Result';
@@ -18,10 +13,10 @@ export interface ApproveMintInput {
 
 export interface ApproveMintOutput {
   data: string;
+  nonce: string;
   expiry: number;
-  salt: string;
   signature: string;
-  ipfsHash: string;
+  ipfsUri: string;
 }
 
 export class ApproveMint extends UseCase<ApproveMintInput, ApproveMintOutput> {
@@ -62,24 +57,26 @@ export class ApproveMint extends UseCase<ApproveMintInput, ApproveMintOutput> {
     if (!pinResult.success) return Result.fail();
 
     const expiry = Math.floor(Date.now() / 1000) + 600; // Expires in 10 minutes
-    const salt = randomNumericString(32);
+    const nonce = randomNumericString(32);
 
     const result = await this.ethereumService.signMint(
       wallet.address,
       token.supply,
-      pinResult.data.hash,
-      expiry,
-      salt
+      pinResult.data.uri,
+      token.royaltyPct,
+      token.id,
+      nonce,
+      expiry
     );
 
     const { signature } = result.data;
 
     return Result.ok({
-      data: encryptText(token.id),
+      data: token.id,
+      nonce,
       expiry,
-      salt,
       signature,
-      ipfsHash: pinResult.data.hash
+      ipfsUri: pinResult.data.uri
     });
   }
 }

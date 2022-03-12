@@ -8,7 +8,7 @@ export class TokenRoyaltyPaymentListener extends EventListener<TokenRoyaltyPayme
   prepareJob(event: any): TokenRoyaltyPaymentJob {
     const { transactionHash, address, returnValues } = event;
 
-    const { token, tokenId, beneficiary, currency, amount } = returnValues;
+    const { token, tokenId, receiver, currency, amount } = returnValues;
 
     const job: TokenRoyaltyPaymentJob = {
       protocol: Protocol.ETHEREUM,
@@ -17,7 +17,7 @@ export class TokenRoyaltyPaymentListener extends EventListener<TokenRoyaltyPayme
       contract: address,
       token,
       tokenId,
-      beneficiary,
+      receiver,
       currency,
       amount
     };

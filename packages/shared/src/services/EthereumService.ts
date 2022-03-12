@@ -1,10 +1,15 @@
-import { EthereumTx, Price, TokenFee } from '@fest/shared';
+import { EthereumTx, Price } from '@fest/shared';
 import Result from '../Result';
 
 export type ERC20Info = {
   name: string;
   symbol: string;
   decimals: number;
+};
+
+export type MarketFees = {
+  buyerPct: number;
+  sellerPct: number;
 };
 
 export type TxResult = Result<string>;
@@ -78,16 +83,17 @@ export interface EthereumService {
   ): Promise<EthereumTx>;
 
   buildListTokenForSaleTx(
-    walletAddress: string,
-    tokenContract: string,
+    seller: string,
+    token: string,
     tokenId: string,
     quantity: number,
     price: {
       currency: string;
       amount: string;
     },
+    fees: MarketFees,
+    nonce: string,
     expiry: number,
-    salt: string,
     signature: string
   ): Promise<EthereumTx>;
 
@@ -110,38 +116,41 @@ export interface EthereumService {
       currency: string;
       amount: string;
     },
-    expiry: number,
-    salt: string
+    fees: MarketFees,
+    nonce: string,
+    expiry: number
   ): Promise<Result<{ signature: string }>>;
 
   buildMintTokenProxyTx(
     creator: string,
     supply: number,
     uri: string,
-    fees: TokenFee[],
+    royaltyPct: number,
     data: string,
+    nonce: string,
     expiry: number,
-    salt: string,
     signature: string
   ): Promise<EthereumTx>;
 
   buildMintTokenTx(
-    walletAddress: string,
+    creator: string,
     supply: number,
     uri: string,
-    fees: TokenFee[],
+    royaltyPct: number,
     data: string,
+    nonce: string,
     expiry: number,
-    salt: string,
     signature: string
   ): Promise<EthereumTx>;
 
   signMint(
-    creatorAddress: string,
+    creator: string,
     supply: number,
     uri: string,
-    expiry: number,
-    salt: string
+    royaltyPct: number,
+    data: string,
+    nonce: string,
+    expiry: number
   ): Promise<
     Result<{
       signature: string;

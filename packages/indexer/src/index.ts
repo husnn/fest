@@ -142,9 +142,7 @@ ethereumListener.on(
         return new TokenCancelListing(
           job.data as TokenCancelListingJob
         ).execute(tokenListingRepository);
-      } else if (
-        (job.data as TokenRoyaltyPaymentJob).beneficiary !== undefined
-      ) {
+      } else if ((job.data as TokenRoyaltyPaymentJob).receiver !== undefined) {
         // Royalty payment
         return new TokenRoyaltyPayment(
           job.data as TokenRoyaltyPaymentJob

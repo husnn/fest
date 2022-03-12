@@ -155,11 +155,12 @@ class TokenController {
 
       if (!result.success) throw new HttpError('Could not approve token sale.');
 
-      const { expiry, salt, signature } = result.data;
+      const { fees, nonce, expiry, signature } = result.data;
 
       return new HttpResponse<ApproveTokenSaleResponse>(res, {
+        fees,
+        nonce,
         expiry,
-        salt,
         signature
       });
     } catch (err) {
@@ -198,14 +199,14 @@ class TokenController {
       token: id
     });
 
-    const { data, expiry, salt, signature, ipfsHash } = result.data;
+    const { ipfsUri, data, nonce, expiry, signature } = result.data;
 
     return new HttpResponse<ApproveMintResponse>(res, {
+      ipfsUri,
       data,
+      nonce,
       expiry,
-      salt,
-      signature,
-      ipfsHash
+      signature
     });
   }
 

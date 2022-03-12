@@ -6,7 +6,6 @@ import {
   TokenRepository,
   WalletRepository
 } from '@fest/core';
-import { decryptText } from '@fest/shared';
 import Job from './Job';
 import JobData from './JobData';
 
@@ -30,7 +29,7 @@ export default class TokenMint extends Job<TokenMintJob> {
     communityRepository: CommunityRepository
   ): Promise<void> {
     try {
-      const tokenId = decryptText(this.props.data);
+      const tokenId = this.props.data;
 
       const token = await tokenRepository.get(tokenId);
 
@@ -40,8 +39,7 @@ export default class TokenMint extends Job<TokenMintJob> {
       token.chain = {
         protocol: this.props.protocol,
         contract: this.props.contract,
-        name: 'Creator',
-        symbol: 'CRT',
+        name: 'Fest Multi-Token',
         id: this.props.id,
         creator: this.props.creator,
         txHash: this.props.txHash

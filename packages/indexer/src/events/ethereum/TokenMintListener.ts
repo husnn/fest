@@ -3,7 +3,7 @@ import { TokenMintJob } from '../../jobs/TokenMint';
 import EventListener from './EventListener';
 
 export class TokenMintListener extends EventListener<TokenMintJob> {
-  EVENT_NAME = 'Minted';
+  EVENT_NAME = 'Mint';
 
   prepareJob(event: any): TokenMintJob {
     const { transactionHash, address, returnValues } = event;

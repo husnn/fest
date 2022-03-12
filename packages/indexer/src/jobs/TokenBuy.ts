@@ -14,7 +14,7 @@ import JobData from './JobData';
 
 export interface TokenBuyJob extends JobData {
   contract: string;
-  listingId: string;
+  tradeId: string;
   buyer: string;
   quantity: number;
 }
@@ -35,7 +35,7 @@ export default class TokenBuy extends Job<TokenBuyJob> {
         this.props.protocol,
         {
           contract: this.props.contract,
-          id: this.props.listingId
+          id: this.props.tradeId
         }
       );
 

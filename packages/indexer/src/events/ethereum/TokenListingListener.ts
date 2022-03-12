@@ -3,7 +3,7 @@ import { TokenListForSaleJob } from '../../jobs/TokenListForSale';
 import EventListener from './EventListener';
 
 export class TokenListingListener extends EventListener<TokenListForSaleJob> {
-  EVENT_NAME = 'ListForSale';
+  EVENT_NAME = 'ListToken';
 
   prepareJob(event: any): TokenListForSaleJob {
     const { transactionHash, address, returnValues } = event;
@@ -11,13 +11,13 @@ export class TokenListingListener extends EventListener<TokenListForSaleJob> {
     const {
       listingId,
       seller,
-      tokenContract,
+      token,
       tokenId,
       quantity,
       currency,
       price,
-      expiry,
-      maxPerBuyer
+      maxPerBuyer,
+      expiry
     } = returnValues;
 
     const job: TokenListForSaleJob = {
@@ -27,13 +27,13 @@ export class TokenListingListener extends EventListener<TokenListForSaleJob> {
       contract: address,
       id: listingId,
       seller,
-      token: tokenContract,
+      token,
       tokenId,
       quantity,
       currency,
       priceAmount: price,
-      expiry,
-      maxPerBuyer
+      maxPerBuyer,
+      expiry
     };
 
     return job;

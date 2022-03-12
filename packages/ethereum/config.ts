@@ -56,16 +56,6 @@ export const generate = async (
 
   const currencies: Currency[] = await toCurrencies(service, currencyAddresses);
 
-  const currenciesSupported: Currency[] = [];
-
-  for (const currency of currencies) {
-    if (
-      await marketContract.methods.isCurrencyApproved(currency.contract).call()
-    ) {
-      currenciesSupported.push(currency);
-    }
-  }
-
   const tokens = await Promise.all(
     [tokenContract].map(async (contract) => {
       return {
@@ -82,17 +72,11 @@ export const generate = async (
     tokens,
     market: {
       contract: marketContract.options.address,
-      wallet: contracts.get('MarketWallet').options.address,
-      defaultCurrency: currenciesSupported[0],
-      currenciesSupported,
+      defaultCurrency: currencies[0],
+      currenciesSupported: currencies,
       fees: {
-        buy: await marketContract.methods.buyerFeePct().call(),
-        sell: await marketContract.methods.sellerFeePct().call()
-      },
-      limits: {
-        maxPrice: await marketContract.methods.maxTokenPrice().call(),
-        minPrice: await marketContract.methods.minTokenPrice().call(),
-        maxQuantity: await marketContract.methods.maxListingQuantity().call()
+        buyerPct: 500,
+        sellerPct: 500
       },
       percentageScale: await marketContract.methods.hundredPct().call()
     },

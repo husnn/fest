@@ -15,9 +15,9 @@ import {
   ERC20Info,
   EthereumService as IEthereumService,
   EthereumTx,
+  MarketFees,
   Price,
   Result,
-  TokenFee,
   TxResult
 } from '@fest/shared';
 import * as BIP39 from 'bip39';
@@ -195,7 +195,7 @@ export class EthereumService implements IEthereumService {
     const contract = Contracts.get('Market', marketContract);
 
     const balance = await contract.methods
-      .getBalance(currencyContract, walletAddress)
+      .balance(walletAddress, currencyContract)
       .call();
 
     return balance;
@@ -312,47 +312,43 @@ export class EthereumService implements IEthereumService {
   }
 
   async buildListTokenForSaleTx(
-    walletAddress: string,
-    tokenContract: string,
+    seller: string,
+    token: string,
     tokenId: string,
     quantity: number,
     price: {
       currency: string;
       amount: string;
     },
+    fees: MarketFees,
+    nonce: string,
     expiry: number,
-    salt: string,
     signature: string
   ): Promise<EthereumTx> {
-    const nonce = await this.web3.eth.getTransactionCount(
-      walletAddress,
-      'pending'
-    );
-
-    const networkId = await this.web3.eth.net.getId();
-    const chainId = await this.web3.eth.getChainId();
+    const txNonce = await this.web3.eth.getTransactionCount(seller, 'pending');
 
     const txData = {
-      seller: walletAddress,
-      tokenContract,
+      seller,
+      token,
       tokenId,
       quantity,
       currency: price.currency,
       price: price.amount,
-      expiry: 0,
+      fees,
       maxPerBuyer: 0,
+      expiry: 0,
       approval: {
+        nonce,
         expiry,
-        salt,
         signature
       }
     };
 
     return new ListTokenForSale(txData).build(
-      walletAddress,
-      networkId,
-      chainId,
-      nonce,
+      seller,
+      this.networkId,
+      this.chainId,
+      txNonce,
       { gasLimit: 385000 }
     );
   }
@@ -381,7 +377,7 @@ export class EthereumService implements IEthereumService {
     tokenContract: string,
     walletAddress: string
   ): Promise<boolean> {
-    const marketWalletContract = Contracts.get('MarketWallet');
+    const marketWalletContract = Contracts.get('Market');
 
     const txResult = await Contracts.get('Token', tokenContract)
       .methods.isApprovedForAll(
@@ -402,22 +398,25 @@ export class EthereumService implements IEthereumService {
       currency: string;
       amount: string;
     },
-    expiry: number,
-    salt: string
+    fees: MarketFees,
+    nonce: string,
+    expiry: number
   ): Promise<Result<{ signature: string }>> {
     const privateKey = Buffer.from(process.env.ETH_WALLET_PK, 'hex');
 
     const hash = await Contracts.get('Market')
-      .methods.getSaleAuthorizationHash(
+      .methods.listingHash(
         seller,
         token,
         tokenId,
         quantity,
         price.currency,
         price.amount,
+        fees,
         0,
-        expiry,
-        salt
+        0,
+        nonce,
+        expiry
       )
       .call();
 
@@ -427,54 +426,47 @@ export class EthereumService implements IEthereumService {
   }
 
   async buildMintTokenTx(
-    walletAddress: string,
+    creator: string,
     supply: number,
     uri: string,
-    fees: TokenFee[],
+    royaltyPct: number,
     data: string,
+    nonce: string,
     expiry: number,
-    salt: string,
     signature: string
   ): Promise<EthereumTx> {
-    const nonce = await this.web3.eth.getTransactionCount(
-      walletAddress,
-      'pending'
-    );
+    const txNonce = await this.web3.eth.getTransactionCount(creator, 'pending');
 
     const txData = {
-      creator: walletAddress,
+      creator,
       supply,
       uri,
-      fees,
+      royaltyPct,
       data,
+      nonce,
       expiry,
-      salt,
       signature
     };
 
     const networkId = await this.web3.eth.net.getId();
     const chainId = await this.web3.eth.getChainId();
 
-    return new MintToken(txData).build(
-      walletAddress,
-      networkId,
-      chainId,
-      nonce,
-      { gasLimit: 385000 }
-    );
+    return new MintToken(txData).build(creator, networkId, chainId, txNonce, {
+      gasLimit: 385000
+    });
   }
 
   async buildMintTokenProxyTx(
     creator: string,
     supply: number,
     uri: string,
-    fees: TokenFee[],
+    royaltyPct: number,
     data: string,
+    nonce: string,
     expiry: number,
-    salt: string,
     signature: string
   ): Promise<EthereumTx> {
-    const nonce = await this.web3.eth.getTransactionCount(
+    const txNonce = await this.web3.eth.getTransactionCount(
       process.env.ETH_WALLET_ADDRESS,
       'pending'
     );
@@ -483,10 +475,10 @@ export class EthereumService implements IEthereumService {
       creator,
       supply,
       uri,
-      fees,
+      royaltyPct,
       data,
+      nonce,
       expiry,
-      salt,
       signature
     };
 
@@ -497,24 +489,26 @@ export class EthereumService implements IEthereumService {
       process.env.ETH_WALLET_ADDRESS,
       networkId,
       chainId,
-      nonce,
+      txNonce,
       { gasLimit: 385000 }
     );
   }
 
   async signMint(
-    creatorAddress: string,
+    creator: string,
     supply: number,
     uri: string,
-    expiry: number,
-    salt: string
+    royaltyPct: number,
+    data: string,
+    nonce: string,
+    expiry: number
   ): Promise<Result<{ signature: string }>> {
     const privateKey = Buffer.from(process.env.ETH_WALLET_PK, 'hex');
 
     const contract = Contracts.get('Token');
 
     const hash = await contract.methods
-      .getMintHash(creatorAddress, supply, uri, expiry, salt)
+      .mintHash(creator, supply, uri, royaltyPct, data, nonce, expiry)
       .call();
 
     const signature = sigUtil.personalSign(privateKey, { data: hash });

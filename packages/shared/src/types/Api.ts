@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 
+import { MarketFees } from '..';
 import {
   CommunityDTO,
   CurrentUserDTO,
@@ -278,8 +279,9 @@ export interface ListTokenForSaleRequest extends Request {
 }
 
 export interface ApproveTokenSaleResponse extends Response {
+  fees: MarketFees;
+  nonce: string;
   expiry: number;
-  salt: string;
   signature: string;
 }
 
@@ -309,11 +311,11 @@ export interface MintTokenRequest extends Request {
 }
 
 export interface ApproveMintResponse extends Response {
+  ipfsUri: string;
   data: string;
+  nonce: string;
   expiry: number;
-  salt: string;
   signature: string;
-  ipfsHash: string;
 }
 
 export interface ApproveMintRequest extends Request {

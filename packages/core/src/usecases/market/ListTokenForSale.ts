@@ -106,7 +106,7 @@ export class ListTokenForSale extends UseCase<
 
     if (!approval.success) return Result.fail();
 
-    const { expiry, salt, signature } = approval.data;
+    const { nonce, expiry, signature } = approval.data;
 
     const tx = await this.ethereumService.buildListTokenForSaleTx(
       wallet.address,
@@ -114,8 +114,12 @@ export class ListTokenForSale extends UseCase<
       token.chain.id,
       quantity,
       price,
+      {
+        buyerPct: 500,
+        sellerPct: 500
+      },
+      nonce,
       expiry,
-      salt,
       signature
     );
 
