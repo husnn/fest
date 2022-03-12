@@ -44,7 +44,7 @@ contract ListingMarketV1 is MarketV1 {
 
   event Cancel(
     uint256 listingId,
-    address indexed seller,
+    address indexed operator,
     address indexed token,
     uint256 tokenId,
     uint256 returned
@@ -296,7 +296,7 @@ contract ListingMarketV1 is MarketV1 {
 
     emit Cancel(
       listingId,
-      listing.seller,
+      msg.sender,
       listing.token,
       listing.tokenId,
       listing.available
