@@ -124,7 +124,7 @@ contract ListingMarketV1 is MarketV1 {
         listing.tokenId,
         quantity,
         listing.currency,
-        listing.price
+        quantity * listing.price
       ),
       listing.fees
     );

@@ -28,7 +28,7 @@ abstract contract MarketV1 is AccessControl, Pausable {
     uint256 tokenId;
     uint256 quantity;
     address currency;
-    uint256 price;
+    uint256 amount;
   }
 
   struct Fees {
@@ -205,7 +205,7 @@ abstract contract MarketV1 is AccessControl, Pausable {
     TokenTrade memory trade,
     Fees memory fees
   ) internal {
-    uint256 sellerPay = trade.price * trade.quantity;
+    uint256 sellerPay = trade.amount;
 
     uint256 buyerFee;
     uint256 sellerFee;
@@ -216,7 +216,7 @@ abstract contract MarketV1 is AccessControl, Pausable {
       buyerFee = _calculateFee(sellerPay, fees.buyerPct);
       sellerFee = _calculateFee(sellerPay, fees.sellerPct);
 
-      total = sellerPay + buyerFee;
+      trade.amount += buyerFee;
 
       IERC20(trade.currency).transferFrom(
         trade.buyer,
@@ -234,6 +234,12 @@ abstract contract MarketV1 is AccessControl, Pausable {
         sellerFee;
 
       _balances[trade.seller][trade.currency] += sellerPay;
+
+      emit SalePayment(
+        trade.seller,
+        trade.currency,
+        sellerPay
+      );
     }
 
     _transfer(
@@ -244,12 +250,6 @@ abstract contract MarketV1 is AccessControl, Pausable {
       trade.quantity
     );
 
-    emit SalePayment(
-      trade.seller,
-      trade.currency,
-      sellerPay
-    );
-
     emit Trade(
       tradeId,
       trade.seller,
@@ -258,7 +258,7 @@ abstract contract MarketV1 is AccessControl, Pausable {
       trade.tokenId,
       trade.quantity,
       trade.currency,
-      total
+      trade.amount
     );
   }
 
