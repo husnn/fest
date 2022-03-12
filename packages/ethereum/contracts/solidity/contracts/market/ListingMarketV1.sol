@@ -35,9 +35,9 @@ contract ListingMarketV1 is MarketV1 {
     address indexed seller,
     address indexed token,
     uint256 tokenId,
+    uint256 quantity,
     address currency,
     uint256 price,
-    uint256 quantity,
     uint256 maxPerBuyer,
     uint256 indexed expiry
   );
@@ -259,9 +259,9 @@ contract ListingMarketV1 is MarketV1 {
       seller,
       token,
       tokenId,
+      quantity,
       currency,
       price,
-      quantity,
       maxPerBuyer,
       expiry
     );
