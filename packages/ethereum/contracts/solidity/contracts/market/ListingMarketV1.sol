@@ -21,9 +21,10 @@ contract ListingMarketV1 is MarketV1 {
     address seller;
     address token;
     uint256 tokenId;
+    uint256 quantity;
     address currency;
     uint256 price;
-    uint256 quantity;
+    Fees fees;
     uint256 available;
     uint256 maxPerBuyer;
     uint256 expiry;
@@ -117,13 +118,16 @@ contract ListingMarketV1 is MarketV1 {
 
     _trade(
       _listingId,
-      listing.seller,
-      msg.sender,
-      listing.token,
-      listing.tokenId,
-      listing.currency,
-      listing.price,
-      quantity
+      TokenTrade(
+        listing.seller,
+        msg.sender,
+        listing.token,
+        listing.tokenId,
+        quantity,
+        listing.currency,
+        listing.price
+      ),
+      listing.fees
     );
   }
 
@@ -136,12 +140,13 @@ contract ListingMarketV1 is MarketV1 {
   }
 
   function listingHash(
+    address seller,
     address token,
     uint256 tokenId,
-    address seller,
+    uint256 quantity,
     address currency,
     uint256 price,
-    uint256 quantity,
+    Fees memory fees,
     uint256 maxPerBuyer,
     uint256 expiry,
     uint256 nonce,
@@ -151,12 +156,13 @@ contract ListingMarketV1 is MarketV1 {
       keccak256(
         abi.encodePacked(
           address(this),
+          seller,
           token,
           tokenId,
-          seller,
+          quantity,
           currency,
           price,
-          quantity,
+          abi.encode(fees),
           maxPerBuyer,
           expiry,
           nonce,
@@ -174,13 +180,9 @@ contract ListingMarketV1 is MarketV1 {
     uint256 quantity,
     uint256 maxPerBuyer,
     uint256 expiry,
+    Fees memory fees,
     Approval calldata approval
-  )
-    external
-    whenNotPaused
-    tokenAllowed(token)
-    currencyAllowed(currency)
-  {
+  ) external whenNotPaused {
     require(quantity > 0);
     require(price >= hundredPct);
 
@@ -204,12 +206,13 @@ contract ListingMarketV1 is MarketV1 {
     }
 
     bytes32 listingHash_ = listingHash(
+      seller,
       token,
       tokenId,
-      seller,
+      quantity,
       currency,
       price,
-      quantity,
+      fees,
       maxPerBuyer,
       expiry,
       approval.nonce,
@@ -240,9 +243,10 @@ contract ListingMarketV1 is MarketV1 {
       seller,
       token,
       tokenId,
+      quantity,
       currency,
       price,
-      quantity,
+      fees,
       quantity,
       maxPerBuyer,
       expiry,

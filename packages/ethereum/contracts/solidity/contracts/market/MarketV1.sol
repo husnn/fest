@@ -20,22 +20,46 @@ abstract contract MarketV1 is AccessControl, Pausable {
     bytes signature;
   }
 
+  struct Fees {
+    uint256 buyerPct;
+    uint256 sellerPct;
+  }
+
+  struct TokenTrade {
+    address seller;
+    address buyer;
+    address token;
+    uint256 tokenId;
+    uint256 quantity;
+    address currency;
+    uint256 price;
+  }
+
   /**
    * @dev Emitted upon the exchange of assets.
    */
   event Trade(
-    uint256 sourceId,
-    address indexed token,
-    uint256 tokenId,
+    uint256 tradeId,
     address indexed seller,
     address indexed buyer,
+    address indexed token,
+    uint256 tokenId,
+    uint256 quantity,
     address currency,
-    uint256 amount,
-    uint256 quantity
+    uint256 amount
   );
 
   /**
-   * @dev Emitted when token royalties are allocated.
+   * @dev Emitted upon an amount being allocated to a seller.
+   */
+  event SalePayment(
+    address indexed recipient,
+    address indexed currency,
+    uint256 amount
+  );
+
+  /**
+   * @dev Emitted upon token royalties being allocated.
    */
   event RoyaltyPayment(
     address indexed token,
@@ -54,21 +78,6 @@ abstract contract MarketV1 is AccessControl, Pausable {
   string public constant version = "1.0";
 
   uint256 public constant hundredPct = 10_000;
-
-  // Basis pecentage point to charge the buyer on a trade.
-  uint256 public buyerFeePct = 500;
-  // Basis pecentage point to charge the seller on a trade.
-  uint256 public sellerFeePct = 500;
-
-  // Whether any token contract can be traded.
-  bool public allowAllTokens = false;
-  // Whether any currency contract can be used for trading.
-  bool public allowAllCurrencies = false;
-
-  // Token contract => Whether it's approved for trading.
-  mapping(address => bool) private _approvedTokens;
-  // Currency contract => Whether it's approved for trading.
-  mapping(address => bool) private _approvedCurrencies;
 
   // Market wallet to use for new token holdings.
   IMarketWallet internal _activeWallet;
@@ -113,32 +122,6 @@ abstract contract MarketV1 is AccessControl, Pausable {
   }
 
   /**
-   * @notice Revert if token contract is not approved,
-   * and not any token can be used for trading.
-   * @param token Token contract address.
-   */
-  modifier tokenAllowed(address token) {
-    require(
-      tokenApproved(token) || allowAllTokens,
-      "Token contract not allowed."
-    );
-    _;
-  }
-
-  /**
-   * @notice Revert if currency contract is not approved,
-   * and not any currency can be used for trading.
-   * @param currency Currency contract address.
-   */
-  modifier currencyAllowed(address currency) {
-    require(
-      currencyApproved(currency) || allowAllCurrencies,
-      "Currency contract not allowed."
-    );
-    _;
-  }
-
-  /**
    * @notice Get the earned amount in a given currency.
    * @param owner Wallet address to enquire about.
    * @param currency ERC20 token address in which the balance has been earned.
@@ -150,47 +133,6 @@ abstract contract MarketV1 is AccessControl, Pausable {
     returns (uint256)
   {
     return _balances[owner][currency];
-  }
-
-  /**
-   * @notice Calculate fees charged for a given order amount.
-   * @param subtotal Amount to calculate the fee for.
-   * @return buyerFee Fee amount charged to buyer.
-   * @return sellerFee Fee amount charged to seller.
-   */
-  function marketFees(uint256 subtotal)
-    public
-    view
-    returns (uint256 buyerFee, uint256 sellerFee)
-  {
-    buyerFee = (subtotal * buyerFeePct) / hundredPct;
-    sellerFee = (subtotal * sellerFeePct) / hundredPct;
-  }
-
-  /**
-   * @notice Check whether a token is approved for trading.
-   * @param token Token contract address.
-   * @return _ Boolean indicating whether token is approved.
-   */
-  function tokenApproved(address token)
-    public
-    view
-    returns (bool)
-  {
-    return _approvedTokens[token];
-  }
-
-  /**
-   * @notice Check whether a currency can be used for trading.
-   * @param currency Currency contract address.
-   * @return _ Boolean indicating whether currency is approved.
-   */
-  function currencyApproved(address currency)
-    public
-    view
-    returns (bool)
-  {
-    return _approvedCurrencies[currency];
   }
 
   /**
@@ -211,7 +153,7 @@ abstract contract MarketV1 is AccessControl, Pausable {
     _holdingWallet[holdingId] = IMarketWallet(
       _activeWallet
     );
-    _activeWallet.take(token, tokenId, from, quantity);
+    _activeWallet.take(from, token, tokenId, quantity);
   }
 
   /**
@@ -230,11 +172,30 @@ abstract contract MarketV1 is AccessControl, Pausable {
     uint256 holdingId
   ) internal {
     _holdingWallet[holdingId].give(
+      to,
       token,
       tokenId,
-      to,
       quantity
     );
+  }
+
+  /**
+   * @notice Calculate buyer and seller fees charged for a trade.
+   * @param subtotal Amount to calculate the fee for.
+   * @param fees Percentages used for the calculation.
+   * @return buyerFee Fee amount charged to buyer.
+   * @return sellerFee Fee amount charged to seller.
+   */
+  function _calculateFeeAmounts(
+    uint256 subtotal,
+    Fees memory fees
+  )
+    private
+    pure
+    returns (uint256 buyerFee, uint256 sellerFee)
+  {
+    buyerFee = (subtotal * fees.buyerPct) / hundredPct;
+    sellerFee = (subtotal * fees.sellerPct) / hundredPct;
   }
 
   /**
@@ -244,52 +205,64 @@ abstract contract MarketV1 is AccessControl, Pausable {
     3. Pay any royalties
     4. Subtract market fees
     5. Allocate net amount to seller
+   * @param tradeId ID of the token holding.
+   * @param trade Details of the trade.
+   * @param fees Percentages charged to the buyer and seller.
    */
   function _trade(
-    uint256 sourceId,
-    address seller,
-    address buyer,
-    address token,
-    uint256 tokenId,
-    address currency,
-    uint256 price,
-    uint256 quantity
+    uint256 tradeId,
+    TokenTrade memory trade,
+    Fees memory fees
   ) internal {
-    uint256 sellerPay = price * quantity;
-    (uint256 buyerFee, uint256 sellerFee) = marketFees(
-      sellerPay
-    );
+    uint256 sellerPay = trade.price * trade.quantity;
+
+    (
+      uint256 buyerFee,
+      uint256 sellerFee
+    ) = _calculateFeeAmounts(sellerPay, fees);
 
     uint256 amount = sellerPay + buyerFee;
 
-    IERC20(currency).transferFrom(
-      buyer,
+    IERC20(trade.currency).transferFrom(
+      trade.buyer,
       address(this),
       amount
     );
 
-    _transferTo(buyer, token, tokenId, quantity, sourceId);
+    _transferTo(
+      trade.buyer,
+      trade.token,
+      trade.tokenId,
+      trade.quantity,
+      tradeId
+    );
 
     sellerPay -=
       maybePayRoyalties(
-        token,
-        tokenId,
-        currency,
+        trade.token,
+        trade.tokenId,
+        trade.currency,
         sellerPay
       ) -
       sellerFee;
 
-    _balances[seller][currency] += sellerPay;
+    _balances[trade.seller][trade.currency] += sellerPay;
+
+    emit SalePayment(
+      trade.seller,
+      trade.currency,
+      sellerPay
+    );
 
     emit Trade(
-      sourceId,
-      token,
-      tokenId,
-      seller,
-      buyer,
-      currency,
-      amount,
-      quantity
+      tradeId,
+      trade.seller,
+      trade.buyer,
+      trade.token,
+      trade.tokenId,
+      trade.quantity,
+      trade.currency,
+      amount
     );
   }
 
@@ -358,58 +331,6 @@ abstract contract MarketV1 is AccessControl, Pausable {
   }
 
   /**
-   * @notice Set whether a list of tokens can be traded.
-   * @param tokens Addresses of token contracts.
-   * @param isApproved Boolean indicating whether to approve/disapprove.
-   */
-  function setTokenApproval(
-    address[] calldata tokens,
-    bool isApproved
-  ) external onlyAdmin {
-    for (uint256 i = 0; i < tokens.length; i++) {
-      _approvedTokens[tokens[i]] = isApproved;
-    }
-  }
-
-  /**
-   * @notice Set whether a list of currencies can be used for trading.
-   * @param currencies Addresses of currency contracts.
-   * @param isApproved Boolean indicating whether to approve/disapprove.
-   */
-  function setCurrencyApproval(
-    address[] calldata currencies,
-    bool isApproved
-  ) external onlyAdmin {
-    for (uint256 i = 0; i < currencies.length; i++) {
-      _approvedCurrencies[currencies[i]] = isApproved;
-    }
-  }
-
-  /**
-   * @notice Set fee percentage to charge the buyer on a trade.
-   * @param pct Percentage basis point to charge.
-   */
-  function setBuyerFeePct(uint256 pct)
-    external
-    onlySuperAdmin
-  {
-    require(pct <= hundredPct);
-    buyerFeePct = pct;
-  }
-
-  /**
-   * @notice Set fee percentage to charge the seller on a trade.
-   * @param pct Percentage basis point to charge.
-   */
-  function setSellerFeePct(uint256 pct)
-    external
-    onlySuperAdmin
-  {
-    require(pct <= hundredPct);
-    sellerFeePct = pct;
-  }
-
-  /**
    * @notice Set the recipient of market fees.
    * @param beneficiary Receiving wallet address.
    */
@@ -418,30 +339,6 @@ abstract contract MarketV1 is AccessControl, Pausable {
     onlySuperAdmin
   {
     _feeBeneficiary = beneficiary;
-  }
-
-  /**
-   * @notice Set whether the trading of a token contract
-   * is allowed regardless of its approval status.
-   * @param allowed Boolean indicating whether to allow/disallow.
-   */
-  function setAllTokenAllowed(bool allowed)
-    external
-    onlySuperAdmin
-  {
-    allowAllTokens = allowed;
-  }
-
-  /**
-   * @notice Set whether a currency contract can be used
-   * regardless of its approval status.
-   * @param allowed Boolean indicating whether to allow/disallow.
-   */
-  function setAllCurrenciesAllowed(bool allowed)
-    external
-    onlySuperAdmin
-  {
-    allowAllCurrencies = allowed;
   }
 
   /**

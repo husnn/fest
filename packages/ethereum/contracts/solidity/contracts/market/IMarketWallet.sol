@@ -8,16 +8,16 @@ interface IMarketWallet {
     returns (uint256);
 
   function take(
+    address from,
     address token,
     uint256 id,
-    address from,
     uint256 quantity
   ) external;
 
   function give(
+    address to,
     address token,
     uint256 id,
-    address to,
     uint256 quantity
   ) external;
 }

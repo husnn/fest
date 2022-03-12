@@ -45,9 +45,9 @@ contract MarketWalletV1 is
   }
 
   function take(
+    address from,
     address token,
     uint256 id,
-    address from,
     uint256 quantity
   ) public onlyOwner {
     _transfer(
@@ -61,9 +61,9 @@ contract MarketWalletV1 is
   }
 
   function give(
+    address to,
     address token,
     uint256 id,
-    address to,
     uint256 quantity
   ) public onlyOwner {
     _transfer(
