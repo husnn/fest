@@ -5,11 +5,17 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
 
 import "../interfaces/IERC2981.sol";
 import "../errors.sol";
 
-contract TokenV1 is AccessControl, ERC1155, IERC2981 {
+contract TokenV1 is
+  AccessControl,
+  ERC1155,
+  IERC2981,
+  Pausable
+{
   using ECDSA for bytes32;
 
   struct Token {
@@ -33,13 +39,6 @@ contract TokenV1 is AccessControl, ERC1155, IERC2981 {
     uint256 supply,
     string data
   );
-
-  modifier onlyMinter() {
-    if (!hasRole(MINTER_ROLE, msg.sender)) {
-      revert Unauthorized();
-    }
-    _;
-  }
 
   string public constant name = "Fest Multi-Token";
   string public constant version = "1.0";
@@ -134,7 +133,7 @@ contract TokenV1 is AccessControl, ERC1155, IERC2981 {
     uint256 nonce,
     uint256 deadline,
     bytes memory signature
-  ) public {
+  ) public whenNotPaused {
     if (deadline <= block.timestamp) {
       revert ApprovalExpired();
     }
@@ -191,7 +190,7 @@ contract TokenV1 is AccessControl, ERC1155, IERC2981 {
     string calldata data,
     uint256 nonce,
     uint256 deadline
-  ) public onlyMinter {
+  ) public onlyRole(MINTER_ROLE) {
     bytes32 mintHash_ = mintHash(
       creator,
       supply,
@@ -209,5 +208,16 @@ contract TokenV1 is AccessControl, ERC1155, IERC2981 {
     _approvalsExhausted[mintHash_] = true;
 
     emit RevokeMint(msg.sender, creator, supply, data);
+  }
+
+  function setPaused(bool paused)
+    external
+    onlyRole(DEFAULT_ADMIN_ROLE)
+  {
+    if (paused) {
+      _pause();
+    } else {
+      _unpause();
+    }
   }
 }

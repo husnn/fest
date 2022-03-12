@@ -108,20 +108,6 @@ abstract contract MarketV1 is
     _feeBeneficiary = msg.sender;
   }
 
-  modifier onlySuperAdmin() {
-    if (!hasRole(DEFAULT_ADMIN_ROLE, msg.sender)) {
-      revert Unauthorized();
-    }
-    _;
-  }
-
-  modifier onlyAdmin() {
-    if (!hasRole(ADMIN_ROLE, msg.sender)) {
-      revert Unauthorized();
-    }
-    _;
-  }
-
   function supportsInterface(bytes4 interfaceID)
     public
     view
@@ -352,7 +338,7 @@ abstract contract MarketV1 is
    */
   function setFeeBeneficiary(address beneficiary)
     external
-    onlySuperAdmin
+    onlyRole(DEFAULT_ADMIN_ROLE)
   {
     _feeBeneficiary = beneficiary;
   }
@@ -361,7 +347,10 @@ abstract contract MarketV1 is
    * @notice Set whether certain transactions can be executed.
    * @param paused Boolean indicating whether to pause/unpause.
    */
-  function setPaused(bool paused) external onlySuperAdmin {
+  function setPaused(bool paused)
+    external
+    onlyRole(DEFAULT_ADMIN_ROLE)
+  {
     if (paused) {
       _pause();
     } else {
