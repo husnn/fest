@@ -1,5 +1,4 @@
-import { TokenChainData, TokenFee, TokenType } from '@fest/shared';
-
+import { TokenChainData, TokenType } from '@fest/shared';
 import Community from './Community';
 import User from './User';
 
@@ -20,7 +19,7 @@ export class Token {
   image?: string;
   externalUrl?: string;
 
-  fees?: TokenFee[];
+  royaltyPct: number;
 
   attributes?: {
     [name: string]: string;

@@ -1,5 +1,4 @@
 import Contracts from '@fest/eth-contracts';
-
 import Transaction from './Transaction';
 
 export class MintToken extends Transaction {
@@ -8,30 +7,25 @@ export class MintToken extends Transaction {
       creator: string;
       supply: number;
       uri: string;
-      fees: Array<[string, number]>;
+      royaltyPct: number;
       data: string;
+      nonce: string;
       expiry: number;
-      salt: string;
       signature: string;
     },
     contractAddress?: string
   ) {
     const contract = Contracts.get('Token', contractAddress);
 
-    const fees = data.fees.map((x) => {
-      const [recipient, pct] = x;
-      return { recipient, pct };
-    });
-
     const txData = contract.methods
       .mint(
         data.creator,
         data.supply,
         data.uri,
-        fees,
+        data.royaltyPct,
         data.data,
+        data.nonce,
         data.expiry,
-        data.salt,
         data.signature
       )
       .encodeABI();

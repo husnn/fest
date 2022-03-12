@@ -10,5 +10,4 @@ export * from './ProtocolConfig';
 export * from './Socket';
 export * from './TokenAttribute';
 export * from './TokenChainData';
-export * from './TokenFee';
 export * from './TokenMetadata';

@@ -13,19 +13,19 @@ module.exports = {
     ropsten: {
       provider: function () {
         return new HDWalletProvider(
-          process.env.PRIVATE_KEY_ROPSTEN,
+          process.env.PK_ROPSTEN,
           process.env.PROVIDER_ROPSTEN
         );
       },
       network_id: 3,
-      gas: 8000000,
-      gasPrice: 10000000000
+      gas: 8_000_000,
+      gasPrice: 10_000_000_000
     },
     mumbai: {
       provider: () =>
         new HDWalletProvider(
-          process.env.PRIVATE_KEY_TESTNET,
-          process.env.PROVIDER_POLYGON_MUMBAI
+          process.env.PK_MUMBAI,
+          process.env.PROVIDER_MUMBAI
         ),
       network_id: 80001,
       gasPrice: 2_000_000_000,
@@ -36,8 +36,8 @@ module.exports = {
     polygon: {
       provider: () =>
         new HDWalletProvider(
-          process.env.PRIVATE_KEY_MAINNET,
-          process.env.PROVIDER_POLYGON_MAINNET
+          process.env.PK_POLYGON,
+          process.env.PROVIDER_MAINNET
         ),
       network_id: 137,
       gas: 8_000_000,

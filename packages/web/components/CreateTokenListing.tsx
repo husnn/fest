@@ -99,8 +99,9 @@ export const CreateTokenListing = ({
           currency: currency.contract,
           amount: actualPrice
         },
+        approval.fees,
+        approval.nonce,
         approval.expiry,
-        approval.salt,
         approval.signature
       );
 

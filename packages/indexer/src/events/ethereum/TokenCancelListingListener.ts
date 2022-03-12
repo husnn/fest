@@ -3,12 +3,12 @@ import { TokenCancelListingJob } from '../../jobs/TokenCancelListing';
 import EventListener from './EventListener';
 
 export class TokenCancelListingListener extends EventListener<TokenCancelListingJob> {
-  EVENT_NAME = 'CancelListing';
+  EVENT_NAME = 'Cancel';
 
   prepareJob(event: any): TokenCancelListingJob {
     const { transactionHash, address, returnValues } = event;
 
-    const { operator, listingId } = returnValues;
+    const { listingId, operator } = returnValues;
 
     const job: TokenCancelListingJob = {
       protocol: Protocol.ETHEREUM,

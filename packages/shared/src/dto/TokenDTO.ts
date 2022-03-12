@@ -1,8 +1,7 @@
-import ChainData from '../types/TokenChainData';
 import { CommunityDTO } from '.';
-import { TokenFee } from '../types';
-import { UserDTO } from './UserDTO';
 import { TokenType } from '..';
+import ChainData from '../types/TokenChainData';
+import { UserDTO } from './UserDTO';
 
 export class TokenDTO {
   id: string;
@@ -18,7 +17,7 @@ export class TokenDTO {
   description?: string;
   supply?: number;
 
-  fees?: TokenFee[];
+  royaltyPct?: number;
 
   image?: string;
 
@@ -52,7 +51,7 @@ export class TokenDTO {
     this.description = props.description;
     this.supply = props.supply;
 
-    this.fees = props.fees;
+    this.royaltyPct = props.royaltyPct;
 
     this.image = props.image;
 

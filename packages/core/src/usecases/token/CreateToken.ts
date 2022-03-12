@@ -1,4 +1,4 @@
-import { Percentage, TokenFee, TokenType } from '@fest/shared';
+import { TokenType } from '@fest/shared';
 import UseCase from '../../base/UseCase';
 import { Token } from '../../entities';
 import { TokenRepository } from '../../repositories';
@@ -88,12 +88,6 @@ export class CreateToken extends UseCase<CreateTokenInput, CreateTokenOutput> {
       externalUrl = ytVideo.data.url;
     }
 
-    const fees: TokenFee[] = [];
-
-    if (royaltyPct && royaltyPct > 0 && royaltyPct <= 100) {
-      fees.push([user.wallet.address, Percentage(royaltyPct)]);
-    }
-
     let token = new Token({
       id: generateTokenId()(),
       creatorId: data.user,
@@ -103,7 +97,7 @@ export class CreateToken extends UseCase<CreateTokenInput, CreateTokenOutput> {
       supply,
       image,
       externalUrl,
-      fees,
+      royaltyPct: royaltyPct * 100,
       ...(attributes && Object.keys(attributes).length > 0 && { attributes })
     });
 

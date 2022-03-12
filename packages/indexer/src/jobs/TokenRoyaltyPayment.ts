@@ -13,7 +13,7 @@ export interface TokenRoyaltyPaymentJob extends JobData {
   contract: string;
   token: string;
   tokenId: string;
-  beneficiary: string;
+  receiver: string;
   currency: string;
   amount: string;
 }
@@ -31,7 +31,7 @@ export class TokenRoyaltyPayment extends Job<TokenRoyaltyPaymentJob> {
     try {
       const wallet = await walletRepository.findByAddress(
         this.props.protocol,
-        this.props.beneficiary
+        this.props.receiver
       );
 
       const price = await ethereumService.priceFromERC20Amount(
