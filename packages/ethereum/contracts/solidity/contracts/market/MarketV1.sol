@@ -7,12 +7,19 @@ import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import "@openzeppelin/contracts/utils/introspection/IERC165.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
 import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
+import "@openzeppelin/contracts/token/ERC1155/utils/ERC1155Holder.sol";
 
 import "../errors.sol";
 import "../interfaces/IERC2981.sol";
 
-abstract contract MarketV1 is AccessControl, Pausable {
+abstract contract MarketV1 is
+  AccessControl,
+  Pausable,
+  ERC721Holder,
+  ERC1155Holder
+{
   using ECDSA for bytes32;
 
   struct Approval {
@@ -113,6 +120,15 @@ abstract contract MarketV1 is AccessControl, Pausable {
       revert Unauthorized();
     }
     _;
+  }
+
+  function supportsInterface(bytes4 interfaceID)
+    public
+    view
+    override(AccessControl, ERC1155Receiver)
+    returns (bool)
+  {
+    return super.supportsInterface(interfaceID);
   }
 
   /**
