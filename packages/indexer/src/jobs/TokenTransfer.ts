@@ -120,7 +120,7 @@ export default class TokenTransfer extends Job<TokenTransferJob> {
         await ownershipRepository.update(toOwnership);
       }
 
-      if (toOwnership.quantity == this.props.quantity)
+      if (toOwnership.quantity == this.props.quantity && toWallet.ownerId)
         communityRepository.addUserForToken(toWallet.ownerId, token.id);
     } catch (err) {
       console.log(err);
