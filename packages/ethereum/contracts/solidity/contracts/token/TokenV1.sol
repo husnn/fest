@@ -13,7 +13,6 @@ contract TokenV1 is AccessControl, ERC1155, IERC2981 {
   using ECDSA for bytes32;
 
   struct Token {
-    uint256 id;
     uint256 dateCreated;
     address creator;
     uint256 supply;
@@ -22,15 +21,15 @@ contract TokenV1 is AccessControl, ERC1155, IERC2981 {
   }
 
   event Mint(
-    address indexed operator,
-    uint256 indexed id,
+    address operator,
+    uint256 id,
     Token token,
     string data
   );
 
   event RevokeMint(
-    address indexed operator,
-    address indexed creator,
+    address operator,
+    address creator,
     uint256 supply,
     string data
   );
@@ -172,7 +171,6 @@ contract TokenV1 is AccessControl, ERC1155, IERC2981 {
     super._mint(creator, _tokenId, supply, EMPTY);
 
     Token memory token = Token(
-      _tokenId,
       block.timestamp,
       creator,
       supply,
