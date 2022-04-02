@@ -37,11 +37,11 @@ module.exports = {
       provider: () =>
         new HDWalletProvider(
           process.env.PK_POLYGON,
-          process.env.PROVIDER_MAINNET
+          process.env.PROVIDER_POLYGON
         ),
       network_id: 137,
       gas: 8_000_000,
-      gasPrice: 50_000_000_000,
+      gasPrice: 35_000_000_000,
       confirmations: 5,
       timeoutBlocks: 200,
       skipDryRun: true
