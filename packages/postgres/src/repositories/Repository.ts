@@ -1,10 +1,9 @@
+import { Repository as IRepository } from '@fest/core';
 import {
   EntitySchema,
-  Repository as PostgresRepository,
-  getRepository
+  getRepository,
+  Repository as PostgresRepository
 } from 'typeorm';
-
-import { Repository as IRepository } from '@fest/core';
 
 export abstract class Repository<T> implements IRepository<T> {
   protected db: PostgresRepository<T>;
@@ -21,11 +20,11 @@ export abstract class Repository<T> implements IRepository<T> {
     return this.db.findByIds(ids);
   }
 
-  create(item: T): Promise<T> {
+  create(item: any): Promise<T> {
     return this.db.save(item);
   }
 
-  update(item: T): Promise<T> {
+  update(item: any): Promise<T> {
     return this.db.save(item);
   }
 
