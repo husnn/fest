@@ -5,6 +5,7 @@ import { Button } from '../../ui';
 import { HeaderContext } from './HeaderProvider';
 import { LinkType } from '../../components/Header';
 import useAuthentication from '../auth/useAuthentication';
+import { ApiClient } from '../api';
 
 export const useHeader = (toShow?: string[], toHide?: string[]) => {
   const context = React.useContext(HeaderContext);
@@ -62,7 +63,10 @@ export const useHeader = (toShow?: string[], toHide?: string[]) => {
         {
           id: 'signout',
           title: 'Sign out',
-          onClick: () => clearAuth()
+          onClick: () =>
+            ApiClient.getInstance()
+              .signOut()
+              .then(() => clearAuth())
         }
       ]
     },

@@ -31,6 +31,7 @@ import {
   ResetPasswordResponse
 } from '@fest/shared';
 import { NextFunction, Request, Response } from 'express';
+import { isDev } from '../config';
 import {
   HttpError,
   HttpResponse,
@@ -195,6 +196,8 @@ class AuthController {
         }
       }
 
+      this.setCookie(res, result.data.token, result.data.expiry);
+
       return new HttpResponse<ResetPasswordResponse>(res, result.data);
     } catch (err) {
       next(err);
@@ -237,6 +240,11 @@ class AuthController {
     }
   }
 
+  async signout(res: Response) {
+    res.clearCookie('auth');
+    res.status(200).end();
+  }
+
   async loginWithEmail(req: Request, res: Response, next: NextFunction) {
     try {
       const { email, password, code } = req.body;
@@ -262,8 +270,9 @@ class AuthController {
 
       const { token, expiry, user } = result.data;
 
+      this.setCookie(res, token, expiry);
+
       return new HttpResponse<LoginResponse>(res, {
-        token,
         expiry,
         user
       });
@@ -285,14 +294,23 @@ class AuthController {
 
       const { token, expiry, user } = result.data;
 
+      this.setCookie(res, token, expiry);
+
       return new HttpResponse<LoginResponse>(res, {
-        token,
         expiry,
         user
       });
     } catch (err) {
       next(err);
     }
+  }
+
+  setCookie(res: Response, token: string, expiry: number) {
+    res.cookie('auth', token, {
+      expires: new Date(expiry * 1000),
+      httpOnly: true,
+      secure: !isDev
+    });
   }
 
   getIdentificationError(error): HttpError {

@@ -1,10 +1,7 @@
 import { CurrentUserDTO } from '@fest/shared';
 
-const AUTH_TOKEN = 'AUTH_TOKEN';
 const AUTH_EXPIRY = 'AUTH_EXPIRY';
 const CURRENT_USER = 'CURRENT_USER';
-
-export const getAuthToken = () => localStorage.getItem(AUTH_TOKEN);
 
 export const getAuthExpiry = (): Date => {
   const expiry = localStorage.getItem(AUTH_EXPIRY);
@@ -15,11 +12,6 @@ export const getAuthExpiry = (): Date => {
 
 export const saveAuthExpiry = (exp: number) => {
   localStorage.setItem(AUTH_EXPIRY, exp.toString());
-};
-
-export const saveAuthToken = (token: string) => {
-  if (token && typeof token === 'string' && token.length > 0)
-    localStorage.setItem(AUTH_TOKEN, token);
 };
 
 export const getCurrentUser = (): CurrentUserDTO | null => {
@@ -43,7 +35,6 @@ export const saveCurrentUser = (user: CurrentUserDTO) => {
 };
 
 export const removeAuth = () => {
-  localStorage.removeItem(AUTH_TOKEN);
   localStorage.removeItem(AUTH_EXPIRY);
   localStorage.removeItem(CURRENT_USER);
 };

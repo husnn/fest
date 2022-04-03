@@ -1,10 +1,6 @@
 import { CurrentUserDTO, Protocol, isEmailAddress } from '@fest/shared';
 import React, { useEffect, useRef, useState } from 'react';
-import {
-  saveAuthExpiry,
-  saveAuthToken,
-  saveCurrentUser
-} from '../modules/auth/authStorage';
+import { saveAuthExpiry, saveCurrentUser } from '../modules/auth/authStorage';
 
 import ApiClient from '../modules/api/ApiClient';
 import Button from '../ui/Button';
@@ -44,10 +40,9 @@ export default function Login() {
     }
   }, [isAuthenticated]);
 
-  const onLogin = (token: string, expiry: number, user: CurrentUserDTO) => {
-    if (!token || !user) return;
+  const onLogin = (expiry: number, user: CurrentUserDTO) => {
+    if (!user) return;
 
-    saveAuthToken(token);
     saveAuthExpiry(expiry);
     saveCurrentUser(user);
 
@@ -85,14 +80,13 @@ export default function Login() {
         wallet
       );
 
-      const { token, expiry, user } =
-        await ApiClient.getInstance().loginWithWallet(
-          Protocol.ETHEREUM,
-          identificationData.code,
-          signature
-        );
+      const { expiry, user } = await ApiClient.getInstance().loginWithWallet(
+        Protocol.ETHEREUM,
+        identificationData.code,
+        signature
+      );
 
-      onLogin(token, expiry, user);
+      onLogin(expiry, user);
     } catch (err) {
       setError(err.message);
       console.log(`Could not login. ${err.message}`);

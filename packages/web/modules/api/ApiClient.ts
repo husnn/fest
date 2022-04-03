@@ -82,6 +82,8 @@ import {
   RequestTestFundsResponse,
   ResetPasswordRequest,
   ResetPasswordResponse,
+  SignOutRequest,
+  SignOutResponse,
   TokenData,
   TokenDTO,
   TokenOwnershipDTO,
@@ -736,6 +738,14 @@ export class ApiClient {
   }
 
   // Auth
+
+  signOut(): Promise<SignOutResponse> {
+    return this.client.request<SignOutResponse, SignOutRequest>({
+      method: 'POST',
+      authentication: 'required',
+      endpoint: '/auth/signout'
+    });
+  }
 
   async doAuthPrecheck(identifier: string): Promise<AuthPrecheckResponse> {
     return this.client.request<AuthPrecheckResponse, AuthPrecheckRequest>({

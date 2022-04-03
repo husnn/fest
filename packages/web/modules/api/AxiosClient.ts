@@ -1,7 +1,6 @@
 import { Request, Response } from '@fest/shared';
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import { isDevelopment } from '../../utils';
-import { getAuthToken } from '../auth/authStorage';
 import HttpClient from './HttpClient';
 
 export default class AxiosClient extends HttpClient {
@@ -26,13 +25,7 @@ export default class AxiosClient extends HttpClient {
         method: req.method,
         url: req.endpoint,
         data: req.method === 'POST' || req.method === 'PUT' ? req.body : null,
-        params: req.params,
-        headers: {
-          ...req.headers,
-          ...(req.authentication !== 'none' && {
-            Authorization: 'Bearer ' + getAuthToken()
-          })
-        }
+        params: req.params
       })
       .then((response: AxiosResponse<U>) => {
         return Promise.resolve(response.data);

@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import {
-  getCurrentUser,
-  saveAuthToken,
-  saveCurrentUser
-} from '../modules/auth/authStorage';
+import { saveCurrentUser } from '../modules/auth/authStorage';
 
 import { ApiClient } from '../modules/api';
 import Head from 'next/head';
 import Modal from '../ui/Modal';
 import { TextInput } from '../ui';
-import { getHomeUrl } from '../utils';
 import { isValidPassword } from '@fest/shared';
 import useAuthentication from '../modules/auth/useAuthentication';
 import { useHeader } from '../modules/navigation';
@@ -43,7 +38,6 @@ export const ResetPasswordPage = () => {
     ApiClient.getInstance()
       .resetPassword(token as string, password)
       .then((res) => {
-        saveAuthToken(res.token);
         saveCurrentUser(res.user);
 
         setCurrentUser(res.user);

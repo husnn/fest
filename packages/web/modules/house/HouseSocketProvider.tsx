@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import io, { Socket } from 'socket.io-client';
 
-import { getAuthToken } from '../auth/authStorage';
-
 export const HouseSocketContext = React.createContext(null);
 
 export const HouseSocketProvider = ({
@@ -16,8 +14,7 @@ export const HouseSocketProvider = ({
     setSocket(
       io(process.env.NEXT_PUBLIC_HOUSE_URL, {
         path: '/socket',
-        withCredentials: true,
-        query: { token: getAuthToken() }
+        withCredentials: true
       })
     );
   }, []);

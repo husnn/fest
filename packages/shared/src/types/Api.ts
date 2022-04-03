@@ -561,6 +561,14 @@ export interface JoinWaitlistRequest extends Request {
  * Login
  */
 
+export interface SignOutResponse extends Response {}
+
+export interface SignOutRequest extends Request {
+  method: 'POST';
+  endpoint: '/auth/signout';
+  authentication: 'required';
+}
+
 export interface AuthPrecheckResponse extends Response {
   exists: boolean;
   needsInvite?: boolean;
@@ -576,7 +584,6 @@ export interface AuthPrecheckRequest extends Request {
 }
 
 export interface LoginResponse extends Response {
-  token: string;
   expiry: number;
   user: CurrentUserDTO;
 }

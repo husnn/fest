@@ -14,6 +14,7 @@ import {
   WaitlistRepository,
   WalletRepository
 } from '@fest/postgres';
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { Application, Router } from 'express';
 import { googleConfig, youTubeConfig } from './config';
@@ -51,6 +52,8 @@ class App {
     app.set('trust proxy', true);
 
     app.use(cors());
+
+    app.use(cookieParser());
 
     app.use(express.urlencoded({ extended: true }));
     app.use(express.json());
