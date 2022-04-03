@@ -59,9 +59,10 @@ export default function init(authController: AuthController) {
       authController.loginWithWallet(req, res, next)
   );
 
-  router.post('/signout', (req: Request, res: Response) =>
-    authController.signout(res)
-  );
+  router.post('/signout', (req: Request, res: Response) => {
+    authController.setCookie(res, '', 0);
+    res.status(200).end();
+  });
 
   return router;
 }

@@ -51,12 +51,19 @@ class App {
 
     app.set('trust proxy', true);
 
-    app.use(cors());
+    app.use(
+      cors({
+        origin: config.clientUrl,
+        credentials: true
+      })
+    );
 
     app.use(cookieParser());
 
     app.use(express.urlencoded({ extended: true }));
     app.use(express.json());
+
+    app.disable('x-powered-by');
 
     app.get('/health', (req, res) => {
       res.status(200).send('Ok');

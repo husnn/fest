@@ -31,7 +31,7 @@ import {
   ResetPasswordResponse
 } from '@fest/shared';
 import { NextFunction, Request, Response } from 'express';
-import { isDev } from '../config';
+import { appConfig, isDev } from '../config';
 import {
   HttpError,
   HttpResponse,
@@ -240,11 +240,6 @@ class AuthController {
     }
   }
 
-  async signout(res: Response) {
-    res.clearCookie('auth');
-    res.status(200).end();
-  }
-
   async loginWithEmail(req: Request, res: Response, next: NextFunction) {
     try {
       const { email, password, code } = req.body;
@@ -306,8 +301,13 @@ class AuthController {
   }
 
   setCookie(res: Response, token: string, expiry: number) {
+    const domain = appConfig.clientUrl
+      .replace(/^https?:\/\//, '')
+      .split(':')[0];
+
     res.cookie('auth', token, {
       expires: new Date(expiry * 1000),
+      domain,
       httpOnly: true,
       secure: !isDev
     });

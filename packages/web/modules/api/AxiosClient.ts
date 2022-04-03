@@ -25,7 +25,8 @@ export default class AxiosClient extends HttpClient {
         method: req.method,
         url: req.endpoint,
         data: req.method === 'POST' || req.method === 'PUT' ? req.body : null,
-        params: req.params
+        params: req.params,
+        withCredentials: true
       })
       .then((response: AxiosResponse<U>) => {
         return Promise.resolve(response.data);
