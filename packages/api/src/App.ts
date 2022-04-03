@@ -54,7 +54,8 @@ class App {
     app.use(
       cors({
         origin: config.clientUrl,
-        credentials: true
+        credentials: true,
+        maxAge: 86400
       })
     );
 
