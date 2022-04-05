@@ -24,9 +24,9 @@ variable "www_cname_root" {
   type = string
 }
 
-variable "staging_cname_root" {
-  type = string
-}
+# variable "staging_cname_root" {
+#   type = string
+# }
 
 variable "github_user" {
   type = string
