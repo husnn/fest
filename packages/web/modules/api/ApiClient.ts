@@ -582,7 +582,8 @@ export class ApiClient {
       body: file,
       headers: {
         'Content-Type': file.type
-      }
+      },
+      ignoreCredentials: true
     });
   }
 

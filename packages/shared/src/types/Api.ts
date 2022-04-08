@@ -28,6 +28,7 @@ export interface Request {
   body?: any;
   params?: any;
   headers?: any;
+  ignoreCredentials?: boolean;
 }
 
 export interface Response<T = any> {
