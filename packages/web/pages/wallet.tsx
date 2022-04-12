@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { getNativeToken, isProduction } from '../utils';
 
 import { ApiClient } from '../modules/api';
-import { Balance } from '@fest/shared';
+import { Balance, Currency } from '@fest/shared';
 import BalanceView from '../ui/BalanceView';
 import { Button } from '../ui';
 import { CurrencyBalance } from '../types';
 import Head from 'next/head';
 import styled from '@emotion/styled';
-import transakSDK from '@transak/transak-sdk';
+import { RampInstantSDK } from '@ramp-network/ramp-instant-sdk';
 import useAuthentication from '../modules/auth/useAuthentication';
 import { useHeader } from '../modules/navigation';
 import { useWeb3 } from '../modules/web3';
@@ -29,10 +29,6 @@ export const WalletPage = () => {
 
   const [addingFunds, setAddingFunds] = useState(false);
 
-  const sendFunds = () => {
-    return;
-  };
-
   const addFunds = async () => {
     if (!isProduction) {
       setAddingFunds(true);
@@ -49,26 +45,50 @@ export const WalletPage = () => {
       return;
     }
 
-    let network = 'ethereum';
+    // let network = 'ethereum';
+
+    // switch (web3.config.chainId) {
+    //   case 137:
+    //   case 80001:
+    //     network = 'polygon';
+    //     break;
+    // }
+
+    // new transakSDK({
+    //   apiKey: process.env.NEXT_PUBLIC_TRANSAK_API_KEY,
+    //   environment: isProduction ? 'PRODUCTION' : 'STAGING',
+    //   networks: network,
+    //   cryptoCurrencyCode: selectedCurrencyBalance.currency.symbol,
+    //   walletAddress: currentUser.wallet.address,
+    //   themeColor: '000000',
+    //   email: currentUser.email,
+    //   redirectURL: '',
+    //   hostURL: window.location.origin
+    // }).init();
+
+    let swapAssetPrefix: string;
 
     switch (web3.config.chainId) {
       case 137:
       case 80001:
-        network = 'polygon';
+        if (selectedCurrencyBalance.currency.symbol !== 'MATIC')
+          swapAssetPrefix = 'MATIC_';
         break;
     }
 
-    new transakSDK({
-      apiKey: process.env.NEXT_PUBLIC_TRANSAK_API_KEY,
-      environment: isProduction ? 'PRODUCTION' : 'STAGING',
-      networks: network,
-      cryptoCurrencyCode: selectedCurrencyBalance.currency.symbol,
-      walletAddress: currentUser.wallet.address,
-      themeColor: '000000',
-      email: currentUser.email,
-      redirectURL: '',
-      hostURL: window.location.origin
-    }).init();
+    new RampInstantSDK({
+      hostAppName: 'Fest',
+      hostLogoUrl: 'https://docs.ramp.network/img/logo-1.svg',
+      ...(!isProduction && {
+        url: 'https://ri-widget-staging.firebaseapp.com'
+      }),
+      userAddress: currentUser.wallet.address,
+      userEmailAddress: currentUser.email,
+      swapAsset: `${swapAssetPrefix ? swapAssetPrefix : ''}${
+        selectedCurrencyBalance.currency.symbol
+      }`,
+      variant: window.innerWidth < 800 ? 'mobile' : 'desktop'
+    }).show();
   };
 
   const [currencyBalances, setCurrencyBalances] = useState<CurrencyBalance[]>(
@@ -132,6 +152,15 @@ export const WalletPage = () => {
     setCurrencyBalances([...currencyBalances]);
   };
 
+  const isFundable = (currency?: Currency): boolean => {
+    if (currency?.symbol == getNativeToken().symbol) return true;
+
+    if (!isProduction && currency?.symbol == 'FEST') return true;
+
+    // Ramp supported currencies
+    return ['USDC', 'DAI'].includes(currency?.symbol);
+  };
+
   return currentUser ? (
     <div className="container boxed">
       <Head>
@@ -153,19 +182,18 @@ export const WalletPage = () => {
         balances={currencyBalances}
         onSelect={(currency: CurrencyBalance) => updateBalance(currency)}
       >
-        <React.Fragment>
-          {/* <Button size="small" color="secondary" onClick={() => sendFunds()}>
-            Send
-          </Button> */}
-          <Button
-            size="small"
-            color="primary"
-            onClick={() => addFunds()}
-            disabled={addingFunds}
-          >
-            Add funds
-          </Button>
-        </React.Fragment>
+        {isFundable(selectedCurrencyBalance?.currency) && (
+          <React.Fragment>
+            <Button
+              size="small"
+              color="primary"
+              onClick={() => addFunds()}
+              disabled={addingFunds}
+            >
+              Add funds
+            </Button>
+          </React.Fragment>
+        )}
       </BalanceView>
     </div>
   ) : null;

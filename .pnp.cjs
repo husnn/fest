@@ -4455,6 +4455,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@fest/eth-transactions", "workspace:packages/ethereum/transactions"],\
             ["@fest/ethereum", "workspace:packages/ethereum"],\
             ["@fest/shared", "workspace:packages/shared"],\
+            ["@ramp-network/ramp-instant-sdk", "npm:3.1.0"],\
             ["@svgr/webpack", "npm:5.5.0"],\
             ["@transak/transak-sdk", "npm:1.0.111"],\
             ["@types/axios", "npm:0.14.0"],\
@@ -4882,6 +4883,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["form-data", "npm:2.5.1"],\
             ["is-ipfs", "npm:0.6.3"],\
             ["recursive-fs", "npm:1.1.2"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@ramp-network/ramp-instant-sdk", [\
+        ["npm:3.1.0", {\
+          "packageLocation": "./.yarn/cache/@ramp-network-ramp-instant-sdk-npm-3.1.0-daa12fea3e-05d79764ef.zip/node_modules/@ramp-network/ramp-instant-sdk/",\
+          "packageDependencies": [\
+            ["@ramp-network/ramp-instant-sdk", "npm:3.1.0"],\
+            ["body-scroll-lock", "npm:3.1.5"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -6812,6 +6823,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["raw-body", "npm:2.5.1"],\
             ["type-is", "npm:1.6.18"],\
             ["unpipe", "npm:1.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["body-scroll-lock", [\
+        ["npm:3.1.5", {\
+          "packageLocation": "./.yarn/cache/body-scroll-lock-npm-3.1.5-fbe946063b-52c25b81d6.zip/node_modules/body-scroll-lock/",\
+          "packageDependencies": [\
+            ["body-scroll-lock", "npm:3.1.5"]\
           ],\
           "linkType": "HARD"\
         }]\
