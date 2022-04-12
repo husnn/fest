@@ -182,18 +182,18 @@ export const WalletPage = () => {
         balances={currencyBalances}
         onSelect={(currency: CurrencyBalance) => updateBalance(currency)}
       >
-        {isFundable(selectedCurrencyBalance?.currency) && (
-          <React.Fragment>
-            <Button
-              size="small"
-              color="primary"
-              onClick={() => addFunds()}
-              disabled={addingFunds}
-            >
-              Add funds
-            </Button>
-          </React.Fragment>
-        )}
+        <React.Fragment>
+          <Button
+            size="small"
+            color="primary"
+            onClick={() => addFunds()}
+            disabled={
+              !isFundable(selectedCurrencyBalance?.currency) || addingFunds
+            }
+          >
+            Add funds
+          </Button>
+        </React.Fragment>
       </BalanceView>
     </div>
   ) : null;
