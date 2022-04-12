@@ -1,10 +1,6 @@
 import contracts from '@fest/eth-contracts';
-import {
-  Currency,
-  EthereumService,
-  ProtocolConfig,
-  TokenStandard
-} from '@fest/shared';
+import { EthereumService, ProtocolConfig, TokenStandard } from '@fest/shared';
+import { getForNetwork } from './currencies';
 
 export const getTokenStandard = async (contract): Promise<TokenStandard> => {
   const tests = [
@@ -31,30 +27,22 @@ export const getTokenStandard = async (contract): Promise<TokenStandard> => {
 
 const isProduction = process.env.NODE_ENV === 'production';
 
-const toCurrencies = async (service: EthereumService, addresses: string[]) =>
-  Promise.all(
-    addresses.map(async (address) => {
-      return {
-        ...(await service.getERC20Info(address)),
-        contract: address
-      };
-    })
-  );
-
 export const generate = async (
   service: EthereumService
 ): Promise<ProtocolConfig> => {
   const tokenContract = contracts.get('Token');
   const marketContract = contracts.get('Market');
 
-  const currencyAddresses: string[] = [
-    ...contracts.currencies.getForNetwork(service.chainId)
-  ];
+  const currencies = getForNetwork(service.chainId);
 
-  if (!isProduction)
-    currencyAddresses.push(contracts.get('Fest').options.address);
-
-  const currencies: Currency[] = await toCurrencies(service, currencyAddresses);
+  if (!isProduction) {
+    currencies.push({
+      name: 'Fest',
+      symbol: 'FEST',
+      decimals: 18,
+      contract: contracts.get('Fest').options.address
+    });
+  }
 
   const tokens = await Promise.all(
     [tokenContract].map(async (contract) => {

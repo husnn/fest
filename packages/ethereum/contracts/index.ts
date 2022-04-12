@@ -2,7 +2,6 @@ import Web3 from 'web3';
 import Fest from './build/Fest.json';
 import Market from './build/ListingMarketV1.json';
 import Token from './build/TokenV1.json';
-import currencies from './currencies';
 
 type ContractBuild = {
   abi: any;
@@ -55,4 +54,4 @@ const init = async (web3: Web3) => {
   return contractInstances;
 };
 
-export default { init, get, currencies };
+export default { init, get };
