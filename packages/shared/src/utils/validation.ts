@@ -21,3 +21,7 @@ export const isValidPassword = (value: string) =>
 
 export const isEthereumAddress = (value: string) =>
   value && ETHEREUM_ADDRESS_REGEX.test(value);
+
+export const URL_REGEX = /^((?:https?:\/\/)?[^./]+(?:\.[^./]+)+(?:\/.*)?)$/;
+
+export const isValidURL = (value: string) => URL_REGEX.test(value);

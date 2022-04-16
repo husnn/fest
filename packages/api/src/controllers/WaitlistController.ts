@@ -1,11 +1,11 @@
-import { HttpError, HttpResponse, ValidationError } from '../http';
-import { JoinWaitlist, WaitlistRepository, WaitlistError } from '@fest/core';
+import { JoinWaitlist, WaitlistError, WaitlistRepository } from '@fest/core';
 import {
-  JoinWaitlistResponse,
   isEmailAddress,
-  isEthereumAddress
+  isEthereumAddress,
+  JoinWaitlistResponse
 } from '@fest/shared';
 import { NextFunction, Request, Response } from 'express';
+import { HttpError, HttpResponse, ValidationError } from '../http';
 
 export class WaitlistController {
   private joinWaitlistUseCase: JoinWaitlist;
@@ -38,7 +38,7 @@ export class WaitlistController {
 
       if (!result.success) {
         if (result.error == WaitlistError.ENTRY_EXISTS)
-          throw new HttpError('You`re already on our waitlist.');
+          throw new HttpError('You`re already on our waitlist.', 400);
         throw new HttpError('Could not join waitlist.');
       }
 

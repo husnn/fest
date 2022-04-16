@@ -14,9 +14,14 @@ import React, { useEffect, useState } from 'react';
 import { ApiClient } from '../modules/api';
 import Confetti from 'react-confetti';
 import Head from 'next/head';
-import { WaitlistEntryType } from '@fest/shared';
+import {
+  isEmailAddress,
+  isValidURL,
+  URL_REGEX,
+  WaitlistEntryType
+} from '@fest/shared';
 import { getProfileUrl } from '../utils';
-import router from 'next/router';
+import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 import useAuthentication from '../modules/auth/useAuthentication';
 import { useFormik } from 'formik';
@@ -50,13 +55,22 @@ const SuccessBox = styled.div`
   }
 `;
 
+const FastTrackNote = styled.div`
+  margin: -20px -15px 0;
+  padding: 15px;
+  background-color: #fafafa;
+  border-radius: 10px;
+`;
+
 export const JoinWaitlistSchema = Yup.object().shape({
   hasWallet: Yup.boolean(),
   socialMedia: Yup.string()
     .label('Social media link')
     .when('isCreator', {
       is: true,
-      then: Yup.string().required('Enter a link to one of your social media.')
+      then: Yup.string()
+        .matches(URL_REGEX, "This link doesn't look quite right...")
+        .required('Enter a link to one of your social media.')
     }),
   emailAddress: Yup.string().email().label('Email address').required(),
   walletAddress: Yup.string()
@@ -76,6 +90,8 @@ export const WaitlistPage = () => {
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
 
+  const router = useRouter();
+
   const { currentUser } = useAuthentication();
 
   useEffect(() => {
@@ -87,7 +103,7 @@ export const WaitlistPage = () => {
     if (currentUser) router.push(getProfileUrl(currentUser));
   }, [currentUser]);
 
-  const [userType, setUserType] = useState<RadioOption>(userTypeOptions[0]);
+  const [userType, setUserType] = useState<RadioOption>(userTypeOptions[1]);
   const [hasWallet, setHasWallet] = useState(false);
 
   const [hasJoined, setHasJoined] = useState(false);
@@ -106,7 +122,7 @@ export const WaitlistPage = () => {
       socialMedia: '',
       emailAddress: '',
       walletAddress: '',
-      isCreator: false,
+      isCreator: isCreator,
       hasWallet: false
     },
     validationSchema: JoinWaitlistSchema,
@@ -162,10 +178,18 @@ export const WaitlistPage = () => {
         {!hasJoined ? (
           <form onSubmit={handleSubmit}>
             <Header>
-              <h1>Join the waitlist</h1>
-              <p>Be one of the first people to get access.</p>
+              <h1>Get early access</h1>
+              <p>Join the waitlist and get a head start 🚀</p>
             </Header>
-            <FormInput label="Are you a fan or creator?">
+
+            {router.query.ft == 'true' ||
+              (router.query.ft == '1' && (
+                <FastTrackNote>
+                  <p>🎉 Your application will be fast-tracked</p>
+                </FastTrackNote>
+              ))}
+
+            <FormInput label="Sign up as a">
               <RadioGroup
                 category="userType"
                 options={userTypeOptions}
@@ -176,25 +200,8 @@ export const WaitlistPage = () => {
                 }}
               />
             </FormInput>
-            {isCreator && (
-              <FormInput
-                label="Social media"
-                description="Established creators are more likely to be approved."
-                error={errors.socialMedia}
-              >
-                <TextInput
-                  name="socialMedia"
-                  value={values.socialMedia}
-                  onChange={handleChange}
-                  placeholder="twitter.com/festdao"
-                />
-              </FormInput>
-            )}
-            <FormInput
-              label="Your email address"
-              description="We'll send you the invite code here."
-              error={errors.emailAddress}
-            >
+
+            <FormInput label="Your email address" error={errors.emailAddress}>
               <TextInput
                 name="emailAddress"
                 type="email"
@@ -203,34 +210,51 @@ export const WaitlistPage = () => {
                 onChange={handleChange}
               />
             </FormInput>
-            <FormInput label="Wallet information" optional>
-              <Checkbox
-                id="hasWallet"
-                label="Add wallet address?"
-                checked={hasWallet}
-                onChange={() => {
-                  setHasWallet(!hasWallet);
-                  setFieldValue('hasWallet', !hasWallet);
-                }}
-              />
-              {hasWallet && (
-                <FormInput
-                  description="Fest allows you to use your own wallet if you have one. Otherwise, we'll take care of it for you :)"
-                  error={errors.walletAddress}
-                >
-                  <TextInput
-                    name="walletAddress"
-                    onChange={handleChange}
-                    value={values.walletAddress}
-                    placeholder="0x34...13bCa"
+
+            {isCreator && isEmailAddress(values.emailAddress) && (
+              <FormInput label="Social media" error={errors.socialMedia}>
+                <TextInput
+                  name="socialMedia"
+                  value={values.socialMedia}
+                  onChange={handleChange}
+                  placeholder="tiktok.com/@khaby.lame"
+                />
+              </FormInput>
+            )}
+
+            {isEmailAddress(values.emailAddress) &&
+              (isCreator ? isValidURL(values.socialMedia) : true) && (
+                <FormInput>
+                  <Checkbox
+                    id="hasWallet"
+                    label="I have a crypto wallet"
+                    checked={hasWallet}
+                    onChange={() => {
+                      setHasWallet(!hasWallet);
+                      setFieldValue('hasWallet', !hasWallet);
+                    }}
                   />
+                  {hasWallet && (
+                    <FormInput
+                      description="Fest allows you to use your own wallet if you have one. Otherwise, we'll create one for you."
+                      error={errors.walletAddress}
+                    >
+                      <TextInput
+                        name="walletAddress"
+                        onChange={handleChange}
+                        value={values.walletAddress}
+                        placeholder="0x34...13bCa"
+                      />
+                    </FormInput>
+                  )}
                 </FormInput>
               )}
-            </FormInput>
+
             {(errors as any).global && (
               <Error className="smaller">{(errors as any).global}</Error>
             )}
-            <Button type="submit" color="primary" style={{ marginTop: 20 }}>
+
+            <Button type="submit" color="primary" style={{ marginTop: 30 }}>
               Join Waitlist
             </Button>
           </form>
