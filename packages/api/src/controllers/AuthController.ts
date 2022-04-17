@@ -31,7 +31,7 @@ import {
   ResetPasswordResponse
 } from '@fest/shared';
 import { NextFunction, Request, Response } from 'express';
-import { appConfig, isDev } from '../config';
+import { appConfig, authCookieName, isDev } from '../config';
 import {
   HttpError,
   HttpResponse,
@@ -305,7 +305,7 @@ class AuthController {
       .replace(/^https?:\/\//, '')
       .split(':')[0];
 
-    res.cookie('auth', token, {
+    res.cookie(authCookieName, token, {
       expires: new Date(expiry * 1000),
       domain,
       httpOnly: true,

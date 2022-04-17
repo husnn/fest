@@ -15,9 +15,3 @@ export default (req: NextApiRequest, res: NextApiResponse) =>
         console.log(err);
       })
     : res.status(404).send(null);
-
-export const config = {
-  api: {
-    bodyParser: false
-  }
-};

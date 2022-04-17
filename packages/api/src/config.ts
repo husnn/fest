@@ -5,6 +5,7 @@ import { AppConfig } from './types/AppConfig';
 export const isDev =
   process.env.NODE_ENV === 'development' || process.env.NODE_ENV === undefined;
 export const isProduction = process.env.NODE_ENV === 'production';
+export const isStaging = process.env.NODE_ENV === 'staging';
 
 const appConfig: AppConfig = {
   protocol: 'http',
@@ -51,6 +52,8 @@ const googleConfig: GoogleConfig = {
 const youTubeConfig: YouTubeConfig = {
   apiKey: process.env.YOUTUBE_API_KEY
 };
+
+export const authCookieName = isStaging ? 'staging_auth' : 'auth';
 
 export {
   appConfig,
