@@ -25,6 +25,7 @@ import styles from '../../styles/Profile.module.scss';
 import useAuthentication from '../../modules/auth/useAuthentication';
 import { useHeader } from '../../modules/navigation';
 import { useRouter } from 'next/router';
+import { Avatar } from '../../components/Avatar';
 
 export default function ProfilePage() {
   useHeader();
@@ -113,7 +114,7 @@ export default function ProfilePage() {
       </Head>
       <div className={styles.header}>
         <div className={styles.headerBg}></div>
-        <div className={'avatar ' + styles.headerAvatar}></div>
+        <Avatar className={styles.headerAvatar} user={user} size={80} />
         <div className={styles.headerContent}>
           <div className={styles.headerUserInfo}>
             <h4 className={styles.headerName}>

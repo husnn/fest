@@ -5,4 +5,5 @@ export * from './GetReferralSummary';
 export * from './GetTokensCreated';
 export * from './GetTokensOwned';
 export * from './GetUser';
+export * from './UpdateAvatar';
 export * from './errors';

@@ -16,6 +16,7 @@ export class User {
   username: string;
   name: string;
   bio: string;
+  avatar?: string;
   walletId: string;
   wallet: Wallet;
   tokensCreated: Token[];

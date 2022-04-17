@@ -1,16 +1,15 @@
-import { MediaService, Result } from '@fest/core';
 import { PutObjectCommand, S3 as S3Client } from '@aws-sdk/client-s3';
-
-import { PassThrough } from 'stream';
-import axios from 'axios';
 import { fromContainerMetadata } from '@aws-sdk/credential-providers';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { MediaService, Result } from '@fest/core';
+import axios from 'axios';
 import mime from 'mime-types';
 import { nanoid } from 'nanoid';
 import path from 'path';
+import { PassThrough } from 'stream';
 
 export class MediaStore implements MediaService {
-  private s3: S3Client;
+  s3: S3Client;
 
   constructor() {
     this.s3 = new S3Client({

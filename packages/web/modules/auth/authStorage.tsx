@@ -34,6 +34,16 @@ export const saveCurrentUser = (user: CurrentUserDTO) => {
     localStorage.setItem(CURRENT_USER, JSON.stringify(user));
 };
 
+export const updateCurrentUser = (
+  props: Partial<CurrentUserDTO>
+): CurrentUserDTO | null => {
+  let user = getCurrentUser();
+  if (!user) return;
+  user = { ...user, ...props };
+  saveCurrentUser(user);
+  return user;
+};
+
 export const removeAuth = () => {
   localStorage.removeItem(AUTH_EXPIRY);
   localStorage.removeItem(CURRENT_USER);

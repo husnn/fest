@@ -6,6 +6,7 @@ export class CurrentUserDTO {
   email?: string;
   username?: string;
   bio?: string;
+  avatar?: string;
   wallet: WalletDTO;
   isCreator: boolean;
   lastLogin?: Date;
@@ -17,6 +18,7 @@ export class CurrentUserDTO {
     this.email = props.email;
     this.username = props.username;
     this.bio = props.bio;
+    this.avatar = props.avatar;
     this.wallet = new WalletDTO(props.wallet);
     this.isCreator = props.isCreator;
     this.lastLogin = props.lastLogin;

@@ -7,6 +7,7 @@ import ApiClient from '../modules/api/ApiClient';
 import styled from '@emotion/styled';
 import useAuthentication from '../modules/auth/useAuthentication';
 import usePagination from '../modules/api/usePagination';
+import { Avatar } from './Avatar';
 
 const Container = styled.div`
   > * + * {
@@ -40,11 +41,6 @@ const HolderRow = styled.div<{
   > * + * {
     margin-top: 20px;
   }
-`;
-
-const Avatar = styled.div`
-  min-width: 50px;
-  min-height: 50px;
 `;
 
 const HolderInfo = styled.div`
@@ -91,7 +87,7 @@ const TokenHolders = ({
               }}
             >
               <div>
-                <Avatar className="avatar" />
+                <Avatar user={ownership.owner} size={40} />
                 <HolderInfo style={{ cursor: 'default' }}>
                   <Link
                     href={

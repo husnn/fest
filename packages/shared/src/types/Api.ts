@@ -448,6 +448,15 @@ export interface GetOAuthLinkRequest extends Request {
  * User
  */
 
+export interface UpdateAvatarResponse extends Response {
+  user: UserDTO;
+}
+export interface UpdateAvatarRequest extends Request {
+  method: 'POST';
+  endpoint: '/avatar';
+  authentication: 'required';
+}
+
 export interface ChangeEmailAddressResponse extends Response {
   email: string;
 }

@@ -30,6 +30,7 @@ import usePagination from '../../modules/api/usePagination';
 import { useRouter } from 'next/router';
 import useWeb3 from '../../modules/web3/useWeb3';
 import TokenAttributes from '../../ui/TokenAttributes';
+import { Avatar } from '../../components/Avatar';
 
 const TokenContainer = styled.div`
   width: 100%;
@@ -88,11 +89,6 @@ const TokenCreatorCard = styled.div`
   > * + * {
     margin-left: 20px;
   }
-`;
-
-const Avatar = styled.div`
-  min-width: 50px;
-  min-height: 50px;
 `;
 
 const TokenActions = styled.div`
@@ -367,7 +363,7 @@ export default function TokenPage() {
             </PreviewContainer>
 
             <TokenCreatorCard>
-              <Avatar className="avatar"></Avatar>
+              <Avatar user={token.creator} size={50} />
               <div className="token-creator-info">
                 <Link href={getProfileUrl({ id: token.creatorId })}>
                   <h4>{getDisplayName(token.creator)}</h4>

@@ -1,3 +1,5 @@
+import { Router } from 'express';
+import { isProduction } from '../config';
 import AuthController from '../controllers/AuthController';
 import CommunityController from '../controllers/CommunityController';
 import ConfigController from '../controllers/ConfigController';
@@ -6,11 +8,14 @@ import GoogleController from '../controllers/GoogleController';
 import InternalController from '../controllers/InternalController';
 import MarketController from '../controllers/MarketController';
 import PostController from '../controllers/PostController';
-import { Router } from 'express';
 import TokenController from '../controllers/TokenController';
 import UserController from '../controllers/UserController';
 import WaitlistController from '../controllers/WaitlistController';
 import YouTubeController from '../controllers/YouTubeController';
+import { HttpError } from '../http';
+import authMiddleware from '../middleware/authMiddleware';
+import { getRateLimiter } from '../middleware/rateLimiting';
+import { upload } from '../services/AvatarService';
 import initAuthRoutes from './auth.routes';
 import initCommunityRoutes from './community.routes';
 import initFeedRoutes from './feed.routes';
@@ -21,7 +26,6 @@ import initPostRoutes from './post.routes';
 import initTokenRoutes from './token.routes';
 import initUserRoutes from './user.routes';
 import initYouTubeRoutes from './youtube.routes';
-import { isProduction } from '../config';
 
 export default function initRoutes(
   router: Router,
@@ -57,4 +61,20 @@ export default function initRoutes(
   router.use('/communities', initCommunityRoutes(communityController));
   router.use('/feed', initFeedRoutes(feedController));
   router.use('/posts', initPostRoutes(postController));
+
+  router.post(
+    '/avatar',
+    getRateLimiter('avatar', { max: 5, windowInMins: 10 }),
+    authMiddleware,
+    upload.single('avatar'),
+    (req, res, next) => {
+      upload.single('avatar')(req, res, function (err) {
+        if (err || !(req as any).file) {
+          return next(err || new HttpError('Missing upload file', 400));
+        }
+
+        userController.updateAvatar(req, res, next);
+      });
+    }
+  );
 }

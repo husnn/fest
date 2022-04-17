@@ -11,6 +11,7 @@ import {
   InviteRepository,
   TokenOwnershipRepository,
   TokenRepository,
+  UpdateAvatar,
   UserRepository,
   WalletRepository
 } from '@fest/core';
@@ -22,15 +23,16 @@ import {
   GetTokensOwnedResponse,
   GetUserCommunitiesResponse,
   GetUserResponse,
+  UpdateAvatarResponse,
   UserInfo
 } from '@fest/shared';
+import { NextFunction, Request, Response } from 'express';
 import {
   HttpError,
   HttpResponse,
   NotFoundError,
   ValidationError
 } from '../http';
-import { NextFunction, Request, Response } from 'express';
 
 class UserController {
   private editUserUseCase: EditUser;
@@ -40,6 +42,7 @@ class UserController {
   private getTokensCreatedUseCase: GetTokensCreated;
   private enableCreatorModeUseCase: EnableCreatorMode;
   private getReferralSummaryUseCase: GetReferralSummary;
+  private updateAvatarUseCase: UpdateAvatar;
 
   constructor(
     userRepository: UserRepository,
@@ -67,6 +70,7 @@ class UserController {
     this.getCommunitiesForUserUseCase = new GetCommunitiesForUser(
       communityRepository
     );
+    this.updateAvatarUseCase = new UpdateAvatar(userRepository);
   }
 
   async getCommunities(
@@ -271,6 +275,24 @@ class UserController {
       return new HttpResponse<GetUserResponse>(res, {
         user: result.data
       });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async updateAvatar(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<HttpResponse<UpdateAvatarResponse>> {
+    try {
+      const result = await this.updateAvatarUseCase.exec({
+        user: req.user,
+        url: (req as any).file.location
+      });
+      if (!result.success) throw new HttpError('Could not update avatar.');
+
+      return new HttpResponse<UpdateAvatarResponse>(res, { user: result.data });
     } catch (err) {
       next(err);
     }

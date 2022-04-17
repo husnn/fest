@@ -15,6 +15,7 @@ import { Link } from '../ui';
 import Modal from '../ui/Modal';
 import { ApiClient } from '../modules/api';
 import useAuthentication from '../modules/auth/useAuthentication';
+import { Avatar } from './Avatar';
 
 const CommunityInformation = styled.div`
   display: flex;
@@ -218,13 +219,7 @@ const Post = React.memo(
               }
             `}
           >
-            <div
-              css={css`
-                width: 40px;
-                height: 40px;
-              `}
-              className="avatar"
-            />
+            <Avatar user={data.user} size={40} />
             <Metadata onClick={() => router.push(getProfileUrl(data.user))}>
               <p>{getDisplayName(data.user)}</p>
               <p className="smaller" style={{ opacity: 0.7 }}>

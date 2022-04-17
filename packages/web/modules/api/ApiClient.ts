@@ -89,6 +89,8 @@ import {
   TokenOwnershipDTO,
   UnlinkOAuthRequest,
   UnlinkOAuthResponse,
+  UpdateAvatarRequest,
+  UpdateAvatarResponse,
   UserInfo,
   WaitlistEntryType,
   WithdrawMarketEarningsRequest,
@@ -378,6 +380,18 @@ export class ApiClient {
   }
 
   // User
+
+  async updateAvatar(form: FormData): Promise<UpdateAvatarResponse> {
+    return this.client.request<UpdateAvatarResponse, UpdateAvatarRequest>({
+      method: 'POST',
+      endpoint: '/avatar',
+      authentication: 'required',
+      body: form,
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+  }
 
   async getCommunitiesForUser(
     userId: string,

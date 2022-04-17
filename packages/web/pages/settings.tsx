@@ -9,11 +9,15 @@ import { YouTubeButton } from '../components';
 import Head from 'next/head';
 import { fontSize } from '../styles/constants';
 import { getProfileUrl } from '../utils';
-import { saveCurrentUser } from '../modules/auth/authStorage';
+import {
+  saveCurrentUser,
+  updateCurrentUser
+} from '../modules/auth/authStorage';
 import styled from '@emotion/styled';
 import styles from '../styles/Settings.module.scss';
 import useAuthentication from '../modules/auth/useAuthentication';
 import { useRouter } from 'next/router';
+import { AvatarUpload } from '../components/AvatarUpload';
 
 const SettingsSheet = styled.div`
   max-width: 450px;
@@ -76,6 +80,13 @@ export default function SettingsPage() {
         <SettingsSheet>
           <h1>Settings</h1>
           <SettingsBlock>
+            <BlockHeader>
+              <AvatarUpload
+                onUpdate={(user) => {
+                  setCurrentUser(updateCurrentUser(user));
+                }}
+              />
+            </BlockHeader>
             <BlockHeader>
               <h2>Your info</h2>
             </BlockHeader>

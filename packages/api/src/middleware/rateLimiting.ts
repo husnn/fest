@@ -1,6 +1,7 @@
 import { rateLimit } from 'express-rate-limit';
 import RedisStore from 'rate-limit-redis';
 import { RedisClientType } from 'redis';
+import { isDev } from '../config';
 import { HttpError } from '../http';
 
 let redis: RedisClientType;
@@ -20,7 +21,7 @@ export const getRateLimiter = (
     default:
       return rateLimit({
         windowMs: opts.windowInMins * 60 * 1000,
-        max: opts.max,
+        max: isDev ? 0 : opts.max,
         handler: (request, response, next, options) => {
           next(
             new HttpError(
