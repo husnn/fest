@@ -32,15 +32,16 @@ export const generate = async (
 ): Promise<ProtocolConfig> => {
   const tokenContract = contracts.get('Token');
   const marketContract = contracts.get('Market');
+  const festContract = contracts.get('Fest');
 
-  const currencies = getForNetwork(service.chainId);
+  const currencies = [...getForNetwork(service.chainId)];
 
   if (!isProduction) {
     currencies.push({
       name: 'Fest',
       symbol: 'FEST',
       decimals: 18,
-      contract: contracts.get('Fest').options.address
+      contract: festContract.options.address
     });
   }
 
