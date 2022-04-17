@@ -1,5 +1,4 @@
-import { PostRepository as IPostRepository, Post } from '@fest/core';
-
+import { Post, PostRepository as IPostRepository } from '@fest/core';
 import PostSchema from '../schemas/PostSchema';
 import Repository from './Repository';
 
@@ -22,7 +21,7 @@ export class PostRepository
       .andWhere('post.date_created < :before', { before })
       .leftJoinAndSelect('post.community', 'community')
       .leftJoin('post.user', 'user')
-      .addSelect(['user.id', 'user.username', 'user.name'])
+      .addSelect(['user.id', 'user.username', 'user.name', 'user.avatar'])
       .orderBy('post.date_created', 'DESC')
       .limit(count)
       .getMany();
