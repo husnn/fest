@@ -24,7 +24,7 @@ class PostController {
     mediaService: MediaService
   ) {
     this.createPostUseCase = new CreatePost(userRepository, postRepository);
-    this.deletePostUseCase = new DeletePost(postRepository);
+    this.deletePostUseCase = new DeletePost(postRepository, mediaService);
     this.mediaService = mediaService;
   }
 

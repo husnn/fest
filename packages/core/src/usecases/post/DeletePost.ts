@@ -1,6 +1,7 @@
 import UseCase from '../../base/UseCase';
 import { PostRepository } from '../../repositories';
 import { Result } from '../../Result';
+import { MediaService } from '../../services';
 
 export interface DeletePostInput {
   userId: string;
@@ -11,11 +12,13 @@ type DeletePostOutput = any;
 
 export class DeletePost extends UseCase<DeletePostInput, DeletePostOutput> {
   private postRepository: PostRepository;
+  private mediaService: MediaService;
 
-  constructor(postRepository: PostRepository) {
+  constructor(postRepository: PostRepository, mediaService: MediaService) {
     super();
 
     this.postRepository = postRepository;
+    this.mediaService = mediaService;
   }
 
   async exec(data: DeletePostInput): Promise<Result<DeletePostOutput>> {
@@ -24,6 +27,13 @@ export class DeletePost extends UseCase<DeletePostInput, DeletePostOutput> {
       return Result.fail('User is not post creator.');
 
     await this.postRepository.remove(post);
+
+    for (const m of post.media) {
+      const key = this.mediaService.getKeyFromUrl(m.sourceUrl);
+      if (!key) continue;
+
+      this.mediaService.deleteFile(key);
+    }
 
     return Result.ok();
   }

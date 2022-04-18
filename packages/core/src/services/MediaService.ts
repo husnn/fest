@@ -6,6 +6,8 @@ export abstract class MediaService {
     posts: 'posts/full'
   };
 
+  abstract getKeyFromUrl(url: string, basePath?: string): string;
+
   abstract pipeFrom(
     basePath: string,
     url: string,
@@ -24,4 +26,6 @@ export abstract class MediaService {
       url: string;
     }>
   >;
+
+  abstract deleteFile(key: string): Promise<Result>;
 }

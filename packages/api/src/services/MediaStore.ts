@@ -1,4 +1,8 @@
-import { PutObjectCommand, S3 as S3Client } from '@aws-sdk/client-s3';
+import {
+  DeleteObjectCommand,
+  PutObjectCommand,
+  S3 as S3Client
+} from '@aws-sdk/client-s3';
 import { fromContainerMetadata } from '@aws-sdk/credential-providers';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { MediaService, Result } from '@fest/core';
@@ -18,6 +22,13 @@ export class MediaStore implements MediaService {
       }),
       region: process.env.MEDIA_S3_REGION || 'us-east-1'
     });
+  }
+
+  getKeyFromUrl(url: string, basePath?: string): string {
+    let parts = url.split(process.env.MEDIA_S3_URL);
+    if (parts.length < 2) return null;
+    if (basePath) parts = parts[1].split(`/${basePath}`);
+    return parts.length < 2 ? null : parts[1].substring(1);
   }
 
   async pipeFrom(
@@ -100,6 +111,23 @@ export class MediaStore implements MediaService {
           url: `${process.env.MEDIA_S3_URL}/${filePath}`
         })
       : Result.fail();
+  }
+
+  async deleteFile(key: string): Promise<Result> {
+    try {
+      await this.s3.send(
+        new DeleteObjectCommand({
+          Bucket: process.env.MEDIA_S3_NAME,
+          Key: key
+        })
+      );
+
+      return Result.ok();
+    } catch (err) {
+      console.log(err);
+    }
+
+    return Result.fail();
   }
 }
 
