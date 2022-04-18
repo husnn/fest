@@ -4752,6 +4752,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./packages/core/",\
           "packageDependencies": [\
             ["@fest/core", "workspace:packages/core"],\
+            ["@fest/emails", "workspace:packages/emails"],\
             ["@fest/shared", "workspace:packages/shared"],\
             ["@types/bcryptjs", "npm:2.4.2"],\
             ["@types/jsonwebtoken", "npm:8.5.8"],\

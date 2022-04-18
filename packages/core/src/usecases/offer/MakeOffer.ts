@@ -1,7 +1,5 @@
 import { Price } from '@fest/shared';
-
 import UseCase from '../../base/UseCase';
-import OfferReceivedEmail from '../../emails/OfferReceivedEmail';
 import TokenTrade from '../../entities/TokenOffer';
 import {
   TokenOwnershipRepository,
@@ -73,8 +71,7 @@ export class MakeOffer extends UseCase<MakeOfferInput, MakeOfferOutput> {
     const ownerWallet = await this.walletRepository.get(ownership.walletId);
     const owner = await this.userRepository.get(ownerWallet.ownerId);
 
-    const email = new OfferReceivedEmail(owner.email, offerCreated.id);
-    this.mailService.send(email);
+    // TODO: Send email
 
     return Result.ok({ id: offerCreated.id });
   }

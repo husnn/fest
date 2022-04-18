@@ -1,0 +1,39 @@
+<mjml>
+  <mj-head>
+    <mj-include path="./snippets/globals.mjml" />
+  </mj-head>
+  <mj-body>
+    <mj-include path="./snippets/top.mjml" />
+    <mj-section mj-class="body">
+      <mj-column>
+        <mj-text mj-class="heading">
+          👋🏼 Welcome to Fest!
+        </mj-text>
+
+        <mj-raw>{{#if isCreator}}</mj-raw>
+          <mj-text mj-class="text-body">Invite up to 1000 fans to join you!</mj-text>
+        <mj-raw>{{else}}</mj-raw>
+          <mj-text mj-class="text-body">Join your favourite creators in their exclusive communities.</mj-text>
+        <mj-raw>{{/if}}</mj-raw>
+
+        <mj-spacer height="10px" />
+
+        
+        <mj-raw>{{#if walletAddress}}</mj-raw>
+          <mj-text mj-class="text-body">Sign up using your email or wallet address:</mj-text>
+          <mj-text mj-class="text-body"> - {{email}}</mj-text>
+          <mj-text mj-class="text-body"> - {{walletAddress}}</mj-text>
+        <mj-raw>{{else}}</mj-raw>
+          <mj-text mj-class="text-body">Sign up using your email {{email}}</mj-text>
+        <mj-raw>{{/if}}</mj-raw>
+        
+        <mj-spacer height="20px" />
+
+        <mj-button href="{{loginUrl}}" align="left" mj-class="btn-primary">
+          Create your account
+        </mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-include path="./snippets/footer.mjml" />
+  </mj-body>
+</mjml>

@@ -1,6 +1,6 @@
-import { Email, MailService as IMailService } from '@fest/core';
+import { MailService as IMailService } from '@fest/core';
+import { Email } from '@fest/emails';
 import sgMail, { MailDataRequired } from '@sendgrid/mail';
-
 import { mailConfig } from './config';
 
 sgMail.setApiKey(mailConfig.sendgrid.apiKey);
@@ -14,7 +14,7 @@ export class MailService implements IMailService {
       },
       to: email.to,
       subject: email.subject,
-      html: email.content
+      html: email.build()
     };
 
     sgMail.send(msg).catch((err: string) => {

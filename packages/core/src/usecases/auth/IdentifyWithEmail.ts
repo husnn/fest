@@ -1,3 +1,4 @@
+import { LoginCodeEmail } from '@fest/emails';
 import {
   EthereumService,
   isValidPassword,
@@ -5,7 +6,6 @@ import {
   WalletType
 } from '@fest/shared';
 import UseCase from '../../base/UseCase';
-import { LoginCodeEmail } from '../../emails';
 import { User, Wallet } from '../../entities';
 import {
   InviteRepository,

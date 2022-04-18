@@ -1,15 +1,18 @@
 import Email from '../Email';
-import getTemplate from '../getTemplate';
-
 export class AcceptanceEmail extends Email {
-  subject = "Congratulations! You're officially in 🎉😎";
+  subject = "😎 You're officially in";
   content;
 
-  constructor(to: string, loginUrl: string, isCreator: boolean) {
-    super(to);
-    this.content = getTemplate('acceptance-email', {
+  constructor(
+    to: string,
+    loginUrl: string,
+    isCreator: boolean,
+    walletAddress?: string
+  ) {
+    super(to, 'waitlist-acceptance', {
       loginUrl,
-      isCreator
+      isCreator,
+      walletAddress
     });
   }
 }

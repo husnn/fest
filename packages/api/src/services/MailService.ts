@@ -1,16 +1,13 @@
-import { Email, MailService as IMailService } from '@fest/core';
+import { MailService as IMailService } from '@fest/core';
+import { Email } from '@fest/emails';
 import sgMail, { MailDataRequired } from '@sendgrid/mail';
-
-import { mailConfig } from '../config';
+import { isDev, mailConfig } from '../config';
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 class MailService implements IMailService {
   send(email: Email) {
-    if (process.env.NODE_ENV !== 'production') {
-      console.log(email.content);
-      return;
-    }
+    if (isDev) console.log(email.props);
 
     const msg: MailDataRequired = {
       from: {
@@ -19,7 +16,7 @@ class MailService implements IMailService {
       },
       to: email.to,
       subject: email.subject,
-      html: email.content
+      html: email.build()
     };
 
     sgMail.send(msg).catch((err: string) => {

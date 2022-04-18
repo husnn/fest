@@ -1,4 +1,4 @@
-import Email from '../base/Email';
+import { Email } from '@fest/emails';
 
 export interface MailService {
   send(email: Email): void;

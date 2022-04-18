@@ -1,11 +1,25 @@
+import getTemplate from './getTemplate';
+
 export abstract class Email {
   to: string;
 
-  abstract subject: string;
-  abstract content: string;
+  template: string;
+  props: object;
 
-  constructor(to: string) {
+  abstract subject: string;
+
+  constructor(to: string, template: string, props: object) {
     this.to = to;
+    this.template = template;
+
+    this.props = {
+      email: to,
+      ...props
+    };
+  }
+
+  build(): string {
+    return getTemplate(this.template, this.props);
   }
 }
 

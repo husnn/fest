@@ -1,16 +1,15 @@
-import { Express, NextFunction, Request, Response } from 'express';
 import {
+  InviteRepository,
   MailService,
-  WaitlistRepository,
+  upgradeInvitesToCreator,
   UserRepository,
-  InviteRepository
+  WaitlistRepository
 } from '@fest/core';
-
 import { AcceptanceEmail } from '@fest/emails';
 import { WaitlistEntryType } from '@fest/shared';
-import { appConfig } from '../config';
+import { Express, NextFunction, Request, Response } from 'express';
 import moment from 'moment';
-import { upgradeInvitesToCreator } from '@fest/core';
+import { appConfig } from '../config';
 
 export default (
   app: Express,
@@ -55,7 +54,8 @@ export default (
       const email = new AcceptanceEmail(
         entry.email,
         `${appConfig.clientUrl}/login`,
-        entry.type == WaitlistEntryType.CREATOR
+        entry.type == WaitlistEntryType.CREATOR,
+        entry.wallet
       );
 
       mailService.send(email);

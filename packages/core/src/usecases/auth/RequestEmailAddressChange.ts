@@ -1,7 +1,7 @@
+import { AddressChangeEmail } from '@fest/emails';
 import { getExpiryDate } from '@fest/shared';
 import UseCase from '../../base/UseCase';
 import { emailChangeLink } from '../../config';
-import ChangeEmail from '../../emails/ChangeEmail';
 import { User } from '../../entities';
 import { UserRepository } from '../../repositories';
 import Result from '../../Result';
@@ -56,7 +56,10 @@ export class RequestEmailAddressChange extends UseCase<
     await this.userRepository.update(user);
 
     this.mailService.send(
-      new ChangeEmail(newEmail, emailChangeLink(jwt, user.wallet.type, expiry))
+      new AddressChangeEmail(
+        newEmail,
+        emailChangeLink(jwt, user.wallet.type, expiry)
+      )
     );
 
     return Result.ok();
