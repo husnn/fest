@@ -1,16 +1,15 @@
 import { OAuthProvider } from '@fest/shared';
-
 import UseCase from '../../base/UseCase';
 import { OAuth } from '../../entities';
 import OAuthRepository from '../../repositories/OAuthRepository';
 import { Result } from '../../Result';
-import { GoogleService, YouTubeService } from '../../services';
+import { GoogleService } from '../../services';
 
 export interface LinkGoogleInput {
   user: string;
   code: string;
 }
-export interface LinkGoogleOutput {}
+export type LinkGoogleOutput = any;
 
 export class LinkGoogle extends UseCase<LinkGoogleInput, LinkGoogleOutput> {
   private oAuthRepository: OAuthRepository;

@@ -1,12 +1,11 @@
-import Axios from 'axios';
-import qs from 'querystring';
-
 import {
   GoogleService as IGoogleService,
   GoogleTokenData,
   Result
 } from '@fest/core';
 import { getExpiryDate } from '@fest/shared';
+import Axios from 'axios';
+import qs from 'querystring';
 
 export interface GoogleConfig {
   clientId: string;
@@ -75,8 +74,11 @@ class GoogleService implements IGoogleService {
     });
 
     const tokenData = this.extractTokenData(response.data);
+    if (!tokenData.success) Result.fail();
 
-    return tokenData.success ? Result.ok(tokenData.data) : Result.fail();
+    tokenData.data.refreshToken = refreshToken;
+
+    return tokenData;
   }
 }
 
