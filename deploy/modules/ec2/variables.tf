@@ -10,3 +10,5 @@ variable "instance_type" {
 
 variable "ssh_key_name" {}
 variable "port" {}
+
+variable "allowed_ip" {}

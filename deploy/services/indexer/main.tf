@@ -30,6 +30,8 @@ module "main" {
   port          = 4000
 
   ssh_key_name = var.ssh_key_name
+
+  allowed_ip = var.allowed_ip
 }
 
 resource "aws_iam_role_policy" "main" {

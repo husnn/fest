@@ -60,3 +60,7 @@ variable "indexer_secrets_manager_staging_arn" {
 variable "indexer_secrets_manager_prod_arn" {
   type = string
 }
+
+variable "indexer_allowed_ip" {
+  type = string
+}

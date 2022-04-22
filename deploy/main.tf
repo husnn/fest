@@ -181,6 +181,10 @@ module "service_api_prod" {
   media_s3_name = module.s3_media_prod.name
 }
 
+data "http" "myip" {
+  url = "http://ipv4.icanhazip.com"
+}
+
 module "service_indexer_prod" {
   source = "./services/indexer"
 
@@ -193,4 +197,6 @@ module "service_indexer_prod" {
   database_url        = module.postgres_main_prod.database_url
   redis_url           = module.redis_main_prod.url
   secrets_manager_arn = var.indexer_secrets_manager_prod_arn
+
+  allowed_ip = try(var.indexer_allowed_ip, chomp(data.http.myip.body))
 }

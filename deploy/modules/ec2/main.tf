@@ -2,10 +2,6 @@ locals {
   project_name = "${var.app_name}-${var.environment}"
 }
 
-data "http" "myip" {
-  url = "http://ipv4.icanhazip.com"
-}
-
 resource "aws_security_group" "main" {
   name   = "${local.project_name}-sg"
   vpc_id = var.vpc_id
@@ -14,14 +10,14 @@ resource "aws_security_group" "main" {
     protocol    = "tcp"
     from_port   = 22
     to_port     = 22
-    cidr_blocks = ["${chomp(data.http.myip.body)}/32"]
+    cidr_blocks = ["${var.allowed_ip}/32"]
   }
 
   ingress {
     protocol    = "tcp"
     from_port   = var.port
     to_port     = var.port
-    cidr_blocks = ["${chomp(data.http.myip.body)}/32"]
+    cidr_blocks = ["${var.allowed_ip}/32"]
   }
 
   egress {
