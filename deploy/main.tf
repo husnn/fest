@@ -168,7 +168,7 @@ module "service_api_prod" {
 
   github_user   = var.github_user
   github_repo   = var.github_repo
-  github_branch = "master"
+  github_branch = "master-api"
   github_token  = var.github_token
 
   cpu            = 256
