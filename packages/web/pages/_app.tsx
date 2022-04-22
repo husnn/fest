@@ -48,7 +48,8 @@ function FestApp({ Component, pageProps, router }: AppProps) {
 
   return (
     <ThemeProvider theme={DefaultTheme}>
-      {!isDevelopment && injectAnalyticsCode && (
+      {/* {!isDevelopment && injectAnalyticsCode && ( */}
+      {!isDevelopment && (
         <Head>
           <script
             async

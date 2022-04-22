@@ -324,9 +324,9 @@ const HomePage = () => {
             margin-top: 120px;
           `}
         >
-          <Link href="https://discord.gg/dg8E4Vnm6U" target="blank">
+          {/* <Link href="https://discord.gg/dg8E4Vnm6U" target="blank">
             <img src="/images/ic-discord.svg" height={28} />
-          </Link>
+          </Link> */}
           <Link href="https://twitter.com/festdao" target="blank">
             <img src="/images/ic-twitter.svg" height={22} />
           </Link>
