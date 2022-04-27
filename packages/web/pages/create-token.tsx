@@ -96,7 +96,7 @@ export default function CreateTokenPage() {
               image: imageUrl,
               supply: values.supply,
               royaltyPct: values.royaltyPercentage,
-              attributes: values.attributes
+              attributes: hasAttributes ? values.attributes : null
             });
 
             setCreated(true);

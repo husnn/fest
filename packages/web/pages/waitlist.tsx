@@ -83,8 +83,8 @@ export const JoinWaitlistSchema = Yup.object().shape({
 
 export const WaitlistPage = () => {
   const userTypeOptions: RadioOption[] = [
-    { id: 'fan', label: 'Fan' },
-    { id: 'creator', label: 'Creator' }
+    { id: 'creator', label: 'Creator' },
+    { id: 'fan', label: 'Fan' }
   ];
 
   const [width, setWidth] = useState(0);
@@ -103,7 +103,7 @@ export const WaitlistPage = () => {
     if (currentUser) router.push(getProfileUrl(currentUser));
   }, [currentUser]);
 
-  const [userType, setUserType] = useState<RadioOption>(userTypeOptions[1]);
+  const [userType, setUserType] = useState<RadioOption>(userTypeOptions[0]);
   const [hasWallet, setHasWallet] = useState(false);
 
   const [hasJoined, setHasJoined] = useState(false);

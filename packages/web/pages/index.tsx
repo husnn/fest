@@ -5,7 +5,7 @@ import { css } from '@emotion/react';
 import { Button, Link } from '../ui';
 import Head from 'next/head';
 import { getCurrentUser } from '../modules/auth/authStorage';
-import Router from 'next/router';
+import router from 'next/router';
 
 const Header = styled.div`
   width: 90%;
@@ -243,7 +243,7 @@ const CircularGradient = styled.div`
 
 const HomePage = () => {
   useEffect(() => {
-    if (getCurrentUser()) Router.push('/home');
+    if (getCurrentUser()) router.push('/home');
   }, []);
 
   return (
@@ -339,8 +339,8 @@ const HomePage = () => {
         <VideoContent>
           <Title>What is Fest?</Title>
           <Description>
-            Fest is a platform that allows creators to build exclusive,
-            token-gated communities for their fans.
+            A social platform for creators to build exclusive, token-gated
+            communities for their top fans.
           </Description>
         </VideoContent>
       </VideoSection>
@@ -365,10 +365,10 @@ const HomePage = () => {
           <li>Custodial wallets for users</li>
         </FeatureList>
         <Link
-          href="https://www.notion.so/Lightpaper-v0-1-1563dc476d2a422e85addaadcb8c1cda"
+          href="https://fested.notion.site/Litepaper-v0-1-b6c8c4c43f2948f89bf9ea1b1f02afe3"
           target="blank"
         >
-          <GhostButton>Read lightpaper</GhostButton>
+          <GhostButton>Read litepaper</GhostButton>
         </Link>
       </Section>
       <VideoSection>
@@ -434,20 +434,15 @@ const HomePage = () => {
             love you the most.
           </p>
         </div>
-        <Link
-          href="/waitlist"
+        <Button
           css={css`
+            margin-top: 30px;
             z-index: 10;
           `}
+          onClick={() => router.push('/waitlist')}
         >
-          <Button
-            css={css`
-              margin-top: 30px;
-            `}
-          >
-            Apply to beta
-          </Button>
-        </Link>
+          Apply to beta
+        </Button>
       </Section>
       <Footer>
         <div
