@@ -370,6 +370,29 @@ const HomePage = () => {
         >
           <GhostButton>Read litepaper</GhostButton>
         </Link>
+
+        <div
+          css={css`
+            width: 100%;
+            max-width: 600px;
+            height: 300px;
+            margin-top: 100px;
+            position: relative;
+          `}
+        >
+          <iframe
+            src="https://www.loom.com/embed/a9caa847fea04822838be28d76a27994"
+            frameBorder="0"
+            allowFullScreen
+            css={css`
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+            `}
+          ></iframe>
+        </div>
       </Section>
       <VideoSection>
         <FullWidthVideo muted loop autoPlay>
