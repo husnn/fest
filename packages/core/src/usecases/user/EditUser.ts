@@ -1,8 +1,7 @@
-import { UserRepository, WalletRepository } from '../../repositories';
-
 import { CurrentUserDTO } from '@fest/shared';
-import { Result } from '../../Result';
 import UseCase from '../../base/UseCase';
+import { UserRepository, WalletRepository } from '../../repositories';
+import { Result } from '../../Result';
 
 type EditUserInput = {
   user: string;
@@ -36,7 +35,7 @@ export class EditUser extends UseCase<EditUserInput, EditUserOutput> {
     const original = Object.assign({}, user);
 
     if (name) user.name = name.trim(); // @BeforeInsert Trim
-    if (username) user.username = username.trim(); // @BeforeInsert Trim and validate
+    if (username) user.username = username.trim().toLowerCase(); // @BeforeInsert Trim and validate
     if (bio) user.bio = bio.trim(); // @BeforeInsert Trim and validate
 
     if (JSON.stringify(original) !== JSON.stringify(user)) {
