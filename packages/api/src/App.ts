@@ -26,6 +26,7 @@ import GoogleController from './controllers/GoogleController';
 import InternalController from './controllers/InternalController';
 import MarketController from './controllers/MarketController';
 import PostController from './controllers/PostController';
+import SearchController from './controllers/SearchController';
 import TokenController from './controllers/TokenController';
 import UserController from './controllers/UserController';
 import WaitlistController from './controllers/WaitlistController';
@@ -183,6 +184,8 @@ class App {
       mediaStore
     );
 
+    const searchController = new SearchController(userRepository);
+
     const router = Router();
 
     initRoutes(
@@ -198,7 +201,8 @@ class App {
       marketController,
       internalController,
       feedController,
-      postController
+      postController,
+      searchController
     );
 
     app.use(getRateLimiter());

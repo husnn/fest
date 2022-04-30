@@ -6,6 +6,7 @@ export * from './google';
 export * from './invites';
 export * from './market';
 export * from './post';
+export * from './search';
 export * from './token';
 export * from './user';
 export * from './waitlist';

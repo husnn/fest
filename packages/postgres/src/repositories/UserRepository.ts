@@ -1,7 +1,6 @@
-import { UserRepository as IUserRepository, User } from '@fest/core';
-
-import Repository from './Repository';
+import { User, UserRepository as IUserRepository } from '@fest/core';
 import UserSchema from '../schemas/UserSchema';
+import Repository from './Repository';
 
 export class UserRepository
   extends Repository<User>
@@ -60,6 +59,24 @@ export class UserRepository
       .where('LOWER(user.username) = LOWER(:username)', { username })
       .leftJoinAndSelect('user.wallet', 'wallet')
       .getOne();
+  }
+
+  async findSimilar(
+    username: string,
+    count: number,
+    page: number
+  ): Promise<{ users: User[]; total: number }> {
+    const [users, total] = await this.db
+      .createQueryBuilder('user')
+      .where('LOWER(user.username) like LOWER(:username)', {
+        username: `%${username}%`
+      })
+      .leftJoinAndSelect('user.wallet', 'wallet')
+      .skip((page - 1) * count)
+      .take(count)
+      .getManyAndCount();
+
+    return { users, total };
   }
 }
 

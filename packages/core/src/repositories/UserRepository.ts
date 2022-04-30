@@ -1,5 +1,5 @@
-import Repository from './Repository';
 import { User } from '../entities';
+import Repository from './Repository';
 
 export interface UserRepository extends Repository<User> {
   get(id: string, select?: Array<keyof User>): Promise<User>;
@@ -7,6 +7,11 @@ export interface UserRepository extends Repository<User> {
   findByEmail(email: string, select?: Array<keyof User>): Promise<User>;
   findByEmailOrWallet(identifier: string): Promise<User>;
   findByUsername(username: string): Promise<User>;
+  findSimilar(
+    username: string,
+    count: number,
+    page: number
+  ): Promise<{ users: User[]; total: number }>;
 }
 
 export default UserRepository;

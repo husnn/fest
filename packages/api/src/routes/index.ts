@@ -8,12 +8,14 @@ import GoogleController from '../controllers/GoogleController';
 import InternalController from '../controllers/InternalController';
 import MarketController from '../controllers/MarketController';
 import PostController from '../controllers/PostController';
+import SearchController from '../controllers/SearchController';
 import TokenController from '../controllers/TokenController';
 import UserController from '../controllers/UserController';
 import WaitlistController from '../controllers/WaitlistController';
 import YouTubeController from '../controllers/YouTubeController';
 import { HttpError } from '../http';
 import authMiddleware from '../middleware/authMiddleware';
+import pagination from '../middleware/pagination';
 import { getRateLimiter } from '../middleware/rateLimiting';
 import { upload } from '../services/AvatarService';
 import initAuthRoutes from './auth.routes';
@@ -40,7 +42,8 @@ export default function initRoutes(
   marketController: MarketController,
   internalController: InternalController,
   feedController: FeedController,
-  postController: PostController
+  postController: PostController,
+  searchController: SearchController
 ) {
   if (!isProduction) {
     router.use('/internal', initInternalRoutes(internalController));
@@ -61,6 +64,10 @@ export default function initRoutes(
   router.use('/communities', initCommunityRoutes(communityController));
   router.use('/feed', initFeedRoutes(feedController));
   router.use('/posts', initPostRoutes(postController));
+
+  router.use('/search', pagination, (req, res, next) =>
+    searchController.search(req, res, next)
+  );
 
   router.post(
     '/avatar',

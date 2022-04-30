@@ -14,6 +14,7 @@ import {
   TokenTradeDTO,
   UserDTO
 } from '../dto';
+import SearchResultDTO from '../dto/SearchResultDTO';
 import { Protocol, TokenType, WaitlistEntryType } from '../enums';
 import { ProtocolConfig } from './';
 
@@ -640,5 +641,21 @@ export interface IdentifyWithWalletRequest extends Request {
     protocol: Protocol;
     address: string;
     invite?: string;
+  };
+}
+
+/**
+ * Search
+ */
+
+export interface SearchResponse extends PaginatedResponse<SearchResultDTO> {}
+
+export interface SearchRequest extends PaginatedRequest {
+  method: 'GET';
+  endpoint: '/search';
+  params: {
+    query: string;
+    count: number;
+    page: number;
   };
 }
