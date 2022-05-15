@@ -25,7 +25,7 @@ export class SearchController {
         count,
         page
       });
-      if (!result.success) throw new HttpError();
+      if (!result.success) throw new HttpError(result.error);
 
       return new HttpResponse<SearchResponse>(
         res,

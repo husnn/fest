@@ -62,15 +62,18 @@ export class UserRepository
   }
 
   async findSimilar(
-    username: string,
+    name: string,
     count: number,
     page: number
   ): Promise<{ users: User[]; total: number }> {
     const [users, total] = await this.db
       .createQueryBuilder('user')
-      .where('LOWER(user.username) like LOWER(:username)', {
-        username: `%${username}%`
-      })
+      .where(
+        'LOWER(user.username) like LOWER(:name) or LOWER(user.name) like LOWER(:name)',
+        {
+          name: `%${name}%`
+        }
+      )
       .leftJoinAndSelect('user.wallet', 'wallet')
       .skip((page - 1) * count)
       .take(count)

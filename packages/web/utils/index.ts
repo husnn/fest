@@ -150,3 +150,36 @@ export const setPreferredCommunity = (community: CommunityDTO) =>
 
 export const getPreferredCommunityId = (): string =>
   localStorage.getItem(PREFERRED_COMMUNITY_ID);
+
+export const getLocalObject = <T>(key: string): T | null => {
+  let obj: T | null;
+  const data = localStorage.getItem(key);
+
+  if (data) {
+    try {
+      obj = JSON.parse(data) as T;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  return obj;
+};
+
+export const saveLocalObject = <T>(key: string, obj: T): T | null => {
+  if (obj && typeof obj === 'object' && Object.keys(obj).length > 0) {
+    localStorage.setItem(key, JSON.stringify(obj));
+    return obj;
+  }
+  return null;
+};
+
+export const updateLocalObject = <T>(
+  key: string,
+  data: Partial<T>
+): T | null => {
+  return saveLocalObject<T>(key, {
+    ...getLocalObject<T>(key),
+    ...data
+  });
+};

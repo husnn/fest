@@ -82,6 +82,8 @@ import {
   RequestTestFundsResponse,
   ResetPasswordRequest,
   ResetPasswordResponse,
+  SearchRequest,
+  SearchResponse,
   SignOutRequest,
   SignOutResponse,
   TokenData,
@@ -844,6 +846,21 @@ export class ApiClient {
       endpoint: '/auth/identify/email',
       authentication: 'none',
       body: { email, password, invite }
+    });
+  }
+
+  /**
+   * Search
+   */
+
+  async search(keyword: string): Promise<SearchResponse> {
+    return this.client.request<SearchResponse, SearchRequest>({
+      method: 'GET',
+      endpoint: '/search',
+      authentication: 'optional',
+      params: {
+        query: keyword
+      }
     });
   }
 }

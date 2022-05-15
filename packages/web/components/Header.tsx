@@ -7,6 +7,7 @@ import MobileMenu from './MobileMenu';
 import styled from '@emotion/styled';
 import useAuthentication from '../modules/auth/useAuthentication';
 import { useHeader } from '../modules/navigation';
+import Search from './Search';
 
 export type LinkType = {
   id: string;
@@ -182,6 +183,7 @@ const Header: React.FC<HeaderProps> = () => {
         <Link href={isAuthenticated ? '/home' : '/'}>
           <h2 style={{ fontFamily: 'Gilmer' }}>Fest</h2>
         </Link>
+        {isAuthenticated && <Search />}
         {links && !singleLink && (
           <HeaderMenu>
             <HeaderLinks links={links} />

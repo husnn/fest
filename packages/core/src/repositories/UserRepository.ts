@@ -8,7 +8,7 @@ export interface UserRepository extends Repository<User> {
   findByEmailOrWallet(identifier: string): Promise<User>;
   findByUsername(username: string): Promise<User>;
   findSimilar(
-    username: string,
+    name: string,
     count: number,
     page: number
   ): Promise<{ users: User[]; total: number }>;

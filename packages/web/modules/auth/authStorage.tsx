@@ -1,7 +1,7 @@
 import { CurrentUserDTO } from '@fest/shared';
 
-const AUTH_EXPIRY = 'AUTH_EXPIRY';
-const CURRENT_USER = 'CURRENT_USER';
+const AUTH_EXPIRY = 'auth_expiry';
+const CURRENT_USER = 'user';
 
 export const getAuthExpiry = (): Date => {
   const expiry = localStorage.getItem(AUTH_EXPIRY);

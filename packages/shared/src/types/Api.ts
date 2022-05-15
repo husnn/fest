@@ -51,8 +51,8 @@ export interface PaginatedResponse<T = any> extends Response {
 
 export interface PaginatedRequest extends Request {
   params: {
-    count: number;
-    page: number;
+    count?: number;
+    page?: number;
   };
 }
 
@@ -655,7 +655,7 @@ export interface SearchRequest extends PaginatedRequest {
   endpoint: '/search';
   params: {
     query: string;
-    count: number;
-    page: number;
+    count?: number;
+    page?: number;
   };
 }

@@ -4980,6 +4980,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["socket.io-client", "npm:4.4.1"],\
             ["typescript", "patch:typescript@npm%3A4.6.3#~builtin<compat/typescript>::version=4.6.3&hash=bda367"],\
             ["url-loader", "virtual:f32071e2bfc54d473c2f0f6b40dde2b07e2ff26c76fa2953efced1336c18a6073f75e162696ba205ee7502532446b01b8b4f431e13eca91a549a04ae84ffd8f5#npm:4.1.1"],\
+            ["use-debounce", "virtual:f32071e2bfc54d473c2f0f6b40dde2b07e2ff26c76fa2953efced1336c18a6073f75e162696ba205ee7502532446b01b8b4f431e13eca91a549a04ae84ffd8f5#npm:7.0.1"],\
             ["web3", "npm:1.7.1"],\
             ["yup", "npm:0.32.11"],\
             ["zustand", "virtual:f32071e2bfc54d473c2f0f6b40dde2b07e2ff26c76fa2953efced1336c18a6073f75e162696ba205ee7502532446b01b8b4f431e13eca91a549a04ae84ffd8f5#npm:3.7.1"]\
@@ -20514,6 +20515,28 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/url-to-options-npm-1.0.1-7eb319b3c8-20e59f4578.zip/node_modules/url-to-options/",\
           "packageDependencies": [\
             ["url-to-options", "npm:1.0.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["use-debounce", [\
+        ["npm:7.0.1", {\
+          "packageLocation": "./.yarn/cache/use-debounce-npm-7.0.1-17cbf0764b-c5c1c34cce.zip/node_modules/use-debounce/",\
+          "packageDependencies": [\
+            ["use-debounce", "npm:7.0.1"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:f32071e2bfc54d473c2f0f6b40dde2b07e2ff26c76fa2953efced1336c18a6073f75e162696ba205ee7502532446b01b8b4f431e13eca91a549a04ae84ffd8f5#npm:7.0.1", {\
+          "packageLocation": "./.yarn/__virtual__/use-debounce-virtual-d4c728f7be/0/cache/use-debounce-npm-7.0.1-17cbf0764b-c5c1c34cce.zip/node_modules/use-debounce/",\
+          "packageDependencies": [\
+            ["use-debounce", "virtual:f32071e2bfc54d473c2f0f6b40dde2b07e2ff26c76fa2953efced1336c18a6073f75e162696ba205ee7502532446b01b8b4f431e13eca91a549a04ae84ffd8f5#npm:7.0.1"],\
+            ["@types/react", "npm:17.0.43"],\
+            ["react", "npm:17.0.2"]\
+          ],\
+          "packagePeers": [\
+            "@types/react",\
+            "react"\
           ],\
           "linkType": "HARD"\
         }]\
