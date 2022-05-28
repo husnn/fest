@@ -14,7 +14,7 @@ export const getRateLimiter = (
   name = 'default',
   opts: { max?: number; windowInMins?: number; message?: string } = {
     max: 100,
-    windowInMins: 5
+    windowInMins: 1
   }
 ) => {
   switch (name) {
