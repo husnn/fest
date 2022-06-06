@@ -1,21 +1,12 @@
+import {
+  NotificationCategory,
+  NotificationDTO,
+  NotificationPriority,
+  NotificationTopic
+} from '@fest/shared';
 import { Notification } from '../entities';
-import { NotificationDTO } from '@fest/shared';
-import { NotificationRepository } from '../repositories';
-
-export enum NotificationPriority {
-  NORMAL = 1,
-  IMPORTANT = 2,
-  CRITICAL = 3
-}
-
-export enum NotificationCategory {
-  MARKET = 'MARKET'
-}
-
-export enum NotificationTopic {
-  TOKEN_MARKET_SALE = 'TOKEN_MARKET_SALE',
-  TOKEN_MARKET_ROYALTY_PAYMENT = 'TOKEN_MARKET_ROYALTY_PAYMENT'
-}
+import { NotificationRepository, UserRepository } from '../repositories';
+import Result from '../Result';
 
 interface NotificationData {
   priority: NotificationPriority;
@@ -26,9 +17,14 @@ interface NotificationData {
 
 export class NotificationService {
   private notificationRepository: NotificationRepository;
+  private userRepository: UserRepository;
 
-  constructor(notificationRepository: NotificationRepository) {
+  constructor(
+    notificationRepository: NotificationRepository,
+    userRepository: UserRepository
+  ) {
     this.notificationRepository = notificationRepository;
+    this.userRepository = userRepository;
   }
 
   create(recipientId: string, data: NotificationData) {
@@ -43,13 +39,37 @@ export class NotificationService {
     );
   }
 
-  async getForUser(userId: string): Promise<NotificationDTO[]> {
-    const notifications = await this.notificationRepository.findForUser(userId);
+  async getForUser(
+    userId: string,
+    all = false
+  ): Promise<
+    Result<{
+      notifications: NotificationDTO[];
+      lastSeen: Date;
+    }>
+  > {
+    const user = await this.userRepository.get(userId);
+    const lastSeen = user.preferences?.notificationsLastSeen;
 
-    return notifications.map((n) => {
-      return new NotificationDTO({
-        text: this.makeText(n)
-      });
+    const notifications = await this.notificationRepository.findForUser(
+      userId,
+      !all && lastSeen
+    );
+
+    user.preferences = {
+      ...user.preferences,
+      notificationsLastSeen: new Date()
+    };
+    this.userRepository.update(user);
+
+    return Result.ok({
+      notifications: notifications.map((n) => {
+        return new NotificationDTO({
+          ...n,
+          text: this.makeText(n)
+        });
+      }),
+      lastSeen
     });
   }
 

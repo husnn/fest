@@ -1,8 +1,8 @@
 import {
-  NotificationRepository as INotificationRepository,
-  Notification
+  Notification,
+  NotificationRepository as INotificationRepository
 } from '@fest/core';
-
+import { MoreThan } from 'typeorm';
 import NotificationSchema from '../schemas/NotificationSchema';
 import Repository from './Repository';
 
@@ -14,7 +14,12 @@ export class NotificationRepository
     super(NotificationSchema);
   }
 
-  findForUser(userId: string): Promise<Notification[]> {
-    return this.db.find({ recipientId: userId });
+  findForUser(userId: string, after?: Date): Promise<Notification[]> {
+    return this.db.find({
+      where: {
+        recipientId: userId,
+        dateCreated: MoreThan(after || new Date(0))
+      }
+    });
   }
 }

@@ -1,5 +1,4 @@
 import { PaginatedResponse, Response } from '@fest/shared';
-
 import { Response as ExpressResponse } from 'express';
 
 export class HttpResponse<U extends Response | PaginatedResponse> {

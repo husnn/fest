@@ -1,11 +1,10 @@
+import { NotificationService, WalletRepository } from '@fest/core';
 import {
+  EthereumService,
   NotificationCategory,
   NotificationPriority,
-  NotificationService,
-  NotificationTopic,
-  WalletRepository
-} from '@fest/core';
-import { EthereumService } from '@fest/shared';
+  NotificationTopic
+} from '@fest/shared';
 import Job from './Job';
 import JobData from './JobData';
 

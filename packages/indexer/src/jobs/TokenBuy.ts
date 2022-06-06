@@ -1,14 +1,16 @@
 import {
-  NotificationCategory,
-  NotificationPriority,
   NotificationService,
-  NotificationTopic,
   TokenListingRepository,
   TokenTrade,
   TokenTradeRepository,
   WalletRepository
 } from '@fest/core';
-import { TokenListingStatus } from '@fest/shared';
+import {
+  NotificationCategory,
+  NotificationPriority,
+  NotificationTopic,
+  TokenListingStatus
+} from '@fest/shared';
 import Job from './Job';
 import JobData from './JobData';
 

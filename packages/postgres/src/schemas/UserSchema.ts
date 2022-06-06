@@ -77,6 +77,10 @@ const UserSchema = new EntitySchema<User>({
       type: 'timestamp',
       name: 'last_login',
       nullable: true
+    },
+    preferences: {
+      type: 'simple-json',
+      nullable: true
     }
   },
   relations: {

@@ -36,6 +36,9 @@ export class User {
   lastLoginIP?: string;
   lastLogin?: Date;
   communities: Community[];
+  preferences?: {
+    notificationsLastSeen?: Date;
+  };
 
   constructor(data?: Partial<User>) {
     Object.assign(this, data);

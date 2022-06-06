@@ -10,6 +10,7 @@ import Postgres, {
   TokenOwnershipRepository,
   TokenRepository,
   TokenTradeRepository,
+  UserRepository,
   WalletRepository
 } from '@fest/postgres';
 import Queue from 'bee-queue';
@@ -83,6 +84,7 @@ ethereumListener.on(
   const ethereumService = await EthereumService.getInstance(web3);
   console.log('\nListening to all new events.');
 
+  const userRepository = new UserRepository();
   const tokenRepository = new TokenRepository();
   const tokenListingRepository = new TokenListingRepository();
   const tokenTradeRepository = new TokenTradeRepository();
@@ -91,7 +93,10 @@ ethereumListener.on(
   const communityRepository = new CommunityRepository();
   const notificationRepository = new NotificationRepository();
 
-  const notificationService = new NotificationService(notificationRepository);
+  const notificationService = new NotificationService(
+    notificationRepository,
+    userRepository
+  );
 
   mintQueue.process(async (job: Queue.Job<TokenMintJob>) => {
     return new TokenMint(job.data).execute(

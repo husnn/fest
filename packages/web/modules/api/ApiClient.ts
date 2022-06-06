@@ -386,7 +386,7 @@ export class ApiClient {
   async updateAvatar(form: FormData): Promise<UpdateAvatarResponse> {
     return this.client.request<UpdateAvatarResponse, UpdateAvatarRequest>({
       method: 'POST',
-      endpoint: '/avatar',
+      endpoint: '/users/me/avatar',
       authentication: 'required',
       body: form,
       headers: {

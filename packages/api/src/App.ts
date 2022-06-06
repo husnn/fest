@@ -1,8 +1,9 @@
-import { CreateCommunity } from '@fest/core';
+import { CreateCommunity, NotificationService } from '@fest/core';
 import { EthereumService } from '@fest/ethereum';
 import {
   CommunityRepository,
   InviteRepository,
+  NotificationRepository,
   OAuthRepository,
   PostRepository,
   TokenListingRepository,
@@ -83,6 +84,7 @@ class App {
     const tokenOfferRepository = new TokenOfferRepository();
     const communityRepository = new CommunityRepository();
     const postRepository = new PostRepository();
+    const notificationRepository = new NotificationRepository();
 
     const ethereumService: EthereumService = EthereumService.instance;
     const mailService = new MailService();
@@ -186,6 +188,11 @@ class App {
 
     const searchController = new SearchController(userRepository);
 
+    const notificationService = new NotificationService(
+      notificationRepository,
+      userRepository
+    );
+
     const router = Router();
 
     initRoutes(
@@ -202,7 +209,8 @@ class App {
       internalController,
       feedController,
       postController,
-      searchController
+      searchController,
+      notificationService
     );
 
     app.use(getRateLimiter());

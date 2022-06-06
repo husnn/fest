@@ -2,7 +2,7 @@ import {
   NotificationCategory,
   NotificationPriority,
   NotificationTopic
-} from '../services/NotificationService';
+} from '@fest/shared';
 
 export class Notification {
   id: string;

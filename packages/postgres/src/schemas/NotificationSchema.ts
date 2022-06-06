@@ -1,10 +1,9 @@
+import { Notification } from '@fest/core';
 import {
-  Notification,
   NotificationCategory,
   NotificationPriority,
   NotificationTopic
-} from '@fest/core';
-
+} from '@fest/shared';
 import { EntitySchema } from 'typeorm';
 
 const NotificationSchema = new EntitySchema<Notification>({

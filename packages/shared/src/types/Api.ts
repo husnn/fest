@@ -5,6 +5,7 @@ import {
   CommunityDTO,
   CurrentUserDTO,
   InviteDTO,
+  NotificationDTO,
   PostDTO,
   TokenDTO,
   TokenListingDTO,
@@ -94,6 +95,20 @@ export interface RequestPasswordResetRequest extends Request {
   body: {
     email: string;
   };
+}
+
+/**
+ * Notifications
+ */
+export interface GetNotificationsResponse extends Response {
+  body: NotificationDTO[];
+  lastSeen: Date;
+}
+
+export interface GetNotificationsRequest extends Request {
+  method: 'GET';
+  authentication: 'required';
+  endpoint: '/notifications' | '/notifications?all=true';
 }
 
 /**
@@ -454,7 +469,7 @@ export interface UpdateAvatarResponse extends Response {
 }
 export interface UpdateAvatarRequest extends Request {
   method: 'POST';
-  endpoint: '/avatar';
+  endpoint: '/users/me/avatar';
   authentication: 'required';
 }
 
