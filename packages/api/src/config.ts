@@ -30,7 +30,7 @@ const indexerConfig = {
 };
 
 const ethConfig = {
-  provider: process.env.ETH_PROVIDER || 'http://localhost:8545'
+  provider: process.env.ETH_PROVIDER || 'http://0.0.0.0:8545'
 };
 
 const mailConfig = {
