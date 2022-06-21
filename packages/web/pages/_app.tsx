@@ -55,15 +55,18 @@ function FestApp({ Component, pageProps, router }: AppProps) {
             async
             src={`https://www.googletagmanager.com/gtag/js?id=${gId}`}
           ></script>
-          <script>
-            {`
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){window.dataLayer.push(arguments);}
-              gtag('js', new Date());
-              
-              gtag('config', '${gId}');
-            `}
-          </script>
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${gId}', {
+                  page_path: window.location.pathname
+                });
+              `
+            }}
+          />
         </Head>
       )}
       <AuthProvider>
