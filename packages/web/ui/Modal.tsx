@@ -43,7 +43,6 @@ const ModalOverlay = styled.div`
   left: 0;
   background-color: black;
   opacity: 0.25;
-  transition-delay: 100ms;
   z-index: 999;
 `;
 
