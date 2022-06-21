@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getAuthExpiry, getCurrentUser, removeAuth } from './authStorage';
+import { getAuthExpiry, getCurrentUser } from './authStorage';
 
 import { CurrentUserDTO } from '@fest/shared';
 import { useRouter } from 'next/router';
@@ -47,7 +47,7 @@ export const AuthProvider: React.FC = ({
   }, [isAuthenticated, redirect]);
 
   const clearAuth = () => {
-    removeAuth();
+    localStorage.clear();
 
     setAuthenticated(false);
     setCurrentUser(null);
