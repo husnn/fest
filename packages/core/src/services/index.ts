@@ -1,3 +1,4 @@
+export * from './DiscordService';
 export * from './GoogleService';
 export * from './IPFSService';
 export * from './MailService';

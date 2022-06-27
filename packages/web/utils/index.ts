@@ -6,6 +6,7 @@ import {
   UserDTO,
   WalletDTO
 } from '@fest/shared';
+
 import { NextRouter } from 'next/router';
 import { getConfig } from '../config';
 import { getCurrentUser } from '../modules/auth/authStorage';
@@ -38,6 +39,8 @@ export const getHomeUrl = (community?: CommunityDTO) =>
 
 export const getCommunityUrl = (community: CommunityDTO) =>
   `/c/${community.id}`;
+
+export const settingsPageUrl = '/settings';
 
 export const specific =
   <T>() =>

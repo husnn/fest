@@ -1,6 +1,7 @@
+import { AppConfig } from './types/AppConfig';
+import { DiscordConfig } from './services/DiscordService';
 import { GoogleConfig } from './services/GoogleService';
 import { YouTubeConfig } from './services/YouTubeService';
-import { AppConfig } from './types/AppConfig';
 
 export const isDev =
   process.env.NODE_ENV === 'development' || process.env.NODE_ENV === undefined;
@@ -53,6 +54,12 @@ const youTubeConfig: YouTubeConfig = {
   apiKey: process.env.YOUTUBE_API_KEY
 };
 
+const discordConfig: DiscordConfig = {
+  clientId: process.env.DISCORD_CLIENT_ID,
+  clientSecret: process.env.DISCORD_CLIENT_SECRET,
+  redirectUrl: `${appConfig.clientUrl}/link/discord`
+};
+
 export const authCookieName = isStaging ? 'staging_auth' : 'auth';
 
 export {
@@ -63,5 +70,6 @@ export {
   ethConfig,
   mailConfig,
   googleConfig,
-  youTubeConfig
+  youTubeConfig,
+  discordConfig
 };

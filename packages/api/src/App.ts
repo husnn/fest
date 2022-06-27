@@ -1,5 +1,3 @@
-import { CreateCommunity, NotificationService } from '@fest/core';
-import { EthereumService } from '@fest/ethereum';
 import {
   CommunityRepository,
   InviteRepository,
@@ -15,32 +13,37 @@ import {
   WaitlistRepository,
   WalletRepository
 } from '@fest/postgres';
-import cookieParser from 'cookie-parser';
-import cors from 'cors';
+import { CreateCommunity, NotificationService } from '@fest/core';
+import { discordConfig, googleConfig, youTubeConfig } from './config';
 import express, { Application, Router } from 'express';
-import { googleConfig, youTubeConfig } from './config';
+
+import { AppConfig } from './types/AppConfig';
 import AuthController from './controllers/AuthController';
 import CommunityController from './controllers/CommunityController';
 import ConfigController from './controllers/ConfigController';
+import DiscordController from './controllers/DiscordController';
+import DiscordService from './services/DiscordService';
+import { EthereumService } from '@fest/ethereum';
 import FeedController from './controllers/FeedController';
 import GoogleController from './controllers/GoogleController';
+import GoogleService from './services/GoogleService';
+import IPFSService from './services/IPFSService';
 import InternalController from './controllers/InternalController';
+import MailService from './services/MailService';
 import MarketController from './controllers/MarketController';
+import MediaStore from './services/MediaStore';
 import PostController from './controllers/PostController';
 import SearchController from './controllers/SearchController';
 import TokenController from './controllers/TokenController';
 import UserController from './controllers/UserController';
 import WaitlistController from './controllers/WaitlistController';
 import YouTubeController from './controllers/YouTubeController';
+import YouTubeService from './services/YouTubeService';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import errorHandler from './middleware/errorHandler';
 import { getRateLimiter } from './middleware/rateLimiting';
 import initRoutes from './routes';
-import GoogleService from './services/GoogleService';
-import IPFSService from './services/IPFSService';
-import MailService from './services/MailService';
-import MediaStore from './services/MediaStore';
-import YouTubeService from './services/YouTubeService';
-import { AppConfig } from './types/AppConfig';
 
 class App {
   app: Application;
@@ -193,6 +196,12 @@ class App {
       userRepository
     );
 
+    const discordService = new DiscordService(discordConfig);
+    const discordController = new DiscordController(
+      oAuthRepository,
+      discordService
+    );
+
     const router = Router();
 
     initRoutes(
@@ -210,7 +219,8 @@ class App {
       feedController,
       postController,
       searchController,
-      notificationService
+      notificationService,
+      discordController
     );
 
     app.use(getRateLimiter());

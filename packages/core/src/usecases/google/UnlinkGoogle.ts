@@ -7,7 +7,7 @@ import { Result } from '../../Result';
 export interface UnlinkGoogleInput {
   user: string;
 }
-export interface UnlinkGoogleOutput {}
+export type UnlinkGoogleOutput = any;
 
 export class UnlinkGoogle extends UseCase<
   UnlinkGoogleInput,
