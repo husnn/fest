@@ -3,21 +3,22 @@ import { Field, Form, Formik, FormikProps } from 'formik';
 import { Global, css } from '@emotion/react';
 import React, { useState } from 'react';
 import { UserInfoSchema, isEmailAddress } from '@fest/shared';
-
-import ApiClient from '../modules/api/ApiClient';
-import { YouTubeButton } from '../components';
-import Head from 'next/head';
-import { fontSize } from '../styles/constants';
-import { getProfileUrl } from '../utils';
 import {
   saveCurrentUser,
   updateCurrentUser
 } from '../modules/auth/authStorage';
+
+import ApiClient from '../modules/api/ApiClient';
+import { AvatarUpload } from '../components/AvatarUpload';
+import { DiscordButton } from '../components/DiscordButton';
+import Head from 'next/head';
+import { YouTubeButton } from '../components';
+import { fontSize } from '../styles/constants';
+import { getProfileUrl } from '../utils';
 import styled from '@emotion/styled';
 import styles from '../styles/Settings.module.scss';
 import useAuthentication from '../modules/auth/useAuthentication';
 import { useRouter } from 'next/router';
-import { AvatarUpload } from '../components/AvatarUpload';
 
 const SettingsSheet = styled.div`
   max-width: 450px;
@@ -277,13 +278,19 @@ export default function SettingsPage() {
 
           <SettingsBlock>
             <BlockHeader>
-              <h2>Link YouTube channel</h2>
-              <p>Sign in to turn your videos into tokens.</p>
+              <h2>Link your social platforms</h2>
+              <p>
+                Sign in to turn your YouTube videos into tokens, create/join
+                token-gated servers on Discord, etc.
+              </p>
             </BlockHeader>
             <YouTubeButton
               onLinkReceived={(link: string) => {
                 router.push(link);
               }}
+            />
+            <DiscordButton
+              onLinkReceived={(link: string) => router.push(link)}
             />
           </SettingsBlock>
         </SettingsSheet>

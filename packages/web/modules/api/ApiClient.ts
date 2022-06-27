@@ -26,6 +26,10 @@ import {
   GetCommunityResponse,
   GetCommunityTokenRequest,
   GetCommunityTokenResponse,
+  GetDiscordLinkRequest,
+  GetDiscordLinkResponse,
+  GetDiscordLinkStatusRequest,
+  GetDiscordLinkStatusResponse,
   GetFeedRequest,
   GetFeedResponse,
   GetListingsForTokenRequest,
@@ -46,10 +50,10 @@ import {
   GetTokenOwnershipsResponse,
   GetTokenRequest,
   GetTokenResponse,
-  GetTokensCreatedResponse,
-  GetTokensOwnedResponse,
   GetTokenTradesForUserRequest,
   GetTokenTradesForUserResponse,
+  GetTokensCreatedResponse,
+  GetTokensOwnedResponse,
   GetUserByIdRequest,
   GetUserByUsernameRequest,
   GetUserCommunitiesResponse,
@@ -59,9 +63,10 @@ import {
   IdentifyWithWalletRequest,
   IdentifyWithWalletResponse,
   InitResponse,
-  isUsername,
   JoinWaitlistRequest,
   JoinWaitlistResponse,
+  LinkDiscordRequest,
+  LinkDiscordResponse,
   ListTokenForSaleRequest,
   ListTokenForSaleResponse,
   LoginResponse,
@@ -86,9 +91,11 @@ import {
   SearchResponse,
   SignOutRequest,
   SignOutResponse,
-  TokenData,
   TokenDTO,
+  TokenData,
   TokenOwnershipDTO,
+  UnlinkDiscordRequest,
+  UnlinkDiscordResponse,
   UnlinkOAuthRequest,
   UnlinkOAuthResponse,
   UpdateAvatarRequest,
@@ -97,8 +104,10 @@ import {
   WaitlistEntryType,
   WithdrawMarketEarningsRequest,
   WithdrawMarketEarningsResponse,
-  YouTubeVideo
+  YouTubeVideo,
+  isUsername
 } from '@fest/shared';
+
 import HttpClient from './HttpClient';
 
 export class ApiClient {
@@ -862,6 +871,47 @@ export class ApiClient {
         query: keyword
       }
     });
+  }
+
+  /**
+   * Discord
+   */
+
+  async getDiscordLink(): Promise<string> {
+    return this.client
+      .request<GetDiscordLinkResponse, GetDiscordLinkRequest>({
+        method: 'GET',
+        endpoint: '/discord/link',
+        authentication: 'optional'
+      })
+      .then((res) => res.body);
+  }
+
+  async linkDiscord(code: string): Promise<LinkDiscordResponse> {
+    return this.client.request<LinkDiscordResponse, LinkDiscordRequest>({
+      method: 'POST',
+      endpoint: '/discord/link',
+      authentication: 'required',
+      body: { code }
+    });
+  }
+
+  async unlinkDiscord(): Promise<UnlinkDiscordResponse> {
+    return this.client.request<UnlinkDiscordResponse, UnlinkDiscordRequest>({
+      method: 'DELETE',
+      endpoint: '/discord/link',
+      authentication: 'required'
+    });
+  }
+
+  async isDiscordLinked(): Promise<boolean> {
+    return this.client
+      .request<GetDiscordLinkStatusResponse, GetDiscordLinkStatusRequest>({
+        method: 'GET',
+        endpoint: '/discord/linked',
+        authentication: 'required'
+      })
+      .then((res) => res.body);
   }
 }
 

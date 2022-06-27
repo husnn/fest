@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 
-import { MarketFees } from '..';
 import {
   CommunityDTO,
   CurrentUserDTO,
@@ -15,11 +14,13 @@ import {
   TokenTradeDTO,
   UserDTO
 } from '../dto';
-import SearchResultDTO from '../dto/SearchResultDTO';
 import { Protocol, TokenType, WaitlistEntryType } from '../enums';
-import { ProtocolConfig } from './';
 
-export type HttpMethod = 'GET' | 'POST' | 'PUT';
+import { MarketFees } from '..';
+import { ProtocolConfig } from './';
+import SearchResultDTO from '../dto/SearchResultDTO';
+
+export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
 export type AuthLevel = 'none' | 'required' | 'optional';
 
@@ -673,4 +674,39 @@ export interface SearchRequest extends PaginatedRequest {
     count?: number;
     page?: number;
   };
+}
+
+/**
+ * Discord
+ */
+
+export interface GetDiscordLinkResponse extends Response<string> {}
+export interface GetDiscordLinkRequest extends Request {
+  method: 'GET';
+  endpoint: '/discord/link';
+  authentication: 'optional';
+}
+
+export interface LinkDiscordResponse extends Response {}
+export interface LinkDiscordRequest extends Request {
+  method: 'POST';
+  endpoint: '/discord/link';
+  authentication: 'required';
+  body: {
+    code: string;
+  };
+}
+
+export interface UnlinkDiscordResponse extends Response {}
+export interface UnlinkDiscordRequest extends Request {
+  method: 'DELETE';
+  endpoint: '/discord/link';
+  authentication: 'required';
+}
+
+export interface GetDiscordLinkStatusResponse extends Response<boolean> {}
+export interface GetDiscordLinkStatusRequest extends Request {
+  method: 'GET';
+  endpoint: '/discord/linked';
+  authentication: 'required';
 }
