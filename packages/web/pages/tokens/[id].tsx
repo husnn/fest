@@ -16,10 +16,13 @@ import {
 } from '../../utils';
 
 import ApiClient from '../../modules/api/ApiClient';
+import { Avatar } from '../../components/Avatar';
 import CreateTokenListing from '../../components/CreateTokenListing';
+import { DiscordButton } from '../../components/DiscordButton';
 import Head from 'next/head';
 import Modal from '../../ui/Modal';
 import SpinnerSvg from '../../public/images/spinner.svg';
+import TokenAttributes from '../../ui/TokenAttributes';
 import TokenHolders from '../../components/TokenHolders';
 import TokenListings from '../../components/TokenListings';
 import { css } from '@emotion/react';
@@ -29,8 +32,6 @@ import useAuthentication from '../../modules/auth/useAuthentication';
 import usePagination from '../../modules/api/usePagination';
 import { useRouter } from 'next/router';
 import useWeb3 from '../../modules/web3/useWeb3';
-import TokenAttributes from '../../ui/TokenAttributes';
-import { Avatar } from '../../components/Avatar';
 
 const TokenContainer = styled.div`
   width: 100%;
@@ -95,11 +96,25 @@ const TokenActions = styled.div`
   width: 100%;
   margin-top: 30px;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  flex-direction: row;
   border-radius: 30px;
 
+  > * {
+    flex: 1;
+  }
+
   > * + * {
-    margin-top: 10px;
+    margin: 0 10px;
+  }
+
+  @media screen and (max-width: 600px) {
+    flex-direction: column;
+    align-items: stretch;
+
+    > * + * {
+      margin: 10px 0 0;
+    }
   }
 `;
 
@@ -393,6 +408,7 @@ export default function TokenPage() {
 
             {token?.creatorId == currentUser?.id && !token?.minted && (
               <TokenActions>
+                <DiscordButton community />
                 <Button
                   size="small"
                   color="primary"

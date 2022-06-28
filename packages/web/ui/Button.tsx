@@ -8,6 +8,7 @@ type ButtonStyle = 'normal' | 'primary' | 'secondary' | 'ghost';
 type ButtonSize = 'regular' | 'small' | 'smaller' | 'large';
 
 const ButtonStyled = styled.button<ButtonProps>`
+  height: ${(props) => (props.size === 'small' ? '40px' : 'auto')};
   max-height: 50px;
   padding: ${(props) => {
     let padding = '15px 30px';

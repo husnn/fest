@@ -5,10 +5,15 @@ import useDiscordAuth from '../modules/discord/useDiscordAuth';
 
 type DiscordButtonProps = {
   linked?: boolean;
+  community?: boolean;
+  guildId?: number;
   onLinkReceived?: (link: string) => void;
 };
 
 export const DiscordButton: React.FC<DiscordButtonProps> = ({
+  linked,
+  community,
+  guildId,
   onLinkReceived
 }: DiscordButtonProps) => {
   const { isLinked, unlink } = useDiscordAuth();
@@ -18,7 +23,8 @@ export const DiscordButton: React.FC<DiscordButtonProps> = ({
       size="small"
       style={{
         display: 'flex',
-        alignItems: 'center'
+        alignItems: 'center',
+        justifyContent: 'center'
       }}
       onClick={async () => {
         if (!isLinked) {
@@ -29,13 +35,20 @@ export const DiscordButton: React.FC<DiscordButtonProps> = ({
           unlink();
         }
       }}
+      disabled={community && linked}
     >
       <img
         src="/images/ic-discord-circle.png"
         width={20}
         style={{ marginRight: 10 }}
       />
-      {isLinked ? 'Unlink account' : 'Sign in with Discord'}
+      {community
+        ? linked
+          ? `Connected to ${guildId}`
+          : 'Link Discord server'
+        : isLinked
+        ? 'Unlink account'
+        : 'Sign in with Discord'}
     </Button>
   );
 };
