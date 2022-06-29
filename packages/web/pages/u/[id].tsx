@@ -1,13 +1,13 @@
 import { Button, Link } from '../../ui';
 import React, { useEffect, useState } from 'react';
-import { TokenDTO, TokenOwnedDTO, UserDTO } from '@fest/shared';
 import {
-  getCommunityUrl,
-  getDisplayName,
+  TokenDTO,
+  TokenOwnedDTO,
+  UserDTO,
   getHomeUrl,
   getTokenOwnershipUrl,
   getTokenUrl
-} from '../../utils';
+} from '@fest/shared';
 import {
   getCurrentUser,
   saveCurrentUser
@@ -15,17 +15,17 @@ import {
 import useTabs, { Tab, Tabs } from '../../modules/navigation/useTabs';
 
 import ApiClient from '../../modules/api/ApiClient';
-import ButtonGroup from '../../ui/ButtonGroup';
+import { Avatar } from '../../components/Avatar';
 import Head from 'next/head';
 import ResponsiveTabs from '../../ui/ResponsiveTabs';
 import TokensCreated from '../../components/TokensCreated';
 import TokensOwned from '../../components/TokensOwned';
 import UserCommunities from '../../components/UserCommunities';
+import { getDisplayName } from '../../utils';
 import styles from '../../styles/Profile.module.scss';
 import useAuthentication from '../../modules/auth/useAuthentication';
 import { useHeader } from '../../modules/navigation';
 import { useRouter } from 'next/router';
-import { Avatar } from '../../components/Avatar';
 
 export default function ProfilePage() {
   useHeader();
@@ -177,7 +177,7 @@ export default function ProfilePage() {
               <UserCommunities
                 user={user.id}
                 onCommunitySelected={(community) => {
-                  router.push(getHomeUrl(community));
+                  router.push(getHomeUrl(community.id));
                 }}
               />
             )}

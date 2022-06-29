@@ -7,10 +7,11 @@ export interface DiscordTokenData {
 }
 
 export interface DiscordService {
-  getOAuthLink(): string;
+  getOAuthLink(linkGuild?: boolean, state?: string): string;
   getTokenData(code: string): Promise<Result<DiscordTokenData>>;
   refreshTokenData(refreshToken: string): Promise<Result<DiscordTokenData>>;
   revokeToken(token: string): Promise<Result>;
+  getGuildName(id: string): Promise<Result<string>>;
 }
 
 export default DiscordService;

@@ -2,11 +2,11 @@ import {
   Balance,
   TokenListingDTO,
   TokenOfferDTO,
-  TokenTradeDTO
+  TokenTradeDTO,
+  getTokenUrl
 } from '@fest/shared';
 import { Button, Link } from '../../ui';
 import React, { useEffect, useState } from 'react';
-import { getTokenUrl, reloadInTime } from '../../utils';
 
 import { ApiClient } from '../../modules/api';
 import BalanceView from '../../ui/BalanceView';
@@ -16,6 +16,7 @@ import Head from 'next/head';
 import TokenTradeRow from '../../ui/TokenTradeRow';
 import WithdrawEarnings from '../../components/WithdrawEarnings';
 import moment from 'moment';
+import { reloadInTime } from '../../utils';
 import styled from '@emotion/styled';
 import useAuthentication from '../../modules/auth/useAuthentication';
 import { useHeader } from '../../modules/navigation';

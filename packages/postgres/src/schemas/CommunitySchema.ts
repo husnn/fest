@@ -14,6 +14,16 @@ const CommunitySchema = new EntitySchema<Community>({
     },
     name: {
       type: 'text'
+    },
+    discordGuildId: {
+      type: 'text',
+      name: 'discord_guild_id',
+      nullable: true
+    },
+    discordGuildName: {
+      type: 'text',
+      name: 'discord_guild_name',
+      nullable: true
     }
   },
   relations: {

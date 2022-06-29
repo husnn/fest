@@ -1,13 +1,12 @@
 /** @jsxImportSource @emotion/react */
+import { PostDTO, getHomeUrl } from '@fest/shared';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { ApiClient } from '../modules/api';
-import Post from './Post';
-import { PostDTO } from '@fest/shared';
-import { css } from '@emotion/react';
-import { getHomeUrl } from '../utils';
-import router from 'next/router';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import Post from './Post';
+import { css } from '@emotion/react';
+import router from 'next/router';
 
 const Feed = ({
   community,
@@ -100,7 +99,7 @@ const Feed = ({
                 onShowContextMenu={() => setContextMenuPostID(p.id)}
                 hideCommunity={!!community}
                 onCommunitySelect={(c) =>
-                  router.push(getHomeUrl(c), undefined, { shallow: true })
+                  router.push(getHomeUrl(c.id), undefined, { shallow: true })
                 }
                 onDelete={() => {
                   posts.splice(i, 1);

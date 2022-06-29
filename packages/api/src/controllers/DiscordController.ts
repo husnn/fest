@@ -1,5 +1,7 @@
 import {
+  CommunityRepository,
   DiscordService,
+  GetDiscordLink,
   GetDiscordLinkStatus,
   LinkDiscord,
   OAuthRepository,
@@ -9,25 +11,34 @@ import {
   GetDiscordLinkResponse,
   GetDiscordLinkStatusResponse,
   LinkDiscordResponse,
-  UnlinkDiscordResponse
+  UnlinkDiscordResponse,
+  getTokenUrl
 } from '@fest/shared';
 import { HttpError, HttpResponse, ValidationError } from '../http';
 import { NextFunction, Request, Response } from 'express';
 
-class DiscordController {
-  private discordService: DiscordService;
+import { appConfig } from '../config';
 
+class DiscordController {
+  private getLinkUseCase: GetDiscordLink;
   private linkUseCase: LinkDiscord;
   private unlinkUseCase: UnlinkDiscord;
   private getLinkStatusUseCase: GetDiscordLinkStatus;
 
   constructor(
     oAuthRepository: OAuthRepository,
+    communityRepository: CommunityRepository,
     discordService: DiscordService
   ) {
-    this.discordService = discordService;
-
-    this.linkUseCase = new LinkDiscord(oAuthRepository, discordService);
+    this.getLinkUseCase = new GetDiscordLink(
+      communityRepository,
+      discordService
+    );
+    this.linkUseCase = new LinkDiscord(
+      oAuthRepository,
+      communityRepository,
+      discordService
+    );
     this.unlinkUseCase = new UnlinkDiscord(oAuthRepository, discordService);
     this.getLinkStatusUseCase = new GetDiscordLinkStatus(
       oAuthRepository,
@@ -37,18 +48,24 @@ class DiscordController {
 
   async link(req: Request, res: Response, next: NextFunction) {
     try {
-      const { code } = req.body;
+      const { code, guild, state } = req.body;
 
       if (!code) throw new ValidationError('Missing code.');
 
       const result = await this.linkUseCase.exec({
         user: req.user,
-        code
+        code,
+        guild,
+        state
       });
       if (!result.success)
         throw new HttpError('Could not link Discord account.');
 
-      return new HttpResponse<LinkDiscordResponse>(res);
+      return new HttpResponse<LinkDiscordResponse>(res, {
+        redirect:
+          appConfig.clientUrl +
+          (result.data?.token ? getTokenUrl(null, result.data.token) : '/')
+      });
     } catch (err) {
       next(err);
     }
@@ -56,8 +73,15 @@ class DiscordController {
 
   async getAuthLink(req: Request, res: Response, next: NextFunction) {
     try {
+      const result = await this.getLinkUseCase.exec({
+        user: req.user,
+        community: req.query.community as string
+      });
+      if (!result.success)
+        throw new HttpError('Could not get Discord auth link.');
+
       return new HttpResponse<GetDiscordLinkResponse>(res, {
-        body: this.discordService.getOAuthLink()
+        body: result.data
       });
     } catch (err) {
       next(err);

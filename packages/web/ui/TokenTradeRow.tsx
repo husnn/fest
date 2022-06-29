@@ -1,12 +1,11 @@
-import { TokenTradeDTO } from '@fest/shared';
-import React from 'react';
-import { useBalance } from '../modules/useBalance';
+import { TokenTradeDTO, getTokenUrl } from '@fest/shared';
+
 import Decimal from 'decimal.js';
 import Link from './Link';
-import { getTokenUrl } from '../utils';
-import styled from '@emotion/styled';
-import { colors } from '../styles/constants';
+import React from 'react';
 import moment from 'moment';
+import styled from '@emotion/styled';
+import { useBalance } from '../modules/useBalance';
 
 type TokenTradeRowProps = {
   trade: TokenTradeDTO;

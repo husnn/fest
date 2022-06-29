@@ -57,7 +57,8 @@ const youTubeConfig: YouTubeConfig = {
 const discordConfig: DiscordConfig = {
   clientId: process.env.DISCORD_CLIENT_ID,
   clientSecret: process.env.DISCORD_CLIENT_SECRET,
-  redirectUrl: `${appConfig.clientUrl}/link/discord`
+  redirectUrl: `${appConfig.clientUrl}/link/discord`,
+  botToken: process.env.DISCORD_BOT_TOKEN
 };
 
 export const authCookieName = isStaging ? 'staging_auth' : 'auth';

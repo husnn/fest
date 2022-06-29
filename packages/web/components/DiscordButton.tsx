@@ -1,22 +1,19 @@
 import { ApiClient } from '../modules/api';
 import Button from '../ui/Button';
+import { CommunityDTO } from '@fest/shared';
 import React from 'react';
 import useDiscordAuth from '../modules/discord/useDiscordAuth';
 
 type DiscordButtonProps = {
-  linked?: boolean;
-  community?: boolean;
-  guildId?: number;
+  community?: CommunityDTO;
   onLinkReceived?: (link: string) => void;
 };
 
 export const DiscordButton: React.FC<DiscordButtonProps> = ({
-  linked,
   community,
-  guildId,
   onLinkReceived
 }: DiscordButtonProps) => {
-  const { isLinked, unlink } = useDiscordAuth();
+  const { isLinked, unlink } = useDiscordAuth(!community?.discordGuildId);
 
   return (
     <Button
@@ -27,15 +24,15 @@ export const DiscordButton: React.FC<DiscordButtonProps> = ({
         justifyContent: 'center'
       }}
       onClick={async () => {
-        if (!isLinked) {
+        if (!isLinked || (community && !community.discordGuildId)) {
           ApiClient.getInstance()
-            .getDiscordLink()
+            .getDiscordLink(community?.id)
             .then((link) => (onLinkReceived ? onLinkReceived(link) : null));
         } else {
           unlink();
         }
       }}
-      disabled={community && linked}
+      disabled={!!community?.discordGuildId}
     >
       <img
         src="/images/ic-discord-circle.png"
@@ -43,8 +40,10 @@ export const DiscordButton: React.FC<DiscordButtonProps> = ({
         style={{ marginRight: 10 }}
       />
       {community
-        ? linked
-          ? `Connected to ${guildId}`
+        ? community.discordGuildId
+          ? `Connected to ${
+              community.discordGuildName || community.discordGuildId
+            }`
           : 'Link Discord server'
         : isLinked
         ? 'Unlink account'

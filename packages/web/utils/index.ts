@@ -1,11 +1,4 @@
-import {
-  CommunityDTO,
-  Currency,
-  TokenDTO,
-  TokenOwnershipDTO,
-  UserDTO,
-  WalletDTO
-} from '@fest/shared';
+import { CommunityDTO, Currency, UserDTO, WalletDTO } from '@fest/shared';
 
 import { NextRouter } from 'next/router';
 import { getConfig } from '../config';
@@ -20,12 +13,6 @@ export const isStaging = environment === 'staging';
 
 export const isDevelopment = environment === 'development';
 
-export const getTokenUrl = (token?: TokenDTO, id?: string): string =>
-  `/tokens/${token ? token.id : id}`;
-
-export const getTokenOwnershipUrl = (ownership: TokenOwnershipDTO): string =>
-  `${getTokenUrl(null, ownership.tokenId)}?o=${ownership.id}`;
-
 export const getProfileUrl = ({
   username,
   id
@@ -33,12 +20,6 @@ export const getProfileUrl = ({
   username?: string;
   id?: string;
 }): string => `/u/${username || id || getCurrentUser().id}`;
-
-export const getHomeUrl = (community?: CommunityDTO) =>
-  `/home${community ? `?c=${community.id}` : ''}`;
-
-export const getCommunityUrl = (community: CommunityDTO) =>
-  `/c/${community.id}`;
 
 export const settingsPageUrl = '/settings';
 

@@ -877,22 +877,27 @@ export class ApiClient {
    * Discord
    */
 
-  async getDiscordLink(): Promise<string> {
+  async getDiscordLink(community?: string): Promise<string> {
     return this.client
       .request<GetDiscordLinkResponse, GetDiscordLinkRequest>({
         method: 'GET',
         endpoint: '/discord/link',
-        authentication: 'optional'
+        authentication: 'optional',
+        params: { community }
       })
       .then((res) => res.body);
   }
 
-  async linkDiscord(code: string): Promise<LinkDiscordResponse> {
+  async linkDiscord(
+    code: string,
+    guildId?: string,
+    state?: string
+  ): Promise<LinkDiscordResponse> {
     return this.client.request<LinkDiscordResponse, LinkDiscordRequest>({
       method: 'POST',
       endpoint: '/discord/link',
       authentication: 'required',
-      body: { code }
+      body: { code, guild: guildId, state }
     });
   }
 

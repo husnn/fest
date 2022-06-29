@@ -8,6 +8,9 @@ export class CommunityDTO {
 
   name: string;
 
+  discordGuildId?: string;
+  discordGuildName?: string;
+
   constructor(props: Partial<CommunityDTO>) {
     this.id = props.id;
 
@@ -17,5 +20,8 @@ export class CommunityDTO {
     }
 
     this.name = props.name;
+
+    this.discordGuildId = props.discordGuildId;
+    this.discordGuildName = props.discordGuildName;
   }
 }

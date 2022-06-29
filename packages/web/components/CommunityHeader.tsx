@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
 
-import { CommunityDTO } from '@fest/shared';
+import { CommunityDTO, getHomeUrl } from '@fest/shared';
+
 import React from 'react';
 import { css } from '@emotion/react';
-import { getHomeUrl } from '../utils';
 import router from 'next/router';
 
 export const CommunityHeader = ({ community }: { community: CommunityDTO }) => {

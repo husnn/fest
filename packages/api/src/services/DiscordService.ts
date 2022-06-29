@@ -3,8 +3,8 @@ import {
   DiscordService as IDiscordService,
   Result
 } from '@fest/core';
+import axios, { Axios } from 'axios';
 
-import Axios from 'axios';
 import { getExpiryDate } from '@fest/shared';
 import qs from 'querystring';
 
@@ -12,12 +12,17 @@ export interface DiscordConfig {
   clientId: string;
   clientSecret: string;
   redirectUrl: string;
+  botToken: string;
 }
 
 class DiscordService implements IDiscordService {
+  private baseUrl: string;
+  private client: Axios;
   private config: DiscordConfig;
 
   constructor(config: DiscordConfig) {
+    this.baseUrl = `https://discord.com/api`;
+    this.client = axios.create({ baseURL: this.baseUrl });
     this.config = config;
   }
 
@@ -35,13 +40,21 @@ class DiscordService implements IDiscordService {
     } as DiscordTokenData;
   }
 
-  getOAuthLink(): string {
-    return `https://discord.com/api/oauth2/authorize?${qs.stringify({
+  getOAuthLink(linkGuild = false, state?: string): string {
+    const params: any = {
       client_id: this.config.clientId,
       redirect_uri: this.config.redirectUrl,
       response_type: 'code',
-      scope: 'guilds.join'
-    })}`;
+      scope: 'guilds guilds.join'
+    };
+
+    if (linkGuild) {
+      params.permissions = 8;
+      params.scope = `${params.scope} bot`;
+      params.state = state;
+    }
+
+    return `https://discord.com/api/oauth2/authorize?${qs.stringify(params)}`;
   }
 
   async getTokenData(code: string): Promise<Result<DiscordTokenData>> {
@@ -54,7 +67,7 @@ class DiscordService implements IDiscordService {
       params.append('redirect_uri', this.config.redirectUrl);
       params.append('code', code);
 
-      const response = await Axios.post(
+      const response = await axios.post(
         'https://discord.com/api/oauth2/token',
         params,
         { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
@@ -77,7 +90,7 @@ class DiscordService implements IDiscordService {
       params.append('grant_type', 'refresh_token');
       params.append('refresh_token', refreshToken);
 
-      const response = await Axios.post(
+      const response = await axios.post(
         'https://discord.com/api/oauth2/token',
         params,
         { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
@@ -98,11 +111,25 @@ class DiscordService implements IDiscordService {
       params.append('client_secret', this.config.clientSecret);
       params.append('token', token);
 
-      await Axios.post('https://discord.com/api/oauth2/token/revoke', params, {
+      await axios.post('https://discord.com/api/oauth2/token/revoke', params, {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       });
 
       return Result.ok();
+    } catch (err) {
+      return Result.fail();
+    }
+  }
+
+  async getGuildName(id: string): Promise<Result<string>> {
+    try {
+      const res = await this.client.get(`/guilds/${id}`, {
+        headers: {
+          Authorization: `Bot ${this.config.botToken}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      return Result.ok(res.data['name']);
     } catch (err) {
       return Result.fail();
     }

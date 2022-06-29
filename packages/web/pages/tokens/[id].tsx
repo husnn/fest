@@ -5,15 +5,11 @@ import {
   TokenDTO,
   TokenListingDTO,
   TokenOwnershipDTO,
-  TokenType
+  TokenType,
+  getHomeUrl
 } from '@fest/shared';
 import React, { useEffect, useState } from 'react';
-import {
-  getDisplayName,
-  getHomeUrl,
-  getImageUrl,
-  getProfileUrl
-} from '../../utils';
+import { getDisplayName, getImageUrl, getProfileUrl } from '../../utils';
 
 import ApiClient from '../../modules/api/ApiClient';
 import { Avatar } from '../../components/Avatar';
@@ -108,7 +104,7 @@ const TokenActions = styled.div`
     margin: 0 10px;
   }
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 900px) {
     flex-direction: column;
     align-items: stretch;
 
@@ -391,10 +387,18 @@ export default function TokenPage() {
               <TokenActions>
                 <Button
                   color="secondary"
-                  onClick={() => router.push(getHomeUrl(token.communities[0]))}
+                  onClick={() =>
+                    router.push(getHomeUrl(token.communities[0].id))
+                  }
                 >
                   Go to community feed
                 </Button>
+                {token.communities.length > 0 && (
+                  <DiscordButton
+                    community={token.communities[0]}
+                    onLinkReceived={(link) => router.push(link)}
+                  />
+                )}
               </TokenActions>
             )}
 
@@ -408,7 +412,6 @@ export default function TokenPage() {
 
             {token?.creatorId == currentUser?.id && !token?.minted && (
               <TokenActions>
-                <DiscordButton community />
                 <Button
                   size="small"
                   color="primary"

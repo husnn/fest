@@ -685,15 +685,22 @@ export interface GetDiscordLinkRequest extends Request {
   method: 'GET';
   endpoint: '/discord/link';
   authentication: 'optional';
+  params: {
+    community?: string;
+  };
 }
 
-export interface LinkDiscordResponse extends Response {}
+export interface LinkDiscordResponse extends Response {
+  redirect?: string;
+}
 export interface LinkDiscordRequest extends Request {
   method: 'POST';
   endpoint: '/discord/link';
   authentication: 'required';
   body: {
     code: string;
+    guild?: string;
+    state?: string;
   };
 }
 

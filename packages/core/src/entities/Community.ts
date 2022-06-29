@@ -9,6 +9,9 @@ export class Community {
 
   name: string;
 
+  discordGuildId?: string;
+  discordGuildName?: string;
+
   tokens: Token[];
   users: User[];
 

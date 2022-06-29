@@ -1,27 +1,36 @@
+import { CommunityRepository } from '../../repositories';
 import DiscordService from '../../services/DiscordService';
 import { OAuth } from '../../entities';
 import { OAuthProvider } from '@fest/shared';
 import OAuthRepository from '../../repositories/OAuthRepository';
 import { Result } from '../../Result';
 import UseCase from '../../base/UseCase';
+import { decryptCommunityId } from './crypt';
 
 export interface LinkDiscordInput {
   user: string;
   code: string;
+  guild?: string;
+  state?: string;
 }
-export type LinkDiscordOutput = any;
+export type LinkDiscordOutput = {
+  token?: string;
+};
 
 export class LinkDiscord extends UseCase<LinkDiscordInput, LinkDiscordOutput> {
   private oAuthRepository: OAuthRepository;
+  private communityRepository: CommunityRepository;
   private discordService: DiscordService;
 
   constructor(
     oAuthRepository: OAuthRepository,
+    communityRepository: CommunityRepository,
     discordService: DiscordService
   ) {
     super();
 
     this.oAuthRepository = oAuthRepository;
+    this.communityRepository = communityRepository;
     this.discordService = discordService;
   }
 
@@ -48,6 +57,27 @@ export class LinkDiscord extends UseCase<LinkDiscordInput, LinkDiscordOutput> {
 
     await this.oAuthRepository.createOrUpdate(auth);
 
-    return Result.ok<LinkDiscordOutput>();
+    if (data.guild) {
+      const community = await this.communityRepository.get(
+        decryptCommunityId(data.state),
+        ['tokens']
+      );
+      if (!community) return Result.fail();
+
+      const nameResult = await this.discordService.getGuildName(data.guild);
+      if (!nameResult.success) return Result.fail();
+
+      await this.communityRepository.update({
+        ...community,
+        discordGuildId: data.guild,
+        discordGuildName: nameResult.data
+      });
+
+      return Result.ok<LinkDiscordOutput>({
+        token: community.tokens[0].id
+      });
+    }
+
+    return Result.ok<LinkDiscordOutput>({});
   }
 }

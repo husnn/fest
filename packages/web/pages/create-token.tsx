@@ -7,7 +7,12 @@ import {
   TextArea,
   TextInput
 } from '../ui';
-import { CreateTokenSchema, TokenType, YouTubeVideo } from '@fest/shared';
+import {
+  CreateTokenSchema,
+  TokenType,
+  YouTubeVideo,
+  getTokenUrl
+} from '@fest/shared';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import React, { useState } from 'react';
 import YouTubeVideoList, {
@@ -19,7 +24,6 @@ import Head from 'next/head';
 import MediaUploader from '../components/MediaUploader';
 import Modal from '../ui/Modal';
 import { RadioOption } from '../ui/RadioGroup';
-import { getTokenUrl } from '../utils';
 import styles from '../styles/CreateToken.module.scss';
 import useAuthentication from '../modules/auth/useAuthentication';
 import { useHeader } from '../modules/navigation';
