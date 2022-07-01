@@ -1,9 +1,8 @@
+import GoogleService from '../../services/GoogleService';
 import { OAuthProvider } from '@fest/shared';
-
-import UseCase from '../../base/UseCase';
 import OAuthRepository from '../../repositories/OAuthRepository';
 import { Result } from '../../Result';
-import GoogleService from '../../services/GoogleService';
+import UseCase from '../../base/UseCase';
 import refreshIfExpired from '../refreshIfExpired';
 
 export type GetGoogleAuthStatusInput = {
@@ -38,7 +37,7 @@ export class GetGoogleAuthStatus extends UseCase<
       data.user
     );
 
-    if (oAuth) {
+    if (oAuth && oAuth.accessToken) {
       const refreshedAuth = await refreshIfExpired(oAuth, this.googleService);
       oAuth = refreshedAuth.success ? refreshedAuth.data.oAuth : null;
 

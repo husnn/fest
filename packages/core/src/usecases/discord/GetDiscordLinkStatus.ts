@@ -38,7 +38,7 @@ export class GetDiscordLinkStatus extends UseCase<
       data.user
     );
 
-    if (oAuth) {
+    if (oAuth && oAuth.accessToken) {
       const refreshedAuth = await latestDiscordAuth(oAuth, this.discordService);
       oAuth = refreshedAuth.success ? refreshedAuth.data.oAuth : null;
 

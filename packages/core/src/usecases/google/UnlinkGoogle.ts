@@ -1,8 +1,7 @@
 import { OAuthProvider } from '@fest/shared';
-
-import UseCase from '../../base/UseCase';
 import OAuthRepository from '../../repositories/OAuthRepository';
 import { Result } from '../../Result';
+import UseCase from '../../base/UseCase';
 
 export interface UnlinkGoogleInput {
   user: string;
@@ -27,7 +26,11 @@ export class UnlinkGoogle extends UseCase<
       data.user
     );
 
-    await this.oAuthRepository.remove(auth);
+    auth.accessToken = null;
+    auth.refreshToken = null;
+    auth.expiry = null;
+
+    await this.oAuthRepository.update(auth);
 
     return Result.ok<UnlinkGoogleOutput>();
   }

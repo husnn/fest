@@ -24,14 +24,16 @@ const OAuthSchema = new EntitySchema<OAuth>({
       nullable: true
     },
     accessToken: {
-      type: 'text'
+      type: 'text',
+      nullable: true
     },
     refreshToken: {
       type: 'text',
       nullable: true
     },
     expiry: {
-      type: 'timestamp'
+      type: 'timestamp',
+      nullable: true
     }
   },
   relations: {

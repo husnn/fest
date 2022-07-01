@@ -199,6 +199,8 @@ class App {
     const discordService = new DiscordService(discordConfig);
     const discordController = new DiscordController(
       oAuthRepository,
+      walletRepository,
+      tokenOwnershipRepository,
       communityRepository,
       discordService
     );

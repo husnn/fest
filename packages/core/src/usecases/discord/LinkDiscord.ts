@@ -1,8 +1,13 @@
-import { CommunityRepository } from '../../repositories';
+import {
+  CommunityRepository,
+  OAuthRepository,
+  TokenOwnershipRepository,
+  WalletRepository
+} from '../../repositories';
+import { OAuthProvider, Protocol } from '@fest/shared';
+
 import DiscordService from '../../services/DiscordService';
 import { OAuth } from '../../entities';
-import { OAuthProvider } from '@fest/shared';
-import OAuthRepository from '../../repositories/OAuthRepository';
 import { Result } from '../../Result';
 import UseCase from '../../base/UseCase';
 import { decryptCommunityId } from './crypt';
@@ -19,17 +24,23 @@ export type LinkDiscordOutput = {
 
 export class LinkDiscord extends UseCase<LinkDiscordInput, LinkDiscordOutput> {
   private oAuthRepository: OAuthRepository;
+  private walletRepository: WalletRepository;
+  private ownershipRepository: TokenOwnershipRepository;
   private communityRepository: CommunityRepository;
   private discordService: DiscordService;
 
   constructor(
     oAuthRepository: OAuthRepository,
+    walletRepository: WalletRepository,
+    ownershipRepository: TokenOwnershipRepository,
     communityRepository: CommunityRepository,
     discordService: DiscordService
   ) {
     super();
 
     this.oAuthRepository = oAuthRepository;
+    this.walletRepository = walletRepository;
+    this.ownershipRepository = ownershipRepository;
     this.communityRepository = communityRepository;
     this.discordService = discordService;
   }
@@ -82,6 +93,30 @@ export class LinkDiscord extends UseCase<LinkDiscordInput, LinkDiscordOutput> {
       return Result.ok<LinkDiscordOutput>({
         token: community.tokens[0].id
       });
+    } else {
+      const wallet = await this.walletRepository.findByUser(
+        Protocol.ETHEREUM,
+        data.user
+      );
+      if (!wallet) return Result.ok<LinkDiscordOutput>({});
+
+      const query = await this.ownershipRepository.findByWallet(
+        wallet.id,
+        100,
+        1
+      );
+      for (const ownership of query.ownerships) {
+        const communities = await this.communityRepository.findByToken(
+          ownership.tokenId
+        );
+        for (const c of communities) {
+          this.discordService.addMember(
+            c.discordGuildId,
+            auth.externalId,
+            tokens.data.accessToken
+          );
+        }
+      }
     }
 
     return Result.ok<LinkDiscordOutput>({});

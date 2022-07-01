@@ -5,7 +5,9 @@ import {
   GetDiscordLinkStatus,
   LinkDiscord,
   OAuthRepository,
-  UnlinkDiscord
+  TokenOwnershipRepository,
+  UnlinkDiscord,
+  WalletRepository
 } from '@fest/core';
 import {
   GetDiscordLinkResponse,
@@ -27,6 +29,8 @@ class DiscordController {
 
   constructor(
     oAuthRepository: OAuthRepository,
+    walletRepository: WalletRepository,
+    ownershipRepository: TokenOwnershipRepository,
     communityRepository: CommunityRepository,
     discordService: DiscordService
   ) {
@@ -36,10 +40,18 @@ class DiscordController {
     );
     this.linkUseCase = new LinkDiscord(
       oAuthRepository,
+      walletRepository,
+      ownershipRepository,
       communityRepository,
       discordService
     );
-    this.unlinkUseCase = new UnlinkDiscord(oAuthRepository, discordService);
+    this.unlinkUseCase = new UnlinkDiscord(
+      oAuthRepository,
+      walletRepository,
+      ownershipRepository,
+      communityRepository,
+      discordService
+    );
     this.getLinkStatusUseCase = new GetDiscordLinkStatus(
       oAuthRepository,
       discordService

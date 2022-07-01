@@ -1,6 +1,12 @@
+import {
+  CommunityRepository,
+  OAuthRepository,
+  TokenOwnershipRepository,
+  WalletRepository
+} from '../../repositories';
+import { OAuthProvider, Protocol } from '@fest/shared';
+
 import DiscordService from '../../services/DiscordService';
-import { OAuthProvider } from '@fest/shared';
-import OAuthRepository from '../../repositories/OAuthRepository';
 import { Result } from '../../Result';
 import UseCase from '../../base/UseCase';
 
@@ -14,15 +20,24 @@ export class UnlinkDiscord extends UseCase<
   UnlinkDiscordOutput
 > {
   private oAuthRepository: OAuthRepository;
+  private walletRepository: WalletRepository;
+  private ownershipRepository: TokenOwnershipRepository;
+  private communityRepository: CommunityRepository;
   private discordService: DiscordService;
 
   constructor(
     oAuthRepository: OAuthRepository,
+    walletRepository: WalletRepository,
+    ownershipRepository: TokenOwnershipRepository,
+    communityRepository: CommunityRepository,
     discordService: DiscordService
   ) {
     super();
 
     this.oAuthRepository = oAuthRepository;
+    this.walletRepository = walletRepository;
+    this.ownershipRepository = ownershipRepository;
+    this.communityRepository = communityRepository;
     this.discordService = discordService;
   }
 
@@ -34,7 +49,31 @@ export class UnlinkDiscord extends UseCase<
 
     if (auth) this.discordService.revokeToken(auth.accessToken); // Best-effort
 
-    await this.oAuthRepository.remove(auth);
+    auth.accessToken = null;
+    auth.refreshToken = null;
+    auth.expiry = null;
+
+    await this.oAuthRepository.update(auth);
+
+    const wallet = await this.walletRepository.findByUser(
+      Protocol.ETHEREUM,
+      data.user
+    );
+    if (wallet) {
+      const query = await this.ownershipRepository.findByWallet(
+        wallet.id,
+        100,
+        1
+      );
+      for (const ownership of query.ownerships) {
+        const communities = await this.communityRepository.findByToken(
+          ownership.tokenId
+        );
+        for (const c of communities) {
+          this.discordService.kickMember(c.discordGuildId, auth.externalId);
+        }
+      }
+    }
 
     return Result.ok<UnlinkDiscordOutput>();
   }
