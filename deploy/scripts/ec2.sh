@@ -26,6 +26,9 @@ sudo docker run \
   -e REDIS_URL="$REDIS_URL" \
   -e ETH_PROVIDER="$ETH_PROVIDER" \
   -e DATABASE_URL="$DATABASE_URL" \
+  -e DISCORD_CLIENT_ID="$DISCORD_CLIENT_ID" \
+  -e DISCORD_CLIENT_SECRET="$DISCORD_CLIENT_SECRET" \
+  -e DISCORD_BOT_TOKEN="$DISCORD_BOT_TOKEN" \
   -p 9000:9000 --restart unless-stopped \
   -idt $ECR_IMAGE_URL yarn indexer serve
 

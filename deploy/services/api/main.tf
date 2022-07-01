@@ -70,6 +70,9 @@ module "service" {
   secrets_manager_arn = var.secrets_manager_arn
   secret_keys = [
     "BYPASS_INDEXER_CONNECTION",
+    "DISCORD_CLIENT_ID",
+    "DISCORD_CLIENT_SECRET",
+    "DISCORD_BOT_TOKEN",
     "INVITE_ONLY",
     "SECRET",
     "JWT_SECRET",
