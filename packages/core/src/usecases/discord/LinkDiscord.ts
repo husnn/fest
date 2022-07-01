@@ -43,6 +43,11 @@ export class LinkDiscord extends UseCase<LinkDiscordInput, LinkDiscordOutput> {
     const tokens = await this.discordService.getTokenData(data.code);
     if (!tokens.success) return Result.fail();
 
+    const externalId = await this.discordService.getCurrentUserID(
+      tokens.data.accessToken
+    );
+    if (!externalId.success) return Result.fail();
+
     if (!auth) {
       auth = new OAuth({
         provider: OAuthProvider.DISCORD,
@@ -52,7 +57,8 @@ export class LinkDiscord extends UseCase<LinkDiscordInput, LinkDiscordOutput> {
 
     auth = {
       ...auth,
-      ...tokens.data
+      ...tokens.data,
+      externalId: externalId.data
     };
 
     await this.oAuthRepository.createOrUpdate(auth);

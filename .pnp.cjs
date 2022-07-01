@@ -33,6 +33,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         "reference": "workspace:packages/core"\
       },\
       {\
+        "name": "@fest/discord",\
+        "reference": "workspace:packages/discord"\
+      },\
+      {\
         "name": "@fest/emails",\
         "reference": "workspace:packages/emails"\
       },\
@@ -79,6 +83,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ["@fest/api", ["workspace:packages/api"]],\
       ["@fest/console", ["workspace:packages/console"]],\
       ["@fest/core", ["workspace:packages/core"]],\
+      ["@fest/discord", ["workspace:packages/discord"]],\
       ["@fest/emails", ["workspace:packages/emails"]],\
       ["@fest/eth-contracts", ["workspace:packages/ethereum/contracts"]],\
       ["@fest/eth-transactions", ["workspace:packages/ethereum/transactions"]],\
@@ -4681,6 +4686,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@aws-sdk/credential-providers", "npm:3.58.0"],\
             ["@aws-sdk/s3-request-presigner", "npm:3.58.0"],\
             ["@fest/core", "workspace:packages/core"],\
+            ["@fest/discord", "workspace:packages/discord"],\
             ["@fest/ethereum", "workspace:packages/ethereum"],\
             ["@fest/postgres", "workspace:packages/postgres"],\
             ["@fest/shared", "workspace:packages/shared"],\
@@ -4761,6 +4767,21 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["decimal.js", "npm:10.3.1"],\
             ["jsonwebtoken", "npm:8.5.1"],\
             ["nanoid", "npm:3.3.2"],\
+            ["typescript", "patch:typescript@npm%3A4.6.3#~builtin<compat/typescript>::version=4.6.3&hash=bda367"]\
+          ],\
+          "linkType": "SOFT"\
+        }]\
+      ]],\
+      ["@fest/discord", [\
+        ["workspace:packages/discord", {\
+          "packageLocation": "./packages/discord/",\
+          "packageDependencies": [\
+            ["@fest/discord", "workspace:packages/discord"],\
+            ["@fest/core", "workspace:packages/core"],\
+            ["@fest/shared", "workspace:packages/shared"],\
+            ["@types/node", "npm:17.0.23"],\
+            ["axios", "npm:0.27.2"],\
+            ["querystring", "npm:0.2.1"],\
             ["typescript", "patch:typescript@npm%3A4.6.3#~builtin<compat/typescript>::version=4.6.3&hash=bda367"]\
           ],\
           "linkType": "SOFT"\
@@ -4863,6 +4884,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@fest/indexer", "workspace:packages/indexer"],\
             ["@fest/core", "workspace:packages/core"],\
+            ["@fest/discord", "workspace:packages/discord"],\
             ["@fest/eth-contracts", "workspace:packages/ethereum/contracts"],\
             ["@fest/ethereum", "workspace:packages/ethereum"],\
             ["@fest/postgres", "workspace:packages/postgres"],\
@@ -7491,6 +7513,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["axios", "npm:0.26.1"],\
             ["follow-redirects", "virtual:e278873748b4e9d158db595d2f6cb0351c74052f52b53924aec4d9299e7b6babfb62aead374cf2f6e453bc8bea3b052380dc6b1137a162bbfc102bbb1c8cac42#npm:1.14.9"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:0.27.2", {\
+          "packageLocation": "./.yarn/cache/axios-npm-0.27.2-dbe3a48aea-38cb754046.zip/node_modules/axios/",\
+          "packageDependencies": [\
+            ["axios", "npm:0.27.2"],\
+            ["follow-redirects", "virtual:dbe3a48aea1dd5649e16abaf23d4ae05582d2149e16141955113766a0f84f681baf358c77ddccfc82eb23e4ccc66c6c912df62a9c01f2a83f1842bf86cc297b1#npm:1.15.1"],\
+            ["form-data", "npm:4.0.0"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -11624,6 +11655,26 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "linkType": "SOFT"\
         }],\
+        ["npm:1.15.1", {\
+          "packageLocation": "./.yarn/cache/follow-redirects-npm-1.15.1-6b191885cd-6aa4e3e3cd.zip/node_modules/follow-redirects/",\
+          "packageDependencies": [\
+            ["follow-redirects", "npm:1.15.1"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:dbe3a48aea1dd5649e16abaf23d4ae05582d2149e16141955113766a0f84f681baf358c77ddccfc82eb23e4ccc66c6c912df62a9c01f2a83f1842bf86cc297b1#npm:1.15.1", {\
+          "packageLocation": "./.yarn/__virtual__/follow-redirects-virtual-659894389a/0/cache/follow-redirects-npm-1.15.1-6b191885cd-6aa4e3e3cd.zip/node_modules/follow-redirects/",\
+          "packageDependencies": [\
+            ["follow-redirects", "virtual:dbe3a48aea1dd5649e16abaf23d4ae05582d2149e16141955113766a0f84f681baf358c77ddccfc82eb23e4ccc66c6c912df62a9c01f2a83f1842bf86cc297b1#npm:1.15.1"],\
+            ["@types/debug", null],\
+            ["debug", null]\
+          ],\
+          "packagePeers": [\
+            "@types/debug",\
+            "debug"\
+          ],\
+          "linkType": "HARD"\
+        }],\
         ["virtual:e278873748b4e9d158db595d2f6cb0351c74052f52b53924aec4d9299e7b6babfb62aead374cf2f6e453bc8bea3b052380dc6b1137a162bbfc102bbb1c8cac42#npm:1.14.9", {\
           "packageLocation": "./.yarn/__virtual__/follow-redirects-virtual-9f13acb18d/0/cache/follow-redirects-npm-1.14.9-522f191631-f5982e0eb4.zip/node_modules/follow-redirects/",\
           "packageDependencies": [\
@@ -11681,6 +11732,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/form-data-npm-3.0.1-d080d436e0-b019e8d35c.zip/node_modules/form-data/",\
           "packageDependencies": [\
             ["form-data", "npm:3.0.1"],\
+            ["asynckit", "npm:0.4.0"],\
+            ["combined-stream", "npm:1.0.8"],\
+            ["mime-types", "npm:2.1.35"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:4.0.0", {\
+          "packageLocation": "./.yarn/cache/form-data-npm-4.0.0-916facec2d-01135bf867.zip/node_modules/form-data/",\
+          "packageDependencies": [\
+            ["form-data", "npm:4.0.0"],\
             ["asynckit", "npm:0.4.0"],\
             ["combined-stream", "npm:1.0.8"],\
             ["mime-types", "npm:2.1.35"]\

@@ -1,16 +1,19 @@
 import {
   CommunityRepository,
-  generateTokenOwnershipId,
-  generateWalletId,
   TokenOwnership,
   TokenOwnershipRepository,
   TokenRepository,
   Wallet,
-  WalletRepository
+  WalletRepository,
+  generateTokenOwnershipId,
+  generateWalletId
 } from '@fest/core';
-import { WalletType } from '@fest/shared';
+
+import BeeQueue from 'bee-queue';
+import { DiscordGuildMembershipJob } from './DiscordGuildMembership';
 import Job from './Job';
 import JobData from './JobData';
+import { WalletType } from '@fest/shared';
 
 export interface TokenTransferJob extends JobData {
   contract: string;
@@ -29,7 +32,8 @@ export default class TokenTransfer extends Job<TokenTransferJob> {
     tokenRepository: TokenRepository,
     walletRepository: WalletRepository,
     ownershipRepository: TokenOwnershipRepository,
-    communityRepository: CommunityRepository
+    communityRepository: CommunityRepository,
+    guildMembershipQueue: BeeQueue
   ): Promise<void> {
     try {
       if (
@@ -71,6 +75,18 @@ export default class TokenTransfer extends Job<TokenTransferJob> {
               fromWallet.ownerId,
               token.id
             );
+
+            if (token.creatorId != fromWallet.ownerId) {
+              guildMembershipQueue
+                .createJob({
+                  type: 'remove',
+                  userId: fromWallet.ownerId,
+                  tokenId: token.id
+                } as DiscordGuildMembershipJob)
+                .backoff('fixed', 60 * 60 * 1000) // Retry after an hour
+                .retries(1000)
+                .save();
+            }
           }
         }
       }
@@ -120,8 +136,19 @@ export default class TokenTransfer extends Job<TokenTransferJob> {
         await ownershipRepository.update(toOwnership);
       }
 
-      if (toOwnership.quantity == this.props.quantity && toWallet.ownerId)
+      if (toOwnership.quantity == this.props.quantity && toWallet.ownerId) {
         communityRepository.addUserForToken(toWallet.ownerId, token.id);
+
+        guildMembershipQueue
+          .createJob({
+            type: 'add',
+            userId: toWallet.ownerId,
+            tokenId: token.id
+          } as DiscordGuildMembershipJob)
+          .backoff('fixed', 60 * 60 * 1000) // Retry after an hour
+          .retries(1000)
+          .save();
+      }
     } catch (err) {
       console.log(err);
     }

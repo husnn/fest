@@ -22,7 +22,7 @@ import AuthController from './controllers/AuthController';
 import CommunityController from './controllers/CommunityController';
 import ConfigController from './controllers/ConfigController';
 import DiscordController from './controllers/DiscordController';
-import DiscordService from './services/DiscordService';
+import { DiscordService } from '@fest/discord';
 import { EthereumService } from '@fest/ethereum';
 import FeedController from './controllers/FeedController';
 import GoogleController from './controllers/GoogleController';

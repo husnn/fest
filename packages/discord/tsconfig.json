@@ -1,7 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "rootDir": "src",
+    "rootDir": ".",
     "outDir": "dist",
     "composite": true
   },
@@ -11,16 +11,7 @@
     },
     {
       "path": "../core"
-    },
-    {
-      "path": "../ethereum"
-    },
-    {
-      "path": "../postgres"
-    },
-    {
-      "path": "../discord"
     }
   ],
-  "include": ["src/**/*"]
+  "include": ["**/*.ts"]
 }

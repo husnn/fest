@@ -1,23 +1,20 @@
 require('dotenv').config(); // eslint-disable-line
 
-import { NotificationService } from '@fest/core';
-import { EthereumService } from '@fest/ethereum';
+import DiscordGuildMembership, {
+  DiscordGuildMembershipJob
+} from './jobs/DiscordGuildMembership';
 import Postgres, {
   CommunityRepository,
-  defaultConfig as postgresConfig,
   NotificationRepository,
+  OAuthRepository,
   TokenListingRepository,
   TokenOwnershipRepository,
   TokenRepository,
   TokenTradeRepository,
   UserRepository,
-  WalletRepository
+  WalletRepository,
+  defaultConfig as postgresConfig
 } from '@fest/postgres';
-import Queue from 'bee-queue';
-import redis from 'redis';
-import Web3 from 'web3';
-import { ethConfig, redisConfig } from './config';
-import EthereumListener from './events/ethereum/EthereumListener';
 import TokenBuy, { TokenBuyJob } from './jobs/TokenBuy';
 import TokenCancelListing, {
   TokenCancelListingJob
@@ -28,7 +25,16 @@ import TokenRoyaltyPayment, {
   TokenRoyaltyPaymentJob
 } from './jobs/TokenRoyaltyPayment';
 import TokenTransfer, { TokenTransferJob } from './jobs/TokenTransfer';
+import { ethConfig, redisConfig } from './config';
+
+import { DiscordService } from '@fest/discord';
+import EthereumListener from './events/ethereum/EthereumListener';
+import { EthereumService } from '@fest/ethereum';
+import { NotificationService } from '@fest/core';
+import Queue from 'bee-queue';
+import Web3 from 'web3';
 import { createServer } from './server';
+import redis from 'redis';
 
 const redisClient = redis.createClient(redisConfig.url);
 
@@ -41,6 +47,13 @@ const mintQueue = new Queue('TOKENS_MINTED', config);
 const transferQueue = new Queue('TOKENS_TRANSFERRED', config);
 
 const tokenTradeQueue = new Queue('TOKEN_TRADES', config);
+
+const discordGuildMembershipQueue = new Queue('DISCORD_GUILD_MEMBERSHIP', {
+  ...config,
+  activateDelayedJobs: true
+})
+  .on('job failed', (_, err: Error) => console.log(err))
+  .on('job retrying', (id) => console.log(`Retrying job ${id}.`));
 
 const provider = process.env.ETH_PROVIDER_WSS
   ? new Web3.providers.WebsocketProvider(ethConfig.provider)
@@ -85,6 +98,7 @@ ethereumListener.on(
   console.log('\nListening to all new events.');
 
   const userRepository = new UserRepository();
+  const oAuthRepository = new OAuthRepository();
   const tokenRepository = new TokenRepository();
   const tokenListingRepository = new TokenListingRepository();
   const tokenTradeRepository = new TokenTradeRepository();
@@ -97,6 +111,8 @@ ethereumListener.on(
     notificationRepository,
     userRepository
   );
+
+  const discordService = new DiscordService();
 
   mintQueue.process(async (job: Queue.Job<TokenMintJob>) => {
     return new TokenMint(job.data).execute(
@@ -112,7 +128,8 @@ ethereumListener.on(
       tokenRepository,
       walletRepository,
       ownershipRepository,
-      communityRepository
+      communityRepository,
+      discordGuildMembershipQueue
     );
   });
 
@@ -155,6 +172,16 @@ ethereumListener.on(
       }
 
       done();
+    }
+  );
+
+  discordGuildMembershipQueue.process(
+    (job: Queue.Job<DiscordGuildMembershipJob>) => {
+      return new DiscordGuildMembership(job.data).execute(
+        oAuthRepository,
+        communityRepository,
+        discordService
+      );
     }
   );
 

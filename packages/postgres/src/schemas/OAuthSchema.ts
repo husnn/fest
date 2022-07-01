@@ -18,6 +18,11 @@ const OAuthSchema = new EntitySchema<OAuth>({
       type: 'enum',
       enum: OAuthProvider
     },
+    externalId: {
+      type: 'text',
+      name: 'external_id',
+      nullable: true
+    },
     accessToken: {
       type: 'text'
     },

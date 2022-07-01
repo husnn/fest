@@ -1,11 +1,12 @@
 import {
   CommunityRepository,
-  generateTokenOwnershipId,
   TokenOwnership,
   TokenOwnershipRepository,
   TokenRepository,
-  WalletRepository
+  WalletRepository,
+  generateTokenOwnershipId
 } from '@fest/core';
+
 import Job from './Job';
 import JobData from './JobData';
 

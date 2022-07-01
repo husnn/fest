@@ -1,26 +1,21 @@
+import * as qs from 'querystring';
+
+import { DiscordConfig, defaultConfig } from './config';
 import {
   DiscordTokenData,
   DiscordService as IDiscordService,
   Result
 } from '@fest/core';
-import axios, { Axios } from 'axios';
+import axios, { Axios, AxiosError } from 'axios';
 
 import { getExpiryDate } from '@fest/shared';
-import qs from 'querystring';
 
-export interface DiscordConfig {
-  clientId: string;
-  clientSecret: string;
-  redirectUrl: string;
-  botToken: string;
-}
-
-class DiscordService implements IDiscordService {
+export class DiscordService implements IDiscordService {
   private baseUrl: string;
   private client: Axios;
   private config: DiscordConfig;
 
-  constructor(config: DiscordConfig) {
+  constructor(config = defaultConfig) {
     this.baseUrl = `https://discord.com/api`;
     this.client = axios.create({ baseURL: this.baseUrl });
     this.config = config;
@@ -45,7 +40,7 @@ class DiscordService implements IDiscordService {
       client_id: this.config.clientId,
       redirect_uri: this.config.redirectUrl,
       response_type: 'code',
-      scope: 'guilds guilds.join'
+      scope: 'guilds guilds.join identify'
     };
 
     if (linkGuild) {
@@ -121,6 +116,19 @@ class DiscordService implements IDiscordService {
     }
   }
 
+  async getCurrentUserID(accessToken: string): Promise<Result<string>> {
+    try {
+      const res = await this.client.get(`/users/@me`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      });
+      return Result.ok(res.data['id']);
+    } catch {
+      return Result.fail();
+    }
+  }
+
   async getGuildName(id: string): Promise<Result<string>> {
     try {
       const res = await this.client.get(`/guilds/${id}`, {
@@ -131,6 +139,48 @@ class DiscordService implements IDiscordService {
       });
       return Result.ok(res.data['name']);
     } catch (err) {
+      return Result.fail();
+    }
+  }
+
+  async addMember(
+    guildId: string,
+    memberId: string,
+    memberAccessToken: string
+  ): Promise<Result<boolean>> {
+    try {
+      await this.client.put(
+        `/guilds/${guildId}/members/${memberId}`,
+        {
+          access_token: memberAccessToken
+        },
+        {
+          headers: {
+            Authorization: `Bot ${this.config.botToken}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      return Result.ok(true);
+    } catch (err) {
+      return Result.fail();
+    }
+  }
+
+  async kickMember(
+    guildId: string,
+    memberId: string
+  ): Promise<Result<boolean>> {
+    try {
+      await this.client.delete(`/guilds/${guildId}/members/${memberId}`, {
+        headers: {
+          Authorization: `Bot ${this.config.botToken}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      return Result.ok(true);
+    } catch (err) {
+      if ((err as AxiosError).response.status == 404) return Result.ok(false);
       return Result.fail();
     }
   }
