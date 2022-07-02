@@ -30,7 +30,7 @@ sudo docker run \
   -e DISCORD_CLIENT_SECRET="$DISCORD_CLIENT_SECRET" \
   -e DISCORD_BOT_TOKEN="$DISCORD_BOT_TOKEN" \
   -p 9000:9000 --restart unless-stopped \
-  -idt $ECR_IMAGE_URL yarn indexer serve
+  -idt $ECR_IMAGE_URL npm run indexer start
 
 sudo docker run \
   -e NODE_ENV="$NODE_ENV" \
@@ -39,4 +39,4 @@ sudo docker run \
   -e MAIL_FROM_NO_REPLY="$MAIL_FROM_NO_REPLY" \
   -e SENDGRID_API_KEY="$SENDGRID_API_KEY" \
   -p 4000:4000 --restart unless-stopped \
-  -idt $ECR_IMAGE_URL yarn console serve
+  -idt $ECR_IMAGE_URL npm run console start

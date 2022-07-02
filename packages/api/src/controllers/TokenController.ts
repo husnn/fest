@@ -33,8 +33,9 @@ import {
   MintTokenResponse,
   TokenData
 } from '@fest/shared';
-import { NextFunction, Request, Response } from 'express';
 import { HttpError, NotFoundError } from '../http';
+import { NextFunction, Request, Response } from 'express';
+
 import HttpResponse from '../http/HttpResponse';
 
 class TokenController {

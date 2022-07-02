@@ -1,21 +1,21 @@
 FROM node:16-alpine
 
-RUN mkdir -p /usr/src/app && \
-  chown -R node:node /usr/src/app
-
-WORKDIR /usr/src/app
-
-COPY --chown=node:node . .
-
 RUN apk add --update --no-cache \
     build-base \
     bash \
     curl \
     make \
-    nodejs \
-    python3 \
-    yarn \
-  && npm install --global node-gyp
+    python3
 
-RUN yarn install --inline-builds \
-  && yarn build
+RUN npm i -g pnpm
+
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+COPY pnpm-lock.yaml ./
+RUN pnpm fetch --prod
+
+ADD . ./
+RUN pnpm install -r
+
+RUN pnpm build

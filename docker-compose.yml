@@ -19,7 +19,7 @@ services:
 
   indexer:
     build: .
-    command: yarn indexer serve
+    command: npm run indexer start
     env_file: ./packages/indexer/.env
     environment:
       PORT: 9000
@@ -36,7 +36,7 @@ services:
 
   api:
     build: .
-    command: yarn api serve
+    command: npm run api start
     env_file: ./packages/api/.env
     environment:
       PORT: 5000
@@ -55,28 +55,9 @@ services:
       - postgres
       - indexer
 
-  house:
-    build: .
-    command: yarn house serve
-    env_file: ./packages/house/.env
-    environment:
-      PORT: 6000
-      PG_HOST: postgres
-      PG_PORT: 5432
-      CLIENT_URL: http://localhost
-      ETH_PROVIDER: http://host:8545
-      REDIS_URL: redis://redis:6379
-    extra_hosts:
-      - 'host:host-gateway'
-    restart: on-failure
-    depends_on:
-      - postgres
-      - redis
-      - api
-
   web:
     build: .
-    command: yarn web serve
+    command: npm run web serve
     env_file: ./packages/web/.env.local
     environment:
       NEXT_PUBLIC_API_URL: http://localhost:5050/v1
@@ -84,11 +65,10 @@ services:
     restart: on-failure
     depends_on:
       - api
-      - house
 
   console:
     build: .
-    command: yarn console serve
+    command: npm run console start
     env_file: ./packages/console/.env
     environment:
       PORT: 4000
@@ -103,7 +83,6 @@ services:
       WEB_PORT: 3000
       CONSOLE_PORT: 4000
       API_PORT: 5000
-      HOUSE_PORT: 6000
     ports:
       - 80:80
       - 4050:4000
@@ -114,7 +93,6 @@ services:
     restart: on-failure
     depends_on:
       - api
-      - house
       - web
       - console
 

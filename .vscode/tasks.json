@@ -26,9 +26,9 @@
     },
     {
       "label": "Watch + Build",
-      "command": "yarn",
+      "command": "npm",
       "type": "shell",
-      "args": ["watch"],
+      "args": ["run", "watch"],
       "isBackground": true,
       "presentation": {
         "group": "default",
@@ -40,8 +40,8 @@
     {
       "label": "Start Indexer",
       "type": "shell",
-      "command": "yarn",
-      "args": ["indexer", "serve"],
+      "command": "npm",
+      "args": ["run", "indexer", "start"],
       "isBackground": true,
       "dependsOn": ["Start Ganache"],
       "presentation": {
@@ -65,8 +65,8 @@
     {
       "label": "Start API",
       "type": "shell",
-      "command": "yarn",
-      "args": ["api", "dev"],
+      "command": "npm",
+      "args": ["run", "api", "dev"],
       "isBackground": true,
       "dependsOn": ["Start Indexer"],
       "presentation": {
@@ -87,36 +87,11 @@
         }
       }
     },
-    // {
-    //   "label": "Start House",
-    //   "type": "shell",
-    //   "command": "yarn",
-    //   "args": ["house", "dev"],
-    //   "isBackground": true,
-    //   "dependsOn": ["Start API"],
-    //   "presentation": {
-    //     "group": "default",
-    //     "panel": "shared"
-    //   },
-    //   "problemMatcher": {
-    //     "pattern": {
-    //       "regexp": ".",
-    //       "file": 1,
-    //       "location": 2,
-    //       "message": 3
-    //     },
-    //     "background": {
-    //       "activeOnStart": true,
-    //       "beginsPattern": ".",
-    //       "endsPattern": "App running"
-    //     }
-    //   }
-    // },
     {
       "label": "Start Web",
       "type": "shell",
-      "command": "yarn",
-      "args": ["web", "dev"],
+      "command": "npm",
+      "args": ["run", "web", "dev"],
       "isBackground": true,
       "dependsOn": ["Start API"],
       "presentation": {

@@ -1,9 +1,10 @@
-import { Post, generatePostId } from '@fest/core';
 import { PostRepository, UserRepository } from '../../repositories';
 
+import { Post } from '../../entities';
 import { PostDTO } from '@fest/shared';
 import { Result } from '../../Result';
 import UseCase from '../../base/UseCase';
+import { generatePostId } from '../../utils';
 
 export interface CreatePostInput {
   userId: string;

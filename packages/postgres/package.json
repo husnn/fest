@@ -4,18 +4,18 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "db:gen": "yarn build && typeorm migration:generate -n",
-    "db:migrate": "yarn build && typeorm migration:run",
+    "db:gen": "npm run build && typeorm migration:generate -n",
+    "db:migrate": "npm run build && typeorm migration:run",
     "db:rollback": "typeorm migration:revert",
     "build": "tsc --build tsconfig.json"
   },
   "devDependencies": {
     "@types/node": "^17.0.10",
-    "typescript": "^4.5.5"
+    "typescript": "^4.7.4"
   },
   "dependencies": {
     "@fest/core": "workspace:^",
-    "@fest/shared": "workspace:^",
+    "@fest/shared": "workspace:^0.0.1",
     "nanoid": "^3.2.0",
     "pg": "^8.7.1",
     "reflect-metadata": "^0.1.13",

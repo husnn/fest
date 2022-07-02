@@ -2,7 +2,12 @@
   {
     "name": "${container_name}",
     "image": "${ecr_repo_url}:${tag}",
-    "command": ["yarn", "${service_name}", "serve"],
+    "command": [
+      "npm",
+      "run",
+      "${service_name}",
+      "start"
+    ],
     "essential": true,
     "logConfiguration": {
       "logDriver": "awslogs",
@@ -14,25 +19,31 @@
     },
     "portMappings": [
       {
-        "containerPort": ${port},
-        "hostPort": ${port},
+        "containerPort": ${port
+        },
+        "hostPort": ${port
+        },
         "protocol": "tcp"
       }
     ],
     "environment": ${jsonencode([
       for key, value in env_vars: {
-        "name": "${key}",
-        "value": "${value}"
-      }
-    ])},
+          "name": "${key}",
+          "value": "${value}"
+        }
+      ])
+    },
     "secrets": ${jsonencode([
       for key in secret_keys: {
-        "name": "${key}",
-        "valueFrom": "${secret_arn}:${key}::"
-      }
-    ])},
-    "cpu": ${cpu},
-    "memory": ${memory},
+          "name": "${key}",
+          "valueFrom": "${secret_arn}:${key}::"
+        }
+      ])
+    },
+    "cpu": ${cpu
+    },
+    "memory": ${memory
+    },
     "mountPoints": [],
     "volumesFrom": []
   }

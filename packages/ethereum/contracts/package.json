@@ -5,13 +5,25 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "truffle:compile": "truffle compile",
+    "truffle:dev": "truffle migrate --network development",
+    "truffle:staging": "truffle migrate --network mumbai",
+    "truffle:prod": "truffle migrate --network polygon",
+    "truffle:test": "truffle test",
     "build": "tsc --build tsconfig.json"
   },
   "devDependencies": {
     "@types/node": "^15.0.2",
-    "typescript": "^4.2.4"
+    "typescript": "^4.7.4"
   },
   "dependencies": {
-    "web3": "^1.3.6"
+    "@openzeppelin/contracts": "^4.3.2",
+    "@openzeppelin/test-helpers": "^0.5.13",
+    "@truffle/hdwallet-provider": "^1.5.0",
+    "chai": "^4.3.4",
+    "dotenv": "^10.0.0",
+    "eth-sig-util": "^3.0.1",
+    "truffle": "^5.4.11",
+    "web3": "^1.5.2"
   }
 }

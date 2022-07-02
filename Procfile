@@ -1,2 +1,2 @@
-web: yarn api serve
-worker: yarn indexer serve
+web: npm run api start
+worker: npm run indexer start
