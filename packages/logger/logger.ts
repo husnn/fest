@@ -36,6 +36,7 @@ if (process.env.NODE_ENV === 'production') {
   loggerOpts = {
     transports: [
       new WinstonCloudwatch({
+        level: 'info',
         logGroupName: `${packageName}-${process.env.NODE_ENV}`,
         logStreamName: function () {
           const date = new Date().toDateString();
@@ -51,10 +52,6 @@ if (process.env.NODE_ENV === 'production') {
     transports: [
       new winston.transports.Console({
         level: 'info',
-        format: jsonFormat
-      }),
-      new winston.transports.Console({
-        level: 'error',
         format: jsonFormat,
         handleExceptions: true
       })
