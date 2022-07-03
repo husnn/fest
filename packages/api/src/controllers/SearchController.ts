@@ -1,8 +1,9 @@
+import { HttpError, HttpResponse } from '../http';
+import { NextFunction, Request, Response } from 'express';
+import { SearchResponse, SearchResultDTO } from '@fest/shared';
+
 import { Search } from '@fest/core';
 import { UserRepository } from '@fest/postgres';
-import { SearchResponse, SearchResultDTO } from '@fest/shared';
-import { NextFunction, Request, Response } from 'express';
-import { HttpError, HttpResponse } from '../http';
 
 export class SearchController {
   private searchUseCase: Search;
@@ -25,7 +26,7 @@ export class SearchController {
         count,
         page
       });
-      if (!result.success) throw new HttpError(result.error);
+      if (!result.success) throw new HttpError();
 
       return new HttpResponse<SearchResponse>(
         res,

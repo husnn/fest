@@ -30,7 +30,7 @@ export class ResetPassword extends UseCase<
 
   async exec(data: ResetPasswordInput): Promise<Result<ResetPasswordOutput>> {
     if (!isValidPassword(data.password))
-      return Result.fail(AuthError.PASSWORD_INVALID);
+      return Result.fail(null, AuthError.PASSWORD_INVALID);
 
     const user = await this.userRepository.get(
       User.fromResetJwt(data.token).userId,
@@ -42,7 +42,7 @@ export class ResetPassword extends UseCase<
       user.passwordResetToken?.value !== data.token ||
       isExpired(user.passwordResetToken?.expiry)
     )
-      return Result.fail(ResetPasswordError.INVALID_TOKEN);
+      return Result.fail(null, ResetPasswordError.INVALID_TOKEN);
 
     user.passwordResetToken.expiry = new Date();
 

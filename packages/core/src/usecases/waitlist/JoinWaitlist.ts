@@ -56,7 +56,7 @@ export class JoinWaitlist extends UseCase<
         updated = true;
       }
 
-      if (!updated) return Result.fail(WaitlistError.ENTRY_EXISTS);
+      if (!updated) return Result.fail(null, WaitlistError.ENTRY_EXISTS);
 
       entry = await this.waitlistRepository.update(entry);
     } else {

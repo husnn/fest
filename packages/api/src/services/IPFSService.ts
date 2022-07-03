@@ -1,7 +1,7 @@
 import { IPFSService as IIPFSService, PinData } from '@fest/core';
 import PinataSDK, { PinataClient } from '@pinata/sdk';
+import { Result, WrappedError } from '@fest/shared';
 
-import { Result } from '@fest/shared';
 import axios from 'axios';
 
 export class IPFSService implements IIPFSService {
@@ -31,10 +31,10 @@ export class IPFSService implements IIPFSService {
         uri: this.getUri(pin.IpfsHash)
       });
     } catch (err) {
-      console.log(err);
+      return Result.fail(
+        new WrappedError(err, 'Could not pipe token media to IPFS.')
+      );
     }
-
-    return Result.fail('Could not pipe token media to IPFS.');
   }
 
   async saveJson(content): Promise<Result<PinData>> {

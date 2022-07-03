@@ -23,8 +23,7 @@ export class DeletePost extends UseCase<DeletePostInput, DeletePostOutput> {
 
   async exec(data: DeletePostInput): Promise<Result<DeletePostOutput>> {
     const post = await this.postRepository.get(data.postId);
-    if (post.userId != data.userId)
-      return Result.fail('User is not post creator.');
+    if (post.userId != data.userId) return Result.fail(notPostCreatorError);
 
     await this.postRepository.remove(post);
 
@@ -38,3 +37,5 @@ export class DeletePost extends UseCase<DeletePostInput, DeletePostOutput> {
     return Result.ok();
   }
 }
+
+export const notPostCreatorError = new Error('User is not post creator.');

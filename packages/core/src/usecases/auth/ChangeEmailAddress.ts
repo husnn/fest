@@ -58,7 +58,7 @@ export class ChangeEmailAddress extends UseCase<
       user.emailChangeToken?.value !== data.token ||
       isExpired(user.emailChangeToken?.expiry)
     )
-      return Result.fail(EmailAddressChangeError.INVALID_TOKEN);
+      return Result.fail(null, EmailAddressChangeError.INVALID_TOKEN);
 
     if (user.wallet.type == WalletType.INTERNAL) {
       const isPasswordCorrect = await User.verifyPassword(
@@ -66,7 +66,7 @@ export class ChangeEmailAddress extends UseCase<
         user.password
       );
       if (!isPasswordCorrect)
-        return Result.fail(EmailAddressChangeError.INCORRECT_PASSWORD);
+        return Result.fail(null, EmailAddressChangeError.INCORRECT_PASSWORD);
     } else {
       const recoveredAddress = this.ethereumService.recoverAddress(
         data.token,
@@ -76,7 +76,7 @@ export class ChangeEmailAddress extends UseCase<
         !recoveredAddress.success ||
         recoveredAddress.data?.address !== user.wallet.address
       )
-        return Result.fail(EmailAddressChangeError.INVALID_SIGNATURE);
+        return Result.fail(null, EmailAddressChangeError.INVALID_SIGNATURE);
     }
 
     const newEmailAddress = recovered.email.trim().toLowerCase();

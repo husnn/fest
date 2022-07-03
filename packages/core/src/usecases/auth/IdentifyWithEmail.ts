@@ -69,7 +69,7 @@ export class IdentifyWithEmail extends UseCase<
     data: IdentifyWithEmailInput
   ): Promise<Result<IdentifyWithEmailOutput>> {
     if (!isValidPassword(data.password))
-      return Result.fail(AuthError.PASSWORD_INVALID);
+      return Result.fail(null, AuthError.PASSWORD_INVALID);
 
     const email = data.email.trim().toLowerCase();
 

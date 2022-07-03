@@ -42,8 +42,8 @@ export class RequestEmailAddressChange extends UseCase<
 
     if (userForEmail) {
       if (user.id == userForEmail.id)
-        return Result.fail(EmailAddressChangeError.SAME_EMAIL);
-      return Result.fail(EmailAddressChangeError.EMAIL_ALREADY_IN_USE);
+        return Result.fail(null, EmailAddressChangeError.SAME_EMAIL);
+      return Result.fail(null, EmailAddressChangeError.EMAIL_ALREADY_IN_USE);
     }
 
     const expiry = getExpiryDate(JWT_EXPIRY_IN_MINS * 60);

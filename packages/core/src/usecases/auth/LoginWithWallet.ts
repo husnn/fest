@@ -67,11 +67,11 @@ export class LoginWithWallet extends UseCase<
     const decryptedCode = decryptText(data.code);
 
     if (code !== decryptedCode) {
-      return Result.fail(AuthError.CODE_INCORRECT);
+      return Result.fail(null, AuthError.CODE_INCORRECT);
     }
 
     if (isExpired(expiry)) {
-      return Result.fail(AuthError.CODE_EXPIRED);
+      return Result.fail(null, AuthError.CODE_EXPIRED);
     }
 
     const userDTO = new CurrentUserDTO(user);

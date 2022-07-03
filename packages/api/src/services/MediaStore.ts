@@ -3,10 +3,10 @@ import {
   PutObjectCommand,
   S3 as S3Client
 } from '@aws-sdk/client-s3';
+import { Result, WrappedError } from '@fest/shared';
 
 import { MediaService } from '@fest/core';
 import { PassThrough } from 'stream';
-import { Result } from '@fest/shared';
 import axios from 'axios';
 import { fromContainerMetadata } from '@aws-sdk/credential-providers';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
@@ -39,40 +39,38 @@ export class MediaStore implements MediaService {
     filename?: string,
     ext?: string
   ): Promise<Result<string>> {
-    const stream = await axios.get(url, {
-      responseType: 'stream'
-    });
-
-    const passThrough = new PassThrough();
-
-    const contentType = stream.headers['content-type'];
-
-    const extension = ext ? ext : mime.extension(contentType);
-    if (!extension) return Result.fail('Could not get file extension.');
-
-    const filePath = `${basePath}/${filename || nanoid(32)}${extension}`;
-
-    const command = new PutObjectCommand({
-      Bucket: process.env.MEDIA_S3_NAME,
-      Key: filePath,
-      ContentType: contentType,
-      ContentLength: Number(stream.headers['content-length']),
-      Body: passThrough,
-      ACL: 'public-read'
-    });
-
-    stream.data.pipe(passThrough);
-
     try {
+      const stream = await axios.get(url, {
+        responseType: 'stream'
+      });
+
+      const passThrough = new PassThrough();
+
+      const contentType = stream.headers['content-type'];
+
+      const extension = ext ? ext : mime.extension(contentType);
+      if (!extension) throw new Error('Could not get file extension.');
+
+      const filePath = `${basePath}/${filename || nanoid(32)}${extension}`;
+
+      const command = new PutObjectCommand({
+        Bucket: process.env.MEDIA_S3_NAME,
+        Key: filePath,
+        ContentType: contentType,
+        ContentLength: Number(stream.headers['content-length']),
+        Body: passThrough,
+        ACL: 'public-read'
+      });
+
+      stream.data.pipe(passThrough);
+
       await this.s3.send(command);
       passThrough.end();
 
       return Result.ok(`${process.env.MEDIA_S3_URL}/${filePath}`);
     } catch (err) {
-      console.log(err);
+      return Result.fail(new WrappedError(err, 'Could not pipe media.'));
     }
-
-    return Result.fail('Could not pipe media.');
   }
 
   async getSignedImageUploadUrl(

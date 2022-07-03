@@ -1,7 +1,8 @@
 import { Response as ExpressResponse, NextFunction, Request } from 'express';
 import { HttpError, HttpResponse } from '../http';
+import { Response, isDev } from '@fest/shared';
 
-import { Response } from '@fest/shared';
+import logger from '../logger';
 
 export interface ErrorResponse extends Response {
   error: string;
@@ -14,7 +15,9 @@ function errorHandler(
   res: ExpressResponse,
   next: NextFunction
 ) {
-  console.log(err.stack);
+  logger.error(err?.message);
+
+  if (isDev) console.error(err?.stack);
 
   const error: HttpError = err instanceof HttpError ? err : new HttpError();
 

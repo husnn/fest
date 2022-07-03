@@ -40,16 +40,17 @@ export class LoginWithEmail extends UseCase<
       data.password,
       user.password
     );
-    if (!isPasswordCorrect) return Result.fail(AuthError.PASSWORD_INCORRECT);
+    if (!isPasswordCorrect)
+      return Result.fail(null, AuthError.PASSWORD_INCORRECT);
 
     const { value: code, expiry } = user.loginCode;
 
     if (isProduction && code !== data.code) {
-      return Result.fail(AuthError.CODE_INCORRECT);
+      return Result.fail(null, AuthError.CODE_INCORRECT);
     }
 
     if (isExpired(expiry)) {
-      return Result.fail(AuthError.CODE_EXPIRED);
+      return Result.fail(null, AuthError.CODE_EXPIRED);
     }
 
     const userDTO = new CurrentUserDTO(user);

@@ -24,20 +24,20 @@ import {
   EthereumService,
   IdentifyWithEmailResponse,
   IdentifyWithWalletResponse,
-  isEmailAddress,
   LoginResponse,
   RequestEmailAddressChangeResponse,
   RequestPasswordResetResponse,
-  ResetPasswordResponse
+  ResetPasswordResponse,
+  isEmailAddress
 } from '@fest/shared';
-import { NextFunction, Request, Response } from 'express';
-import { appConfig, authCookieName, isDev } from '../config';
 import {
   HttpError,
   HttpResponse,
   NotFoundError,
   ValidationError
 } from '../http';
+import { NextFunction, Request, Response } from 'express';
+import { appConfig, authCookieName, isDev } from '../config';
 
 class AuthController {
   private doAuthPrecheckUseCase: AuthPrecheck;
@@ -125,7 +125,7 @@ class AuthController {
         signature
       });
       if (!result.success) {
-        switch (result.error) {
+        switch (result.reason) {
           case EmailAddressChangeError.INVALID_TOKEN:
             throw new ValidationError('Invalid or expired token.');
           case EmailAddressChangeError.INCORRECT_PASSWORD:
@@ -156,7 +156,7 @@ class AuthController {
         email
       });
       if (!result.success) {
-        switch (result.error) {
+        switch (result.reason) {
           case EmailAddressChangeError.SAME_EMAIL:
             throw new ValidationError(
               'New email address cannot be the same as existing.'
@@ -188,7 +188,7 @@ class AuthController {
         ip: req.ip
       });
       if (!result.success) {
-        switch (result.error) {
+        switch (result.reason) {
           case ResetPasswordError.INVALID_TOKEN:
             throw new ValidationError('Invalid or expired token.');
           default:
@@ -252,7 +252,7 @@ class AuthController {
       });
 
       if (!result.success) {
-        switch (result.error) {
+        switch (result.reason) {
           case AuthError.PASSWORD_INCORRECT:
             throw new ValidationError('Incorrect email or password.');
           case AuthError.CODE_EXPIRED:
@@ -286,6 +286,7 @@ class AuthController {
         signature,
         ip: req.ip
       });
+      if (!result.success) throw new HttpError('Could not login with wallet.');
 
       const { token, expiry, user } = result.data;
 
@@ -313,8 +314,8 @@ class AuthController {
     });
   }
 
-  getIdentificationError(error): HttpError {
-    switch (error) {
+  getIdentificationError(reason: string): HttpError {
+    switch (reason) {
       case AuthError.INVITE_CODE_MISSING:
         return new ValidationError('Sorry, we are currently invite-only.');
       case AuthError.INVITE_NOT_FOUND:
@@ -338,7 +339,7 @@ class AuthController {
         invite
       });
 
-      if (!result.success) throw this.getIdentificationError(result.error);
+      if (!result.success) throw this.getIdentificationError(result.reason);
 
       return new HttpResponse<IdentifyWithEmailResponse>(res);
     } catch (err) {
@@ -360,7 +361,7 @@ class AuthController {
         invite
       });
 
-      if (!result.success) throw this.getIdentificationError(result.error);
+      if (!result.success) throw this.getIdentificationError(result.reason);
 
       return new HttpResponse<IdentifyWithWalletResponse>(res, {
         body: {

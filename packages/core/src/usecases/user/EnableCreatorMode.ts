@@ -34,16 +34,17 @@ export class EnableCreatorMode extends UseCase<
     data: EnableCreatorModeInput
   ): Promise<Result<EnableCreatorModeOutput>> {
     const invite = await this.inviteRepository.findByCode(data.code);
-    if (!invite) return Result.fail(InviteError.INVITE_NOT_FOUND);
+    if (!invite) return Result.fail(null, InviteError.INVITE_NOT_FOUND);
 
-    if (invite.ownerId === data.user) return Result.fail(InviteError.OWN_CODE);
+    if (invite.ownerId === data.user)
+      return Result.fail(null, InviteError.OWN_CODE);
     if (invite.type !== InviteType.CREATOR)
-      return Result.fail(InviteError.INVITE_INVALID);
+      return Result.fail(null, InviteError.INVITE_INVALID);
     if (!Invite.validate(invite))
-      return Result.fail(InviteError.INVITE_INVALID);
+      return Result.fail(null, InviteError.INVITE_INVALID);
 
     const user = await this.userRepository.get(data.user);
-    if (user.isCreator) return Result.fail(InviteError.USER_INELIGIBLE);
+    if (user.isCreator) return Result.fail(null, InviteError.USER_INELIGIBLE);
 
     user.isCreator = true;
     upgradeInvitesToCreator(this.inviteRepository, user.id);

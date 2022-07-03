@@ -26,13 +26,13 @@ import {
   UpdateAvatarResponse,
   UserInfo
 } from '@fest/shared';
-import { NextFunction, Request, Response } from 'express';
 import {
   HttpError,
   HttpResponse,
   NotFoundError,
   ValidationError
 } from '../http';
+import { NextFunction, Request, Response } from 'express';
 
 class UserController {
   private editUserUseCase: EditUser;
@@ -141,7 +141,7 @@ class UserController {
         code
       });
       if (!result.success) {
-        switch (result.error) {
+        switch (result.reason) {
           case InviteError.INVITE_NOT_FOUND:
             throw new HttpError('Could not find invite code.');
           case InviteError.INVITE_INVALID:

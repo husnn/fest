@@ -42,7 +42,7 @@ export class AuthCheck extends UseCase<AuthCheckInput, AuthCheckOutput> {
 
       if (entry) {
         if (!entry.isAccepted && !data.inviteCode)
-          return Result.fail(AuthError.INVITE_CODE_MISSING);
+          return Result.fail(null, AuthError.INVITE_CODE_MISSING);
         isCreator = entry.type === WaitlistEntryType.CREATOR;
       }
     }
@@ -51,10 +51,10 @@ export class AuthCheck extends UseCase<AuthCheckInput, AuthCheckOutput> {
       invite = await this.inviteRepository.findByCode(
         data.inviteCode.trim().toLowerCase()
       );
-      if (!invite) return Result.fail(AuthError.INVITE_NOT_FOUND);
+      if (!invite) return Result.fail(null, AuthError.INVITE_NOT_FOUND);
 
       if (!Invite.validate(invite))
-        return Result.fail(AuthError.INVITE_INVALID);
+        return Result.fail(null, AuthError.INVITE_INVALID);
 
       if (!isCreator) isCreator = invite.type === InviteType.CREATOR;
 
