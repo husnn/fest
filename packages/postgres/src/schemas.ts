@@ -1,6 +1,5 @@
 import CommunitySchema from './schemas/CommunitySchema';
 import InviteSchema from './schemas/InviteSchema';
-import MerlinPaymentSchema from './schemas/MerlinPaymentSchema';
 import MessageSchema from './schemas/MessageSchema';
 import NotificationSchema from './schemas/NotificationSchema';
 import OAuthSchema from './schemas/OAuthSchema';
@@ -20,7 +19,6 @@ import WalletSchema from './schemas/WalletSchema';
 export default [
   CommunitySchema,
   InviteSchema,
-  MerlinPaymentSchema,
   MessageSchema,
   NotificationSchema,
   OAuthSchema,

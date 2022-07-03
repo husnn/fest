@@ -1,6 +1,5 @@
 export * from './CommunityRepository';
 export * from './InviteRepository';
-export * from './MerlinPaymentRepository';
 export * from './NotificationRepository';
 export * from './OAuthRepository';
 export * from './PostRepository';
