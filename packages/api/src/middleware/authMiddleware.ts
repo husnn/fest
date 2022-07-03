@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
 import { appConfig, authCookieName } from '../config';
+
+import jwt from 'jsonwebtoken';
+import logger from '@fest/logger';
 
 export default (req: Request, res: Response, next: NextFunction) => {
   if (req.cookies[authCookieName] == null) return res.sendStatus(401);
@@ -10,7 +12,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
     appConfig.jwtSecret,
     (err, data: any) => {
       if (err) {
-        console.log(err);
+        logger.error(err);
         return res.sendStatus(403);
       }
       req.user = data.userId;

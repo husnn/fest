@@ -44,6 +44,7 @@ import cors from 'cors';
 import errorHandler from './middleware/errorHandler';
 import { getRateLimiter } from './middleware/rateLimiting';
 import initRoutes from './routes';
+import logger from '@fest/logger';
 
 class App {
   app: Application;
@@ -238,7 +239,7 @@ class App {
   getInstance = (): Application => this.app;
 
   onError(err: string) {
-    console.log(`Could not start app. ${err}`);
+    logger.error(`Could not start app. ${err}`);
   }
 
   start() {
@@ -246,7 +247,7 @@ class App {
 
     this.app
       .listen(port, host, () => {
-        console.log(`App running at ${protocol}://${host}:${port}`);
+        logger.info(`App running at ${protocol}://${host}:${port}`);
       })
       .on('error', this.onError);
   }

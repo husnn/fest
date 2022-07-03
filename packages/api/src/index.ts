@@ -1,15 +1,16 @@
-import { EthereumService } from '@fest/ethereum';
 import Postgres, { defaultConfig as postgresConfig } from '@fest/postgres';
-import net from 'net';
-import { createClient } from 'redis';
-import { setInterval } from 'timers';
-import Web3 from 'web3';
-import App from './App';
 import { appConfig, ethConfig, indexerConfig, redisConfig } from './config';
-import { setupLogger } from './logger';
-import { initRateLimiters } from './middleware/rateLimiting';
+import logger, { setupLogger } from '@fest/logger';
 
-const web3 = new Web3(ethConfig.provider);
+import App from './App';
+import { EthereumService } from '@fest/ethereum';
+import Web3 from 'web3';
+import { createClient } from 'redis';
+import { initRateLimiters } from './middleware/rateLimiting';
+import net from 'net';
+import { setInterval } from 'timers';
+
+setupLogger('api');
 
 const connectToIndexer = () => {
   const MAX_CONN_ATTEMPTS = 5;
@@ -19,11 +20,11 @@ const connectToIndexer = () => {
 
   const connect = (attempt = 1) => {
     if (attempt > MAX_CONN_ATTEMPTS) {
-      console.log('\n Could not connect to Indexer service.');
+      logger.error('Could not connect to Indexer service.');
       process.exit(1);
     }
 
-    console.log(`Attempting connection to Indexer (#${attempt})`);
+    logger.info(`Attempting connection to Indexer (#${attempt})`);
 
     const client = new net.Socket();
 
@@ -31,14 +32,14 @@ const connectToIndexer = () => {
       attempt = 0;
       client.setKeepAlive(true, 1000);
 
-      console.log('Connected to Indexer.');
+      logger.info('Connected to Indexer.');
     });
 
     const checkHealth = setInterval(() => client.write('health'), 1000);
 
     client.on('error', (err: string) => {
       clearInterval(checkHealth);
-      console.log(`Error getting indexer. ${err}`);
+      logger.error(`Error getting indexer. ${err}`);
 
       setTimeout(() => connect(attempt + 1), CONN_ATTEMPT_INTERVAL);
     });
@@ -47,12 +48,14 @@ const connectToIndexer = () => {
   connect();
 };
 
+const web3 = new Web3(ethConfig.provider);
+
 (async () => {
   await Postgres.init(postgresConfig);
-  console.log('Connected to database.');
+  logger.info('Connected to database.');
 
   await EthereumService.getInstance(web3);
-  console.log('Connected to Ethereum.');
+  logger.info('Connected to Ethereum.');
 
   if (process.env.BYPASS_INDEXER_CONNECTION !== 'true') {
     connectToIndexer();
@@ -62,8 +65,6 @@ const connectToIndexer = () => {
   await redisClient.connect();
 
   initRateLimiters(redisClient);
-
-  setupLogger('api');
 
   new App(appConfig).start();
 })();

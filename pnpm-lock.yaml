@@ -44,6 +44,7 @@ importers:
       '@fest/core': workspace:^0.0.1
       '@fest/discord': workspace:^0.0.1
       '@fest/ethereum': workspace:^0.0.1
+      '@fest/logger': workspace:^0.0.1
       '@fest/postgres': workspace:^0.0.1
       '@fest/shared': workspace:^0.0.1
       '@pinata/sdk': ^1.1.23
@@ -88,6 +89,7 @@ importers:
       '@fest/core': link:../core
       '@fest/discord': link:../discord
       '@fest/ethereum': link:../ethereum
+      '@fest/logger': link:../logger
       '@fest/postgres': link:../postgres
       '@fest/shared': link:../shared
       '@pinata/sdk': 1.1.26
@@ -327,6 +329,19 @@ importers:
       '@types/node': 17.0.45
       '@types/redis': 4.0.11
       nodemon: 2.0.18
+      typescript: 4.7.4
+
+  packages/logger:
+    specifiers:
+      '@types/node': ^17.0.10
+      app-root-path: ^3.0.0
+      typescript: ^4.7.4
+      winston: ^3.8.1
+    dependencies:
+      app-root-path: 3.0.0
+      winston: 3.8.1
+    devDependencies:
+      '@types/node': 17.0.45
       typescript: 4.7.4
 
   packages/postgres:
