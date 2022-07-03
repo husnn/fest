@@ -1,8 +1,3 @@
-resource "aws_iam_role" "task" {
-  name               = "${local.project_name}-ecs-role"
-  assume_role_policy = file("${path.module}/role.json")
-}
-
 resource "aws_iam_role" "task_execution" {
   name               = "${local.project_name}-ecs-execution-role"
   assume_role_policy = file("${path.module}/role.json")
@@ -34,4 +29,9 @@ resource "aws_iam_role_policy_attachment" "secrets_manager" {
 
   role       = aws_iam_role.task_execution.id
   policy_arn = aws_iam_policy.secrets_manager.0.arn
+}
+
+resource "aws_iam_role" "task" {
+  name               = "${local.project_name}-ecs-role"
+  assume_role_policy = file("${path.module}/role.json")
 }

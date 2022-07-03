@@ -6,12 +6,38 @@ locals {
 }
 
 resource "aws_cloudwatch_log_group" "main" {
-  name = "awslogs-ecs-${local.project_name}"
+  name = local.project_name
 
   tags = {
     Environment = var.environment
     Application = var.app_name
   }
+}
+
+resource "aws_iam_policy" "cloudwatch" {
+  name   = "${local.project_name}-cloudwatch-policy"
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:DescribeLogGroups",
+        "logs:DescribeLogStreams",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "cloudwatch" {
+  role       = aws_iam_role.task.name
+  policy_arn = aws_iam_policy.cloudwatch.arn
 }
 
 resource "aws_route53_record" "main" {

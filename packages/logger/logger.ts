@@ -1,31 +1,30 @@
 import 'winston-daily-rotate-file';
 
 import * as appRoot from 'app-root-path';
+import * as crypto from 'crypto';
 import * as winston from 'winston';
 
+import WinstonCloudwatch from 'winston-cloudwatch';
 import { getContext } from './context';
 
 let packageName = process.env.npm_package_name;
 
 const ctx = getContext();
 
-const logFormat = winston.format.combine(
+const logFormat = (info: winston.LogEntry) => {
+  const { level, message, ...metadata } = info;
+  return {
+    level,
+    ...(packageName && { app: packageName }),
+    message,
+    ...metadata,
+    ...ctx.get('context')
+  };
+};
+
+const fileFormat = winston.format.combine(
   winston.format.timestamp(),
-  winston.format.printf((info) => {
-    const { timestamp, level, message, ...metadata } = info;
-    return JSON.stringify(
-      {
-        timestamp,
-        level,
-        ...(packageName && { app: packageName }),
-        message,
-        ...metadata,
-        ...ctx.get('context')
-      },
-      null,
-      2
-    );
-  })
+  winston.format.printf((info) => JSON.stringify(logFormat(info), null, 2))
 );
 
 const consoleLogFormat = winston.format.combine(
@@ -36,28 +35,48 @@ const consoleLogFormat = winston.format.combine(
 export const setupLogger = (package_: string) => (packageName = package_);
 
 const rotationFileConfig = {
-  format: logFormat,
+  format: fileFormat,
   zippedArchive: true,
   maxSize: '20m',
   maxFiles: '14d'
 };
 
 export const logger = winston.createLogger({
-  transports: [
+  exitOnError: false
+});
+
+if (process.env.NODE_ENV === 'production') {
+  const startTime = new Date().toISOString();
+
+  logger.add(
+    new WinstonCloudwatch({
+      logGroupName: 'api-production',
+      logStreamName: function () {
+        const date = new Date().toISOString().split('T')[0];
+        return (
+          date + '-' + crypto.createHash('md5').update(startTime).digest('hex')
+        );
+      },
+      messageFormatter: (info) => JSON.stringify(logFormat(info))
+    })
+  );
+} else {
+  logger.add(
     new winston.transports.DailyRotateFile({
       ...rotationFileConfig,
       filename: `${appRoot}/logs/info-%DATE%.log`,
       level: 'info'
-    }),
+    })
+  );
+  logger.add(
     new winston.transports.DailyRotateFile({
       ...rotationFileConfig,
       filename: `${appRoot}/logs/error-%DATE%.log`,
       level: 'error',
       handleExceptions: true
     })
-  ],
-  exitOnError: false
-});
+  );
+}
 
 if (process.env.NODE_ENV === 'development') {
   logger.add(
