@@ -2,7 +2,7 @@ import { Response as ExpressResponse, NextFunction, Request } from 'express';
 import { HttpError, HttpResponse } from '../http';
 import { Response, isDev } from '@fest/shared';
 
-import { logger } from '@fest/logger';
+import logger from '@fest/logger';
 
 export interface ErrorResponse extends Response {
   error: string;

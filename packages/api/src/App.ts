@@ -46,7 +46,7 @@ import cors from 'cors';
 import errorHandler from './middleware/errorHandler';
 import { getRateLimiter } from './middleware/rateLimiting';
 import initRoutes from './routes';
-import { logger } from '@fest/logger';
+import logger from '@fest/logger';
 
 class App {
   app: Application;

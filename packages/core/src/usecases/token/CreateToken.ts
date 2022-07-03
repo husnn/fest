@@ -8,7 +8,7 @@ import { TokenRepository } from '../../repositories';
 import UseCase from '../../base/UseCase';
 import UserRepository from '../../repositories/UserRepository';
 import { generateTokenId } from '../../utils';
-import { logger } from '@fest/logger';
+import logger from '@fest/logger';
 
 export interface CreateTokenInput {
   user: string;

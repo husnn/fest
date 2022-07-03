@@ -1,16 +1,14 @@
 import Postgres, { defaultConfig as postgresConfig } from '@fest/postgres';
 import { appConfig, ethConfig, indexerConfig, redisConfig } from './config';
-import { logger, setupLogger } from '@fest/logger';
 
 import App from './App';
 import { EthereumService } from '@fest/ethereum';
 import Web3 from 'web3';
 import { createClient } from 'redis';
 import { initRateLimiters } from './middleware/rateLimiting';
+import logger from '@fest/logger';
 import net from 'net';
 import { setInterval } from 'timers';
-
-setupLogger('api');
 
 const connectToIndexer = () => {
   const MAX_CONN_ATTEMPTS = 5;

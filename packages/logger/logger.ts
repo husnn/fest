@@ -5,15 +5,18 @@ import * as crypto from 'crypto';
 import * as winston from 'winston';
 
 import WinstonCloudwatch from 'winston-cloudwatch';
+import { cleanPackageName } from './utils';
 import { getCtxMetadata } from './context';
 
-let packageName = process.env.npm_package_name;
+const appName = cleanPackageName(
+  process.env.APP_NAME || process.env.npm_package_name
+);
 
 const logFormat = (info: winston.LogEntry) => {
   const { level, message, ...metadata } = info;
   return {
     level,
-    ...(packageName && { app: packageName }),
+    ...(appName && { app: appName }),
     message,
     ...metadata,
     ...getCtxMetadata()
@@ -23,20 +26,20 @@ const logFormat = (info: winston.LogEntry) => {
 const isProd = process.env.NODE_ENV === 'production';
 const isDev = process.env.NODE_ENV === 'development';
 
-let logger: winston.Logger;
 let transports: winston.transport[] = [];
 
-const setupLogger = (package_: string) => {
-  packageName = package_;
+const jsonFormat = winston.format.combine(
+  winston.format.timestamp(),
+  winston.format.printf((info) => JSON.stringify(logFormat(info), null, 2))
+);
 
-  if (!isProd) return;
-
+if (isProd) {
   const startTime = new Date().toISOString();
 
   transports = [
     new WinstonCloudwatch({
       level: 'info',
-      logGroupName: `${packageName}-${process.env.NODE_ENV}`,
+      logGroupName: `${appName}-${process.env.NODE_ENV}`,
       logStreamName: function () {
         const date = new Date().toISOString().split('T')[0];
         const hash = crypto.createHash('md5').update(startTime).digest('hex');
@@ -45,16 +48,7 @@ const setupLogger = (package_: string) => {
       messageFormatter: (info) => JSON.stringify(logFormat(info))
     })
   ];
-
-  logger = winston.createLogger({ transports });
-};
-
-const jsonFormat = winston.format.combine(
-  winston.format.timestamp(),
-  winston.format.printf((info) => JSON.stringify(logFormat(info), null, 2))
-);
-
-if (process.env.HEROKU) {
+} else if (process.env.HEROKU) {
   transports = [
     new winston.transports.Console({
       level: 'info',
@@ -96,9 +90,7 @@ if (isDev) {
   );
 }
 
-logger = winston.createLogger({
+export default winston.createLogger({
   transports,
   exitOnError: false
 });
-
-export { logger, setupLogger };
