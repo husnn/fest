@@ -1,29 +1,29 @@
 import { NextFunction, Request, Response, Router } from 'express';
 
 import MarketController from '../controllers/MarketController';
-import authMiddleware from '../middleware/authMiddleware';
 import pagination from '../middleware/pagination';
+import protectedRoute from '../middleware/protectedRoute';
 
 export default function init(marketController: MarketController): Router {
   const router = Router();
 
   router.get(
     '/summary',
-    authMiddleware,
+    protectedRoute,
     (req: Request, res: Response, next: NextFunction) =>
       marketController.getTokenMarketSummary(req, res, next)
   );
 
   router.post(
     '/listings/:listingId/cancel',
-    authMiddleware,
+    protectedRoute,
     (req: Request, res: Response, next: NextFunction) =>
       marketController.cancelTokenListing(req, res, next)
   );
 
   router.post(
     '/listings/:listingId/buy',
-    authMiddleware,
+    protectedRoute,
     (req: Request, res: Response, next: NextFunction) =>
       marketController.buyTokenListing(req, res, next)
   );
@@ -31,14 +31,14 @@ export default function init(marketController: MarketController): Router {
   router.get(
     '/trades',
     pagination,
-    authMiddleware,
+    protectedRoute,
     (req: Request, res: Response, next: NextFunction) =>
       marketController.getTokenTradesForUser(req, res, next)
   );
 
   router.post(
     '/withdraw',
-    authMiddleware,
+    protectedRoute,
     (req: Request, res: Response, next: NextFunction) =>
       marketController.withdrawEarnings(req, res, next)
   );

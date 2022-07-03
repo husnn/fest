@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response, Router } from 'express';
+
 import AuthController from '../controllers/AuthController';
-import authMiddleware from '../middleware/authMiddleware';
 import { getRateLimiter } from '../middleware/rateLimiting';
+import protectedRoute from '../middleware/protectedRoute';
 
 export default function init(authController: AuthController) {
   const router = Router();
@@ -40,7 +41,7 @@ export default function init(authController: AuthController) {
 
   router.post(
     '/email-change',
-    authMiddleware,
+    protectedRoute,
     (req: Request, res: Response, next: NextFunction) => {
       authController.requestEmailChange(req, res, next);
     }

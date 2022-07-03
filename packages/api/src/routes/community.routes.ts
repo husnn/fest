@@ -1,21 +1,21 @@
 import { NextFunction, Request, Response, Router } from 'express';
 
 import CommunityController from '../controllers/CommunityController';
-import authMiddleware from '../middleware/authMiddleware';
+import protectedRoute from '../middleware/protectedRoute';
 
 export default function init(communityController: CommunityController) {
   const router = Router();
 
   router.post(
     '/',
-    authMiddleware,
+    protectedRoute,
     (req: Request, res: Response, next: NextFunction) =>
       communityController.create(req, res, next)
   );
 
   router.get(
     '/:id',
-    authMiddleware,
+    protectedRoute,
     (req: Request, res: Response, next: NextFunction) =>
       communityController.get(req, res, next)
   );

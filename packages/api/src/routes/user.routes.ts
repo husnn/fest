@@ -1,9 +1,10 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import UserController from '../controllers/UserController';
+
 import { HttpError } from '../http';
-import authMiddleware from '../middleware/authMiddleware';
-import pagination from '../middleware/pagination';
+import UserController from '../controllers/UserController';
 import { getRateLimiter } from '../middleware/rateLimiting';
+import pagination from '../middleware/pagination';
+import protectedRoute from '../middleware/protectedRoute';
 import { upload } from '../services/AvatarService';
 
 export default function init(userController: UserController) {
@@ -11,7 +12,7 @@ export default function init(userController: UserController) {
 
   router.get(
     '/referral',
-    authMiddleware,
+    protectedRoute,
     (req: Request, res: Response, next: NextFunction) => {
       userController.getReferralSummary(req, res, next);
     }
@@ -44,14 +45,14 @@ export default function init(userController: UserController) {
 
   router.post(
     '/me',
-    authMiddleware,
+    protectedRoute,
     (req: Request, res: Response, next: NextFunction) =>
       userController.editUser(req, res, next)
   );
 
   router.post(
     '/enable-creator',
-    authMiddleware,
+    protectedRoute,
     (req: Request, res: Response, next: NextFunction) =>
       userController.enableCreatorMode(req, res, next)
   );
@@ -59,7 +60,7 @@ export default function init(userController: UserController) {
   router.post(
     '/me/avatar',
     getRateLimiter('avatar', { max: 5, windowInMins: 10 }),
-    authMiddleware,
+    protectedRoute,
     upload.single('avatar'),
     (req: Request, res: Response, next: NextFunction) => {
       upload.single('avatar')(req, res, function (err) {

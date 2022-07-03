@@ -4,6 +4,7 @@ import { Community } from '../../entities';
 import { Result } from '@fest/shared';
 import UseCase from '../../base/UseCase';
 import { generateCommunityId } from '../../utils';
+import logger from '@fest/logger';
 
 type CreateCommunityInput = {
   creator: string;
@@ -12,7 +13,7 @@ type CreateCommunityInput = {
 };
 
 type CreateCommunityOutput = {
-  community: string;
+  id: string;
 };
 
 export class CreateCommunity extends UseCase<
@@ -49,7 +50,12 @@ export class CreateCommunity extends UseCase<
 
     community = await this.communityRepository.create(community);
 
-    return Result.ok({ community: community.id });
+    logger.info('Community created for token(s).', {
+      communityId: community.id,
+      tokenIds: data.tokens
+    });
+
+    return Result.ok({ id: community.id });
   }
 }
 

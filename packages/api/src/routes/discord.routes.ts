@@ -1,35 +1,35 @@
 import { NextFunction, Request, Response, Router } from 'express';
 
 import DiscordController from '../controllers/DiscordController';
-import authMiddleware from '../middleware/authMiddleware';
+import protectedRoute from '../middleware/protectedRoute';
 
 export default function init(discordController: DiscordController) {
   const router = Router();
 
   router.get(
     '/link',
-    authMiddleware,
+    protectedRoute,
     (req: Request, res: Response, next: NextFunction) =>
       discordController.getAuthLink(req, res, next)
   );
 
   router.post(
     '/link',
-    authMiddleware,
+    protectedRoute,
     (req: Request, res: Response, next: NextFunction) =>
       discordController.link(req, res, next)
   );
 
   router.delete(
     '/link',
-    authMiddleware,
+    protectedRoute,
     (req: Request, res: Response, next: NextFunction) =>
       discordController.unlink(req, res, next)
   );
 
   router.get(
     '/linked',
-    authMiddleware,
+    protectedRoute,
     (req: Request, res: Response, next: NextFunction) =>
       discordController.getLinkStatus(req, res, next)
   );

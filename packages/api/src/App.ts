@@ -39,6 +39,8 @@ import UserController from './controllers/UserController';
 import WaitlistController from './controllers/WaitlistController';
 import YouTubeController from './controllers/YouTubeController';
 import YouTubeService from './services/YouTubeService';
+import authMiddleware from './middleware/authMiddleware';
+import contextMiddleware from './middleware/context';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import errorHandler from './middleware/errorHandler';
@@ -205,6 +207,9 @@ class App {
       communityRepository,
       discordService
     );
+
+    app.use(authMiddleware);
+    app.use(contextMiddleware);
 
     const router = Router();
 

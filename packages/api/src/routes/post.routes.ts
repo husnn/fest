@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response, Router } from 'express';
+
 import PostController from '../controllers/PostController';
-import authMiddleware from '../middleware/authMiddleware';
 import { getRateLimiter } from '../middleware/rateLimiting';
+import protectedRoute from '../middleware/protectedRoute';
 
 export default function init(postController: PostController): Router {
   const router = Router();
@@ -9,14 +10,14 @@ export default function init(postController: PostController): Router {
   router.post(
     '/',
     getRateLimiter('createPost', { max: 10, windowInMins: 1 }),
-    authMiddleware,
+    protectedRoute,
     (req: Request, res: Response, next: NextFunction) =>
       postController.create(req, res, next)
   );
 
   router.post(
     '/:id/delete',
-    authMiddleware,
+    protectedRoute,
     (req: Request, res: Response, next: NextFunction) =>
       postController.delete(req, res, next)
   );

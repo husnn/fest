@@ -1,13 +1,14 @@
-import { NotificationService } from '@fest/core';
-import { GetNotificationsResponse } from '@fest/shared';
-import { Router } from 'express';
 import { HttpError, HttpResponse } from '../http';
-import authMiddleware from '../middleware/authMiddleware';
+
+import { GetNotificationsResponse } from '@fest/shared';
+import { NotificationService } from '@fest/core';
+import { Router } from 'express';
+import protectedRoute from '../middleware/protectedRoute';
 
 export default function init(notificationService: NotificationService) {
   const router = Router();
 
-  router.get('/', authMiddleware, async (req, res, next) => {
+  router.get('/', protectedRoute, async (req, res, next) => {
     try {
       const result = await notificationService.getForUser(
         req.user,

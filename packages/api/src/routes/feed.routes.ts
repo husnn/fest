@@ -1,14 +1,14 @@
 import { NextFunction, Request, Response, Router } from 'express';
 
 import FeedController from '../controllers/FeedController';
-import authMiddleware from '../middleware/authMiddleware';
+import protectedRoute from '../middleware/protectedRoute';
 
 export default function init(feedController: FeedController): Router {
   const router = Router();
 
   router.post(
     '/',
-    authMiddleware,
+    protectedRoute,
     (req: Request, res: Response, next: NextFunction) =>
       feedController.getFeed(req, res, next)
   );

@@ -8,6 +8,7 @@ import { TokenRepository } from '../../repositories';
 import UseCase from '../../base/UseCase';
 import UserRepository from '../../repositories/UserRepository';
 import { generateTokenId } from '../../utils';
+import logger from '@fest/logger';
 
 export interface CreateTokenInput {
   user: string;
@@ -105,6 +106,8 @@ export class CreateToken extends UseCase<CreateTokenInput, CreateTokenOutput> {
 
       token = await this.tokenRepository.create(token);
       await this.userRepository.addToken(data.user, token.id);
+
+      logger.info('Token created by user.', { tokenId: token.id });
 
       await this.createCommunityUseCase.exec({
         name: data.name,
