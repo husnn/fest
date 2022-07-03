@@ -8,7 +8,6 @@ import WinstonCloudwatch from 'winston-cloudwatch';
 import { getContext } from './context';
 
 let packageName = process.env.npm_package_name;
-
 export const setupLogger = (package_: string) => (packageName = package_);
 
 const ctx = getContext();
@@ -37,14 +36,11 @@ if (process.env.NODE_ENV === 'production') {
   loggerOpts = {
     transports: [
       new WinstonCloudwatch({
-        logGroupName: 'api-production',
+        logGroupName: `${packageName}-${process.env.NODE_ENV}`,
         logStreamName: function () {
-          const date = new Date().toISOString().split('T')[0];
-          return (
-            date +
-            '-' +
-            crypto.createHash('md5').update(startTime).digest('hex')
-          );
+          const date = new Date().toDateString();
+          const hash = crypto.createHash('md5').update(startTime).digest('hex');
+          return `${date}-${hash}`;
         },
         messageFormatter: (info) => JSON.stringify(logFormat(info))
       })
