@@ -1,7 +1,7 @@
-import { UserDTO } from '@fest/shared';
+import { Result, UserDTO } from '@fest/shared';
+
 import UseCase from '../../base/UseCase';
 import { UserRepository } from '../../repositories';
-import Result from '../../Result';
 
 type UpdateAvatarInput = {
   user: string;

@@ -1,7 +1,6 @@
-import { YouTubeVideo } from '@fest/shared';
-
+import { Result } from '@fest/shared';
 import { YouTubeChannel } from '../entities';
-import { Result } from '../Result';
+import { YouTubeVideo } from '@fest/shared';
 
 export interface YouTubeService {
   getOwnChannel(accessToken: string): Promise<Result<YouTubeChannel>>;

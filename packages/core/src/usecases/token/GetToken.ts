@@ -1,7 +1,6 @@
 import { CommunityRepository, TokenRepository } from '../../repositories';
+import { Result, TokenDTO } from '@fest/shared';
 
-import { Result } from '../../Result';
-import { TokenDTO } from '@fest/shared';
 import UseCase from '../../base/UseCase';
 
 export interface GetTokenInput {

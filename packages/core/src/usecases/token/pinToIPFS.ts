@@ -1,8 +1,8 @@
-import { TokenMetadata, TokenType } from '@fest/shared';
+import { IPFSService, PinData } from '../../services';
+import { Result, TokenMetadata, TokenType } from '@fest/shared';
+
 import { Token } from '../../entities';
 import { TokenRepository } from '../../repositories';
-import Result from '../../Result';
-import { IPFSService, PinData } from '../../services';
 
 export const pinToIPFS = async (
   repo: TokenRepository,

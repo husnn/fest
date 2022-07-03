@@ -1,5 +1,4 @@
-import { EthereumTx, Price } from '@fest/shared';
-import Result from '../Result';
+import { EthereumTx, Price, Result } from '@fest/shared';
 
 export type ERC20Info = {
   name: string;

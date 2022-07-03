@@ -1,7 +1,7 @@
+import { CommunityDTO, Result } from '@fest/shared';
+
 import { Community } from '../../entities';
-import { CommunityDTO } from '@fest/shared';
 import { CommunityRepository } from '../../repositories';
-import Result from '../../Result';
 import UseCase from '../../base/UseCase';
 
 type GetCommunitiesForUserInput = {

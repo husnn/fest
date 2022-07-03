@@ -1,7 +1,7 @@
+import { Result, TokenTradeDTO } from '@fest/shared';
+
 import { TokenTradeRepository } from '@fest/core';
-import { TokenTradeDTO } from '@fest/shared';
 import UseCase from '../../base/UseCase';
-import Result from '../../Result';
 
 type GetTokenTradesInput = {
   user: string;

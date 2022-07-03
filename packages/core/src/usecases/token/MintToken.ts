@@ -1,8 +1,8 @@
-import { EthereumService, Protocol } from '@fest/shared';
+import { EthereumService, Protocol, Result } from '@fest/shared';
+import { TokenRepository, WalletRepository } from '../../repositories';
+
 import { ApproveMint } from '.';
 import UseCase from '../../base/UseCase';
-import { TokenRepository, WalletRepository } from '../../repositories';
-import { Result } from '../../Result';
 
 export interface MintTokenInput {
   protocol: Protocol;

@@ -1,12 +1,12 @@
+import { Result, getExpiryDate } from '@fest/shared';
+
 import { AddressChangeEmail } from '@fest/emails';
-import { getExpiryDate } from '@fest/shared';
+import { EmailAddressChangeError } from './errors';
+import { MailService } from '../../services';
 import UseCase from '../../base/UseCase';
-import { emailChangeLink } from '../../config';
 import { User } from '../../entities';
 import { UserRepository } from '../../repositories';
-import Result from '../../Result';
-import { MailService } from '../../services';
-import { EmailAddressChangeError } from './errors';
+import { emailChangeLink } from '../../config';
 
 export type RequestEmailAddressChangeInput = {
   userId: string;

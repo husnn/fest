@@ -3,7 +3,7 @@ import { Protocol, WalletType, encryptText } from '@fest/shared';
 import { User, Wallet } from '../../entities';
 import { generateUserId, generateWalletId } from '../../utils';
 
-import { Result } from '../../Result';
+import { Result } from '@fest/shared';
 import UseCase from '../../base/UseCase';
 import UserRepository from '../../repositories/UserRepository';
 import WalletRepository from '../../repositories/WalletRepository';

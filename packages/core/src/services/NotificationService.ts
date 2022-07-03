@@ -2,11 +2,12 @@ import {
   NotificationCategory,
   NotificationDTO,
   NotificationPriority,
-  NotificationTopic
+  NotificationTopic,
+  Result
 } from '@fest/shared';
-import { Notification } from '../entities';
 import { NotificationRepository, UserRepository } from '../repositories';
-import Result from '../Result';
+
+import { Notification } from '../entities';
 
 interface NotificationData {
   priority: NotificationPriority;

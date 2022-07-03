@@ -1,11 +1,16 @@
-import { EthereumService, MarketFees, randomNumericString } from '@fest/shared';
-import UseCase from '../../base/UseCase';
+import {
+  EthereumService,
+  MarketFees,
+  Result,
+  randomNumericString
+} from '@fest/shared';
 import {
   TokenOwnershipRepository,
   TokenRepository,
   WalletRepository
 } from '../../repositories';
-import { Result } from '../../Result';
+
+import UseCase from '../../base/UseCase';
 
 export interface ApproveTokenSaleInput {
   user: string;

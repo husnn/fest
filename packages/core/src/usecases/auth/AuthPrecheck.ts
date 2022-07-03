@@ -1,6 +1,6 @@
 import { UserRepository, WaitlistRepository } from '../../repositories';
 
-import Result from '../../Result';
+import { Result } from '@fest/shared';
 import UseCase from '../../base/UseCase';
 import { isInviteOnly } from '../../config';
 

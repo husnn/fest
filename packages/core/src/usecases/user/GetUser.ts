@@ -1,9 +1,9 @@
-import { UserDTO as UserDTO } from '@fest/shared';
+import { UserRepository, WalletRepository } from '../../repositories';
 
+import { Result } from '@fest/shared';
 import UseCase from '../../base/UseCase';
 import { User } from '../../entities';
-import { UserRepository, WalletRepository } from '../../repositories';
-import { Result } from '../../Result';
+import { UserDTO } from '@fest/shared';
 
 export interface GetUserInput {
   id?: string;

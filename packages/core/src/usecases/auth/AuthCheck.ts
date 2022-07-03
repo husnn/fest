@@ -1,10 +1,10 @@
-import { InviteType, WaitlistEntryType } from '@fest/shared';
-import UseCase from '../../base/UseCase';
-import { isInviteOnly, isProduction } from '../../config';
-import { Invite } from '../../entities';
 import { InviteRepository, WaitlistRepository } from '../../repositories';
-import Result from '../../Result';
+import { InviteType, Result, WaitlistEntryType } from '@fest/shared';
+import { isInviteOnly, isProduction } from '../../config';
+
 import { AuthError } from '../auth/errors';
+import { Invite } from '../../entities';
+import UseCase from '../../base/UseCase';
 
 type AuthCheckInput = {
   email?: string;

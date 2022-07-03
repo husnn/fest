@@ -1,11 +1,7 @@
-import {
-  YouTubeService as IYouTubeService,
-  Result,
-  YouTubeChannel
-} from '@fest/core';
+import { YouTubeService as IYouTubeService, YouTubeChannel } from '@fest/core';
+import { Result, YouTubeVideo } from '@fest/shared';
 
 import Axios from 'axios';
-import { YouTubeVideo } from '@fest/shared';
 
 export interface YouTubeConfig {
   apiKey: string;

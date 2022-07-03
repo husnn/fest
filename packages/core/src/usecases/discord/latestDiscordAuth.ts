@@ -1,6 +1,6 @@
 import { DiscordService } from '../../services';
 import { OAuth } from '@fest/core';
-import { Result } from '../../Result';
+import { Result } from '@fest/shared';
 
 export const latestDiscordAuth = async (
   oAuth: OAuth,

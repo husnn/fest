@@ -1,7 +1,7 @@
+import { OAuthProvider, Result } from '@fest/shared';
+
 import GoogleService from '../../services/GoogleService';
-import { OAuthProvider } from '@fest/shared';
 import OAuthRepository from '../../repositories/OAuthRepository';
-import { Result } from '../../Result';
 import UseCase from '../../base/UseCase';
 import refreshIfExpired from '../refreshIfExpired';
 

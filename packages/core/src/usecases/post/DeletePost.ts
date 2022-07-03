@@ -1,7 +1,7 @@
-import UseCase from '../../base/UseCase';
-import { PostRepository } from '../../repositories';
-import { Result } from '../../Result';
 import { MediaService } from '../../services';
+import { PostRepository } from '../../repositories';
+import { Result } from '@fest/shared';
+import UseCase from '../../base/UseCase';
 
 export interface DeletePostInput {
   userId: string;

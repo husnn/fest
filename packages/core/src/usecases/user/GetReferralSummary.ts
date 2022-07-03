@@ -1,8 +1,7 @@
+import { InviteDTO, Result } from '@fest/shared';
 import { InviteRepository, UserRepository } from '../../repositories';
 
 import { Invite } from '../../entities/Invite';
-import { InviteDTO } from '@fest/shared';
-import Result from '../../Result';
 import UseCase from '../../base/UseCase';
 
 type GetReferralSummaryInput = {

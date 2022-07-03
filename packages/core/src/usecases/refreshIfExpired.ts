@@ -1,7 +1,6 @@
-import { OAuth } from '@fest/core';
-
-import { Result } from '../Result';
 import GoogleService from '../services/GoogleService';
+import { OAuth } from '@fest/core';
+import { Result } from '@fest/shared';
 
 export const refreshIfExpired = async (
   oAuth: OAuth,

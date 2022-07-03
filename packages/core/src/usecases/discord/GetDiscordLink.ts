@@ -1,6 +1,6 @@
 import { CommunityRepository } from '../../repositories';
 import { DiscordService } from 'core/src/services';
-import { Result } from '../../Result';
+import { Result } from '@fest/shared';
 import UseCase from '../../base/UseCase';
 import { encryptCommunityId } from './crypt';
 

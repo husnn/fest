@@ -1,9 +1,8 @@
 import { InviteRepository, UserRepository } from '../../repositories';
+import { InviteType, Result } from '@fest/shared';
 
 import { Invite } from '../../entities';
 import { InviteError } from './errors';
-import { InviteType } from '@fest/shared';
-import Result from '../../Result';
 import UseCase from '../../base/UseCase';
 import { upgradeInvitesToCreator } from '../invites';
 

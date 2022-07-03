@@ -1,12 +1,12 @@
-import { PostDTO } from '@fest/shared';
-import UseCase from '../../base/UseCase';
 import {
   CommunityRepository,
   PostRepository,
   UserRepository
 } from '../../repositories';
-import Result from '../../Result';
+import { PostDTO, Result } from '@fest/shared';
 import { decodeCursor, encodeCursor } from '../../utils/cursor';
+
+import UseCase from '../../base/UseCase';
 
 type GetUserFeedInput = {
   userId: string;

@@ -1,6 +1,6 @@
-import { OAuthProvider } from '@fest/shared';
+import { OAuthProvider, Result } from '@fest/shared';
+
 import OAuthRepository from '../../repositories/OAuthRepository';
-import { Result } from '../../Result';
 import UseCase from '../../base/UseCase';
 
 export interface UnlinkGoogleInput {

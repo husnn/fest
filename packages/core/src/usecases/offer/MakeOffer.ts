@@ -1,14 +1,14 @@
-import { Price } from '@fest/shared';
-import UseCase from '../../base/UseCase';
-import TokenTrade from '../../entities/TokenOffer';
+import { Price, Result } from '@fest/shared';
 import {
   TokenOwnershipRepository,
   UserRepository,
   WalletRepository
 } from '../../repositories';
-import TokenOfferRepository from '../../repositories/TokenOfferRepository';
-import Result from '../../Result';
+
 import MailService from '../../services/MailService';
+import TokenOfferRepository from '../../repositories/TokenOfferRepository';
+import TokenTrade from '../../entities/TokenOffer';
+import UseCase from '../../base/UseCase';
 
 type MakeOfferInput = {
   buyer: string;

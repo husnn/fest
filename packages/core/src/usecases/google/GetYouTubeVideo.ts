@@ -1,8 +1,7 @@
-import { YouTubeVideo } from '@fest/shared';
-
+import { Result } from '@fest/shared';
 import UseCase from '../../base/UseCase';
-import { Result } from '../../Result';
 import { YouTubeService } from '../../services';
+import { YouTubeVideo } from '@fest/shared';
 
 export interface GetYouTubeVideoInput {
   id: string;

@@ -1,5 +1,5 @@
+import { Result } from '@fest/shared';
 import UseCase from '../../base/UseCase';
-import { Result } from '../../Result';
 
 type GetTokenListingInput = {
   token: string;

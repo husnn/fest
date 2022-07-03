@@ -1,12 +1,12 @@
 import { TokenListingDTO, TokenOfferDTO, TokenTradeDTO } from '@fest/shared';
-
-import UseCase from '../../base/UseCase';
 import {
   TokenListingRepository,
   TokenOfferRepository,
   TokenTradeRepository
 } from '../../repositories';
-import { Result } from '../../Result';
+
+import { Result } from '@fest/shared';
+import UseCase from '../../base/UseCase';
 
 interface GetTokenMarketSummaryInput {
   user: string;

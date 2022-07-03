@@ -1,6 +1,7 @@
-import { IPFSService as IIPFSService, PinData, Result } from '@fest/core';
+import { IPFSService as IIPFSService, PinData } from '@fest/core';
 import PinataSDK, { PinataClient } from '@pinata/sdk';
 
+import { Result } from '@fest/shared';
 import axios from 'axios';
 
 export class IPFSService implements IIPFSService {

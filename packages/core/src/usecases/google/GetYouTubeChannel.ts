@@ -1,10 +1,10 @@
-import { OAuthProvider } from '@fest/shared';
+import { GoogleService, YouTubeService } from '../../services';
 
+import { OAuthProvider } from '@fest/shared';
+import OAuthRepository from '../../repositories/OAuthRepository';
+import { Result } from '@fest/shared';
 import UseCase from '../../base/UseCase';
 import { YouTubeChannel } from '../../entities';
-import OAuthRepository from '../../repositories/OAuthRepository';
-import { Result } from '../../Result';
-import { GoogleService, YouTubeService } from '../../services';
 import refreshIfExpired from '../refreshIfExpired';
 
 export type GetYouTubeChannelInput = {

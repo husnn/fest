@@ -1,15 +1,16 @@
 import {
   EthereumService,
+  Result,
+  WalletType,
   isEmailAddress,
-  isExpired,
-  WalletType
+  isExpired
 } from '@fest/shared';
+
+import { EmailAddressChangeError } from './errors';
+import { MailService } from '../../services';
 import UseCase from '../../base/UseCase';
 import { User } from '../../entities';
 import { UserRepository } from '../../repositories';
-import Result from '../../Result';
-import { MailService } from '../../services';
-import { EmailAddressChangeError } from './errors';
 
 export type ChangeEmailAddressInput = {
   token: string;

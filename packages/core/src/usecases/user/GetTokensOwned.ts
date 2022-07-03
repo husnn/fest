@@ -1,9 +1,9 @@
-import { TokenOwnedDTO } from '@fest/shared';
-
-import UseCase from '../../base/UseCase';
-import { TokenOwnership } from '../../entities';
 import { TokenOwnershipRepository, UserRepository } from '../../repositories';
-import Result from '../../Result';
+
+import { Result } from '@fest/shared';
+import { TokenOwnedDTO } from '@fest/shared';
+import { TokenOwnership } from '../../entities';
+import UseCase from '../../base/UseCase';
 
 export interface GetTokensOwnedInput {
   user: string;

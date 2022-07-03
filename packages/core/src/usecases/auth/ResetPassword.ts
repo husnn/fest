@@ -1,10 +1,10 @@
-import { isExpired, isValidPassword } from '@fest/shared';
+import { AuthError, ResetPasswordError } from './errors';
+import { LoginWithEmail, LoginWithEmailOutput } from './LoginWithEmail';
+import { Result, isExpired, isValidPassword } from '@fest/shared';
+
 import UseCase from '../../base/UseCase';
 import { User } from '../../entities';
 import { UserRepository } from '../../repositories';
-import Result from '../../Result';
-import { AuthError, ResetPasswordError } from './errors';
-import { LoginWithEmail, LoginWithEmailOutput } from './LoginWithEmail';
 
 type ResetPasswordInput = {
   token: string;

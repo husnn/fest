@@ -1,9 +1,8 @@
-import { TokenDTO } from '@fest/shared';
-
-import UseCase from '../../base/UseCase';
+import { Result } from '@fest/shared';
 import { Token } from '../../entities';
+import { TokenDTO } from '@fest/shared';
 import { TokenRepository } from '../../repositories';
-import { Result } from '../../Result';
+import UseCase from '../../base/UseCase';
 
 export interface GetTokensCreatedInput {
   user: string;

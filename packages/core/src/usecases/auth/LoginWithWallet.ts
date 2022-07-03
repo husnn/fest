@@ -1,16 +1,17 @@
 import {
   CurrentUserDTO,
-  decryptText,
   EthereumService,
-  isExpired,
-  Protocol
+  Protocol,
+  Result,
+  decryptText,
+  isExpired
 } from '@fest/shared';
+
+import { AuthError } from './errors';
 import UseCase from '../../base/UseCase';
 import { User } from '../../entities';
 import UserRepository from '../../repositories/UserRepository';
 import WalletRepository from '../../repositories/WalletRepository';
-import { Result } from '../../Result';
-import { AuthError } from './errors';
 import { msgToSign } from './IdentifyWithWallet';
 
 export interface LoginWithWalletInput {

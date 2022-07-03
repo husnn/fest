@@ -7,7 +7,7 @@ import {
 import { OAuthProvider, Protocol } from '@fest/shared';
 
 import DiscordService from '../../services/DiscordService';
-import { Result } from '../../Result';
+import { Result } from '@fest/shared';
 import UseCase from '../../base/UseCase';
 
 export interface UnlinkDiscordInput {

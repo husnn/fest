@@ -1,7 +1,7 @@
-import { CurrentUserDTO } from '@fest/shared';
-import UseCase from '../../base/UseCase';
+import { CurrentUserDTO, Result } from '@fest/shared';
 import { UserRepository, WalletRepository } from '../../repositories';
-import { Result } from '../../Result';
+
+import UseCase from '../../base/UseCase';
 
 type EditUserInput = {
   user: string;

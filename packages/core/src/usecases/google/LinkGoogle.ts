@@ -1,9 +1,9 @@
-import { OAuthProvider } from '@fest/shared';
-import UseCase from '../../base/UseCase';
+import { OAuthProvider, Result } from '@fest/shared';
+
+import { GoogleService } from '../../services';
 import { OAuth } from '../../entities';
 import OAuthRepository from '../../repositories/OAuthRepository';
-import { Result } from '../../Result';
-import { GoogleService } from '../../services';
+import UseCase from '../../base/UseCase';
 
 export interface LinkGoogleInput {
   user: string;

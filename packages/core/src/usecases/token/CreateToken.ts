@@ -1,13 +1,13 @@
-import { TokenType } from '@fest/shared';
-import UseCase from '../../base/UseCase';
+import { MediaService, YouTubeService } from '../../services';
+import { Result, TokenType } from '@fest/shared';
+
+import { CreateCommunity } from '../../usecases';
+import { GetYouTubeChannel } from '../google/GetYouTubeChannel';
 import { Token } from '../../entities';
 import { TokenRepository } from '../../repositories';
+import UseCase from '../../base/UseCase';
 import UserRepository from '../../repositories/UserRepository';
-import { Result } from '../../Result';
-import { MediaService, YouTubeService } from '../../services';
-import { CreateCommunity } from '../../usecases';
 import { generateTokenId } from '../../utils';
-import { GetYouTubeChannel } from '../google/GetYouTubeChannel';
 
 export interface CreateTokenInput {
   user: string;

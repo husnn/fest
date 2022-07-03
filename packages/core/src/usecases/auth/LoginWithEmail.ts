@@ -1,10 +1,10 @@
-import { CurrentUserDTO, isExpired } from '@fest/shared';
+import { CurrentUserDTO, Result, isExpired } from '@fest/shared';
+
+import { AuthError } from './errors';
 import UseCase from '../../base/UseCase';
-import { isProduction } from '../../config';
 import { User } from '../../entities';
 import UserRepository from '../../repositories/UserRepository';
-import { Result } from '../../Result';
-import { AuthError } from './errors';
+import { isProduction } from '../../config';
 
 export interface LoginWithEmailInput {
   email: string;

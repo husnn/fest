@@ -1,7 +1,7 @@
-import { WalletRepository } from '@fest/core';
-import { decryptText, EthereumService, Protocol } from '@fest/shared';
+import { EthereumService, Protocol, Result, decryptText } from '@fest/shared';
+
 import UseCase from '../../base/UseCase';
-import Result from '../../Result';
+import { WalletRepository } from '@fest/core';
 
 type WithdrawMarketEarningsInput = {
   user: string;

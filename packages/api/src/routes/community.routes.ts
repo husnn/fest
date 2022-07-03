@@ -20,12 +20,5 @@ export default function init(communityController: CommunityController) {
       communityController.get(req, res, next)
   );
 
-  router.get(
-    '/:id/token',
-    authMiddleware,
-    (req: Request, res: Response, next: NextFunction) =>
-      communityController.getToken(req, res, next)
-  );
-
   return router;
 }

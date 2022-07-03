@@ -1,8 +1,8 @@
-import { decryptText, EthereumService, WalletType } from '@fest/shared';
+import { EthereumService, Result, WalletType, decryptText } from '@fest/shared';
+import { TokenListingRepository, WalletRepository } from '../../repositories';
+
 import Decimal from 'decimal.js';
 import UseCase from '../../base/UseCase';
-import { TokenListingRepository, WalletRepository } from '../../repositories';
-import { Result } from '../../Result';
 
 type BuyTokenListingInput = {
   buyer: string;

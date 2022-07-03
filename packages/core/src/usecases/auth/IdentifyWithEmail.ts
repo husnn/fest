@@ -1,23 +1,24 @@
-import { LoginCodeEmail } from '@fest/emails';
 import {
   EthereumService,
-  isValidPassword,
   Protocol,
-  WalletType
+  Result,
+  WalletType,
+  isValidPassword
 } from '@fest/shared';
-import UseCase from '../../base/UseCase';
-import { User, Wallet } from '../../entities';
 import {
   InviteRepository,
   UserRepository,
   WalletRepository
 } from '../../repositories';
-import { Result } from '../../Result';
-import { MailService } from '../../services';
+import { User, Wallet } from '../../entities';
 import { generateUserId, generateWalletId } from '../../utils';
-import { generateInvitesForNewUser } from '../invites';
+
 import { AuthCheck } from './AuthCheck';
 import { AuthError } from './errors';
+import { LoginCodeEmail } from '@fest/emails';
+import { MailService } from '../../services';
+import UseCase from '../../base/UseCase';
+import { generateInvitesForNewUser } from '../invites';
 
 export interface IdentifyWithEmailInput {
   email: string;

@@ -1,7 +1,7 @@
+import { OAuthProvider, Result } from '@fest/shared';
+
 import { DiscordService } from 'core/src/services';
-import { OAuthProvider } from '@fest/shared';
 import OAuthRepository from '../../repositories/OAuthRepository';
-import { Result } from '../../Result';
 import UseCase from '../../base/UseCase';
 import latestDiscordAuth from './latestDiscordAuth';
 

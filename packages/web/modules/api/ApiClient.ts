@@ -24,8 +24,6 @@ import {
   EnableCreatorModeResponse,
   GetCommunityRequest,
   GetCommunityResponse,
-  GetCommunityTokenRequest,
-  GetCommunityTokenResponse,
   GetDiscordLinkRequest,
   GetDiscordLinkResponse,
   GetDiscordLinkStatusRequest,
@@ -178,17 +176,6 @@ export class ApiClient {
   }
 
   // Community
-
-  async getCommunityToken(id: string): Promise<GetCommunityTokenResponse> {
-    return this.client.request<
-      GetCommunityTokenResponse,
-      GetCommunityTokenRequest
-    >({
-      method: 'GET',
-      authentication: 'required',
-      endpoint: `/communities/${id}/token`
-    });
-  }
 
   async getCommunity(id: string): Promise<GetCommunityResponse> {
     return this.client.request<GetCommunityResponse, GetCommunityRequest>({

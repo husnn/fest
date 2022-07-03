@@ -1,7 +1,7 @@
-import { decryptText, EthereumService, WalletType } from '@fest/shared';
-import UseCase from '../../base/UseCase';
+import { EthereumService, Result, WalletType, decryptText } from '@fest/shared';
 import { TokenListingRepository, WalletRepository } from '../../repositories';
-import { Result } from '../../Result';
+
+import UseCase from '../../base/UseCase';
 
 type CancelTokenListingInput = {
   user: string;

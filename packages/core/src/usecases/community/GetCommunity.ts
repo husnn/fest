@@ -1,9 +1,7 @@
+import { CommunityDTO, Result } from '@fest/shared';
 import { CommunityRepository, UserRepository } from '../../repositories';
 
-import { CommunityDTO } from '@fest/shared';
-import Result from '../../Result';
 import UseCase from '../../base/UseCase';
-import { generateCommunityToken } from './generate';
 
 type GetCommunityInput = {
   id: string;
@@ -13,7 +11,6 @@ type GetCommunityInput = {
 type GetCommunityOutput = {
   community: CommunityDTO;
   isMember: boolean;
-  token?: string;
 };
 
 export class GetCommunity extends UseCase<
@@ -44,8 +41,7 @@ export class GetCommunity extends UseCase<
 
     return Result.ok({
       community: new CommunityDTO(community),
-      isMember,
-      token: isMember ? generateCommunityToken(community.id) : null
+      isMember
     });
   }
 }

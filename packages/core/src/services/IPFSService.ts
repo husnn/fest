@@ -1,4 +1,4 @@
-import Result from '../Result';
+import { Result } from '@fest/shared';
 
 export type PinData = {
   hash: string;

@@ -1,9 +1,9 @@
-import Result from '../../Result';
+import { Result, WaitlistEntryType } from '@fest/shared';
+
 import UseCase from '../../base/UseCase';
 import { WaitlistEntry } from '../../entities/WaitlistEntry';
-import { WaitlistEntryType } from '@fest/shared';
-import { WaitlistRepository } from '../../repositories';
 import { WaitlistError } from './errors';
+import { WaitlistRepository } from '../../repositories';
 
 type JoinWaitlistInput = {
   type: WaitlistEntryType;

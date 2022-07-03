@@ -1,11 +1,11 @@
+import { Result, getExpiryDate } from '@fest/shared';
+
+import { MailService } from '../../services';
 import { PasswordResetEmail } from '@fest/emails';
-import { getExpiryDate } from '@fest/shared';
 import UseCase from '../../base/UseCase';
-import { passwordResetLink } from '../../config';
 import { User } from '../../entities';
 import { UserRepository } from '../../repositories';
-import Result from '../../Result';
-import { MailService } from '../../services';
+import { passwordResetLink } from '../../config';
 
 type RequestPasswordResetInput = {
   email: string;

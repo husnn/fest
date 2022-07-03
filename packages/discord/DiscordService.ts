@@ -3,12 +3,10 @@ import * as qs from 'querystring';
 import { DiscordConfig, defaultConfig } from './config';
 import {
   DiscordTokenData,
-  DiscordService as IDiscordService,
-  Result
+  DiscordService as IDiscordService
 } from '@fest/core';
+import { Result, getExpiryDate } from '@fest/shared';
 import axios, { Axios, AxiosError } from 'axios';
-
-import { getExpiryDate } from '@fest/shared';
 
 export class DiscordService implements IDiscordService {
   private baseUrl: string;

@@ -8,7 +8,7 @@ import { OAuthProvider, Protocol } from '@fest/shared';
 
 import DiscordService from '../../services/DiscordService';
 import { OAuth } from '../../entities';
-import { Result } from '../../Result';
+import { Result } from '@fest/shared';
 import UseCase from '../../base/UseCase';
 import { decryptCommunityId } from './crypt';
 

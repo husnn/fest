@@ -1,9 +1,6 @@
-import {
-  GoogleService as IGoogleService,
-  GoogleTokenData,
-  Result
-} from '@fest/core';
-import { getExpiryDate } from '@fest/shared';
+import { GoogleTokenData, GoogleService as IGoogleService } from '@fest/core';
+import { Result, getExpiryDate } from '@fest/shared';
+
 import Axios from 'axios';
 import qs from 'querystring';
 
