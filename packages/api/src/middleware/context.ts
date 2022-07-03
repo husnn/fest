@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import logger, { getContext, setContext } from '@fest/logger';
+import { getContext, logger, setCtxMetadata } from '@fest/logger';
 
 import { nanoid } from 'nanoid';
 
@@ -33,7 +33,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
   });
 
   getContext().run(() => {
-    setContext(meta);
+    setCtxMetadata(meta);
     next();
   });
 };

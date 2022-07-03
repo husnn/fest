@@ -4,7 +4,7 @@ import { Community } from '../../entities';
 import { Result } from '@fest/shared';
 import UseCase from '../../base/UseCase';
 import { generateCommunityId } from '../../utils';
-import logger from '@fest/logger';
+import { logger } from '@fest/logger';
 
 type CreateCommunityInput = {
   creator: string;

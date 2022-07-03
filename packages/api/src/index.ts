@@ -1,6 +1,6 @@
 import Postgres, { defaultConfig as postgresConfig } from '@fest/postgres';
 import { appConfig, ethConfig, indexerConfig, redisConfig } from './config';
-import logger, { setupLogger } from '@fest/logger';
+import { logger, setupLogger } from '@fest/logger';
 
 import App from './App';
 import { EthereumService } from '@fest/ethereum';

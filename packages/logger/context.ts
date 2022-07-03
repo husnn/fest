@@ -7,6 +7,8 @@ export const getContext = () => {
   return context;
 };
 
-export const setContext = (data: any) => getContext().set('context', data);
+export const setCtxMetadata = (data: any) => getContext().set('metadata', data);
+
+export const getCtxMetadata = () => getContext().get('metadata');
 
 export default context;
