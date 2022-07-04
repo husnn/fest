@@ -43,7 +43,7 @@ _IS_FIRST_RUN=true
 : ${GANACHE_PORT:=8545}
 : ${GANACHE_NETWORK:=123456}
 
-: ${CONTRACTS_PATH:="./packages/ethereum/contracts/solidity"}
+: ${CONTRACTS_PATH:="./packages/ethereum/contracts"}
 
 if [ $_DO_RESET == false ];
   then
