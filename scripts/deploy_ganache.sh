@@ -64,9 +64,10 @@ if [ $_IS_FIRST_RUN == true ] || [ ! -d $_LOGS_DIR ];
 fi
 
 deploy_contracts() {
-  echo "Deploying contracts..."
   cd $CONTRACTS_PATH
-  npm install
+  echo "Installing dependencies inside $PWD"
+  pnpm install
+  echo "Deploying contracts..."
   npm run truffle:dev
 }
 
