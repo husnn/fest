@@ -1,0 +1,23 @@
+{
+  "name": "@fest/queue",
+  "main": "dist/index.js",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "build": "tsc --build tsconfig.json",
+    "dev": "nodemon -r dotenv/config dist/index.js"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.10",
+    "dotenv": "^16.0.1",
+    "nodemon": "^2.0.15",
+    "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "@fest/logger": "workspace:^0.0.1",
+    "@fest/shared": "workspace:^0.0.1",
+    "app-root-path": "^3.0.0",
+    "bee-queue": "^1.4.0",
+    "redis": "^4.1.1"
+  }
+}
