@@ -43,7 +43,7 @@ export class MintToken extends UseCase<MintTokenInput, MintTokenOutput> {
     );
 
     const approvalResult = await this.approveMintUseCase.exec(data);
-    if (!approvalResult.success) return Result.fail();
+    if (!approvalResult.success) return Result.fail(approvalResult.error);
 
     const {
       data: approvalData,

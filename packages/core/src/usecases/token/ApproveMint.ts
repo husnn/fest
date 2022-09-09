@@ -59,7 +59,7 @@ export class ApproveMint extends UseCase<ApproveMintInput, ApproveMintOutput> {
       this.ipfsService,
       token
     );
-    if (!pinResult.success) return Result.fail();
+    if (!pinResult.success) return Result.fail(pinResult.error);
 
     const expiry = Math.floor(Date.now() / 1000) + 600; // Expires in 10 minutes
     const nonce = randomNumericString(32);

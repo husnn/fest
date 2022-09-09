@@ -96,8 +96,8 @@ class App {
     const mailService = new MailService();
 
     const ipfsService = new IPFSService(
-      process.env.PINATA_API_KEY,
-      process.env.PINATA_API_SECRET
+      process.env.IPFS_INFURA_PROJECT_ID,
+      process.env.IPFS_INFURA_PROJECT_SECRET
     );
 
     const authController = new AuthController(
