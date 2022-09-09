@@ -39,6 +39,7 @@ if (isProd) {
   transports = [
     new WinstonCloudwatch({
       level: 'info',
+      awsRegion: process.env.AWS_DEFAULT_REGION || 'eu-west-1',
       logGroupName: `${appName}-${process.env.NODE_ENV}`,
       logStreamName: function () {
         const date = new Date().toISOString().split('T')[0];
