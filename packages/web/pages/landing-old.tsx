@@ -1,12 +1,13 @@
 import { Button, Link } from '../ui';
-import React, { useEffect } from 'react';
 
 import Fade from 'react-reveal/Fade';
 import Flash from 'react-reveal/Flash';
 import Head from 'next/head';
+import { NextSeo } from 'next-seo';
 import { getCurrentUser } from '../modules/auth/authStorage';
 import router from 'next/router';
 import styles from '../styles/Home.module.scss';
+import { useEffect } from 'react';
 import { useHeader } from '../modules/navigation';
 
 export default function Home() {
@@ -20,6 +21,7 @@ export default function Home() {
 
   return (
     <div className="full-width">
+      <NextSeo noindex />
       <Head>
         <title>Fest</title>
         <link rel="icon" href="/favicon.ico" />

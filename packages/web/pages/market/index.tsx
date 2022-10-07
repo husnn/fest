@@ -6,13 +6,14 @@ import {
   getTokenUrl
 } from '@fest/shared';
 import { Button, Link } from '../../ui';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { ApiClient } from '../../modules/api';
 import BalanceView from '../../ui/BalanceView';
 import CancelTokenListing from '../../components/CancelTokenListing';
 import { CurrencyBalance } from '../../types';
 import Head from 'next/head';
+import { NextSeo } from 'next-seo';
 import TokenTradeRow from '../../ui/TokenTradeRow';
 import WithdrawEarnings from '../../components/WithdrawEarnings';
 import moment from 'moment';
@@ -191,6 +192,7 @@ export default function MarketPage() {
 
   return currentUser ? (
     <div className="container boxed" style={{ maxWidth: 800 }}>
+      <NextSeo description="View your past and active listings on the NFT marketplace." />
       <Head>
         <title>Market</title>
       </Head>

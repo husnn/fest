@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 
 import { CommunityDTO, PostDTO } from '@fest/shared';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { ApiClient } from '../modules/api';
 import { Button } from '../ui';
@@ -10,12 +10,13 @@ import Composer from '../components/Composer';
 import Feed from '../components/Feed';
 import Head from 'next/head';
 import Modal from '../ui/Modal';
+import { NextSeo } from 'next-seo';
 import { css } from '@emotion/react';
 import { getCurrentUser } from '../modules/auth/authStorage';
 import useAuthentication from '../modules/auth/useAuthentication';
+import { useHeader } from '../modules/navigation';
 import usePagination from '../modules/api/usePagination';
 import { useRouter } from 'next/router';
-import { useHeader } from '../modules/navigation';
 
 const HomePage = () => {
   useHeader();
@@ -78,6 +79,10 @@ const HomePage = () => {
         align-items: center;
       `}
     >
+      <NextSeo
+        title="Home"
+        description="Activity feed of exclusive content from your favourite creators and fellow community members."
+      />
       <Head>
         <title>{selected ? selected.name : 'Home'}</title>
       </Head>

@@ -14,7 +14,6 @@ import {
   getTokenUrl
 } from '@fest/shared';
 import { Field, Form, Formik, FormikProps } from 'formik';
-import React, { useState } from 'react';
 import YouTubeVideoList, {
   YouTubeVideoRow
 } from '../components/YouTubeVideoList';
@@ -23,11 +22,13 @@ import ApiClient from '../modules/api/ApiClient';
 import Head from 'next/head';
 import MediaUploader from '../components/MediaUploader';
 import Modal from '../ui/Modal';
+import { NextSeo } from 'next-seo';
 import { RadioOption } from '../ui/RadioGroup';
 import styles from '../styles/CreateToken.module.scss';
 import useAuthentication from '../modules/auth/useAuthentication';
 import { useHeader } from '../modules/navigation';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 
 export default function CreateTokenPage() {
   useHeader();
@@ -75,6 +76,7 @@ export default function CreateTokenPage() {
 
   return (
     <div className="container boxed">
+      <NextSeo />
       <Head>
         <title>Create new token</title>
       </Head>

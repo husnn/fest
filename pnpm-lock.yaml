@@ -450,6 +450,7 @@ importers:
       moment: ^2.29.1
       next: ^10.2.2
       next-http-proxy-middleware: ^1.2.1
+      next-seo: ^5.5.0
       next-transpile-modules: ^7.2.0
       react: ^17.0.2
       react-confetti: ^6.0.1
@@ -489,6 +490,7 @@ importers:
       moment: 2.29.3
       next: 10.2.3_zynkqlpchen7f2c7eqsbt4unjy
       next-http-proxy-middleware: 1.2.4
+      next-seo: 5.5.0_zwyhyqtscjthhh732pvi5amo7y
       next-transpile-modules: 7.3.0
       react: 17.0.2
       react-confetti: 6.1.0_react@17.0.2
@@ -4876,7 +4878,6 @@ packages:
 
   /@types/node/18.7.16:
     resolution: {integrity: sha512-EQHhixfu+mkqHMZl1R2Ovuvn47PUw18azMJOTwSZr9/fhzHNGXAJ0ma0dayRVchprpCj0Kc1K1xKoWaATWF1qg==}
-    dev: false
 
   /@types/parse-json/4.0.0:
     resolution: {integrity: sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==}
@@ -10797,7 +10798,7 @@ packages:
     resolution: {integrity: sha512-7vuh85V5cdDofPyxn58nrPjBktZo0u9x1g8WtjQol+jZDaE+fhN+cIvTj11GndBnMnyfrUOG1sZQxCdjKh+DKg==}
     engines: {node: '>= 10.13.0'}
     dependencies:
-      '@types/node': 17.0.45
+      '@types/node': 18.7.16
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
@@ -12427,6 +12428,18 @@ packages:
       http-proxy: 1.18.1
     transitivePeerDependencies:
       - debug
+    dev: false
+
+  /next-seo/5.5.0_zwyhyqtscjthhh732pvi5amo7y:
+    resolution: {integrity: sha512-5ouBHFtx8YrSDW44lj0qIEQ+oMcz6stgoITB+SqHUZbhgizoJsyLmq73gJ0lxtEKpcN8vG2QgRIJfdb8OAPChw==}
+    peerDependencies:
+      next: ^8.1.1-canary.54 || >=9.0.0
+      react: '>=16.0.0'
+      react-dom: '>=16.0.0'
+    dependencies:
+      next: 10.2.3_zynkqlpchen7f2c7eqsbt4unjy
+      react: 17.0.2
+      react-dom: 17.0.2_react@17.0.2
     dev: false
 
   /next-tick/1.1.0:

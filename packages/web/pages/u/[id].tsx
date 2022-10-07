@@ -1,6 +1,6 @@
 import { Button, Link } from '../../ui';
-import React, { useEffect, useState } from 'react';
 import {
+  GetUserResponse,
   TokenDTO,
   TokenOwnedDTO,
   UserDTO,
@@ -12,11 +12,13 @@ import {
   getCurrentUser,
   saveCurrentUser
 } from '../../modules/auth/authStorage';
+import { useEffect, useState } from 'react';
 import useTabs, { Tab, Tabs } from '../../modules/navigation/useTabs';
 
 import ApiClient from '../../modules/api/ApiClient';
 import { Avatar } from '../../components/Avatar';
 import Head from 'next/head';
+import { NextSeo } from 'next-seo';
 import ResponsiveTabs from '../../ui/ResponsiveTabs';
 import TokensCreated from '../../components/TokensCreated';
 import TokensOwned from '../../components/TokensOwned';
@@ -27,12 +29,12 @@ import useAuthentication from '../../modules/auth/useAuthentication';
 import { useHeader } from '../../modules/navigation';
 import { useRouter } from 'next/router';
 
-export default function ProfilePage() {
+export default function ProfilePage(props: { user?: UserDTO }) {
   useHeader();
 
   const router = useRouter();
 
-  const [user, setUser] = useState<UserDTO>();
+  const [user, setUser] = useState<UserDTO>(props.user);
 
   const { currentUser, setCurrentUser } = useAuthentication();
 
@@ -57,30 +59,9 @@ export default function ProfilePage() {
 
   const { id } = router.query;
 
-  const fetchUser = async () => {
-    try {
-      const response = await ApiClient.instance?.getUser(id as string);
-
-      const { user } = response;
-
-      // if (user.username) {
-      //   router.replace(getProfileUrl(user));
-      // }
-
-      setUser(user);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   useEffect(() => {
     initTabs(TABS);
   }, []);
-
-  useEffect(() => {
-    if (!id) return;
-    fetchUser();
-  }, [id]);
 
   const isSelf =
     currentUser &&
@@ -109,6 +90,17 @@ export default function ProfilePage() {
 
   return (
     <div className="boxed" style={{ padding: 0 }}>
+      {user && (
+        <NextSeo
+          title={`${getDisplayName(user)} on Fest`}
+          description={
+            user.bio ||
+            `View all tokens created and owned by ${getDisplayName(
+              user
+            )}, and which communities they are part of.`
+          }
+        />
+      )}
       <Head>
         <title>{(user && getDisplayName(user)) || id}</title>
       </Head>
@@ -202,4 +194,15 @@ export default function ProfilePage() {
       </div>
     </div>
   );
+}
+
+export async function getServerSideProps(ctx) {
+  let res: GetUserResponse;
+  try {
+    res = await ApiClient.getInstance().getUser(ctx.query.id);
+  } catch (err) {
+    console.log(err);
+  }
+
+  return { props: { user: res.user || {} } };
 }

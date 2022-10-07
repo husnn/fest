@@ -5,8 +5,8 @@ import React, { useEffect } from 'react';
 import { colors, corners } from '../styles/constants';
 
 import Accordion from '../ui/Accordion';
-import Head from 'next/head';
 import MultiFeatureCard from '../components/MultiFeatureCard';
+import { NextSeo } from 'next-seo';
 import { Spacing } from '../ui/Spacing';
 import { css } from '@emotion/react';
 import { getCurrentUser } from '../modules/auth/authStorage';
@@ -160,9 +160,13 @@ const HomePage = () => {
         overflow: hidden;
       `}
     >
-      <Head>
-        <title>Fest</title>
-      </Head>
+      <NextSeo
+        title="Fest - Web3 Community Platform for Creators"
+        description="A home for creators to gather their top fans from across the internet, and easily build token-gated communities powered by NFTs on the blockchain."
+        twitter={{
+          handle: '@festdao'
+        }}
+      />
       <Header>
         <div>🎉</div>
         <div>

@@ -1,14 +1,15 @@
+import { Balance, Currency } from '@fest/shared';
 import React, { useEffect, useState } from 'react';
 import { getNativeToken, isProduction } from '../utils';
 
 import { ApiClient } from '../modules/api';
-import { Balance, Currency } from '@fest/shared';
 import BalanceView from '../ui/BalanceView';
 import { Button } from '../ui';
 import { CurrencyBalance } from '../types';
 import Head from 'next/head';
-import styled from '@emotion/styled';
+import { NextSeo } from 'next-seo';
 import { RampInstantSDK } from '@ramp-network/ramp-instant-sdk';
+import styled from '@emotion/styled';
 import useAuthentication from '../modules/auth/useAuthentication';
 import { useHeader } from '../modules/navigation';
 import { useWeb3 } from '../modules/web3';
@@ -163,6 +164,7 @@ export const WalletPage = () => {
 
   return currentUser ? (
     <div className="container boxed">
+      <NextSeo description="Check your balance for different currencies and easily buy crypto using card or bank transfer." />
       <Head>
         <title>Wallet</title>
       </Head>

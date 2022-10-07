@@ -9,22 +9,23 @@ import {
   RadioOption,
   TextInput
 } from '../ui';
-import React, { useEffect, useState } from 'react';
+import {
+  URL_REGEX,
+  WaitlistEntryType,
+  isEmailAddress,
+  isValidURL
+} from '@fest/shared';
+import { useEffect, useState } from 'react';
 
 import { ApiClient } from '../modules/api';
 import Confetti from 'react-confetti';
 import Head from 'next/head';
-import {
-  isEmailAddress,
-  isValidURL,
-  URL_REGEX,
-  WaitlistEntryType
-} from '@fest/shared';
+import { NextSeo } from 'next-seo';
 import { getProfileUrl } from '../utils';
-import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 import useAuthentication from '../modules/auth/useAuthentication';
 import { useFormik } from 'formik';
+import { useRouter } from 'next/router';
 
 const Box = styled.div`
   max-width: 450px;
@@ -154,6 +155,10 @@ export const WaitlistPage = () => {
 
   return (
     <div className="container boxed wider">
+      <NextSeo
+        title="Join Waitlist - Get early access to Fest"
+        description="Be one of the earliest creators to leverage the power of web3 to build exclusive token-gated communities, and discover your top fans."
+      />
       <Head>
         <title>Waitlist</title>
       </Head>

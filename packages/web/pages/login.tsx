@@ -7,6 +7,7 @@ import Button from '../ui/Button';
 import Head from 'next/head';
 import LoginWithEmail from '../components/LoginWithEmail';
 import Modal from '../ui/Modal';
+import { NextSeo } from 'next-seo';
 import { TextInput } from '../ui';
 import { getProfileUrl } from '../utils';
 import styled from '@emotion/styled';
@@ -250,6 +251,10 @@ export default function Login() {
 
   return (
     <Container>
+      <NextSeo
+        title="Login"
+        description="Sign into your Fest account using your email address or non-custodial wallet."
+      />
       <Head>
         <title>Continue to Fest</title>
       </Head>

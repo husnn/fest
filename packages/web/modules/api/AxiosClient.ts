@@ -1,7 +1,8 @@
 import { Request, Response } from '@fest/shared';
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
-import { isDevelopment } from '../../utils';
+
 import HttpClient from './HttpClient';
+import { baseApiUrl } from '../../utils';
 
 export default class AxiosClient extends HttpClient {
   private axios: AxiosInstance;
@@ -9,7 +10,7 @@ export default class AxiosClient extends HttpClient {
   constructor() {
     super();
     this.axios = axios.create({
-      baseURL: !isDevelopment ? process.env.NEXT_PUBLIC_API_URL : '/api'
+      baseURL: baseApiUrl
     });
   }
 

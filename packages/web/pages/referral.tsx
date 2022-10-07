@@ -1,8 +1,9 @@
 import { InviteDTO, InviteType } from '@fest/shared';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { ApiClient } from '../modules/api';
 import Head from 'next/head';
+import { NextSeo } from 'next-seo';
 import styled from '@emotion/styled';
 
 const Container = styled.div`
@@ -115,6 +116,7 @@ export const ReferralPage = () => {
 
   return (
     <div className="container boxed">
+      <NextSeo noindex />
       <Head>
         <title>Referral</title>
       </Head>

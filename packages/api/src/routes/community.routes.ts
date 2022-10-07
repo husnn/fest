@@ -13,11 +13,8 @@ export default function init(communityController: CommunityController) {
       communityController.create(req, res, next)
   );
 
-  router.get(
-    '/:id',
-    protectedRoute,
-    (req: Request, res: Response, next: NextFunction) =>
-      communityController.get(req, res, next)
+  router.get('/:id', (req: Request, res: Response, next: NextFunction) =>
+    communityController.get(req, res, next)
   );
 
   return router;

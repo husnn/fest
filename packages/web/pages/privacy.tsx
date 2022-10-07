@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react';
+
 import Head from 'next/head';
-import React from 'react';
+import { css } from '@emotion/react';
 
 export const PrivacyPage = () => {
   return (

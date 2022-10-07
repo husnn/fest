@@ -1,10 +1,11 @@
 import { Button, TextInput } from '../ui';
-import React, { useEffect, useState } from 'react';
 import { WaitlistEntryType, WalletType } from '@fest/shared';
 import { getCurrentUser, saveCurrentUser } from '../modules/auth/authStorage';
+import { useEffect, useState } from 'react';
 
 import { ApiClient } from '../modules/api';
 import Head from 'next/head';
+import { NextSeo } from 'next-seo';
 import { getProfileUrl } from '../utils';
 import router from 'next/router';
 import styled from '@emotion/styled';
@@ -125,6 +126,10 @@ export const CreatorPage = () => {
 
   return (
     <div className="container boxed">
+      <NextSeo
+        title="Become a creator on Fest"
+        description="Apply to be a creator on Fest and unlock powerful tools to build token-gated communities on the blockchain."
+      />
       <Head>
         <title>Creator Program</title>
       </Head>

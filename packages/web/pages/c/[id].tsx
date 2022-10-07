@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import { CommunityDTO, GetCommunityResponse } from '@fest/shared';
+import { useEffect, useState } from 'react';
 
 import { ApiClient } from '../../modules/api';
-import { CommunityDTO } from '@fest/shared';
 import Head from 'next/head';
+import { NextSeo } from 'next-seo';
 import { useRouter } from 'next/router';
 
-export const CommunityPage = () => {
+export const CommunityPage = ({ title }: { title: string }) => {
   const router = useRouter();
 
   const { id } = router.query;
@@ -26,6 +27,10 @@ export const CommunityPage = () => {
 
   return (
     <div className="container">
+      <NextSeo
+        title={title || 'Community'}
+        description={`Become part of ${title} by owning the token. This will give you access to exclusive content among other things.`}
+      />
       <Head>
         <title>{community?.name || 'Community'}</title>
       </Head>
@@ -33,5 +38,16 @@ export const CommunityPage = () => {
     </div>
   );
 };
+
+export async function getServerSideProps(ctx) {
+  let res: GetCommunityResponse;
+  try {
+    res = await ApiClient.getInstance().getCommunity(ctx.query.id);
+  } catch (err) {
+    console.log(err);
+  }
+
+  return { props: { title: res ? res.body.name : '' } };
+}
 
 export default CommunityPage;

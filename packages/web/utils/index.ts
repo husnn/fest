@@ -13,6 +13,10 @@ export const isStaging = environment === 'staging';
 
 export const isDevelopment = environment === 'development';
 
+export const baseApiUrl = !isDevelopment
+  ? process.env.NEXT_PUBLIC_API_URL
+  : `http://localhost:3000/api`;
+
 export const getProfileUrl = ({
   username,
   id

@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { saveCurrentUser } from '../modules/auth/authStorage';
+import { useEffect, useState } from 'react';
 
 import { ApiClient } from '../modules/api';
 import Head from 'next/head';
 import Modal from '../ui/Modal';
+import { NextSeo } from 'next-seo';
 import { TextInput } from '../ui';
 import { isValidPassword } from '@fest/shared';
+import { saveCurrentUser } from '../modules/auth/authStorage';
 import useAuthentication from '../modules/auth/useAuthentication';
 import { useHeader } from '../modules/navigation';
 import { useRouter } from 'next/router';
@@ -59,6 +60,7 @@ export const ResetPasswordPage = () => {
 
   return (
     <div className="container">
+      <NextSeo noindex />
       <Head>
         <title>Reset password</title>
       </Head>

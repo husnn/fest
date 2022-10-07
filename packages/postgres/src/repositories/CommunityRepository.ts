@@ -85,7 +85,7 @@ export class CommunityRepository
 
     return [
       community,
-      community.users.length > 0 || community.creatorId == user
+      community?.users.length > 0 || community?.creatorId == user
     ];
   }
 

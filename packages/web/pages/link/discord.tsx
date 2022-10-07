@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
-
 import { ApiClient } from '../../modules/api';
+import { NextSeo } from 'next-seo';
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 const LinkDiscordPage = () => {
@@ -15,7 +15,11 @@ const LinkDiscordPage = () => {
       .then((res) => router.push(res.redirect || '/'));
   }, [code]);
 
-  return <></>;
+  return (
+    <>
+      <NextSeo noindex />
+    </>
+  );
 };
 
 export default LinkDiscordPage;

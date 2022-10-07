@@ -1,7 +1,6 @@
 import { Button, FormInput, TextArea, TextInput } from '../ui';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import { Global, css } from '@emotion/react';
-import React, { useState } from 'react';
 import { UserInfoSchema, isEmailAddress } from '@fest/shared';
 import {
   saveCurrentUser,
@@ -12,6 +11,7 @@ import ApiClient from '../modules/api/ApiClient';
 import { AvatarUpload } from '../components/AvatarUpload';
 import { DiscordButton } from '../components/DiscordButton';
 import Head from 'next/head';
+import { NextSeo } from 'next-seo';
 import { YouTubeButton } from '../components';
 import { fontSize } from '../styles/constants';
 import { getProfileUrl } from '../utils';
@@ -19,6 +19,7 @@ import styled from '@emotion/styled';
 import styles from '../styles/Settings.module.scss';
 import useAuthentication from '../modules/auth/useAuthentication';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 
 const SettingsSheet = styled.div`
   max-width: 450px;
@@ -74,6 +75,7 @@ export default function SettingsPage() {
 
   return (
     <div className="container boxed">
+      <NextSeo noindex />
       <Head>
         <title>Settings</title>
       </Head>
