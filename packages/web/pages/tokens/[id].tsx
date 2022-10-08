@@ -170,7 +170,7 @@ const Section = ({
   );
 };
 
-export default function TokenPage({ token }: { token?: TokenDTO }) {
+export default function TokenPage() {
   const router = useRouter();
   const { currentUser } = useAuthentication();
 
@@ -178,6 +178,7 @@ export default function TokenPage({ token }: { token?: TokenDTO }) {
 
   const { id, o } = router.query;
 
+  const [token, setToken] = useState<TokenDTO>();
   const [isOwn, setOwn] = useState(false);
   const [ownership, setOwnership] = useState<TokenOwnershipDTO>();
 
@@ -195,6 +196,13 @@ export default function TokenPage({ token }: { token?: TokenDTO }) {
   );
 
   useEffect(() => {
+    if (!id) return;
+    ApiClient.instance?.getToken(id as string).then(async (token: TokenDTO) => {
+      setToken(token);
+    });
+  }, [id]);
+
+  useEffect(() => {
     if (!ownership && o) {
       ApiClient.instance
         ?.getTokenOwnership(id as string, o as string)
@@ -210,7 +218,7 @@ export default function TokenPage({ token }: { token?: TokenDTO }) {
       router.replace({ query: { o: ownership.id } }, undefined, {
         scroll: false
       });
-  }, [ownership]);
+  }, [token, ownership]);
 
   const MintToken = ({ onExecuted }: { onExecuted: () => void }) => {
     const [executing, setExecuting] = useState(false);
@@ -271,19 +279,8 @@ export default function TokenPage({ token }: { token?: TokenDTO }) {
 
   return (
     <div className="container boxed wider">
-      {token && (
-        <NextSeo
-          title={`${token.name} by ${getDisplayName(
-            token.creator
-          )} - NFT on Fest`}
-          description={
-            token.description ||
-            `${token.name} is a token created on Fest by ${getDisplayName(
-              token.creator
-            )}).`
-          }
-        />
-      )}
+      <NextSeo noindex />
+
       <Head>
         <title>{token?.name || id}</title>
       </Head>
@@ -468,15 +465,4 @@ export default function TokenPage({ token }: { token?: TokenDTO }) {
       )}
     </div>
   );
-}
-
-export async function getServerSideProps(ctx) {
-  let token: TokenDTO;
-  try {
-    token = await ApiClient.getInstance().getToken(ctx.query.id);
-  } catch (err) {
-    console.log(err);
-  }
-
-  return { props: { token: token || {} } };
 }
