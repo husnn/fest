@@ -73,8 +73,7 @@ export const getImageUrl = (
 
   let baseUrl;
 
-  const el = document.createElement('a');
-  el.href = sourceUrl;
+  const el = new URL(sourceUrl);
 
   baseUrl = process.env.NEXT_PUBLIC_IMAGES_URL || el.hostname;
 

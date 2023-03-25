@@ -1,33 +1,33 @@
-import { Button, Link } from '../../ui';
 import {
+  getHomeUrl,
+  getTokenOwnershipUrl,
+  getTokenUrl,
   GetUserResponse,
   TokenDTO,
   TokenOwnedDTO,
-  UserDTO,
-  getHomeUrl,
-  getTokenOwnershipUrl,
-  getTokenUrl
+  UserDTO
 } from '@fest/shared';
+import { useEffect, useState } from 'react';
 import {
   getCurrentUser,
   saveCurrentUser
 } from '../../modules/auth/authStorage';
-import { useEffect, useState } from 'react';
 import useTabs, { Tab, Tabs } from '../../modules/navigation/useTabs';
+import { Button, Link } from '../../ui';
 
-import ApiClient from '../../modules/api/ApiClient';
-import { Avatar } from '../../components/Avatar';
-import Head from 'next/head';
 import { NextSeo } from 'next-seo';
-import ResponsiveTabs from '../../ui/ResponsiveTabs';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { Avatar } from '../../components/Avatar';
 import TokensCreated from '../../components/TokensCreated';
 import TokensOwned from '../../components/TokensOwned';
 import UserCommunities from '../../components/UserCommunities';
-import { getDisplayName } from '../../utils';
-import styles from '../../styles/Profile.module.scss';
+import ApiClient from '../../modules/api/ApiClient';
 import useAuthentication from '../../modules/auth/useAuthentication';
 import { useHeader } from '../../modules/navigation';
-import { useRouter } from 'next/router';
+import styles from '../../styles/Profile.module.scss';
+import ResponsiveTabs from '../../ui/ResponsiveTabs';
+import { getDisplayName } from '../../utils';
 
 export default function ProfilePage(props: { user?: UserDTO }) {
   useHeader();
@@ -204,5 +204,5 @@ export async function getServerSideProps(ctx) {
     console.log(err);
   }
 
-  return { props: { user: res.user || {} } };
+  return { props: { user: res?.user || {} } };
 }
