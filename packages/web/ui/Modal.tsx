@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 
-import Button from './Button';
-import { CSSTransition } from 'react-transition-group';
-import Image from 'next/image';
-import Link from './Link';
-import ReactDOM from 'react-dom';
-import { corners } from '../styles/constants';
 import styled from '@emotion/styled';
+import Image from 'next/image';
+import ReactDOM from 'react-dom';
+import { CSSTransition } from 'react-transition-group';
+import { corners } from '../styles/constants';
+import Button from './Button';
+import Link from './Link';
 
 export type ModalProps = {
   show: boolean;
@@ -197,6 +197,7 @@ const Modal: React.FC<ModalProps> = ({
                         width="10"
                         height="10"
                         onClick={() => (onBackPressed ? onBackPressed() : null)}
+                        alt=""
                       />
                     )}
                     {title && <ModalTitle>{title}</ModalTitle>}

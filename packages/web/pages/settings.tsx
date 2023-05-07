@@ -1,25 +1,25 @@
-import { Button, FormInput, TextArea, TextInput } from '../ui';
+import { css, Global } from '@emotion/react';
+import { isEmailAddress, UserInfoSchema } from '@fest/shared';
 import { Field, Form, Formik, FormikProps } from 'formik';
-import { Global, css } from '@emotion/react';
-import { UserInfoSchema, isEmailAddress } from '@fest/shared';
 import {
   saveCurrentUser,
   updateCurrentUser
 } from '../modules/auth/authStorage';
+import { Button, FormInput, TextArea, TextInput } from '../ui';
 
-import ApiClient from '../modules/api/ApiClient';
-import { AvatarUpload } from '../components/AvatarUpload';
-import { DiscordButton } from '../components/DiscordButton';
-import Head from 'next/head';
-import { NextSeo } from 'next-seo';
-import { YouTubeButton } from '../components';
-import { fontSize } from '../styles/constants';
-import { getProfileUrl } from '../utils';
 import styled from '@emotion/styled';
-import styles from '../styles/Settings.module.scss';
-import useAuthentication from '../modules/auth/useAuthentication';
+import { NextSeo } from 'next-seo';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { YouTubeButton } from '../components';
+import { AvatarUpload } from '../components/AvatarUpload';
+import { DiscordButton } from '../components/DiscordButton';
+import ApiClient from '../modules/api/ApiClient';
+import useAuthentication from '../modules/auth/useAuthentication';
+import { fontSize } from '../styles/constants';
+import styles from '../styles/Settings.module.scss';
+import { getProfileUrl } from '../utils';
 
 const SettingsSheet = styled.div`
   max-width: 450px;
@@ -177,7 +177,7 @@ export default function SettingsPage() {
                   </FormInput>
 
                   {errors.global && (
-                    <p className="form-error">{errors.global}</p>
+                    <p className="form-error">{errors.global as string}</p>
                   )}
 
                   <Global

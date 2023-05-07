@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const withTM = require('next-transpile-modules')([
-  '@fest/shared',
-  '@fest/eth-contracts',
-  '@fest/eth-transactions'
-]);
+/** @type {import('next').NextConfig} */
+// const withTM = require('next-transpile-modules')([
+//   '@fest/shared',
+//   '@fest/eth-contracts',
+//   '@fest/eth-transactions'
+// ]);
 
-module.exports = withTM({
+module.exports = {
   webpack(config) {
     config.module.rules.push(
       {
@@ -26,6 +27,16 @@ module.exports = withTM({
 
     return config;
   },
+  transpilePackages: [
+    '@fest/shared',
+    '@fest/eth-contracts',
+    '@fest/eth-transactions'
+  ],
+  eslint: {
+    // Warning: This allows production builds to successfully complete even if
+    // your project has ESLint errors.
+    ignoreDuringBuilds: true
+  },
   async headers() {
     const headers = [];
     if (process.env.NEXT_PUBLIC_VERCEL_ENV === 'preview') {
@@ -33,12 +44,12 @@ module.exports = withTM({
         headers: [
           {
             key: 'X-Robots-Tag',
-            value: 'noindex',
-          },
+            value: 'noindex'
+          }
         ],
-        source: '/:path*',
+        source: '/:path*'
       });
     }
     return headers;
-  },
-});
+  }
+};

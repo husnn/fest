@@ -27,7 +27,7 @@ export const useTabs = () => {
   }, [tabs, tab]);
 
   const selectTab = (tab: Tab) => {
-    router.push({ query: { tab: tab.id } });
+    router.push({ query: { ...router.query, tab: tab.id } });
   };
 
   const initTabs = (tabs: Tabs) => {

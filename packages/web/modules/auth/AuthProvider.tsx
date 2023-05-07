@@ -17,11 +17,7 @@ export const AuthContext = React.createContext<AuthContextProps | undefined>(
   undefined
 );
 
-export const AuthProvider: React.FC = ({
-  children
-}: {
-  children: React.ReactChild[];
-}) => {
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAuthenticated, setAuthenticated] = useState(false);
   const [currentUser, setCurrentUser] = useState<CurrentUserDTO>(null);
   const [redirect, setRedirect] = useState(false);
